@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# load modules
+module load boost/1.60.0
+module load eigen/3.2.7
+
+# clean build directory
+make clean -f Makefile-lpc
+
+# run Makefile
+make -f Makefile-lpc

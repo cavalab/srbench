@@ -1,0 +1,12 @@
+CC=icpc
+CFLAGS= -c -I $(TACC_BOOST_INC) -std=libc++ -openmp -pch-create pch/stdafx.pchi 
+LDFLAGS= -I $(TACC_BOOST_INC) -std=libc++ -openmp 
+LDFLAGS2= -Bstatic -L$(TACC_BOOST_LIB) -lboost_regex 
+SOURCES= stdafx.cpp 
+OBJECTS=$(SOURCES:.cpp=.o)
+EXECUTABLE=stdafxpch
+
+all: $(SOURCES) $(EXECUTABLE)
+
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@

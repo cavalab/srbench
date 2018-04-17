@@ -1,0 +1,47 @@
+CC=g++
+
+#CFLAGS= -c -fPIC -I $(CPATH) -I/net/software/local/eigen/3.2.7/include  -I /net/software/local/python/3.5.2/lib/python3.5/site-packages/numpy/core/include -I/net/software/local/python/3.5.2/include/python3.5m -I -std=c++0x -fopenmp -Ofast
+CFLAGS= -c -fPIC -I $(CPATH) -I/net/software/local/eigen/3.2.7/include  -I /net/software/local/python/3.5.2/lib/python3.5/site-packages/numpy/core/include -I/net/software/local/python/3.5.2/include/python3.5m -I -std=c++0x -fopenmp -Ofast
+#LDFLAGS= -std=c++0x -fopenmp -Ofast -shared -lpython3.5m -L/usr/include/boost_1_61_0/stage/lib -L/net/software/local/python/3.5.2/lib
+LDFLAGS= -std=c++11 -fopenmp -Ofast -shared -L/net/software/local/boost/1.58.0-gcc6.4.0/ -L/net/software/local/python/3.5.2/lib -L$(LD_LIBRARY_PATH)
+#LDFLAGS= -std=c++11 -fopenmp -Ofast -shared -L/net/software/local/boost/1.61.0/ -L/net/software/local/python/3.5.2/lib -L$(LD_LIBRARY_PATH)
+
+#-L/usr/lib/x86_64-linux-gnu/
+# LDFLAGS2= /usr/include/boost_1_61_0/stage/lib/libboost_python3.a
+#LDFLAGS2= include/libboost_python3.a
+#LDFLAGS2= -lboost_python3 -Wl,-rpath,'/usr/include/boost_1_61_0/stage/lib/'
+LDFLAGS2= /net/software/local/intel-python/2018.0.022/intelpython3/lib/libboost_python3.so -Wl,-rpath,python3.5m
+#-L/usr/lib/x86_64-linux-gnu
+SOURCES= stdafx.cpp AgeBreed.cpp AgeFitSurvival.cpp AgeFitGenSurvival.cpp ApplyGenetics.cpp BruteforceAlgo.cpp Crossover.cpp Datapoint.cpp DC.cpp EpiHC.cpp EpiMut.cpp Eqn2Line.cpp Fitness.cpp FitnessEstimator.cpp general_fns.cpp Generation.cpp HillClimb.cpp InitPop.cpp LexicaseSelect.cpp Line2Eqn.cpp Mutate.cpp NondominatedsortAlgo.cpp pareto.cpp pareto_fc.cpp ParetoSurvival.cpp Prune.cpp runEllenGP.cpp StablesortAlgo.cpp StochasticGradient.cpp strdist.cpp Tournament.cpp
+#SOURCES = $(wildcard *.cpp)
+#OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS = $(patsubst %.cpp, $(BIN)/%.o, $(SOURCES))
+BIN=./lib
+EXECUTABLE=lib/elgp.so
+
+
+all: lib_dir program
+
+debug:	CFLAGS += -ggdb
+debug: lib_dir program
+
+lib_dir:
+	mkdir -p $(BIN)
+
+program: $(SOURCES) $(EXECUTABLE)
+
+link: cleanexe $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) $(LDFLAGS2) -o $@
+
+$(BIN)/%.o: %.cpp
+	$(CC) $(CFLAGS) $< -o $@
+
+.PHONY : clean
+clean :
+	- rm $(OBJECTS)
+	- rm $(EXECUTABLE)
+
+cleanexe :
+	- rm $(EXECUTABLE)
