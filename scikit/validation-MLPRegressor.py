@@ -74,22 +74,10 @@ runtime = time.time()-t0
 
 
 
-
-train_score_mse = mean_squared_error(sc_y.inverse_transform(grid_clf.predict(X_train)),
-                                  sc_y.inverse_transform(y_train))
-
-train_score_mae = mean_absolute_error(sc_y.inverse_transform(grid_clf.predict(X_train)),
-                                  sc_y.inverse_transform(y_train))
-train_score_r2 = r2_score(sc_y.inverse_transform(grid_clf.predict(X_train)),
-                                sc_y.inverse_transform(y_train))
-
-test_score_mse = mean_squared_error(sc_y.inverse_transform(grid_clf.predict(X_test)),
-                                  sc_y.inverse_transform(y_test))
-test_score_mae = mean_absolute_error(sc_y.inverse_transform(grid_clf.predict(X_test)),
-                                  sc_y.inverse_transform(y_test))
-test_score_r2 = r2_score(sc_y.inverse_transform(grid_clf.predict(X_test)),
-                                sc_y.inverse_transform(y_test))
-
+train_score_mse = mean_squared_error(sc_y.inverse_transform(y_train),sc_y.inverse_transform(grid_clf.predict(X_train)))
+train_score_mae = mean_absolute_error(sc_y.inverse_transform(y_train),sc_y.inverse_transform(grid_clf.predict(X_train)))
+test_score_mse = mean_squared_error(sc_y.inverse_transform(y_test),sc_y.inverse_transform(grid_clf.predict(X_test)))
+test_score_mae = mean_absolute_error(sc_y.inverse_transform(y_test),sc_y.inverse_transform(grid_clf.predict(X_test)))
 
 
 sorted_grid_params = sorted(grid_clf.best_params_.items(), key=operator.itemgetter(0))
@@ -97,15 +85,13 @@ sorted_grid_params = sorted(grid_clf.best_params_.items(), key=operator.itemgett
 
 # print results
 out_text = '\t'.join([dataset.split('/')[-1][:-7],
-                      'xgboost',
+                      'mlp',
                       str(trial),
                       str(sorted_grid_params).replace('\n',','),
                       str(train_score_mse),
                       str(train_score_mae),
-                      str(train_score_r2),
                       str(test_score_mse),
                       str(test_score_mae),
-                      str(test_score_r2),
                       str(runtime)])
 
 

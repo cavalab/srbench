@@ -71,10 +71,6 @@ hyper_params = [
         'max_len': (6,),
         'rt_cross':(0.2,),'rt_mut':(0.8,),
     },
-
-
-
-
 ]
 
 
@@ -100,10 +96,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                     random_state=None)
 
 
-#X_save=np.hstack((X_train,y_train))
-#est=GSGPClassifier(dataset=dataset.split('/')[-1][:-7], X_train=X_train, X_test=X_test, y_test=y_test)
-
-#est=GSGPClassifier(dataset=dataset.split('/')[-1][:-7])
 est=GSGPClassifier(dataset=dataset.split('/')[-1][:-7], y_test=y_test, y_train=y_test)
 
 
@@ -120,22 +112,10 @@ runtime = time.time()-t0
 
 
 
-
-train_score_mse = mean_squared_error(sc_y.inverse_transform(grid_clf.predict(X_train)),
-                                  sc_y.inverse_transform(y_train))
-
-train_score_mae = mean_absolute_error(sc_y.inverse_transform(grid_clf.predict(X_train)),
-                                  sc_y.inverse_transform(y_train))
-train_score_r2 = r2_score(sc_y.inverse_transform(grid_clf.predict(X_train)),
-                                sc_y.inverse_transform(y_train))
-
-test_score_mse = mean_squared_error(sc_y.inverse_transform(grid_clf.predict(X_test)),
-                                  sc_y.inverse_transform(y_test))
-test_score_mae = mean_absolute_error(sc_y.inverse_transform(grid_clf.predict(X_test)),
-                                  sc_y.inverse_transform(y_test))
-test_score_r2 = r2_score(sc_y.inverse_transform(grid_clf.predict(X_test)),
-                                sc_y.inverse_transform(y_test))
-
+train_score_mse = mean_squared_error(sc_y.inverse_transform(y_train),sc_y.inverse_transform(grid_clf.predict(X_train)))
+train_score_mae = mean_absolute_error(sc_y.inverse_transform(y_train),sc_y.inverse_transform(grid_clf.predict(X_train)))
+test_score_mse = mean_squared_error(sc_y.inverse_transform(y_test),sc_y.inverse_transform(grid_clf.predict(X_test)))
+test_score_mae = mean_absolute_error(sc_y.inverse_transform(y_test),sc_y.inverse_transform(grid_clf.predict(X_test)))
 
 
 sorted_grid_params = sorted(grid_clf.best_params_.items(), key=operator.itemgetter(0))
@@ -148,12 +128,9 @@ out_text = '\t'.join([dataset.split('/')[-1][:-7],
                       str(sorted_grid_params).replace('\n',','),
                       str(train_score_mse),
                       str(train_score_mae),
-                      str(train_score_r2),
                       str(test_score_mse),
                       str(test_score_mae),
-                      str(test_score_r2),
                       str(runtime)])
-#                      str(runtime),str(grid_clf.cv_results_)])
 
 
 print(out_text)
