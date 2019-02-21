@@ -1,10 +1,9 @@
 import sys
 import itertools
 import pandas as pd
-from sklearn.model_selection import GridSearchCV, KFold, StratifiedKFold, cross_val_predict
-from sklearn.metrics import accuracy_score, make_scorer
-from sklearn.pipeline import Pipeline,make_pipeline
-from metrics import balanced_accuracy_score
+from sklearn.model_selection import GridSearchCV, KFold, train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score  
 import warnings
 import time
 from tempfile import mkdtemp
@@ -15,6 +14,7 @@ from utils import feature_importance , roc
 from convergence import convergence
 import pdb
 import numpy as np
+from complexity import complexity
 
 def evaluate_model(dataset, save_file, random_state, est, hyper_params):
 
@@ -50,7 +50,7 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
         best_est = grid_est.best_estimator_
         
         # get the size of the final model
-        model_size= complexity(best_est)
+        model_size = complexity(best_est)
 
         param_string = ','.join(['{}={}'.format(p, v) for p,v in 
                                  best_est.get_params().items()])
@@ -58,15 +58,15 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
         # scores
         sc_inv = sc_y.inverse_transform
         pred = grid_est.predict
-
-        train_score_mse = mean_squared_error(sc_inv(y_train),
-                                             sc_inv(pred(X_train)))
-        train_score_mae = mean_absolute_error(sc_inv(y_train),
-                                              sc_inv(pred(X_train)))
-        test_score_mse = mean_squared_error(sc_inv(y_test),
-                                            sc_inv(pred(X_test)))
-        test_score_mae = mean_absolute_error(sc_inv(y_test),
-                                             sc_inv(pred(X_test)))
+        # mse
+        train_score_mse = mean_squared_error(sc_inv(y_train), sc_inv(pred(X_train)))
+        test_score_mse = mean_squared_error(sc_inv(y_test), sc_inv(pred(X_test)))
+        # mae 
+        train_score_mae = mean_absolute_error(sc_inv(y_train), sc_inv(pred(X_train)))
+        test_score_mae = mean_absolute_error(sc_inv(y_test), sc_inv(pred(X_test)))
+        # r2 
+        train_score_r2 = r2_score(sc_inv(y_train), sc_inv(pred(X_train)))
+        test_score_r2 = r2_score(sc_inv(y_test), sc_inv(pred(X_test)))
 
         sorted_grid_params = sorted(grid_est.best_params_.items(), 
                                     key=operator.itemgetter(0))
@@ -86,7 +86,6 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
                               str(test_score_mae),
                               str(runtime),
                               str(model_size)
-                              # TODO: add complexity 
                               ]
                               )
 
