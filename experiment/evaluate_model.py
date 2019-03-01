@@ -39,7 +39,9 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
     
     t0 = time.process_time()
     # Grid Search
-    grid_est.fit(X_train,y_train)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        grid_est.fit(X_train,y_train)
     
     runtime = time.process_time() - t0
 
@@ -47,9 +49,6 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
     
     # get the size of the final model
     model_size = complexity(best_est)
-
-    param_string = ','.join(['{}={}'.format(p, v) for p,v in 
-                             best_est.get_params().items()])
 
     # scores
     sc_inv = sc_y.inverse_transform
@@ -64,11 +63,8 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
     train_score_r2 = r2_score(sc_inv(y_train), sc_inv(pred(X_train)))
     test_score_r2 = r2_score(y_test, sc_inv(pred(X_test)))
 
-    sorted_grid_params = sorted(grid_est.best_params_.items(), 
-                                key=operator.itemgetter(0))
-
-    best=grid_est.best_estimator_
-    best.stack_2_eqn(best.best_estimator_)
+    sorted_grid_params = ','.join(['{}={}'.format(p, v) 
+                             for p,v in sorted(best_est.get_params().items())])
 
 
     # print results
@@ -87,22 +83,22 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
                           ]
                           )
 
-        print(out_text)
-        sys.stdout.flush()
-        with open(save_file, 'a') as out:
-            out.write(out_text+'\n')
-        sys.stdout.flush()
+    print(out_text)
+    sys.stdout.flush()
+    with open(save_file, 'a') as out:
+        out.write(out_text+'\n')
+    sys.stdout.flush()
 
-
-        df = pd.DataFrame(data=grid_est.cv_results_)
-        df['seed'] = random_state
-        cv_save_name = save_file.split('.csv')[0]+'_cv_results.csv'
-        import os.path
-        if os.path.isfile(cv_save_name):
-            # if exists, append
-            df.to_csv(cv_save_name, mode='a', header=False, index=False)
-        else:
-            df.to_csv(cv_save_name, index=False)
+    # store CV detailed results
+    df = pd.DataFrame(data=grid_est.cv_results_)
+    df['seed'] = random_state
+    cv_save_name = save_file.split('.csv')[0]+'_cv_results.csv'
+    import os.path
+    if os.path.isfile(cv_save_name):
+        # if exists, append
+        df.to_csv(cv_save_name, mode='a', header=False, index=False)
+    else:
+        df.to_csv(cv_save_name, index=False)
 
 ###
 # main entry point
