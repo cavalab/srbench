@@ -55,7 +55,10 @@ if __name__ == '__main__':
         save_file = results_path + '/' + dataset + '_' + ml + '.csv'  
         
         with open(save_file,'w') as out:
-            out.write('dataset\talgorithm\tparameters\tseed\tscore\tcorr\tcond\ttime\tsize\tnum_params\n')
+            out.write('dataset\talgorithm\tparameters\tseed'
+                    '\ttrain_mse\ttrain_mae\ttrain_r2'
+                    '\ttest_mse\ttest_mae\ttest_r2'
+                    '\ttime\tsize\n')
         
     # write run commands
     all_commands = []
@@ -67,10 +70,15 @@ if __name__ == '__main__':
         for ml in learners:
             save_file = results_path + '/' + dataset + '_' + ml + '.csv'  
             
-            all_commands.append('python {ML}.py {DATASET} {SAVEFILE} {RS}'.format(ML=model_dir + '/' + ml,
-                                                                                  DATASET=args.INPUT_FILE,
-                                                                                  SAVEFILE=save_file,
-                                                                                  RS=random_state))
+            all_commands.append('python evaluate_model.py '
+                                '{DATASET}'
+                                ' -ml {ML}'
+                                ' -save_file {SAVEFILE}'
+                                ' -seed {RS}'.format(ML=ml,
+                                                     DATASET=args.INPUT_FILE,
+                                                     SAVEFILE=save_file,
+                                                     RS=random_state)
+                                )
             job_info.append({'ml':ml,'dataset':dataset,'results_path':results_path})
 
     if args.LSF:    # bsub commands
@@ -91,4 +99,5 @@ if __name__ == '__main__':
             os.system(bsub_cmd)     # submit jobs 
 
     else:   # run locally  
+        for run_cmd in all_commands: print(run_cmd)
         Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) for run_cmd in all_commands )

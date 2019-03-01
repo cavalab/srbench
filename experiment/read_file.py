@@ -3,7 +3,7 @@ import numpy as np
 import pdb
 from sklearn.preprocessing import RobustScaler, LabelEncoder
 
-def read_file(filename, classification=True, label='class', sep=None):
+def read_file(filename, classification=False, label='target', sep=None):
     
     if filename.split('.')[-1] == 'gz':
         compression = 'gzip'
@@ -16,8 +16,8 @@ def read_file(filename, classification=True, label='class', sep=None):
         input_data = pd.read_csv(filename, sep=sep, compression=compression,
                 engine='python')
     
-    input_data.rename(columns={'Label': 'class','Class':'class', 'target':'class'}, 
-                      inplace=True)
+    # input_data.rename(columns={'Label': 'class','Class':'class', 'target':'class'}, 
+    #                   inplace=True)
 
     feature_names = np.array([x for x in input_data.columns.values if x != label])
 
