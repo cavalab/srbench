@@ -36,13 +36,13 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
     cv = KFold(n_splits=5, shuffle=True,random_state=random_state)
     grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
             verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
-    
+
     t0 = time.process_time()
     # Grid Search
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         grid_est.fit(X_train,y_train)
-    
+
     runtime = time.process_time() - t0
 
     best_est = grid_est.best_estimator_
@@ -85,20 +85,20 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
 
     print(out_text)
     sys.stdout.flush()
-    with open(save_file, 'a') as out:
-        out.write(out_text+'\n')
-    sys.stdout.flush()
+    if save_file:
+        with open(save_file, 'a') as out:
+            out.write(out_text+'\n')
 
-    # store CV detailed results
-    df = pd.DataFrame(data=grid_est.cv_results_)
-    df['seed'] = random_state
-    cv_save_name = save_file.split('.csv')[0]+'_cv_results.csv'
-    import os.path
-    if os.path.isfile(cv_save_name):
-        # if exists, append
-        df.to_csv(cv_save_name, mode='a', header=False, index=False)
-    else:
-        df.to_csv(cv_save_name, index=False)
+        # store CV detailed results
+        df = pd.DataFrame(data=grid_est.cv_results_)
+        df['seed'] = random_state
+        cv_save_name = save_file.split('.csv')[0]+'_cv_results.csv'
+        import os.path
+        if os.path.isfile(cv_save_name):
+            # if exists, append
+            df.to_csv(cv_save_name, mode='a', header=False, index=False)
+        else:
+            df.to_csv(cv_save_name, index=False)
 
 ###
 # main entry point
