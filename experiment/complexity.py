@@ -1,6 +1,6 @@
 import numpy as np
 
-def complexity(est):
+def complexity(est,default=0):
     """Returns a complexity estimate for a model."""
     est_name = type(est).__name__
 
@@ -18,7 +18,11 @@ def complexity(est):
         model_size = np.sum([e.tree_.node_count for e in est.estimators_])
     elif 'XGB' in est_name:
         model_size = np.sum([m.count(':') for m in est._Booster.get_dump()])
+    elif 'MRGP' in est_name:
+        model_size = est.complexity
+    elif 'FFX' in est_name:
+        model_size = est._models[-1].complexity() 
     else:
-        model_size = features.shape[1]
+        model_size = default
 
     return model_size

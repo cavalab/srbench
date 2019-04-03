@@ -31,11 +31,13 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
     # scale and normalize the data
     X_train = StandardScaler().fit_transform(X_train)
     sc_y = StandardScaler()
-    y_train = sc_y.fit_transform(y_train.reshape(-1,1))
+    y_train = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
+    print('X_train:',X_train.shape)
+    print('y_train:',y_train.shape)
     # define CV strategy for hyperparam tuning
     cv = KFold(n_splits=5, shuffle=True,random_state=random_state)
     grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
-            verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
+            verbose=1,n_jobs=-1,scoring='r2',error_score=0.0)
 
     t0 = time.process_time()
     # Grid Search
@@ -48,7 +50,7 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
     best_est = grid_est.best_estimator_
     
     # get the size of the final model
-    model_size = complexity(best_est)
+    model_size = complexity(best_est,features.shape[1])
 
     # scores
     sc_inv = sc_y.inverse_transform
@@ -100,9 +102,9 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
         else:
             df.to_csv(cv_save_name, index=False)
 
-###
+################################################################################
 # main entry point
-###
+################################################################################
 import argparse
 import importlib
 
@@ -118,15 +120,19 @@ if __name__ == '__main__':
                         help='Show this help message and exit.')
     parser.add_argument('-ml', action='store', dest='ALG',default=None,type=str, 
             help='Name of estimator (with matching file in methods/)')
-    parser.add_argument('-save_file', action='store', dest='SAVE_FILE',default=None,type=str, 
-            help='Name of save file')
-    parser.add_argument('-seed', action='store', dest='RANDOM_STATE',default=None,type=int, 
-            help='Seed / trial')
+    parser.add_argument('-save_file', action='store', dest='SAVE_FILE',default=None,
+            type=str, help='Name of save file')
+    parser.add_argument('-seed', action='store', dest='RANDOM_STATE',default=None,
+            type=int, help='Seed / trial')
 
     args = parser.parse_args()
     # import algorithm 
+    print('import from','methods.'+args.ALG)
     algorithm = importlib.__import__('methods.'+args.ALG,globals(),locals(),
                                    ['est','hyper_params'])
+    if args.ALG == 'mrgp':
+        algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
+
     print('algorithm:',algorithm.est)
     print('hyperparams:',algorithm.hyper_params)
     evaluate_model(args.INPUT_FILE, args.SAVE_FILE, args.RANDOM_STATE, 
