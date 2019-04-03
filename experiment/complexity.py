@@ -14,7 +14,7 @@ def complexity(est):
         model_size = est.module.get_n_params()
     elif hasattr(est,'coef_'):
         model_size = est.coef_.size
-    elif 'RF' in est_name:
+    elif 'RandomForest' in est_name:
         model_size = np.sum([e.tree_.node_count for e in est.estimators_])
     elif 'XGB' in est_name:
         model_size = np.sum([m.count(':') for m in est._Booster.get_dump()])
