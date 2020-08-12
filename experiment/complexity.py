@@ -22,6 +22,8 @@ def complexity(est,default=0):
         model_size = est.complexity
     elif 'FFX' in est_name:
         model_size = est._models[-1].complexity() 
+    elif 'GPGOMEARegressor' in est_name:
+        model_size = est.get_n_nodes()
     else:
         model_size = default
 
