@@ -21,7 +21,9 @@ def complexity(est,default=0):
     elif 'MRGP' in est_name:
         model_size = est.complexity
     elif 'FFX' in est_name:
-        model_size = est.model_.complexity() 
+        model_size = est.model_.complexity()
+    elif 'GPGOMEARegressor' in est_name:
+        model_size = est.get_n_nodes()
     else:
         model_size = default
 
