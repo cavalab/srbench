@@ -21,7 +21,7 @@ def complexity(est,default=0):
     elif 'MRGP' in est_name:
         model_size = est.complexity
     elif 'FFX' in est_name:
-        model_size = est._models[-1].complexity() 
+        model_size = est.model_.complexity() 
     else:
         model_size = default
 
