@@ -13,7 +13,8 @@ if __name__ == '__main__':
             default='')
     parser.add_argument('--long',action='store_true',dest='LONG', default=False)
     parser.add_argument('-n_trials',action='store',dest='TRIALS', default=1)
-    parser.add_argument('-results',action='store',dest='RDIR',default='../results/regression',type=str,help='Results directory')
+    parser.add_argument('-results',action='store',dest='RDIR',
+            default='../results/regression',type=str,help='Results directory')
     args = parser.parse_args()
 
 datapath = args.DATA_PATH 
