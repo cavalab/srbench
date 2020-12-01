@@ -11,13 +11,14 @@ GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://w
 
 # How to run
 
-Validation scripts were run with the following command:
-```python
-python3.6 validation-[algorithm_name].py [dataset_name].tsv.gz output-[dataset_name].txt [trial_name]
-```
+Batch jobs are controlled via `submit_jobs.py`. 
+Run `python submit_jobs.py -h` to see options.
 
-e.g.:
+Results of single methods on datasets are generated using `analyze.py`. 
+Run `python analyze.py -h` to see options. 
 
-```python
-python3.6 validation-MLPRegressor.py dataset.tsv.gz dataset-MLPRegressor-results.txt 0
-```
+# Contact
+
+William La Cava (@lacava), lacava at upenn dot edu
+
+Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
