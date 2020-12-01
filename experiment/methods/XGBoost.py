@@ -11,3 +11,6 @@ hyper_params = [
 ]
 
 est=xgboost.XGBRegressor()
+
+def complexity(est):
+    return np.sum([m.count(':') for m in est._Booster.get_dump()])

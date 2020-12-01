@@ -14,10 +14,10 @@ from utils import feature_importance , roc
 from convergence import convergence
 import pdb
 import numpy as np
-from complexity import complexity
 import methods
 
-def evaluate_model(dataset, save_file, random_state, est, hyper_params):
+def evaluate_model(dataset, save_file, random_state, est, hyper_params, 
+                  complexity):
 
     est_name = type(est).__name__
     
@@ -50,16 +50,21 @@ def evaluate_model(dataset, save_file, random_state, est, hyper_params):
     best_est = grid_est.best_estimator_
     
     # get the size of the final model
-    model_size = complexity(best_est,features.shape[1])
+    if complexity == None:
+        model_size = features.shape[1]
+    else:
+        model_size = complexity(best_est)
 
     # scores
     sc_inv = sc_y.inverse_transform
     pred = grid_est.predict
     # mse
-    train_score_mse = mean_squared_error(sc_inv(y_train), sc_inv(pred(X_train)))
+    train_score_mse = mean_squared_error(sc_inv(y_train), 
+                                         sc_inv(pred(X_train)))
     test_score_mse = mean_squared_error(y_test, sc_inv(pred(X_test)))
     # mae 
-    train_score_mae = mean_absolute_error(sc_inv(y_train), sc_inv(pred(X_train)))
+    train_score_mae = mean_absolute_error(sc_inv(y_train), 
+                                          sc_inv(pred(X_train)))
     test_score_mae = mean_absolute_error(y_test, sc_inv(pred(X_test)))
     # r2 
     train_score_r2 = r2_score(sc_inv(y_train), sc_inv(pred(X_train)))
@@ -111,8 +116,8 @@ import importlib
 if __name__ == '__main__':
 
     # parse command line arguments
-    parser = argparse.ArgumentParser(description="Evaluate a method on a dataset.", 
-                                     add_help=False)
+    parser = argparse.ArgumentParser(
+        description="Evaluate a method on a dataset.", add_help=False)
     parser.add_argument('INPUT_FILE', type=str,
                         help='Data file to analyze; ensure that the '
                         'target/label column is labeled as "class".')    
@@ -120,16 +125,16 @@ if __name__ == '__main__':
                         help='Show this help message and exit.')
     parser.add_argument('-ml', action='store', dest='ALG',default=None,type=str, 
             help='Name of estimator (with matching file in methods/)')
-    parser.add_argument('-save_file', action='store', dest='SAVE_FILE',default=None,
-            type=str, help='Name of save file')
-    parser.add_argument('-seed', action='store', dest='RANDOM_STATE',default=None,
-            type=int, help='Seed / trial')
+    parser.add_argument('-save_file', action='store', dest='SAVE_FILE',
+                        default=None, type=str, help='Name of save file')
+    parser.add_argument('-seed', action='store', dest='RANDOM_STATE',
+                        default=None, type=int, help='Seed / trial')
 
     args = parser.parse_args()
     # import algorithm 
     print('import from','methods.'+args.ALG)
     algorithm = importlib.__import__('methods.'+args.ALG,globals(),locals(),
-                                   ['est','hyper_params'])
+                                   ['est','hyper_params','complexity'])
     if args.ALG == 'mrgp':
         algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
 

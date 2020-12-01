@@ -36,7 +36,12 @@ hyper_params = [
 ]
 
 
-est=GSGPClassifier(dataset=dataset.split('/')[-1][:-7], y_test=y_test, y_train=y_test)
+est=GSGPClassifier(dataset=dataset.split('/')[-1][:-7], y_test=y_test, 
+                   y_train=y_test)
+
+#TODO: define complexity
+def complexity(est):
+    return -1
 
 
 

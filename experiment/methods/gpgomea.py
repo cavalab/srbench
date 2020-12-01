@@ -15,4 +15,8 @@ hyper_params = [
     },
 ]
 
-est = GPG( gomea=True, time=-1, generations=-1, evaluations=1000000, ims='5_1', silent=True, parallel=False )
+est = GPG( gomea=True, time=-1, generations=-1, evaluations=1000000, ims='5_1', 
+          silent=True, parallel=False )
+
+def complexity(est):
+    return est.get_n_nodes()

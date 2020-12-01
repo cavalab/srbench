@@ -8,3 +8,6 @@ hyper_params = [{
 
 
 est=ensemble.RandomForestRegressor()
+
+def complexity(est):
+    return np.sum([e.tree_.node_count for e in est.estimators_])

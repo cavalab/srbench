@@ -37,3 +37,6 @@ est = GPG( popsize=1000, generations=100, time=-1, evaluations=-1,
     tournament=4,
     caching=False,
     gomea=False, ims=False, silent=True, parallel=False )
+
+def complexity(est):
+    return est.get_n_nodes()

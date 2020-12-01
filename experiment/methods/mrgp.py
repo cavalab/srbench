@@ -34,3 +34,6 @@ hyper_params = {}
 # ]
 
 est=MRGPRegressor()
+
+def complexity(est):
+    return est.complexity

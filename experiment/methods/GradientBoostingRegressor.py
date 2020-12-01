@@ -8,4 +8,6 @@ hyper_params = [{
 
 est=ensemble.GradientBoostingRegressor()
 
+def complexity(est): 
+    return np.sum([m.count(':') for m in est._Booster.get_dump()])
 

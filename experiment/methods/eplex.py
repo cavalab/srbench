@@ -48,3 +48,5 @@ est = ellyn(selection='eplex',
             pHC_on=True,
             prto_arch_on=True)
 
+def complexity(est):
+    return len(est.best_estimator_)
