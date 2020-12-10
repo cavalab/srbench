@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import argparse
 import os, errno, sys
-from sklearn.externals.joblib import Parallel, delayed
+from joblib import Parallel, delayed
 
 
 if __name__ == '__main__':
@@ -17,8 +17,8 @@ if __name__ == '__main__':
     parser.add_argument('-ml', action='store', dest='LEARNERS',default=None,
             type=str, help='Comma-separated list of ML methods to use (should '
             'correspond to a py file name in learners/)')
-    parser.add_argument('--lsf', action='store_true', dest='LSF', default=False, 
-            help='Run on an LSF HPC (using bsub commands)')
+    parser.add_argument('--local', action='store_true', dest='LOCAL', default=False, 
+            help='Run locally as opposed to on LPC')
     parser.add_argument('-metric',action='store', dest='METRIC', default='f1_macro', 
             type=str, help='Metric to compare algorithms')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=4,type=int,
@@ -54,17 +54,6 @@ if __name__ == '__main__':
         if e.errno != errno.EEXIST:
             raise
 
-    # initialize output files
-    for ml in learners:
-        #write headers
-        save_file = results_path + '/' + dataset + '_' + ml + '.csv'  
-        
-        with open(save_file,'w') as out:
-            out.write('dataset\talgorithm\tparameters\tseed'
-                    '\ttrain_mse\ttrain_mae\ttrain_r2'
-                    '\ttest_mse\ttest_mae\ttest_r2'
-                    '\ttime\tsize\n')
-        
     # write run commands
     all_commands = []
     job_info=[]
@@ -73,20 +62,27 @@ if __name__ == '__main__':
         print('random_seed:',random_state)
         
         for ml in learners:
-            save_file = results_path + '/' + dataset + '_' + ml + '.csv'  
             
             all_commands.append('python evaluate_model.py '
                                 '{DATASET}'
                                 ' -ml {ML}'
-                                ' -save_file {SAVEFILE}'
+                                ' -results_path {RDIR}'
                                 ' -seed {RS}'.format(ML=ml,
                                                      DATASET=args.INPUT_FILE,
-                                                     SAVEFILE=save_file,
+                                                     RDIR=results_path,
                                                      RS=random_state)
                                 )
-            job_info.append({'ml':ml,'dataset':dataset,'results_path':results_path})
+            job_info.append({'ml':ml,
+                             'dataset':dataset,
+                             'results_path':results_path})
 
-    if args.LSF:    # bsub commands
+    if args.LOCAL:
+        # run locally  
+        for run_cmd in all_commands: 
+            print(run_cmd)
+            Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
+                                     for run_cmd in all_commands)
+    else: # LPC
         for i,run_cmd in enumerate(all_commands):
             job_name = job_info[i]['ml'] + '_' + job_info[i]['dataset']
             out_file = job_info[i]['results_path'] + job_name + '_%J.out'
@@ -103,9 +99,3 @@ if __name__ == '__main__':
             bsub_cmd +=  '"' + run_cmd + '"'
             print(bsub_cmd)
             os.system(bsub_cmd)     # submit jobs 
-
-    else:   # run locally  
-        for run_cmd in all_commands: 
-            print(run_cmd)
-        Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
-                for run_cmd in all_commands )

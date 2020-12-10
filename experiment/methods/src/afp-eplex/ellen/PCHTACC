@@ -1,2 +1,0 @@
-icpc -c -I $(TACC_BOOST_INC) -std=libc++ -openmp -pch-create pch/stdafx.pchi stdafx.cpp
-

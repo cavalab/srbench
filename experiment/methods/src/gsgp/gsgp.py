@@ -1,10 +1,5 @@
 from sklearn.base import BaseEstimator
-#from sklearn.utils import check_X_y
-#from sklearn.externals.joblib import Parallel, delayed
 from sklearn.pipeline import make_pipeline, make_union
-from sklearn.preprocessing import FunctionTransformer, Imputer
-#from sklearn.model_selection import train_test_split
-#from sklearn.metrics.scorer import make_scorer
 
 import os
 import subprocess
