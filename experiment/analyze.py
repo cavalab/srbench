@@ -3,6 +3,7 @@ import numpy as np
 import argparse
 import os, errno, sys
 from joblib import Parallel, delayed
+from seeds import SEEDS
 
 
 if __name__ == '__main__':
@@ -58,7 +59,8 @@ if __name__ == '__main__':
     all_commands = []
     job_info=[]
     for t in range(args.N_TRIALS):
-        random_state = np.random.randint(2**15-1)
+        # random_state = np.random.randint(2**15-1)
+        random_state = SEEDS[t]
         print('random_seed:',random_state)
         
         for ml in learners:
