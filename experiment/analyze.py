@@ -26,8 +26,6 @@ if __name__ == '__main__':
             help='Number of parallel jobs')
     parser.add_argument('-n_trials',action='store',dest='N_TRIALS',default=1,
             type=int, help='Number of parallel jobs')
-    parser.add_argument('-rs',action='store',dest='RANDOM_STATE',default=None,
-            type=int, help='random state')
     parser.add_argument('-label',action='store',dest='LABEL',default='class',
             type=str,help='Name of class label column')
     parser.add_argument('-results',action='store',dest='RDIR',default='results',

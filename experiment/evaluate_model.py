@@ -21,6 +21,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     if hasattr(est, 'random_state'):
         est.random_state = random_state
 
+    hyper_params = {}
 
     ##################################################
     # setup data
