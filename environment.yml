@@ -3,22 +3,20 @@ channels:
     - conda-forge
 dependencies:
     - python=3.9.1
-    - eigen=3.3.7
-    - boost=1.74.0
+    - cmake=3.19.1
+    - pybind11=2.6.1
+    - eigen=3.3.9
+    - boost #=1.74.0
     - scikit-learn=0.23.2
     - pandas=1.1.*
     - xgboost
-    - pip=20.3.3
     - armadillo=9.900.4
     - fmt=7.1.3
     - ceres-solver=2.0.0
-    - tbb 
+    - tbb-devel=2020.2
+    - pip=20.3.3
     - pip:
         - DistanceClassifier==0.0.8
-        - pmlb
+        - pmlb==1.0.1.post3
         - ffx==2.0.2
-    # - setuptools=45.*
-    # - wheel=0.35.*
-    # - pip=20.*
-    # - pip:
 # ellyn=0.1

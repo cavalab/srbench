@@ -1,14 +1,19 @@
 # Installing operon
-# Dependencies - installed via conda
-# - oneTBB
-# - Eigen
-# - Ceres
-# - {fmt}
+export CC=gcc-9
+export CXX=gcc-9
+# Dependencies 
+# - TBB - installed via conda
+# - Eigen- installed via conda
+# - Ceres- installed via conda
+# - {fmt}- installed via conda
 
 git clone https://github.com/heal-research/operon
+git checkout 1b08b7ffb65edb2a347e08a32595ccc1f078a882
 cd operon
-mkdir build; cd build; cmake .. -DCMAKE_BUILD_TYPE=Release
-make . VERBOSE=1
 
+# run cmake
+mkdir build; cd build; 
+cmake .. -DCMAKE_BUILD_TYPE=Release  -DBUILD_PYBIND=ON  
 
-
+#install
+make VERBOSE=1
