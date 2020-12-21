@@ -8,8 +8,8 @@ export CXX=gcc-9
 # - {fmt}- installed via conda
 
 git clone https://github.com/heal-research/operon
-git checkout 1b08b7ffb65edb2a347e08a32595ccc1f078a882
 cd operon
+git checkout 1b08b7ffb65edb2a347e08a32595ccc1f078a882
 
 # run cmake
 mkdir build; cd build; 
