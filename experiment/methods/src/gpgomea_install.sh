@@ -1,6 +1,7 @@
 # install GOMEA
 git clone https://github.com/marcovirgolin/GP-GOMEA 
 cd GP-GOMEA
+git checkout 6a92cb671c2772002b60df621a513d8b4df57887
 
 # use python 3.9
 sed -i 's/lboost_python37/lboost_python39/' Makefile-variables.mk
