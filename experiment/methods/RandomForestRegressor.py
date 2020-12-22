@@ -1,4 +1,5 @@
 from sklearn import ensemble
+import numpy as np
 
 hyper_params = [{
     'n_estimators': (10, 100, 1000),

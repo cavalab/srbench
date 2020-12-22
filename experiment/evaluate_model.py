@@ -16,12 +16,11 @@ import methods
 import json
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
-                   hyper_params, complexity):
+                   hyper_params, complexity, test=False):
 
+    print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
     if hasattr(est, 'random_state'):
         est.random_state = random_state
-
-    hyper_params = {}
 
     ##################################################
     # setup data
@@ -51,10 +50,17 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # define CV strategy for hyperparam tuning
     ################################################## 
-    cv = KFold(n_splits=5, shuffle=True,random_state=random_state)
+    # define a test mode with fewer splits and no hyper_params
+    if test:
+        n_splits = 2
+        hyper_params = {}
+    else:
+        n_splits = 5
+
+    cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
     grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
-            verbose=1,n_jobs=-1,scoring='r2',error_score=0.0)
+            verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
 
     ################################################## 
     # Fit models
@@ -151,6 +157,8 @@ if __name__ == '__main__':
                         default=None, type=str, help='Name of save file')
     parser.add_argument('-seed', action='store', dest='RANDOM_STATE',
                         default=None, type=int, help='Seed / trial')
+    parser.add_argument('-test',action='store_true', dest='TEST', 
+                       help='Used for testing a minimal version')
 
     args = parser.parse_args()
     # import algorithm 
@@ -163,4 +171,5 @@ if __name__ == '__main__':
     print('algorithm:',algorithm.est)
     print('hyperparams:',algorithm.hyper_params)
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
-                   algorithm.est, algorithm.hyper_params, algorithm.complexity)
+                   algorithm.est, algorithm.hyper_params, algorithm.complexity,
+                   args.TEST)

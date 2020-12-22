@@ -39,4 +39,4 @@ for dataset in regression_dataset_names:
                                                       RDIR=args.RDIR,
                                                       NT=args.TRIALS)
     print(jobline)
-    # os.system(jobline)
+    os.system(jobline)

@@ -4,6 +4,6 @@ git clone http://github.com/EpistasisLab/ellyn
 
 cd ellyn
 # fix version
-git checkout fd40c61f79534727e2d29825ed8afff270a3c01d
+git checkout 136ce63
 
 python setup.py install

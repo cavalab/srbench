@@ -1,5 +1,7 @@
 import xgboost
 from sklearn.neural_network import MLPRegressor
+import numpy as np
+
 hyper_params = [
     {
         'activation' : ('logistic', 'tanh', 'relu',),

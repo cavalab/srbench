@@ -34,6 +34,8 @@ if __name__ == '__main__':
             type=str,help='LSF queue')
     parser.add_argument('-m',action='store',dest='M',default=4096,type=int,
             help='LSF memory request and limit (MB)')
+    parser.add_argument('-test',action='store_true', dest='TEST', 
+                       help='Used for testing a minimal version')
 
     args = parser.parse_args()
       
@@ -67,10 +69,14 @@ if __name__ == '__main__':
                                 '{DATASET}'
                                 ' -ml {ML}'
                                 ' -results_path {RDIR}'
-                                ' -seed {RS}'.format(ML=ml,
-                                                     DATASET=args.INPUT_FILE,
-                                                     RDIR=results_path,
-                                                     RS=random_state)
+                                ' -seed {RS} {TEST}'.format(
+                                    ML=ml,
+                                    DATASET=args.INPUT_FILE,
+                                    RDIR=results_path,
+                                    RS=random_state,
+                                    TEST=('-test' if args.TEST
+                                            else '')
+                                    )
                                 )
             job_info.append({'ml':ml,
                              'dataset':dataset,

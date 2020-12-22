@@ -9,7 +9,7 @@ sed -i 's/lboost_numpy37/lboost_numpy39/' Makefile-variables.mk
 
 # add extra flags to varables
 echo "EXTRA_FLAGS=-I ${CONDA_PREFIX}/include" >> Makefile-variables.mk
-echo "EXTRA_LIB=-I ${CONDA_PREFIX}/lib" >> Makefile-variables.mk
+echo "EXTRA_LIB=-L ${CONDA_PREFIX}/lib" >> Makefile-variables.mk
 # check
 tail Makefile-variables.mk
 
@@ -22,4 +22,7 @@ cat Makefile-Python_Release.mk | grep EXTRA_LIB
 
 #todo: add CONDA_PREFIX to Make-file
 sudo make 
+# copy the .so library into the python package
+cp pyGPGOMEA/gpgomea.so dist/Python_Release/GNU-Linux/gpgomea/
+
 pip install .

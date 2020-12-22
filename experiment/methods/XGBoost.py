@@ -1,4 +1,5 @@
 import xgboost
+import numpy as np
 
 hyper_params = [
     {
