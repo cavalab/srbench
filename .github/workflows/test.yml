@@ -37,7 +37,9 @@ jobs:
           key:
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
             hashFiles('etc/example-environment.yml') }}
-      - uses: conda-incubator/setup-miniconda@v2
+      # Sets up the conda environment
+      - name: Set up Conda Environment 
+        uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: regression-benchmarks
           environment-file: environment.yml
@@ -47,3 +49,10 @@ jobs:
           conda info
           conda list
           conda activate regression-benchmarks
+      - name: Install ellyn
+        run: |
+            conda info
+            cd experiment/methods/src/
+            bash ellyn_install.sh
+
+
