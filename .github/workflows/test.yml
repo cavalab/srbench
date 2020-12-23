@@ -24,14 +24,36 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: anaconda-client-env
+          environment-file: environment.yml
+          python-version: 3.9.1
+          auto-activate-base: false
+      - run: |
+          conda info
+          conda list
 
-      - name: Install GP Methods
-        run: 
-            bash install.sh
+      - name: Install ellyn
+        run: |
+            conda info
+            # move to methods folder
+            cd experiment/methods/src/
+            bash ellyn_install.sh
+
+      - name: Install GP-GOMEA
+        run: |
+            # move to methods folder
+            cd experiment/methods/src/
+            bash gpgomea_install.sh
+        
+      - name: Install operon
+        run: |
+            conda info 
+            cd experiment/methods/src/
+            bash operon_install.sh
 
       - name: Test Analyze
         run: |
-            which conda
-            conda activate regression-benchmarks
             cd experiment
             python test_analyze.py
