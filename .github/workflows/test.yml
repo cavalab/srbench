@@ -54,5 +54,10 @@ jobs:
             conda info
             cd experiment/methods/src/
             bash ellyn_install.sh
+      - name: Test analysis 
+        run: |
+            cd experiment
+            python test_analyze.py
+
 
 
