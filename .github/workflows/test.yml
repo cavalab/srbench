@@ -25,35 +25,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Configure
+      - name: Install GP Methods
         run: 
-            bash configure.sh
-
-      - name: Install ellyn
-        run: |
-            conda activate regression-benchmarks
-            # move to methods folder
-            cd experiment/methods/src/
-
-            bash ellyn_install.sh
-
-      - name: Install GP-GOMEA
-        run: |
-            which conda
-            conda activate regression-benchmarks
-            # move to methods folder
-            cd experiment/methods/src/
-
-            bash gpgomea_install.sh
-        
-      - name: Install operon
-        run: |
-            which conda
-            conda activate regression-benchmarks
-            # move to methods folder
-            cd experiment/methods/src/
-
-            bash operon_install.sh
+            bash install.sh
 
       - name: Test Analyze
         run: |
