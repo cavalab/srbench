@@ -31,6 +31,7 @@ jobs:
 
       - name: Install ellyn
         run: |
+            conda activate regression-benchmarks
             # move to methods folder
             cd experiment/methods/src/
 
@@ -38,6 +39,8 @@ jobs:
 
       - name: Install GP-GOMEA
         run: |
+            which conda
+            conda activate regression-benchmarks
             # move to methods folder
             cd experiment/methods/src/
 
@@ -45,6 +48,8 @@ jobs:
         
       - name: Install operon
         run: |
+            which conda
+            conda activate regression-benchmarks
             # move to methods folder
             cd experiment/methods/src/
 
@@ -52,5 +57,7 @@ jobs:
 
       - name: Test Analyze
         run: |
-          cd experiment
-          python test_analyze.py
+            which conda
+            conda activate regression-benchmarks
+            cd experiment
+            python test_analyze.py
