@@ -11,24 +11,29 @@ Currently these are the challenges, as we see it, to achieving this:
 
 We are addressing the lack of pollination by making these comparisons open source, reproduceable and public, and hoping to share them widely with the entire ML research community.
 We are trying to address the lack of strong benchmarks by providing open source benchmarking of many SR methods on large sets of problems, with strong baselines for comparison. 
-To handle the lack of a unified framework, we've specified minimal requirements for contributing a method to this benchmark: a scikit-learn compatible API for each method.
+To handle the lack of a unified framework, we've specified minimal requirements for contributing a method to this benchmark: a scikit-learn compatible API.
 
 How to contribute
 =================
 
-- your open-source method
+To contribute a symbolic regression method for benchmarking, you need to provide the following:
+
+- an open-source method
 - a scikit-learn compatible API
-- installation instructions
-- a minimal script in `experiment/methods/` that specifies defines these items:
-    -   `est`: a sklearn-compatible Regressor object 
+- an install script in `experiment/methods/src/` that installs your method, and is added to our [Github actions workflow](.github/workflows/test.yml)
+- a minimal script in `experiment/methods/` that defines these items:
+    -   `est`: a sklearn-compatible `Regressor` object 
     -   `hyper_params` : a dictionary or list of dictionaries specifying the hyperparameter search space
-    -   `complexity`: a function that returns the complexity of the final model produced. 
+    -   `complexity(est)`: a function that returns the complexity of the final model produced
+    -   `model(est)`: a function that returns the form of the final model as a string 
 
-## Complexity
-
-To compare across methods with different representations, we need a precise definition of complexity. 
-
-*Complexity* is defined as the total number of elements in the model, which in Koza-style GP would be the number of _nodes_ in the solution program tree. 
-For example, the complexity of `(x + sin(3*y))` would be `len([x, y, 3, *, sin, +]) = 6`. 
-Contributors are responsible for defining this within their provided method. 
+See [experiment/methods/afp.py](experiment/methods/afp.py) for an example.
+**Complexity**: To compare across methods with different representations, we use this common definition of complexity. 
+Contributors are responsible for defining this complexity within their provided method. 
+Complexity is defined as the total number of elements in the model, which in Koza-style GP would be the number of _nodes_ in the solution program tree. 
+For example, the complexity of `(x + sin(3*y))` would be `len([+, x, sin, *, 3, y]) = 6`. 
+In other words, **every instance of basic math operators `(+, -, *, /, sin, cos, exp, log, %)`, constants, and input features should count toward the complexity**. 
+So, if your method uses very complex operations, for example, an operator that is defined as `Op(x,y) = (x+sin(3*y))`, you need to decompose such operators into their component parts when accounting for this complexity. 
+Note that the relative complexity of these basic math operators is not captured by this measure.
+If you are unsure about this definition, please open a discussion ticket.
 

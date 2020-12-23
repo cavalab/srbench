@@ -33,17 +33,6 @@ hyper_params = [
     },
 
 ]
-hyper_params=    [{
-        'popsize': (5,), 'g': (10,),
-        'max_len': (64,),
-        'rt_cross':(0.5,),'rt_mut':(0.5,),
-    },
-    {
-        'popsize': (10,), 'g': (5,),
-        'max_len': (64,),
-        'rt_cross':(0.5,),'rt_mut':(0.5,),
-    }
-]
 
 
 # Create the pipeline for the model

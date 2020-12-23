@@ -25,12 +25,32 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Install the GP methods
-        run: bash install.sh
+      - name: Configure
+        run: 
+            bash configure.sh
+
+      - name: Install ellyn
+        run: |
+            # move to methods folder
+            cd experiment/methods/src/
+
+            bash ellyn_install.sh
+
+      - name: Install GP-GOMEA
+        run: |
+            # move to methods folder
+            cd experiment/methods/src/
+
+            bash gpgomea_install.sh
         
-      # Runs a single command using the runners shell
+      - name: Install operon
+        run: |
+            # move to methods folder
+            cd experiment/methods/src/
+
+            bash operon_install.sh
+
       - name: Test Analyze
         run: |
-          cd experiments
+          cd experiment
           python test_analyze.py
