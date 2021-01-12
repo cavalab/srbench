@@ -36,7 +36,7 @@ hyper_params = [
 
 
 # Create the pipeline for the model
-est = ellyn(selection='eplex',
+est = ellyn(selection='epsilon_lexicase',
             lex_eps_global=False,
             lex_eps_dynamic=False,
             islands=True,

@@ -1,4 +1,4 @@
-from gsgp import GSGPClassifier
+from .src.gsgp import GSGPRegressor
 
 
 hyper_params = [
@@ -35,8 +35,7 @@ hyper_params = [
 ]
 
 
-est=GSGPClassifier(dataset=dataset.split('/')[-1][:-7], y_test=y_test, 
-                   y_train=y_test)
+est=GSGPRegressor()
 
 #TODO: define complexity
 def complexity(est):

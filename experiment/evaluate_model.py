@@ -50,10 +50,15 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # define CV strategy for hyperparam tuning
     ################################################## 
-    # define a test mode with fewer splits and no hyper_params
+    # define a test mode with fewer splits and no hyper_params and few gens
     if test:
         n_splits = 2
         hyper_params = {}
+        for genname in ['generations','gens','g']:
+            if hasattr(est, genname):
+                setattr(est, genname, 2)
+        if hasattr(est, 'popsize'):
+            est.popsize = 10
     else:
         n_splits = 5
 
@@ -87,9 +92,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     }
     # get the size of the final model
     if complexity == None:
-        results['model_size'] = features.shape[1]
+        results['model_size'] = int(features.shape[1])
     else:
-        results['model_size'] = complexity(best_est)
+        results['model_size'] = int(complexity(best_est))
 
     # scores
     sc_inv = sc_y.inverse_transform

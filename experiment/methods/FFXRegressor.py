@@ -11,4 +11,4 @@ hyper_params = [
 est = FFXRegressor()
 
 def complexity(est):
-    return est.model_.complexity
+    return est.model_.complexity()

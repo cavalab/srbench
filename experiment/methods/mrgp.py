@@ -38,3 +38,6 @@ est=MRGPRegressor()
 
 def complexity(est):
     return est.complexity
+
+def model(est):
+    return str(est.model_)
