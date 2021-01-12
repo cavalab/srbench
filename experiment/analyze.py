@@ -48,12 +48,12 @@ if __name__ == '__main__':
     print('dataset:',dataset)
 
     results_path = '/'.join([args.RDIR, dataset]) + '/'
-    # make the results_path directory if it doesn't exit 
-    try:
-        os.makedirs(results_path)
-    except OSError as e:
-        if e.errno != errno.EEXIST:
-            raise
+    # # make the results_path directory if it doesn't exit 
+    # try:
+    #     os.makedirs(results_path)
+    # except OSError as e:
+    #     if e.errno != errno.EEXIST:
+    #         raise
 
     # write run commands
     all_commands = []

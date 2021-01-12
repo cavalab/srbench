@@ -1,5 +1,4 @@
-import metrics
-from .gsgp import GSGPClassifier
+from gsgp import GSGPClassifier
 
 
 hyper_params = [

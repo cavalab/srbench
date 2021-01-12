@@ -70,6 +70,8 @@ jobs:
 
       - name: Test analysis 
         run: |
+            conda info 
+            pip install pytest
             cd experiment
             python test_analyze.py
 

@@ -23,6 +23,6 @@ cat Makefile-Python_Release.mk | grep EXTRA_LIB
 #todo: add CONDA_PREFIX to Make-file
 sudo make 
 # copy the .so library into the python package
-cp pyGPGOMEA/gpgomea.so dist/Python_Release/GNU-Linux/gpgomea/
+cp dist/Python_Release/GNU-Linux/gpgomea pyGPGOMEA/gpgomea.so
 
 pip install .

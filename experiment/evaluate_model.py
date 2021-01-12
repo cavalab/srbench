@@ -9,11 +9,11 @@ import time
 from tempfile import mkdtemp
 from shutil import rmtree
 from joblib import Memory
-from read_file import read_file
+from .read_file import read_file
 import pdb
 import numpy as np
-import methods
 import json
+import os
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, test=False):
@@ -115,6 +115,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ##################################################
     # write to file
     ##################################################
+    if not os.path.exists(results_path):
+        os.makedirs(results_path)
+
     save_file = (results_path + '/' + dataset_name + '_' + est_name + '_' 
                  + str(random_state))
     print('save_file:',save_file)
