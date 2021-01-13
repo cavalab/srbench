@@ -16,7 +16,10 @@ To handle the lack of a unified framework, we've specified minimal requirements 
 How to contribute
 =================
 
-To contribute a symbolic regression method for benchmarking, you need to provide the following:
+To contribute a symbolic regression method for benchmarking, fork the repo, make the changes listed below, and submit a pull request. 
+Once your method passes the basic tests and we've reviewed it, congrats! 
+We will plan to benchmark your method on hundreds of regression problems. 
+Here are the requirements:
 
 - an open-source method
 - a scikit-learn compatible API
@@ -29,8 +32,6 @@ To contribute a symbolic regression method for benchmarking, you need to provide
     -   `complexity(est)`: a function that returns the complexity of the final model produced
     -   `model(est)`: a function that returns the form of the final model as a string 
   See [experiment/methods/afp.py](experiment/methods/afp.py) for an example.
-- Fork the repo, make these changes, and submit a pull request. 
-  Once your method passes the basic tests and we've reviewed it, congrats! We will plan to benchmark your method on hundreds of regression problems. 
 
 **Complexity**: To compare across methods with different representations, we use this common definition of complexity. 
 Contributors are responsible for defining this complexity within their provided method. 
