@@ -50,23 +50,10 @@ jobs:
           conda list
           conda activate regression-benchmarks
 
-      - name: Install ellyn
+      - name: Install GP methods
         run: |
             conda info
-            cd experiment/methods/src/
-            bash ellyn_install.sh
-
-      - name: Install GP-GOMEA
-        run: |
-            conda info
-            cd experiment/methods/src/
-            bash gpgomea_install.sh
-
-      - name: Install operon
-        run: |
-            conda info
-            cd experiment/methods/src/
-            bash operon_install.sh
+            bash install.sh
 
       - name: Test analysis 
         run: |

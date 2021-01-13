@@ -1,10 +1,7 @@
-# install conda environment
-conda env create -f environment.yml
-
-eval "$(conda shell.bash hook)"
-
+# note: make sure conda environment is installed 
+# before running install. see configure.sh
 conda activate regression-benchmarks
-conda info 
+conda info
 
 # install methods
 echo "///////////////////////////"
@@ -16,13 +13,13 @@ cd experiment/methods/src/
 
 # install all methods
 for install_file in $(ls *.sh) ; do
-    echo "///////////////////////////"
+    echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
     echo "Running $install_file"
-    echo "///////////////////////////"
+    echo "////////////////////////////////////////////////////////////////////////////////"
 
     bash $install_file
 
-    echo "///////////////////////////"
+    echo "////////////////////////////////////////////////////////////////////////////////"
     echo "Finished $install_file"
-    echo "///////////////////////////"
+    echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 done
