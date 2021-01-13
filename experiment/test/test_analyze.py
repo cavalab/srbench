@@ -1,5 +1,4 @@
 import pytest
-import os
 from glob import glob
 from experiment.evaluate_model import evaluate_model
 import importlib
