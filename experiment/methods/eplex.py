@@ -50,3 +50,6 @@ est = ellyn(selection='epsilon_lexicase',
 
 def complexity(est):
     return len(est.best_estimator_)
+
+def model(est):
+    return est.stack_2_eqn(est.best_estimator_)

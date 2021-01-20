@@ -27,5 +27,6 @@ def test_evaluate_model(ml):
                    algorithm.est, 
                    algorithm.hyper_params, 
                    algorithm.complexity,
+                   algorithm.model,
                    True # testing
                   )

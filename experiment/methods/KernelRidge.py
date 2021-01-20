@@ -9,3 +9,4 @@ hyper_params = [{
 est=kernel_ridge.KernelRidge()
 
 complexity = None
+model = None

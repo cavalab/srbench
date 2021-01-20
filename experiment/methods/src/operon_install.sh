@@ -20,4 +20,4 @@ cmake .. -DCMAKE_BUILD_TYPE=Release  -DBUILD_PYBIND=ON -DUSE_OPENLIBM=ON -DUSE_S
 make VERBOSE=1 -j pyoperon
 
 # install
-make install
+sudo make install

@@ -9,3 +9,4 @@ hyper_params = [
 est=linear_model.LinearRegression()
 
 complexity = None
+model = None

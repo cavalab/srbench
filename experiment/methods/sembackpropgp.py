@@ -40,3 +40,6 @@ est = GPG( popsize=1000, generations=100, time=-1, evaluations=-1,
 
 def complexity(est):
     return est.get_n_nodes()
+
+def model(est):
+    return est.get_model()

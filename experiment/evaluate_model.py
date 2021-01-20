@@ -14,9 +14,10 @@ import pdb
 import numpy as np
 import json
 import os
+import inspect
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
-                   hyper_params, complexity, test=False):
+                   hyper_params, complexity, model, test=False):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
     if hasattr(est, 'random_state'):
@@ -90,11 +91,21 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         'random_state':random_state,
         'runtime':runtime 
     }
+
     # get the size of the final model
     if complexity == None:
         results['model_size'] = int(features.shape[1])
     else:
         results['model_size'] = int(complexity(best_est))
+
+    # get the final symbolic model as a string
+    if model == None:
+        results['symbolic_model'] = 'not implemented'
+    else:
+        if 'X' in inspect.signature(model).parameters.keys():
+            results['symbolic_model'] = model(best_est, X_train)
+        else:
+            results['symbolic_model'] = model(best_est)
 
     # scores
     sc_inv = sc_y.inverse_transform
@@ -172,7 +183,11 @@ if __name__ == '__main__':
     # import algorithm 
     print('import from','methods.'+args.ALG)
     algorithm = importlib.__import__('methods.'+args.ALG,globals(),locals(),
-                                   ['est','hyper_params','complexity'])
+                                   ['est',
+                                    'hyper_params',
+                                    'complexity',
+                                    'model'
+                                   ])
     if args.ALG == 'mrgp':
         algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
 
@@ -180,4 +195,4 @@ if __name__ == '__main__':
     print('hyperparams:',algorithm.hyper_params)
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,
-                   args.TEST)
+                   algorithm.model, args.TEST)
