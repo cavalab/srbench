@@ -9,11 +9,12 @@ export CXX=gcc-9
 
 git clone https://github.com/heal-research/operon
 cd operon
-git checkout 1b08b7ffb65edb2a347e08a32595ccc1f078a882
+# fix version
+git checkout a45dd32
 
 # run cmake
 mkdir build; cd build; 
-cmake .. -DCMAKE_BUILD_TYPE=Release  -DBUILD_PYBIND=ON -DUSE_OPENLIBM=ON -DUSE_SINGLE_PRECISION=ON 
+cmake .. -DCMAKE_BUILD_TYPE=Release  -DBUILD_PYBIND=ON -DUSE_OPENLIBM=ON -DUSE_SINGLE_PRECISION=ON -DCERES_TINY_SOLVER=ON 
 
 #install
 make VERBOSE=1

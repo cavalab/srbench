@@ -14,6 +14,8 @@ dependencies:
     - fmt=7.1.3 # operon
     - ceres-solver=2.0.0 # operon
     - tbb-devel=2020.2 # operon
+    - openlibm # operon
+    - cxxopts # operon
     - jupyter
     - pip=20.3.3 
     - pip:
