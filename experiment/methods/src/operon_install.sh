@@ -16,5 +16,8 @@ git checkout a45dd32
 mkdir build; cd build; 
 cmake .. -DCMAKE_BUILD_TYPE=Release  -DBUILD_PYBIND=ON -DUSE_OPENLIBM=ON -DUSE_SINGLE_PRECISION=ON -DCERES_TINY_SOLVER=ON 
 
-#install
-make VERBOSE=1
+# build
+make VERBOSE=1 -j pyoperon
+
+# install
+make install
