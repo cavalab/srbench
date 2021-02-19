@@ -10,7 +10,7 @@ export CXX=gcc-9
 git clone https://github.com/heal-research/operon
 cd operon
 # fix version
-git checkout a45dd32
+# git checkout a45dd32
 
 # run cmake
 mkdir build; cd build; 
