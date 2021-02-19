@@ -925,7 +925,7 @@ void read_config_file(string dataset, cfg *config){
 	string cfgname=dataset+"-configuration.ini";
 	fstream f(cfgname.c_str(), ios::in);
 	if (!f.is_open()) {
-    		cerr<<"CONFIGURATION FILE NOT FOUND." << endl;
+    		cerr<<"CONFIGURATION FILE ( " << cfgname << ") NOT FOUND." << endl;
     		exit(-1);
 	}
 	int k=0;
