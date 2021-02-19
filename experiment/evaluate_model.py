@@ -9,7 +9,7 @@ import time
 from tempfile import mkdtemp
 from shutil import rmtree
 from joblib import Memory
-from .read_file import read_file
+from read_file import read_file
 import pdb
 import numpy as np
 import json
@@ -59,7 +59,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
             if hasattr(est, genname):
                 setattr(est, genname, 2)
         if hasattr(est, 'popsize'):
-            est.popsize = 10
+            est.popsize = 20
     else:
         n_splits = 5
 
@@ -67,6 +67,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
 
     grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
             verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
+# ## TEMP TEst
+#     grid_est = est
 
     ################################################## 
     # Fit models
@@ -78,6 +80,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     runtime = time.process_time() - t0
 
     best_est = grid_est.best_estimator_
+    # best_est = grid_est
     
     ##################################################
     # store results
@@ -173,9 +176,10 @@ if __name__ == '__main__':
     parser.add_argument('-ml', action='store', dest='ALG',default=None,type=str, 
             help='Name of estimator (with matching file in methods/)')
     parser.add_argument('-results_path', action='store', dest='RDIR',
-                        default=None, type=str, help='Name of save file')
+                        default='results_test', type=str, 
+                        help='Name of save file')
     parser.add_argument('-seed', action='store', dest='RANDOM_STATE',
-                        default=None, type=int, help='Seed / trial')
+                        default=42, type=int, help='Seed / trial')
     parser.add_argument('-test',action='store_true', dest='TEST', 
                        help='Used for testing a minimal version')
 
