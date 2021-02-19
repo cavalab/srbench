@@ -60,4 +60,4 @@ jobs:
             conda info 
             pip install pytest
             cd experiment
-            python -m pytest -v
+            python -m pytest -v --root-dir /home/runner/work/regression-benchmark/regression-benchmark/
