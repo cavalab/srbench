@@ -9,6 +9,12 @@ Orzechowski, P., La Cava, W., & Moore, J. H. (2018).
 Where are we now? A large benchmark study of recent symbolic regression methods. 
 GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://www.researchgate.net/profile/Patryk_Orzechowski/publication/324769381_Where_are_we_now_A_large_benchmark_study_of_recent_symbolic_regression_methods/links/5ae779b70f7e9b837d392dc9/Where-are-we-now-A-large-benchmark-study-of-recent-symbolic-regression-methods.pdf)
 
+# Contribute
+
+We are actively updating and expanding this benchmark. 
+Want to add your method? 
+See our [Contribution Guide.](CONTRIBUTING.md)
+
 # How to run
 
 Batch jobs are controlled via `submit_jobs.py`. 
@@ -23,10 +29,7 @@ Run `python analyze.py -h` to see options.
 We have provided a [conda environment](environment.yml) and [installation script](install.sh) that should make installation straightforward.
 We've currently tested this on Ubuntu and CentOS. 
 
-# Contribute
 
-Want to add your method? 
-See our [Contribution Guide.](CONTRIBUTING.md)
 
 
 # Contact
