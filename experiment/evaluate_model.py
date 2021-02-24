@@ -186,12 +186,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
     # import algorithm 
     print('import from','methods.'+args.ALG)
-    algorithm = importlib.__import__('methods.'+args.ALG,globals(),locals(),
-                                   ['est',
-                                    'hyper_params',
-                                    'complexity',
-                                    'model'
-                                   ])
+    algorithm = importlib.__import__('methods.'+args.ALG,
+                                     globals(),
+                                     locals(),
+                                     ['est',
+                                      'hyper_params',
+                                      'complexity',
+                                      'model'
+                                     ]
+                                    )
     if args.ALG == 'mrgp':
         algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
 
