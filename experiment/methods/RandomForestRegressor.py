@@ -1,4 +1,5 @@
 from sklearn import ensemble
+import numpy as np
 
 hyper_params = [{
     'n_estimators': (10, 100, 1000),
@@ -11,3 +12,4 @@ est=ensemble.RandomForestRegressor()
 
 def complexity(est):
     return np.sum([e.tree_.node_count for e in est.estimators_])
+model = None

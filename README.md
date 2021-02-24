@@ -17,6 +17,18 @@ Run `python submit_jobs.py -h` to see options.
 Results of single methods on datasets are generated using `analyze.py`. 
 Run `python analyze.py -h` to see options. 
 
+
+# Installation
+
+We have provided a [conda environment](environment.yml) and [installation script](install.sh) that should make installation straightforward.
+We've currently tested this on Ubuntu and CentOS. 
+
+# Contribute
+
+Want to add your method? 
+See our [Contribution Guide.](CONTRIBUTING.md)
+
+
 # Contact
 
 William La Cava (@lacava), lacava at upenn dot edu

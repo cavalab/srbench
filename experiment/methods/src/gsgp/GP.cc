@@ -47,10 +47,13 @@ int main(int argc, const char **argv){
                 strcat(path_test,argv[++i]);
 	     }
        	if (strncmp(argv[i],"-name",5) == 0) {
-       	                        strcat(dataset_name,argv[++i]);
+            strcat(dataset_name,argv[++i]);
        	}                        
    	}
 	std::string dataset(dataset_name);
+    std::cout << "path_in: " << path_in << endl;
+    std::cout << "path_test: " << path_test << endl;
+    std::cout << "dataset: " << dataset << endl;
 	
 	// initialization of the seed for the generation of random numbers
 	//srand(time (NULL));

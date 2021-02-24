@@ -1,4 +1,3 @@
-
 from ellyn import ellyn
 
 hyper_params = [
@@ -35,6 +34,7 @@ hyper_params = [
 
 ]
 
+
 # Create the pipeline for the model
 est = ellyn(selection='afp',
             lex_eps_global=False,
@@ -50,3 +50,6 @@ est = ellyn(selection='afp',
 
 def complexity(est):
     return len(est.best_estimator_)
+
+def model(est):
+    return est.stack_2_eqn(est.best_estimator_)

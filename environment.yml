@@ -1,0 +1,25 @@
+name: regression-benchmarks
+channels:
+    - conda-forge
+dependencies:
+    - python=3.9.1
+    - cmake=3.19.1 # operon, feat 
+    - pybind11=2.6.1 # operon
+    - eigen=3.3.9 # operon, feat, ellyn
+    - boost=1.74.0 # gpgomea, ellyn
+    - scikit-learn=0.23.2 
+    - pandas=1.1.*
+    - xgboost
+    - armadillo=9.900.4 # gpgomea
+    - fmt=7.1.3 # operon
+    - ceres-solver=2.0.0 # operon
+    - tbb-devel=2020.2 # operon
+    - openlibm # operon
+    - cxxopts # operon
+    - jupyter
+    - pip=20.3.3 
+    - pip:
+        - DistanceClassifier==0.0.8 # ellyn
+        - pmlb==1.0.1.post3
+        - ffx==2.0.2 # ffx
+# ellyn=0.1
