@@ -59,4 +59,5 @@ jobs:
         run: |
             conda info 
             pip install pytest
+            cd experiment
             python -m pytest -v 
