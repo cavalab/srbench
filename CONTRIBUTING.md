@@ -23,7 +23,8 @@ Here are the requirements:
 
 - an open-source method
 - a scikit-learn compatible API
-- a bash install script in `experiment/methods/src/` named `your-method_install.sh` that installs your method. 
+- if your method is installable via pip or conda, add it to the [environment file](environment.yml). 
+  Otherwise, a bash install script in `experiment/methods/src/` named `your-method_install.sh` that installs your method. 
   See [ellyn_install.sh](experiment/methods/src/ellyn_install.sh) as an example. 
   Our [Github actions workflow](.github/workflows/test.yml) will automatically recognize it. 
 - a minimal script in `experiment/methods/` that defines these items:
