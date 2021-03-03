@@ -26,7 +26,6 @@ est = gplearn.SymbolicRegressor(function_set=('add', 'sub', 'mul', 'div','max','
                                 p_subtree_mutation=0.01, p_hoist_mutation=0.01, p_point_mutation=0.01, p_point_replace=0.05,
                                 max_samples=1.0)
 
-)
 
 def model(est):
     return str(est._program)
