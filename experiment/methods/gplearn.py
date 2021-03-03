@@ -16,7 +16,17 @@ hyper_params = [
     },
 ]
 
-est = gplearn.SymbolicRegressor(function_set=('add', 'sub', 'mul', 'div','max','min','log','sqrt'),)
+est = gplearn.SymbolicRegressor(function_set=('add', 'sub', 'mul', 'div','max','min','log','sqrt'),
+                                tournament_size=20,
+                                init_depth=(2, 6),
+                                init_method='half and half',
+                                metric='mean absolute error',
+                                parsimony_coefficient=0.001,
+                                p_crossover=0.9,
+                                p_subtree_mutation=0.01, p_hoist_mutation=0.01, p_point_mutation=0.01, p_point_replace=0.05,
+                                max_samples=1.0)
+
+)
 
 def model(est):
     return str(est._program)
