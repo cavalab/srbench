@@ -11,3 +11,4 @@ hyper_params = [
 est=linear_model.SGDRegressor()
 
 complexity = None
+model = None

@@ -5,10 +5,13 @@ from sklearn.preprocessing import RobustScaler, LabelEncoder
 
 def read_file(filename, classification=False, label='target', sep=None):
     
-    if filename.split('.')[-1] == 'gz':
+    if filename.endswith('gz'):
         compression = 'gzip'
     else:
         compression = None
+    
+    print('compression:',compression)
+    print('filename:',filename)
 
     if sep:
         input_data = pd.read_csv(filename, sep=sep, compression=compression)

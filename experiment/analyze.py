@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 import argparse
 import os, errno, sys
-from sklearn.externals.joblib import Parallel, delayed
+from joblib import Parallel, delayed
+from seeds import SEEDS
 
 
 if __name__ == '__main__':
@@ -17,16 +18,14 @@ if __name__ == '__main__':
     parser.add_argument('-ml', action='store', dest='LEARNERS',default=None,
             type=str, help='Comma-separated list of ML methods to use (should '
             'correspond to a py file name in learners/)')
-    parser.add_argument('--lsf', action='store_true', dest='LSF', default=False, 
-            help='Run on an LSF HPC (using bsub commands)')
+    parser.add_argument('--local', action='store_true', dest='LOCAL', default=False, 
+            help='Run locally as opposed to on LPC')
     parser.add_argument('-metric',action='store', dest='METRIC', default='f1_macro', 
             type=str, help='Metric to compare algorithms')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=4,type=int,
             help='Number of parallel jobs')
     parser.add_argument('-n_trials',action='store',dest='N_TRIALS',default=1,
             type=int, help='Number of parallel jobs')
-    parser.add_argument('-rs',action='store',dest='RANDOM_STATE',default=None,
-            type=int, help='random state')
     parser.add_argument('-label',action='store',dest='LABEL',default='class',
             type=str,help='Name of class label column')
     parser.add_argument('-results',action='store',dest='RDIR',default='results',
@@ -35,6 +34,8 @@ if __name__ == '__main__':
             type=str,help='LSF queue')
     parser.add_argument('-m',action='store',dest='M',default=4096,type=int,
             help='LSF memory request and limit (MB)')
+    parser.add_argument('-test',action='store_true', dest='TEST', 
+                       help='Used for testing a minimal version')
 
     args = parser.parse_args()
       
@@ -47,46 +48,47 @@ if __name__ == '__main__':
     print('dataset:',dataset)
 
     results_path = '/'.join([args.RDIR, dataset]) + '/'
-    # make the results_path directory if it doesn't exit 
-    try:
-        os.makedirs(results_path)
-    except OSError as e:
-        if e.errno != errno.EEXIST:
-            raise
+    # # make the results_path directory if it doesn't exit 
+    # try:
+    #     os.makedirs(results_path)
+    # except OSError as e:
+    #     if e.errno != errno.EEXIST:
+    #         raise
 
-    # initialize output files
-    for ml in learners:
-        #write headers
-        save_file = results_path + '/' + dataset + '_' + ml + '.csv'  
-        
-        with open(save_file,'w') as out:
-            out.write('dataset\talgorithm\tparameters\tseed'
-                    '\ttrain_mse\ttrain_mae\ttrain_r2'
-                    '\ttest_mse\ttest_mae\ttest_r2'
-                    '\ttime\tsize\n')
-        
     # write run commands
     all_commands = []
     job_info=[]
     for t in range(args.N_TRIALS):
-        random_state = np.random.randint(2**15-1)
+        # random_state = np.random.randint(2**15-1)
+        random_state = SEEDS[t]
         print('random_seed:',random_state)
         
         for ml in learners:
-            save_file = results_path + '/' + dataset + '_' + ml + '.csv'  
             
             all_commands.append('python evaluate_model.py '
                                 '{DATASET}'
                                 ' -ml {ML}'
-                                ' -save_file {SAVEFILE}'
-                                ' -seed {RS}'.format(ML=ml,
-                                                     DATASET=args.INPUT_FILE,
-                                                     SAVEFILE=save_file,
-                                                     RS=random_state)
+                                ' -results_path {RDIR}'
+                                ' -seed {RS} {TEST}'.format(
+                                    ML=ml,
+                                    DATASET=args.INPUT_FILE,
+                                    RDIR=results_path,
+                                    RS=random_state,
+                                    TEST=('-test' if args.TEST
+                                            else '')
+                                    )
                                 )
-            job_info.append({'ml':ml,'dataset':dataset,'results_path':results_path})
+            job_info.append({'ml':ml,
+                             'dataset':dataset,
+                             'results_path':results_path})
 
-    if args.LSF:    # bsub commands
+    if args.LOCAL:
+        # run locally  
+        for run_cmd in all_commands: 
+            print(run_cmd)
+            Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
+                                     for run_cmd in all_commands)
+    else: # LPC
         for i,run_cmd in enumerate(all_commands):
             job_name = job_info[i]['ml'] + '_' + job_info[i]['dataset']
             out_file = job_info[i]['results_path'] + job_name + '_%J.out'
@@ -103,9 +105,3 @@ if __name__ == '__main__':
             bsub_cmd +=  '"' + run_cmd + '"'
             print(bsub_cmd)
             os.system(bsub_cmd)     # submit jobs 
-
-    else:   # run locally  
-        for run_cmd in all_commands: 
-            print(run_cmd)
-        Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
-                for run_cmd in all_commands )

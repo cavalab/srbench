@@ -36,7 +36,7 @@ hyper_params = [
 
 
 # Create the pipeline for the model
-est = ellyn(selection='eplex',
+est = ellyn(selection='epsilon_lexicase',
             lex_eps_global=False,
             lex_eps_dynamic=False,
             islands=True,
@@ -50,3 +50,6 @@ est = ellyn(selection='eplex',
 
 def complexity(est):
     return len(est.best_estimator_)
+
+def model(est):
+    return est.stack_2_eqn(est.best_estimator_)
