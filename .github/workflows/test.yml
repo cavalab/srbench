@@ -58,6 +58,6 @@ jobs:
       - name: Test analysis 
         run: |
             conda info 
-            pip install pytest
+            # pip install pytest
             cd experiment
             python -m pytest -v 

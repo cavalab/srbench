@@ -19,6 +19,7 @@ dependencies:
     - cxxopts # operon
     - jupyter
     - pip=20.3.3 
+    - pytest
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3

@@ -1,4 +1,4 @@
-#install ellyn
+#install Bayesian Symbolic Regression
 
 git clone https://github.com/ying531/MCMC-SymReg
 
