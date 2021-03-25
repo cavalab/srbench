@@ -51,15 +51,20 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # define CV strategy for hyperparam tuning
     ################################################## 
-    # define a test mode with fewer splits and no hyper_params and few gens
+    # define a test mode with fewer splits, no hyper_params, and few iterations
     if test:
         n_splits = 2
         hyper_params = {}
-        for genname in ['generations','gens','g']:
+        for genname in ['generations','gens','g','iterNum','treeNum']:
             if hasattr(est, genname):
+                print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
         if hasattr(est, 'popsize'):
-            est.popsize = 20
+            print('setting popsize=5 for test')
+            est.popsize = 5
+        if hasattr(est, 'val'):
+            print('setting val=5 for test')
+            est.val = 5
     else:
         n_splits = 5
 
@@ -67,8 +72,6 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
 
     grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
             verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
-# ## TEMP TEst
-#     grid_est = est
 
     ################################################## 
     # Fit models
@@ -78,7 +81,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         warnings.simplefilter("ignore")
         grid_est.fit(X_train,y_train)
     runtime = time.process_time() - t0
-
+    print('Training took',runtime,'seconds')
     best_est = grid_est.best_estimator_
     # best_est = grid_est
     

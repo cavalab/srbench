@@ -18,10 +18,12 @@ dependencies:
     - openlibm # operon
     - cxxopts # operon
     - jupyter
-    - pip=20.3.3 
     - pytest
+    - matplotlib
+    - pip=20.3.3 
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
         - ffx==2.0.2 # ffx
+        - git+https://github.com/ying531/MCMC-SymReg
 # ellyn=0.1

@@ -11,7 +11,7 @@ from evaluate_model import evaluate_model
 import importlib
 
 # WARNING: this glob assumes tests are running from project root directory
-MLs = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') if
+MLs = [ml.split('/')[-1][:-3] for ml in glob('methods/*BSR*.py') if
        not ml.split('/')[-1][:-3].startswith('_')]
 print('MLs:',MLs)
 

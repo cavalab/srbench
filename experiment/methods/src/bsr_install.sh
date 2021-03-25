@@ -1,6 +1,6 @@
 #install Bayesian Symbolic Regression
 
-git clone https://github.com/ying531/MCMC-SymReg
+git clone https://github.com/lacava/MCMC-SymReg
 
 cd MCMC-SymReg
 
