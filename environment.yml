@@ -1,4 +1,4 @@
-name: regression-benchmarks
+name: srbench
 channels:
     - conda-forge
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
     - pybind11=2.6.1 # operon
     - eigen=3.3.9 # operon, feat, ellyn
     - boost=1.74.0 # gpgomea, ellyn
-    - scikit-learn=0.23.2 
+    - scikit-learn=0.24.1 
     - pandas=1.1.*
     - xgboost
     - gplearn
@@ -25,5 +25,4 @@ dependencies:
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
         - ffx==2.0.2 # ffx
-        - git+https://github.com/ying531/MCMC-SymReg
-# ellyn=0.1
+        - git+https://github.com/lacava/MCMC-SymReg

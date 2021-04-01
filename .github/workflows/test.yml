@@ -41,14 +41,14 @@ jobs:
       - name: Set up Conda Environment 
         uses: conda-incubator/setup-miniconda@v2
         with:
-          activate-environment: regression-benchmarks
+          activate-environment: srbench
           environment-file: environment.yml
           python-version: 3.9.1
           auto-activate-base: false
       - run: |
           conda info
           conda list
-          conda activate regression-benchmarks
+          conda activate srbench
 
       - name: Install GP methods
         run: |

@@ -1,6 +1,8 @@
 import sys
 import itertools
 import pandas as pd
+from sklearn.experimental import enable_halving_search_cv # noqa
+from sklearn.model_selection import HalvingGridSearchCV
 from sklearn.model_selection import GridSearchCV, KFold, train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score  
@@ -53,25 +55,27 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # define a test mode with fewer splits, no hyper_params, and few iterations
     if test:
+        print('test mode enabled')
         n_splits = 2
         hyper_params = {}
-        for genname in ['generations','gens','g','iterNum','treeNum']:
+        print('hyper_params set to',hyper_params)
+        for genname in ['generations','gens','g','itrNum','treeNum']:
             if hasattr(est, genname):
                 print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
         if hasattr(est, 'popsize'):
             print('setting popsize=5 for test')
-            est.popsize = 5
+            est.popsize = 20 
         if hasattr(est, 'val'):
-            print('setting val=5 for test')
-            est.val = 5
+            print('setting val=1 for test')
+            est.val = 1
     else:
         n_splits = 5
 
     cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
-    grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
-            verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
+    grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
+            verbose=2,n_jobs=1,scoring='r2',error_score=0.0)
 
     ################################################## 
     # Fit models
