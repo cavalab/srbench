@@ -57,23 +57,23 @@ public class SRLearnerMenuManager {
         int numMinutes=0;
         String propsFile = "";
         SymbRegMOO srEvoGPj;
-            dataPath = args[1];
-            String generations = args[2];
-            String pop_size = args[3];
-            String  mut_rate = args[4];
-            String  crossover_rate = args[5];
-            String  max_length = args[6];
-            // run evogpj with standard properties
-            Properties props = new Properties();
-            //System.out.print(dataPath);
-            props.put(Parameters.Names.PROBLEM, dataPath);
-            props.put(Parameters.Names.NUM_GENS, generations);
-            props.put(Parameters.Names.POP_SIZE, pop_size);      
-            props.put(Parameters.Names.MUTATION_RATE, mut_rate);
-            props.put(Parameters.Names.XOVER_RATE, crossover_rate);
-            props.put(Parameters.Names.TREE_INIT_MAX_DEPTH, max_length);
-            props.put(Parameters.Names.TREE_MUTATE_MAX_DEPTH, max_length);
-            props.put(Parameters.Names.TREE_XOVER_MAX_DEPTH, max_length);
+        dataPath = args[1];
+        String generations = args[2];
+        String pop_size = args[3];
+        String  mut_rate = args[4];
+        String  crossover_rate = args[5];
+        String  max_length = args[6];
+        // run evogpj with standard properties
+        Properties props = new Properties();
+        //System.out.print(dataPath);
+        props.put(Parameters.Names.PROBLEM, dataPath);
+        props.put(Parameters.Names.NUM_GENS, generations);
+        props.put(Parameters.Names.POP_SIZE, pop_size);      
+        props.put(Parameters.Names.MUTATION_RATE, mut_rate);
+        props.put(Parameters.Names.XOVER_RATE, crossover_rate);
+        props.put(Parameters.Names.TREE_INIT_MAX_DEPTH, max_length);
+        props.put(Parameters.Names.TREE_MUTATE_MAX_DEPTH, max_length);
+        props.put(Parameters.Names.TREE_XOVER_MAX_DEPTH, max_length);
 
 /*            if (args[2].equals("-minutes")) {
                 ;

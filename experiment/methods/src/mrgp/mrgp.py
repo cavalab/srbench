@@ -8,8 +8,7 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 
 class MRGPRegressor(BaseEstimator):
   def __init__(self, g=10, popsize=100, rt_mut=0.5, 
-               rt_cross=0.5, max_len=10, n_jobs=1):
-    env = dict(os.environ)
+               rt_cross=0.5, max_len=10):
     self.g = g
     self.popsize = popsize
     self.rt_cross = rt_cross

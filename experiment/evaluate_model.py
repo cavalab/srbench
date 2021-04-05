@@ -1,6 +1,8 @@
 import sys
 import itertools
 import pandas as pd
+from sklearn.experimental import enable_halving_search_cv # noqa
+from sklearn.model_selection import HalvingGridSearchCV
 from sklearn.model_selection import GridSearchCV, KFold, train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score  
@@ -51,24 +53,29 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # define CV strategy for hyperparam tuning
     ################################################## 
-    # define a test mode with fewer splits and no hyper_params and few gens
+    # define a test mode with fewer splits, no hyper_params, and few iterations
     if test:
+        print('test mode enabled')
         n_splits = 2
         hyper_params = {}
-        for genname in ['generations','gens','g']:
+        print('hyper_params set to',hyper_params)
+        for genname in ['generations','gens','g','itrNum','treeNum']:
             if hasattr(est, genname):
+                print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
         if hasattr(est, 'popsize'):
-            est.popsize = 20
+            print('setting popsize=5 for test')
+            est.popsize = 20 
+        if hasattr(est, 'val'):
+            print('setting val=1 for test')
+            est.val = 1
     else:
         n_splits = 5
 
     cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
-    grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
-            verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
-# ## TEMP TEst
-#     grid_est = est
+    grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
+            verbose=2,n_jobs=1,scoring='r2',error_score=0.0)
 
     ################################################## 
     # Fit models
@@ -78,7 +85,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         warnings.simplefilter("ignore")
         grid_est.fit(X_train,y_train)
     runtime = time.process_time() - t0
-
+    print('Training took',runtime,'seconds')
     best_est = grid_est.best_estimator_
     # best_est = grid_est
     
