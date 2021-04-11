@@ -113,24 +113,24 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
 
     # scores
     sc_inv = sc_y.inverse_transform
-    X_test_std = sc_x.transform(X_test)
+    X_test = sc_x.transform(X_test)
     pred = grid_est.predict
     # mse
     results['train_score_mse'] = mean_squared_error(sc_inv(y_train), 
                                                     sc_inv(pred(X_train)))
     results['test_score_mse'] = mean_squared_error(y_test, 
-                                                   sc_inv(pred(X_test_std)))
+                                                   sc_inv(pred(X_test)))
 
     # mae 
     results['train_score_mae'] = mean_absolute_error(sc_inv(y_train), 
                                                      sc_inv(pred(X_train)))
     results['test_score_mae'] = mean_absolute_error(y_test, 
-                                                    sc_inv(pred(X_test_std)))
+                                                    sc_inv(pred(X_test)))
 
     # r2 
     results['train_score_r2'] = r2_score(sc_inv(y_train), 
                                          sc_inv(pred(X_train)))
-    results['test_score_r2'] = r2_score(y_test, sc_inv(pred(X_test_std)))
+    results['test_score_r2'] = r2_score(y_test, sc_inv(pred(X_test)))
 
     
     ##################################################
