@@ -20,7 +20,7 @@ import inspect
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, model, n_samples=10000, 
-                   test=False):
+                   test=False, scale_x = True, scale_y = True):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
     if hasattr(est, 'random_state'):
@@ -33,7 +33,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     # if dataset is large, subsample it 
     if n_samples > 0 and len(labels) > n_samples:
         print('subsampling data from',len(labels),'to',n_samples)
-        sample_idx = np.random.choice(np.arange(labels), size=n_samples)
+        sample_idx = np.random.choice(np.arange(len(labels)), size=n_samples)
         labels = labels[sample_idx]
         features = features[sample_idx]
 
@@ -128,7 +128,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
 
     for fold, target, X in zip(['train','test'],
                                [y_train, y_test], 
-                               [X_train, X_test]
+                               [X_train_scaled, X_test_scaled]
                               ):
         for score, scorer in [('mse',mean_squared_error),
                               ('mae',mean_absolute_error),
@@ -194,17 +194,24 @@ if __name__ == '__main__':
     algorithm = importlib.__import__('methods.'+args.ALG,
                                      globals(),
                                      locals(),
-                                     ['est',
-                                      'hyper_params',
-                                      'complexity',
-                                      'model'
-                                     ]
+                                     ['*']
+                                     # ['est',
+                                     #  'hyper_params',
+                                     #  'complexity',
+                                     #  'model'
+                                     # ]
                                     )
     if args.ALG == 'mrgp':
         algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
 
     print('algorithm:',algorithm.est)
     print('hyperparams:',algorithm.hyper_params)
+
+    # optional keyword arguments passed to evaluate
+    eval_kwargs = {}
+    if 'eval_kwargs' in dir(algorithm):
+        eval_kwargs = algorithm.eval_kwargs
+
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,
-                   algorithm.model, args.TEST)
+                   algorithm.model, test = args.TEST, **eval_kws)
