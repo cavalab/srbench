@@ -35,5 +35,5 @@ def test_evaluate_model(ml):
                    algorithm.hyper_params, 
                    algorithm.complexity,
                    algorithm.model,
-                   True # testing
+                   test=True # testing
                   )

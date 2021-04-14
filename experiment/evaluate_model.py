@@ -19,7 +19,8 @@ import os
 import inspect
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
-                   hyper_params, complexity, model, test=False):
+                   hyper_params, complexity, model, n_samples=10000, 
+                   test=False):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
     if hasattr(est, 'random_state'):
@@ -30,8 +31,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ##################################################
     features, labels, feature_names = read_file(dataset)
     # if dataset is large, subsample it 
-    n_samples = 10000
-    if len(labels) > n_samples:
+    if n_samples > 0 and len(labels) > n_samples:
         print('subsampling data from',len(labels),'to',n_samples)
         sample_idx = np.random.choice(np.arange(labels), size=n_samples)
         labels = labels[sample_idx]
@@ -44,11 +44,16 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                                                     test_size=0.25,
                                                     random_state=random_state)
     # scale and normalize the data
-    X_train = StandardScaler().fit_transform(X_train)
-    sc_y = StandardScaler()
-    y_train = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
-    print('X_train:',X_train.shape)
-    print('y_train:',y_train.shape)
+    sc_X, sc_y = StandardScaler(), StandardScaler()
+
+    X_train_scaled = sc_X.fit_transform(X_train)
+    X_test_scaled = sc_X.transform(X_test)
+
+    y_train_scaled = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
+    y_test_scaled = sc_y.transform(y_test.reshape(-1,1)).flatten()
+
+    print('X_train:',X_train_scaled.shape)
+    print('y_train:',y_train_scaled.shape)
 
     ################################################## 
     # define CV strategy for hyperparam tuning
@@ -83,7 +88,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     t0 = time.process_time()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        grid_est.fit(X_train,y_train)
+        grid_est.fit(X_train_scaled, y_train_scaled)
     runtime = time.process_time() - t0
     print('Training took',runtime,'seconds')
     best_est = grid_est.best_estimator_
@@ -113,29 +118,39 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         results['symbolic_model'] = 'not implemented'
     else:
         if 'X' in inspect.signature(model).parameters.keys():
-            results['symbolic_model'] = model(best_est, X_train)
+            results['symbolic_model'] = model(best_est, X_train_scaled)
         else:
             results['symbolic_model'] = model(best_est)
 
     # scores
     sc_inv = sc_y.inverse_transform
     pred = grid_est.predict
-    # mse
-    results['train_score_mse'] = mean_squared_error(sc_inv(y_train), 
-                                                    sc_inv(pred(X_train)))
-    results['test_score_mse'] = mean_squared_error(y_test, 
-                                                   sc_inv(pred(X_test)))
 
-    # mae 
-    results['train_score_mae'] = mean_absolute_error(sc_inv(y_train), 
-                                                     sc_inv(pred(X_train)))
-    results['test_score_mae'] = mean_absolute_error(y_test, 
-                                                    sc_inv(pred(X_test)))
+    for fold, target, X in zip(['train','test'],
+                               [y_train, y_test], 
+                               [X_train, X_test]
+                              ):
+        for score, scorer in [('mse',mean_squared_error),
+                              ('mae',mean_absolute_error),
+                              ('r2', r2_score)
+                             ]:
+            results[score + '_' + fold] = scorer(target, sc_inv(pred(X))) 
+    # # mse
+    # results['train_score_mse'] = mean_squared_error(sc_inv(y_train), 
+    #                                                 sc_inv(pred(X_train)))
+    # results['test_score_mse'] = mean_squared_error(y_test, 
+    #                                                sc_inv(pred(X_test)))
 
-    # r2 
-    results['train_score_r2'] = r2_score(sc_inv(y_train), 
-                                         sc_inv(pred(X_train)))
-    results['test_score_r2'] = r2_score(y_test, sc_inv(pred(X_test)))
+    # # mae 
+    # results['train_score_mae'] = mean_absolute_error(sc_inv(y_train), 
+    #                                                  sc_inv(pred(X_train)))
+    # results['test_score_mae'] = mean_absolute_error(y_test, 
+    #                                                 sc_inv(pred(X_test)))
+
+    # # r2 
+    # results['train_score_r2'] = r2_score(sc_inv(y_train), 
+    #                                      sc_inv(pred(X_train)))
+    # results['test_score_r2'] = r2_score(y_test, sc_inv(pred(X_test)))
 
     
     ##################################################
