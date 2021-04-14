@@ -18,5 +18,5 @@ hyper_params = [
 est=lightgbm.LGBMRegressor()
 
 def complexity(est):
-    return np.sum([x['num_leaves'] for x in model._Booster.dump_model()['tree_info']])
+    return np.sum([x['num_leaves'] for x in est._Booster.dump_model()['tree_info']])
 model = None
