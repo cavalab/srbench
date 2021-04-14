@@ -10,6 +10,7 @@ dependencies:
     - scikit-learn=0.24.1 
     - pandas=1.1.*
     - xgboost
+    - lightgbm
     - gplearn
     - armadillo=9.900.4 # gpgomea
     - fmt=7.1.3 # operon
