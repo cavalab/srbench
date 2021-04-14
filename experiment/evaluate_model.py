@@ -135,23 +135,6 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                               ('r2', r2_score)
                              ]:
             results[score + '_' + fold] = scorer(target, sc_inv(pred(X))) 
-    # # mse
-    # results['train_score_mse'] = mean_squared_error(sc_inv(y_train), 
-    #                                                 sc_inv(pred(X_train)))
-    # results['test_score_mse'] = mean_squared_error(y_test, 
-    #                                                sc_inv(pred(X_test)))
-
-    # # mae 
-    # results['train_score_mae'] = mean_absolute_error(sc_inv(y_train), 
-    #                                                  sc_inv(pred(X_train)))
-    # results['test_score_mae'] = mean_absolute_error(y_test, 
-    #                                                 sc_inv(pred(X_test)))
-
-    # # r2 
-    # results['train_score_r2'] = r2_score(sc_inv(y_train), 
-    #                                      sc_inv(pred(X_train)))
-    # results['test_score_r2'] = r2_score(y_test, sc_inv(pred(X_test)))
-
     
     ##################################################
     # write to file
