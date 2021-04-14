@@ -19,8 +19,8 @@ import os
 import inspect
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
-                   hyper_params, complexity, model, n_samples=10000, 
-                   test=False, scale_x = True, scale_y = True):
+                   hyper_params, complexity, model, test=False, 
+                   n_samples=10000, scale_x = True, scale_y = True):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
     if hasattr(est, 'random_state'):
@@ -44,13 +44,21 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                                                     test_size=0.25,
                                                     random_state=random_state)
     # scale and normalize the data
-    sc_X, sc_y = StandardScaler(), StandardScaler()
+    if scale_x:
+        print('scaling X')
+        sc_X = StandardScaler() 
+        X_train_scaled = sc_X.fit_transform(X_train)
+        X_test_scaled = sc_X.transform(X_test)
+    else:
+        X_train_scaled = X_train
+        X_test_scaled = X_test
 
-    X_train_scaled = sc_X.fit_transform(X_train)
-    X_test_scaled = sc_X.transform(X_test)
-
-    y_train_scaled = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
-    y_test_scaled = sc_y.transform(y_test.reshape(-1,1)).flatten()
+    if scale_y:
+        print('scaling y')
+        sc_y = StandardScaler()
+        y_train_scaled = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
+    else:
+        y_train_scaled = y_train
 
     print('X_train:',X_train_scaled.shape)
     print('y_train:',y_train_scaled.shape)
@@ -123,7 +131,6 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
             results['symbolic_model'] = model(best_est)
 
     # scores
-    sc_inv = sc_y.inverse_transform
     pred = grid_est.predict
 
     for fold, target, X in zip(['train','test'],
@@ -134,7 +141,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                               ('mae',mean_absolute_error),
                               ('r2', r2_score)
                              ]:
-            results[score + '_' + fold] = scorer(target, sc_inv(pred(X))) 
+            y_pred = sc_y.inverse_transform(pred(X)) if scale_y else pred(X)
+            results[score + '_' + fold] = scorer(target, y_pred) 
     
     ##################################################
     # write to file
@@ -214,4 +222,4 @@ if __name__ == '__main__':
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,
-                   algorithm.model, test = args.TEST, **eval_kws)
+                   algorithm.model, test = args.TEST, **eval_kwargs)

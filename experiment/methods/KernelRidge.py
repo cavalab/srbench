@@ -10,3 +10,8 @@ est=kernel_ridge.KernelRidge()
 
 complexity = None
 model = None
+eval_kwargs = {
+               'n_samples':0,
+               'scale_y': False,
+               'scale_x': True,
+              }
