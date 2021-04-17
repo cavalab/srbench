@@ -7,6 +7,11 @@ export CXX=gcc-9
 # - Ceres- installed via conda
 # - {fmt}- installed via conda
 
+# remove directory if it exists
+if [ -d opern ]; then 
+    rm -rf operon
+fi
+
 git clone https://github.com/heal-research/operon
 cd operon
 # fix version
@@ -20,4 +25,4 @@ cmake .. -DCMAKE_BUILD_TYPE=Release  -DBUILD_PYBIND=ON -DUSE_OPENLIBM=ON -DUSE_S
 make VERBOSE=1 -j pyoperon
 
 # install
-sudo make install
+make install
