@@ -21,8 +21,8 @@ Once your method passes the basic tests and we've reviewed it, congrats!
 We will plan to benchmark your method on hundreds of regression problems. 
 Here are the requirements:
 
-- an open-source method
-- a scikit-learn compatible API
+- an open-source method with a [scikit-learn compatible API](https://scikit-learn.org/stable/developers/develop.html)
+  - if your method uses a random seed, it should have a `random_state` attribute that can be set.
 - if your method is installable via pip or conda, add it to the [environment file](environment.yml). 
   Otherwise, a bash install script in `experiment/methods/src/` named `your-method_install.sh` that installs your method. 
   See [ellyn_install.sh](experiment/methods/src/ellyn_install.sh) as an example. 
