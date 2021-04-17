@@ -1,6 +1,6 @@
 # note: make sure conda environment is installed 
 # before running install. see configure.sh
-conda activate regression-benchmarks
+conda activate srbench
 conda info
 
 failed=()
