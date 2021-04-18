@@ -1,6 +1,13 @@
 # install GOMEA
+
+# remove directory if it exists
+if [ -d "GP-GOMEA" ]; then 
+    rm -rf GP-GOMEA
+fi
+
 git clone https://github.com/marcovirgolin/GP-GOMEA 
 cd GP-GOMEA
+#fix version
 git checkout 6a92cb671c2772002b60df621a513d8b4df57887
 
 # use python 3.9
@@ -21,7 +28,7 @@ cat Makefile-Python_Release.mk | grep EXTRA_FLAGS
 cat Makefile-Python_Release.mk | grep EXTRA_LIB
 
 #todo: add CONDA_PREFIX to Make-file
-sudo make 
+make 
 # copy the .so library into the python package
 cp dist/Python_Release/GNU-Linux/gpgomea pyGPGOMEA/gpgomea.so
 
