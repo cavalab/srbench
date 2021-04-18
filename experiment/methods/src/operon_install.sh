@@ -8,7 +8,7 @@ export CXX=gcc-9
 # - {fmt}- installed via conda
 
 # remove directory if it exists
-if [ -d opern ]; then 
+if [ -d operon ]; then 
     rm -rf operon
 fi
 
