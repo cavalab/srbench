@@ -17,7 +17,6 @@ dependencies:
     - ceres-solver=2.0.0 # operon
     - tbb-devel=2020.2 # operon
     - openlibm # operon
-    - cxxopts # operon
     - jupyter
     - pytest
     - matplotlib
