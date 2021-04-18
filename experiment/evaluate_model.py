@@ -1,6 +1,8 @@
 import sys
 import itertools
 import pandas as pd
+from sklearn.experimental import enable_halving_search_cv # noqa
+from sklearn.model_selection import HalvingGridSearchCV
 from sklearn.model_selection import GridSearchCV, KFold, train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score  
@@ -17,7 +19,8 @@ import os
 import inspect
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
-                   hyper_params, complexity, model, test=False):
+                   hyper_params, complexity, model, test=False, 
+                   n_samples=10000, scale_x = True, scale_y = True):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
     if hasattr(est, 'random_state'):
@@ -28,10 +31,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ##################################################
     features, labels, feature_names = read_file(dataset)
     # if dataset is large, subsample it 
-    n_samples = 10000
-    if len(labels) > n_samples:
+    if n_samples > 0 and len(labels) > n_samples:
         print('subsampling data from',len(labels),'to',n_samples)
-        sample_idx = np.random.choice(np.arange(labels), size=n_samples)
+        sample_idx = np.random.choice(np.arange(len(labels)), size=n_samples)
         labels = labels[sample_idx]
         features = features[sample_idx]
 
@@ -42,34 +44,51 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                                                     test_size=0.25,
                                                     random_state=random_state)
     # scale and normalize the data
-    sc_x = StandardScaler()
-    X_train = sc_x.fit_transform(X_train)
-    sc_y = StandardScaler()
-    y_train = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
-    print('X_train:',X_train.shape)
-    print('y_train:',y_train.shape)
+    if scale_x:
+        print('scaling X')
+        sc_X = StandardScaler() 
+        X_train_scaled = sc_X.fit_transform(X_train)
+        X_test_scaled = sc_X.transform(X_test)
+    else:
+        X_train_scaled = X_train
+        X_test_scaled = X_test
+
+    if scale_y:
+        print('scaling y')
+        sc_y = StandardScaler()
+        y_train_scaled = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
+    else:
+        y_train_scaled = y_train
+
+    print('X_train:',X_train_scaled.shape)
+    print('y_train:',y_train_scaled.shape)
 
     ################################################## 
     # define CV strategy for hyperparam tuning
     ################################################## 
-    # define a test mode with fewer splits and no hyper_params and few gens
+    # define a test mode with fewer splits, no hyper_params, and few iterations
     if test:
+        print('test mode enabled')
         n_splits = 2
         hyper_params = {}
-        for genname in ['generations','gens','g']:
+        print('hyper_params set to',hyper_params)
+        for genname in ['generations','gens','g','itrNum','treeNum']:
             if hasattr(est, genname):
+                print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
         if hasattr(est, 'popsize'):
-            est.popsize = 20
+            print('setting popsize=5 for test')
+            est.popsize = 20 
+        if hasattr(est, 'val'):
+            print('setting val=1 for test')
+            est.val = 1
     else:
         n_splits = 5
 
     cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
-    grid_est = GridSearchCV(est,cv=cv, param_grid=hyper_params,
-            verbose=1,n_jobs=1,scoring='r2',error_score=0.0)
-# ## TEMP TEst
-#     grid_est = est
+    grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
+            verbose=2,n_jobs=1,scoring='r2',error_score=0.0)
 
     ################################################## 
     # Fit models
@@ -77,9 +96,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     t0 = time.process_time()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        grid_est.fit(X_train,y_train)
+        grid_est.fit(X_train_scaled, y_train_scaled)
     runtime = time.process_time() - t0
-
+    print('Training took',runtime,'seconds')
     best_est = grid_est.best_estimator_
     # best_est = grid_est
     
@@ -107,31 +126,23 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         results['symbolic_model'] = 'not implemented'
     else:
         if 'X' in inspect.signature(model).parameters.keys():
-            results['symbolic_model'] = model(best_est, X_train)
+            results['symbolic_model'] = model(best_est, X_train_scaled)
         else:
             results['symbolic_model'] = model(best_est)
 
     # scores
-    sc_inv = sc_y.inverse_transform
-    X_test = sc_x.transform(X_test)
     pred = grid_est.predict
-    # mse
-    results['train_score_mse'] = mean_squared_error(sc_inv(y_train), 
-                                                    sc_inv(pred(X_train)))
-    results['test_score_mse'] = mean_squared_error(y_test, 
-                                                   sc_inv(pred(X_test)))
 
-    # mae 
-    results['train_score_mae'] = mean_absolute_error(sc_inv(y_train), 
-                                                     sc_inv(pred(X_train)))
-    results['test_score_mae'] = mean_absolute_error(y_test, 
-                                                    sc_inv(pred(X_test)))
-
-    # r2 
-    results['train_score_r2'] = r2_score(sc_inv(y_train), 
-                                         sc_inv(pred(X_train)))
-    results['test_score_r2'] = r2_score(y_test, sc_inv(pred(X_test)))
-
+    for fold, target, X in zip(['train','test'],
+                               [y_train, y_test], 
+                               [X_train_scaled, X_test_scaled]
+                              ):
+        for score, scorer in [('mse',mean_squared_error),
+                              ('mae',mean_absolute_error),
+                              ('r2', r2_score)
+                             ]:
+            y_pred = sc_y.inverse_transform(pred(X)) if scale_y else pred(X)
+            results[score + '_' + fold] = scorer(target, y_pred) 
     
     ##################################################
     # write to file
@@ -191,17 +202,24 @@ if __name__ == '__main__':
     algorithm = importlib.__import__('methods.'+args.ALG,
                                      globals(),
                                      locals(),
-                                     ['est',
-                                      'hyper_params',
-                                      'complexity',
-                                      'model'
-                                     ]
+                                     ['*']
+                                     # ['est',
+                                     #  'hyper_params',
+                                     #  'complexity',
+                                     #  'model'
+                                     # ]
                                     )
     if args.ALG == 'mrgp':
         algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
 
     print('algorithm:',algorithm.est)
     print('hyperparams:',algorithm.hyper_params)
+
+    # optional keyword arguments passed to evaluate
+    eval_kwargs = {}
+    if 'eval_kwargs' in dir(algorithm):
+        eval_kwargs = algorithm.eval_kwargs
+
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,
-                   algorithm.model, args.TEST)
+                   algorithm.model, test = args.TEST, **eval_kwargs)
