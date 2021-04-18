@@ -7,6 +7,7 @@ dependencies:
     - pybind11=2.6.1 # operon
     - eigen=3.3.9 # operon, feat, ellyn
     - boost=1.74.0 # gpgomea, ellyn
+    - pkg-config=0.29.2
     - scikit-learn=0.24.1 
     - pandas=1.1.*
     - xgboost
