@@ -8,7 +8,7 @@ dependencies:
     - eigen=3.3.9 # operon, feat, ellyn
     - boost=1.74.0 # gpgomea, ellyn
     - scikit-learn=0.24.1 
-    - pandas=1.1.*
+    - pandas #=1.1.*
     - xgboost
     - lightgbm
     - gplearn
@@ -21,6 +21,16 @@ dependencies:
     - jupyter
     - pytest
     - matplotlib
+      #vv deep-symbolic-regression 
+    - tensorflow #=1.14 
+    - cython
+    - numpy
+    - numba
+    - sympy
+    - click
+    - mpi4py
+    - dataclasses
+      #^^ deep-symbolic-regression 
     - pip=20.3.3 
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
