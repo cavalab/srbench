@@ -24,6 +24,7 @@ dependencies:
     - pytest
     - matplotlib
     #vv ITEA vv#
+    - pkg-config
     - gmp
     - libffi
     - gsl

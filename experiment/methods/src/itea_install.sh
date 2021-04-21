@@ -9,6 +9,5 @@ git clone https://github.com/folivetti/ITEA.git
 
 cd ITEA
 curl -sSL https://get.haskellstack.org/ | sh 
-echo "stack build"
 stack build --allow-different-user 
 
