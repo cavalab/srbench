@@ -43,7 +43,7 @@ jobs:
         with:
           activate-environment: srbench
           environment-file: environment.yml
-          python-version: 3.9.1
+          python-version: 3.7.1
           auto-activate-base: false
       - run: |
           conda info

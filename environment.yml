@@ -30,6 +30,7 @@ dependencies:
     - gsl
     - libblas
     - liblapack
+    - stack
     #^^ ITEA ^^#
     #vv deep-symbolic-regression vv#
     - tensorflow=1.14 
