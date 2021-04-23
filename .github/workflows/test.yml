@@ -50,7 +50,7 @@ jobs:
           conda list
           conda activate srbench
 
-      - name: Install GP methods
+      - name: Install SR methods
         run: |
             conda info
             bash install.sh

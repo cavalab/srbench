@@ -12,18 +12,17 @@ dependencies:
     - lightgbm
     - gplearn
     - armadillo=9.900.4 # gpgomea
-    #vv operon vv#
+    - jupyter
+    - pytest
+    - matplotlib
+    # operon 
     - pybind11=2.6.1 
     - fmt=7.1.3 
     - ceres-solver=2.0.0 
     - tbb-devel=2020.2 
     - openlibm 
-    - cxxopts 
-    #^^ operon ^^#
-    - jupyter
-    - pytest
-    - matplotlib
-    #vv ITEA vv#
+    #  
+    # ITEA 
     - pkg-config
     - gmp
     - libffi
@@ -31,8 +30,8 @@ dependencies:
     - libblas
     - liblapack
     - stack
-    #^^ ITEA ^^#
-    #vv deep-symbolic-regression vv#
+    #
+    #deep-symbolic-regression 
     - tensorflow=1.14 
     - cython
     - numpy
@@ -41,7 +40,7 @@ dependencies:
     - click
     - mpi4py
     - dataclasses
-    #^^ deep-symbolic-regression ^^#
+    #
     - pip=20.3.3 
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
