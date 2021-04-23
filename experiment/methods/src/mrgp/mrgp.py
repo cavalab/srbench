@@ -8,12 +8,13 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 
 class MRGPRegressor(BaseEstimator):
   def __init__(self, g=10, popsize=100, rt_mut=0.5, 
-               rt_cross=0.5, max_len=10):
+               rt_cross=0.5, max_len=10, time_out=10*60):
     self.g = g
     self.popsize = popsize
     self.rt_cross = rt_cross
     self.rt_mut = rt_mut
     self.max_len = max_len
+    self.time_out = time_out  #in seconds
 
   def fit(self, features, target, sample_weight=None, groups=None):
     data=pd.DataFrame(features)
@@ -32,6 +33,8 @@ class MRGPRegressor(BaseEstimator):
                              str(self.rt_mut), 
                              str(self.rt_cross), 
                              str(self.max_len)
+                             str(self.time_out)
+
                             ])
     # get complexity
     # print('reading in ', self.dataset+'best')
