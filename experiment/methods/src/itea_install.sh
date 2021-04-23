@@ -8,6 +8,7 @@ fi
 git clone https://github.com/folivetti/ITEA.git
 
 cd ITEA
-curl -sSL https://get.haskellstack.org/ | sh
-stack build
+#curl -sSL https://get.haskellstack.org/ | sh
+#stack build
+cp ~/.conda/envs/srbench/libgsl.so bin/libgsl.so.0
 
