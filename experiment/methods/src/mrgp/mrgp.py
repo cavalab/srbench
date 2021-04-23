@@ -32,7 +32,7 @@ class MRGPRegressor(BaseEstimator):
                              str(self.popsize), 
                              str(self.rt_mut), 
                              str(self.rt_cross), 
-                             str(self.max_len)
+                             str(self.max_len),
                              str(self.time_out)
 
                             ])
