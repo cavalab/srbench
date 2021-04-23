@@ -3,20 +3,84 @@ import operon._operon as op
 
 
 est = SymbolicRegressor(
-            allowed_symbols='add,sub,mul,div,constant,variable',
-            offspring_generator='basic',
-            local_iterations=0, 
-            n_threads=1, 
-            random_state=None, 
+            local_iterations=5,
+            generations=10000, # just large enough since we have an evaluation budget
+            n_threads=1,
+            random_state=None,
+            time_limit=86400 # 24 hours
             )
 
-hyper_params = {} #TODO
+hyper_params = [
+        {
+            'population_size': (100,),
+            'pool_size': (100,),
+            'max_length': (25,),
+            'allowed_symbols': ('add,mul,aq,constant,variable',),
+            'local_iterations': (5,),
+            'offspring_generator': ('basic',),
+            'tournament_size': (3,),
+            'reinserter': ('keep-best',),
+            'max_evaluations': (int(5e5),)
+        },
+        {
+            'population_size': (100,),
+            'pool_size': (100,),
+            'max_length': (25,),
+            'allowed_symbols': ('add,mul,aq,exp,log,sin,tanh,constant,variable',),
+            'local_iterations': (5,),
+            'offspring_generator': ('basic',),
+            'tournament_size': (3,),
+            'reinserter': ('keep-best',),
+            'max_evaluations': (int(5e5),)
+        },
+        {
+            'population_size': (100,),
+            'pool_size': (100,),
+            'max_length': (50,),
+            'allowed_symbols': ('add,mul,aq,constant,variable',),
+            'local_iterations': (5,),
+            'offspring_generator': ('basic',),
+            'tournament_size': (3,),
+            'reinserter': ('keep-best',),
+            'max_evaluations': (int(5e5),)
+        },
+        {
+            'population_size': (500,),
+            'pool_size': (500,),
+            'max_length': (25,),
+            'allowed_symbols': ('add,mul,aq,constant,variable',),
+            'local_iterations': (5,),
+            'offspring_generator': ('basic',),
+            'tournament_size': (5,),
+            'reinserter': ('keep-best',),
+            'max_evaluations': (int(5e5),)
+        },
+        {
+            'population_size': (500,),
+            'pool_size': (500,),
+            'max_length': (25,),
+            'allowed_symbols': ('add,mul,aq,exp,log,sin,tanh,constant,variable',),
+            'local_iterations': (5,),
+            'offspring_generator': ('basic',),
+            'tournament_size': (5,),
+            'reinserter': ('keep-best',),
+            'max_evaluations': (int(5e5),)
+        },
+        {
+            'population_size': (500,),
+            'pool_size': (500,),
+            'max_length': (50,),
+            'allowed_symbols': ('add,mul,aq,constant,variable',),
+            'local_iterations': (5,),
+            'offspring_generator': ('basic',),
+            'tournament_size': (5,),
+            'reinserter': ('keep-best',),
+            'max_evaluations': (int(5e5),)
+        },
+    ]
 
-#TODO
 def complexity(est):
-    return est._model.Length
+    return est._stats['model_length'] # scaling nodes not counted
 
 def model(est, X):
-    #TODO: replace with est._model_str_ when PR merged
-    return str(op.InfixFormatter.Format(est._model, op.Dataset(X), 3))
-model = None
+    return est.get_model_string(3)
