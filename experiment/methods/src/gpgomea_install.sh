@@ -10,9 +10,19 @@ cd GP-GOMEA
 #fix version
 git checkout 6a92cb671c2772002b60df621a513d8b4df57887
 
-# use python 3.9
-sed -i 's/lboost_python37/lboost_python39/' Makefile-variables.mk
-sed -i 's/lboost_numpy37/lboost_numpy39/' Makefile-variables.mk
+# use correct python version
+LIBNAME=$(echo $CONDA_PREFIX/lib/libboost_python*.so)
+PYVERSION=${LIBNAME##$CONDA_PREFIX/lib/libboost_python}
+PYVERSION=${PYVERSION%.so}
+LBOOST="lboost_python$PYVERSION"
+LNP="lboost_numpy$PYVERSION"
+
+echo "PYVERSION: ${PYVERSION}"
+echo "LBOOST: $LBOOST"
+echo "LNUMPY: $LNP"
+
+sed -i "s/lboost_python37/$LBOOST/" Makefile-variables.mk
+sed -i "s/lboost_numpy37/$LNP/" Makefile-variables.mk
 
 # add extra flags to varables
 echo "EXTRA_FLAGS=-I ${CONDA_PREFIX}/include" >> Makefile-variables.mk
