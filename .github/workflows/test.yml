@@ -59,4 +59,4 @@ jobs:
             conda info 
             # pip install pytest
             cd experiment
-            python -m pytest -v 
+            python -m pytest -v test_evaluate_model.py
