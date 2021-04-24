@@ -2,13 +2,13 @@ name: srbench
 channels:
     - conda-forge
 dependencies:
-    - python=3.9.1
+    - python #=3.9.1
     - cmake=3.19.1 # operon, feat 
     - pybind11=2.6.1 # operon
     - eigen=3.3.9 # operon, feat, ellyn
     - boost=1.74.0 # gpgomea, ellyn
     - scikit-learn=0.24.1 
-    - pandas=1.1.*
+    - pandas
     - xgboost
     - lightgbm
     - gplearn
@@ -21,14 +21,21 @@ dependencies:
     - jupyter
     - pytest
     - matplotlib
-    - pip=20.3.3 
     - libblas=3.9.0=8_openblas # itea
     - liblapack=3.9.0=8_openblas # itea
     - gmp=6.2.1=h58526e2_0 # itea
     - gsl=2.6=he838d99_2 # itea
     - libffi=3.3=h58526e2_2 # itea
+    # feat
+    - cython=0.29.*
+    - setuptools=45.*
+    - shogun-cpp=6.1.4
+    - wheel=0.35.*
+    #
+    - pip=20.3.3 
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
         - ffx==2.0.2 # ffx
+        - eigency==1.77
         - git+https://github.com/lacava/MCMC-SymReg
