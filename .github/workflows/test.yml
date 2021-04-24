@@ -26,17 +26,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      # Caches the conda environment
-      - name: Cache conda
-        uses: actions/cache@v1
-        env:
-          # Increase this value to reset cache if environment.yml has not changed
-          CACHE_NUMBER: 1
-        with:
-          path: ~/conda_pkgs_dir
-          key:
-            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
-            hashFiles('etc/example-environment.yml') }}
+      # # Caches the conda environment
+      # - name: Cache conda
+      #   uses: actions/cache@v1
+      #   env:
+      #     # Increase this value to reset cache if environment.yml has not changed
+      #     CACHE_NUMBER: 1
+      #   with:
+      #     path: ~/conda_pkgs_dir
+      #     key:
+      #       ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
+      #       hashFiles('etc/example-environment.yml') }}
       # Sets up the conda environment
       - name: Set up Conda Environment 
         uses: conda-incubator/setup-miniconda@v2
