@@ -22,6 +22,11 @@ dependencies:
     - pytest
     - matplotlib
     - pip=20.3.3 
+    - libblas=3.9.0=8_openblas # itea
+    - liblapack=3.9.0=8_openblas # itea
+    - gmp=6.2.1=h58526e2_0 # itea
+    - gsl=2.6=he838d99_2 # itea
+    - libffi=3.3=h58526e2_2 # itea
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
