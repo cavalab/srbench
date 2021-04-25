@@ -49,7 +49,7 @@ jobs:
           conda list
           conda activate srbench
 
-      - name: Install GP methods
+      - name: Install SR methods
         run: |
             conda info
             bash install.sh
@@ -59,4 +59,4 @@ jobs:
             conda info 
             # pip install pytest
             cd experiment
-            python -m pytest -v 
+            python -m pytest -v test_evaluate_model.py

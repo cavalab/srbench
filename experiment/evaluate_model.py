@@ -17,12 +17,15 @@ import numpy as np
 import json
 import os
 import inspect
+from utils import jsonify
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, model, test=False, 
                    n_samples=10000, scale_x = True, scale_y = True):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
+
+    np.random.seed(random_state)
     if hasattr(est, 'random_state'):
         est.random_state = random_state
 
@@ -82,6 +85,11 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         if hasattr(est, 'val'):
             print('setting val=1 for test')
             est.val = 1
+        # deep sr setting
+        if hasattr(est, 'config'):
+            est.config['training']['n_samples'] = 10
+            est.config['training']['batch_size'] = 10
+            est.config['training']['hof'] = 5
     else:
         n_splits = 5
 
@@ -154,21 +162,15 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                  + str(random_state))
     print('save_file:',save_file)
 
-    print('results types:',type(results))
-    for k,v in results.items():
-        print(k,v.__class__.__name__ )
     with open(save_file + '.json', 'w') as out:
-        json.dump(results, out)
+        json.dump(jsonify(results), out)
 
     # store CV detailed results
     cv_results = grid_est.cv_results_
     cv_results['random_state'] = random_state
-    for k,v in cv_results.items():
-        print(k,'type:',type(v).__name__)
-        if type(v).__name__ in ['ndarray','MaskedArray']:
-            cv_results[k] = cv_results[k].tolist()
+
     with open(save_file + '_cv_results.json', 'w') as out:
-        json.dump(cv_results, out)
+        json.dump(jsonify(cv_results), out)
 
 ################################################################################
 # main entry point
@@ -203,11 +205,6 @@ if __name__ == '__main__':
                                      globals(),
                                      locals(),
                                      ['*']
-                                     # ['est',
-                                     #  'hyper_params',
-                                     #  'complexity',
-                                     #  'model'
-                                     # ]
                                     )
     if args.ALG == 'mrgp':
         algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]

@@ -12,4 +12,3 @@ git clone https://github.com/folivetti/ITEA.git
 #stack build
 #conda activate srbench
 #cp $CONDA_PREFIX/lib/libgsl.so bin/libgsl.so.0
-
