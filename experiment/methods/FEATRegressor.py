@@ -4,20 +4,19 @@ from feat import FeatRegressor
 pop_sizes = [100, 500, 1000]
 gs = [2500, 500, 250]
 lrs = [0.1, 0.3]
-hyper_params = {'pop_size':[],
-                'gens':[]
-                'lr':[]
-                }
+hyper_params = []
 for p, g in zip(pop_sizes, gs):
     for lr in lrs:
-        hyper_params['pop_size'].append(p)
-        hyper_params['gens'].append(g)
-        hyper_params['lr'].append(lr)
+        hyper_params.append({
+            'pop_size':[p],
+            'gens':[g]
+            'lr':[lr]
+        })
 
 est = FeatRegressor(
                     pop_size=500,
                     gens=200,
-                    max_time=82800, #23 hrs 
+                    max_time=43200, #12 hrs 
                     max_stall=100,
                     batch_size=100,
                     max_depth=6,

@@ -7,6 +7,9 @@ hyper_params = [{
 
 est=ensemble.AdaBoostRegressor()
 
-complexity = None
-model = None
+def complexity(est):
+    size = 0 
+    for i in est.estimators_:
+        size += i.tree_.node_count
+
 model = None
