@@ -5,12 +5,12 @@ from bsr.bsr_class import BSR
 # K = 3
 # MM = 50
 
-hyper_params = {'treeNum': 3, 
-                 'itrNum': 50, 
-                 'val':100,
-                 'alpha1':0.4, 
-                 'alpha2':0.4, 
-                 'beta':-1
+hyper_params = {'treeNum': [3], 
+                 'itrNum': [50], 
+                 'val': [100],
+                 'alpha1': [0.4], 
+                 'alpha2': [0.4], 
+                 'beta': [-1]
                 }
 # initialize
 est = BSR()
