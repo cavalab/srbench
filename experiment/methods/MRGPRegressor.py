@@ -41,4 +41,4 @@ def complexity(est):
 
 def model(est):
     return str(est.model_)
-model = None
+
