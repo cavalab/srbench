@@ -1,22 +1,42 @@
-from .src.ITEA import itea
+from .src.ITEA import itea_srbench as itea
 from itertools import product
-
-es = [(-5, 5), (0, 5), (-2, 2), (0, 2)]
-ts = [(2, 10), (2, 15), (2, 5)]
-nzs = [1]
-tss = [ '[Id]', '[Id, Tanh, Sin, Cos, Log, Exp, SqrtAbs]', '[Id, Sin]']
 
 hyper_params = [
     {
-        'exponents': (e,),
-        'termlimit':(t,), 'nonzeroexps': (nz,),
-        'transfunctions':(ts,),
-    } for e, t, nz, ts in product(es, ts, nzs, tss)
+        'exponents' : ((0,5),),
+        'termlimit' : ((2,5),),
+        'transfunctions' : ('[Id, Sin]',)
+    },
+    {
+        'exponents' : ((0,5),),
+        'termlimit' : ((2, 15),),
+        'transfunctions' : ('[Id, Sin]',)
+    },
+    {
+        'exponents' : ((-5,5),),
+        'termlimit' : ((2, 15),),
+        'transfunctions' : ('[Id, Sin]',)
+    },
+    {
+        'exponents' : ((-5, 5),),
+        'termlimit' : ((2, 5),),
+        'transfunctions' : ('[Id, Tanh, Sin, Cos, Log, Exp, SqrtAbs]',)
+    },
+    {
+        'exponents' : ((0, 5),),
+        'termlimit' : ((2, 15),),
+        'transfunctions' : ('[Id, Tanh, Sin, Cos, Log, Exp, SqrtAbs]',)
+    },
+    {
+        'exponents' : ((-5, 5),),
+        'termlimit' : ((2, 15),),
+        'transfunctions' : ('[Id, Tanh, Sin, Cos, Log, Exp, SqrtAbs]',)
+    },
 ]
 
 # Create the pipeline for the model
 eval_kwargs = {'scale_x': False, 'scale_y': False}
-est = itea.ITEARegressor(npop=500, ngens=200, exponents=(-1, 1), termlimit=(2, 2))
+est = itea.ITEARegressor(npop=1000, ngens=500, exponents=(-1, 1), termlimit=(2, 2), nonzeroexps=1)
 
 def complexity(e):
     return e.len
