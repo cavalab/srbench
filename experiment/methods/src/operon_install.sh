@@ -15,7 +15,7 @@ fi
 git clone https://github.com/heal-research/operon
 cd operon
 # fix version
-# git checkout c537a45b5ff5f98b78821244a1fc657e2f081cb0
+git checkout 015d420944a64353a37e0493ae9be74c645b4198
 
 # run cmake
 rm -rf build

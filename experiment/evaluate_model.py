@@ -21,7 +21,8 @@ from utils import jsonify
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, model, test=False, 
-                   n_samples=10000, scale_x = True, scale_y = True):
+                   n_samples=10000, scale_x = True, scale_y = True,
+                   pre_train=None):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
 
@@ -62,6 +63,10 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         y_train_scaled = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
     else:
         y_train_scaled = y_train
+
+    # run any method-specific pre_train routines
+    if pre_train:
+        pre_train(est, X_train_scaled, y_train_scaled)
 
     print('X_train:',X_train_scaled.shape)
     print('y_train:',y_train_scaled.shape)
@@ -163,14 +168,14 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     print('save_file:',save_file)
 
     with open(save_file + '.json', 'w') as out:
-        json.dump(jsonify(results), out)
+        json.dump(jsonify(results), out, indent=4)
 
     # store CV detailed results
     cv_results = grid_est.cv_results_
     cv_results['random_state'] = random_state
 
     with open(save_file + '_cv_results.json', 'w') as out:
-        json.dump(jsonify(cv_results), out)
+        json.dump(jsonify(cv_results), out, indent=4)
 
 ################################################################################
 # main entry point

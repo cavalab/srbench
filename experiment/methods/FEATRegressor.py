@@ -37,3 +37,15 @@ def complexity(est):
 
 def model(est):
     return est.get_eqn()
+
+def pre_train(est, X, y):
+    """Adjust settings based on data before training"""
+    # adjust generations based onsize of X versus batch size
+    if est.batch_size < len(X):
+        est.gens = int(est.gens*len(X)/est.batch_size)
+    print('FEAT gens adjusted to',est.gens)
+    # adjust max dim
+    est.max_dim=min(max(est.max_dim, X.shape[1]), 20)
+    print('FEAT max_dim set to',est.max_dim)
+
+eval_kwargs = dict(pre_train=pre_train)

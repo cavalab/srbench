@@ -80,7 +80,7 @@ hyper_params = [
     ]
 
 def complexity(est):
-    return est._stats['model_length'] # scaling nodes not counted
+    return est._stats['model_complexity'] # scaling nodes not counted
 
 def model(est, X):
     return est.get_model_string(3)
