@@ -108,12 +108,16 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # Fit models
     ################################################## 
-    t0 = time.process_time()
+    t0p = time.process_time()
+    t0c = time.clock_time()
+    t0t = time.time()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         grid_est.fit(X_train_scaled, y_train_scaled)
-    runtime = time.process_time() - t0
-    print('Training took',runtime,'seconds')
+    process_time = time.process_time() - t0
+    clock_time = time.clock_time() - t0
+    time_time = time.time() - t0
+    print('Training time measures:',process_time, clock_time, time_time)
     best_est = grid_est.best_estimator_
     # best_est = grid_est
     
@@ -127,7 +131,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         'params':{k:v for k,v in best_est.get_params().items() 
                   if any(isinstance(v, t) for t in [bool,int,float,str])},
         'random_state':random_state,
-        'runtime':runtime 
+        'process_time': process_time, 
+        'clock_time': clock_time, 
+        'time_time': time_time, 
     }
 
     # get the size of the final model
