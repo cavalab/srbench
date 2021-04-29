@@ -48,3 +48,15 @@ def complexity(est):
 
 def model(est):
     return est.stack_2_eqn(est.best_estimator_)
+
+def pre_train(est, X, y):
+    """Adjust settings based on data before training"""
+    # adjust generations based on size of X versus FE size, taking into account
+    # additional training models evaluated for coevolution
+    g = est.gens
+    est.gens = int(
+        g*len(X)*(1-est.FE_train_size/(FE_train_gens*FE_ind_size*est.popsize))
+        )
+    print('FE ellyn gens adjusted from',g,'to',est.gens)
+
+eval_kwargs = dict(pre_train=pre_train)
