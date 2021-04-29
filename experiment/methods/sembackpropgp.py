@@ -18,14 +18,13 @@ hyper_params = [
         'sbrdo': (0.75,), 'submut': (0.25,),
     },
     {
-        'popsize': (100,), 'functions' : ('+_-_*_aq_plog_sin_cos',), 'linearscaling' : (False,),
-        'sbrdo': (0.75,), 'submut': (0.25,),
-    },
-    {
         'popsize': (1000,), 'functions' : ('+_-_*_aq_plog_sin_cos',), 'linearscaling' : (False,),
         'sbrdo': (0.75,), 'submut': (0.25,),
     },
-
+    {
+        'popsize': (5000,), 'functions' : ('+_-_*_aq_plog_sin_cos',), 'linearscaling' : (False,),
+        'sbrdo': (0.75,), 'submut': (0.25,),
+    },
 ]
 
 est = GPG( popsize=100, generations=-1, time=-1, evaluations=500000, 
