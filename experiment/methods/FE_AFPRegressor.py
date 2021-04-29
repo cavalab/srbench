@@ -51,12 +51,9 @@ def model(est):
 
 def pre_train(est, X, y):
     """Adjust settings based on data before training"""
-    # adjust generations based on size of X versus FE size, taking into account
-    # additional training models evaluated for coevolution
+    # adjust generations based on size of X versus FE size
     g = est.g
-    est.g = int(
-        g*len(X)*(1-est.FE_train_size/(FE_train_gens*FE_ind_size*est.popsize))
-        )
+    est.g = g*len(X)/est.FE_ind_size
     print('FE ellyn gens adjusted from',g,'to',est.g)
 
 eval_kwargs = dict(pre_train=pre_train)

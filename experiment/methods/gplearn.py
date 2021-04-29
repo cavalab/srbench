@@ -3,8 +3,9 @@ import re
 
 hyper_params = []
 for p, g in zip([1000,500,100],[500,1000,5000]):
-    for fs in [('add', 'sub', 'mul', 'div','exp','log','sqrt'),
-               ('add', 'sub', 'mul', 'div','sin','cos','exp','log','sqrt')]:
+    for fs in [('add', 'sub', 'mul', 'div', 'log','sqrt'),
+               ('add', 'sub', 'mul', 'div', 'log','sqrt', 'sin','cos')
+              ]:
         hyper_params.append({
             'population_size' : [p],
             'generations' : [g],
