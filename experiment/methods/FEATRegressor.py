@@ -9,7 +9,7 @@ for p, g in zip(pop_sizes, gs):
     for lr in lrs:
         hyper_params.append({
             'pop_size':[p],
-            'gens':[g]
+            'gens':[g],
             'lr':[lr]
         })
 

@@ -11,5 +11,6 @@ def complexity(est):
     size = 0 
     for i in est.estimators_:
         size += i.tree_.node_count
+    return size
 
 model = None

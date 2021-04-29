@@ -50,11 +50,14 @@ if __name__ == '__main__':
 
     print('dataset directory:',args.DATASET_DIR)
 
-
+    if args.DATASET_DIR.endswith('.tsv.gz'):
+        datasets = [args.DATASET_DIR]
+    else:
+        datasets = glob(args.DATASET_DIR+'/*/*.tsv.gz')
     # write run commands
     all_commands = []
     job_info=[]
-    for dataset in glob(args.DATASET_DIR+'/*/*.tsv.gz'):
+    for dataset in datasets:
         # grab regression datasets
         metadata = load(
                 open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
@@ -100,9 +103,11 @@ if __name__ == '__main__':
                                      for run_cmd in all_commands)
     else: # LPC
         for i,run_cmd in enumerate(all_commands):
-            job_name = (job_info[i]['ml'] + '_' 
-                        + job_info[i]['dataset'] 
-                        + job_info[i]['seed'])
+            job_name = '_'.join([
+                                 job_info[i]['dataset'],
+                                 job_info[i]['ml'],
+                                 job_info[i]['seed']
+                                ])
             out_file = job_info[i]['results_path'] + job_name + '_%J.out'
             error_file = out_file[:-4] + '.err'
             
