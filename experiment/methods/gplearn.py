@@ -11,7 +11,7 @@ for p, g in zip([1000,500,100],[500,1000,5000]):
             'function_set': [fs]
             })
 
-est = SymbolicRegressor(function_set=('add', 'sub', 'mul', 'div','max','min','log','sqrt'),
+est = SymbolicRegressor(
                         tournament_size=20,
                         init_depth=(2, 6),
                         init_method='half and half',
