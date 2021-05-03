@@ -19,11 +19,11 @@ hyper_params = [
     },
     {
         'popsize': (1000,), 'functions' : ('+_-_*_aq_plog_sin_cos',), 'linearscaling' : (False,),
-        'sbrdo': (0.9,), 'submut': (0.1,), 'tournament': (4,), 'maxsize': (250,), 'sblibtype': ('p_6_20000',), 
+        'sbrdo': (0.9,), 'submut': (0.1,), 'tournament': (4,), 'maxsize': (250,), 'sblibtype': ('p_6_9999',), 
     },
     {
         'popsize': (10000,), 'functions' : ('+_-_*_aq_plog_sin_cos',), 'linearscaling' : (False,),
-        'sbrdo': (0.9,), 'submut': (0.1,), 'tournament': (8,), 'maxsize': (250,), 'sblibtype': ('p_6_20000',),
+        'sbrdo': (0.9,), 'submut': (0.1,), 'tournament': (8,), 'maxsize': (250,), 'sblibtype': ('p_6_9999',),
     },
 ]
 
