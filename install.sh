@@ -31,4 +31,8 @@ for install_file in $(ls *.sh) ; do
     echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 done
 
-echo "failed: ${failed}"
+if [ ${#failed[@]} -gt 0 ] ; then
+    echo "${#failed[@]} installs failed: ${failed}"
+else
+    echo "All installations completed successfully."
+fi

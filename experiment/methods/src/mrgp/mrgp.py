@@ -4,7 +4,7 @@ import os
 import subprocess
 import pandas as pd
 import numpy as np
-this_dir = os.path.dirname(os.path.realpath(__file__))
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 
 class MRGPRegressor(BaseEstimator):
   def __init__(self, g=10, popsize=100, rt_mut=0.5, 
@@ -19,13 +19,13 @@ class MRGPRegressor(BaseEstimator):
   def fit(self, features, target, sample_weight=None, groups=None):
     data=pd.DataFrame(features)
     data['target']=target
-    self.dataset = this_dir + '/tmp_data_' + str(np.random.randint(2**15-1))
+    self.dataset = THIS_DIR + '/tmp_data_' + str(np.random.randint(2**15-1))
     # print('dataset name:',self.dataset)
     data.to_csv(self.dataset+'-train',
                 header=None, 
                 index=None)
     subprocess.check_output(['java', '-jar', 
-                             this_dir+'/mrgp.jar',
+                             THIS_DIR+'/mrgp.jar',
                              '-train', 
                              self.dataset, 
                              str(self.g), 
@@ -61,7 +61,7 @@ class MRGPRegressor(BaseEstimator):
     y_pred=[float(x) for x in ''.join(
         chr(i) for i in 
         subprocess.check_output(['java', '-jar', 
-                                 this_dir +'/mrgp.jar', '-test', 
+                                 THIS_DIR +'/mrgp.jar', '-test', 
                                  self.dataset])
         )[:-1].strip().split(" ")]
 
