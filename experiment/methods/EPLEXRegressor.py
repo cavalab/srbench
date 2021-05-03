@@ -23,7 +23,7 @@ for p, g in zip(pop_sizes, gs):
 est = ellyn(selection='epsilon_lexicase',
             lex_eps_global=False,
             lex_eps_dynamic=False,
-            islands=True,
+            islands=False,
             num_islands=1,
             island_gens=1,
             verbosity=0,
@@ -33,8 +33,6 @@ est = ellyn(selection='epsilon_lexicase',
             prto_arch_on=True,
             max_len = 64,
             max_len_init=20,
-            op_list=['n','v','+','-','*','/','sin','cos','exp','log','2','3',
-                     'sqrt'],
             )
 
 def complexity(est):

@@ -73,7 +73,7 @@ if __name__ == '__main__':
         for t in range(args.N_TRIALS):
             # random_state = np.random.randint(2**15-1)
             random_state = SEEDS[t]
-            print('random_seed:',random_state)
+            # print('random_seed:',random_state)
             
             for ml in learners:
                 
