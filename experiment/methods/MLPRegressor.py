@@ -12,6 +12,6 @@ hyper_params = [
 est=MLPRegressor()
 
 def complexity(est):
-    return np.sum([c.size for c in est.coefs_]
-                  + [c.size for c in est.intercepts_])
+    return np.sum([c.size*2 for c in est.coefs_]
+                  + [c.size*2 for c in est.intercepts_])
 model = None

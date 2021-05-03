@@ -9,14 +9,14 @@ for p, g in zip(pop_sizes, gs):
     for lr in lrs:
         hyper_params.append({
             'pop_size':[p],
-            'gens':[g]
+            'gens':[g],
             'lr':[lr]
         })
 
 est = FeatRegressor(
                     pop_size=500,
                     gens=200,
-                    max_time=43200, #12 hrs 
+                    max_time=28800,  # 8 hrs
                     max_stall=100,
                     batch_size=100,
                     max_depth=6,
@@ -24,11 +24,10 @@ est = FeatRegressor(
                     backprop=True,
                     iters=1,
                     n_jobs=1,
-                    simplify=0.01,
-                    stagewise_xo=True,
+                    simplify=0.005,
                     corr_delete_mutate=True,
                     cross_rate=0.75,
-                    verbosity=2
+                    verbosity=1
                    )
 
 def complexity(est):

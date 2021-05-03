@@ -34,12 +34,6 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     # setup data
     ##################################################
     features, labels, feature_names = read_file(dataset)
-    # if dataset is large, subsample it 
-    if n_samples > 0 and len(labels) > n_samples:
-        print('subsampling data from',len(labels),'to',n_samples)
-        sample_idx = np.random.choice(np.arange(len(labels)), size=n_samples)
-        labels = labels[sample_idx]
-        features = features[sample_idx]
 
 
     # generate train/test split
@@ -47,6 +41,14 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                                                     train_size=0.75,
                                                     test_size=0.25,
                                                     random_state=random_state)
+
+    # if dataset is large, subsample the training set 
+    if n_samples > 0 and len(labels) > n_samples:
+        print('subsampling training data from',len(X_train),'to',n_samples)
+        sample_idx = np.random.choice(np.arange(len(X_train)), size=n_samples)
+        X_train = X_train[sample_idx]
+        y_train = y_train[sample_idx]
+
     # scale and normalize the data
     if scale_x:
         print('scaling X')
@@ -106,12 +108,14 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # Fit models
     ################################################## 
-    t0 = time.process_time()
+    t0p = time.process_time()
+    t0t = time.time()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         grid_est.fit(X_train_scaled, y_train_scaled)
-    runtime = time.process_time() - t0
-    print('Training took',runtime,'seconds')
+    process_time = time.process_time() - t0p
+    time_time = time.time() - t0t
+    print('Training time measures:',process_time, time_time)
     best_est = grid_est.best_estimator_
     # best_est = grid_est
     
@@ -125,7 +129,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         'params':{k:v for k,v in best_est.get_params().items() 
                   if any(isinstance(v, t) for t in [bool,int,float,str])},
         'random_state':random_state,
-        'runtime':runtime 
+        'process_time': process_time, 
+        'time_time': time_time, 
     }
 
     # get the size of the final model

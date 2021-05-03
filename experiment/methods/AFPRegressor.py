@@ -24,7 +24,7 @@ for p, g in zip(pop_sizes, gs):
 est = ellyn(selection='afp',
             lex_eps_global=False,
             lex_eps_dynamic=False,
-            islands=True,
+            islands=False,
             num_islands=1,
             island_gens=1,
             verbosity=1,

@@ -7,7 +7,7 @@ est = SymbolicRegressor(
             generations=10000, # just large enough since we have an evaluation budget
             n_threads=1,
             random_state=None,
-            time_limit=86400 # 24 hours
+            time_limit=8*60*60 # 8 hours
             )
 
 hyper_params = [
