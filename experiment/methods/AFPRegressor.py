@@ -4,8 +4,9 @@ from ellyn import ellyn
 pop_sizes = [100, 500, 1000]
 gs = [2500, 500, 250]
 op_lists=[
-        ['n','v','+','-','*','/','sin','cos','exp','log','2','3', 'sqrt'],
-        ['n','v','+','-','*','/', 'exp','log','2','3', 'sqrt']
+        ['n','v','+','-','*','/','exp','log','2','3', 'sqrt'],
+        ['n','v','+','-','*','/', 'exp','log','2','3', 'sqrt',
+         'sin','cos','asin','acos']
         ]
 
 hyper_params = []
@@ -33,8 +34,6 @@ est = ellyn(selection='afp',
             prto_arch_on=True,
             max_len = 64,
             max_len_init=20,
-            op_list=['n','v','+','-','*','/','sin','cos','exp','log','2','3',
-                     'sqrt'],
             )
 
 def complexity(est):
