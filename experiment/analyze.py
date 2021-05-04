@@ -38,6 +38,12 @@ if __name__ == '__main__':
             help='LSF memory request and limit (MB)')
     parser.add_argument('-test',action='store_true', dest='TEST', 
                        help='Used for testing a minimal version')
+    parser.add_argument('-target_noise',action='store',dest='Y_NOISE',
+                        default=0.0, type=float, help='Gaussian noise to add'
+                        'to the target')
+    parser.add_argument('-feature_noise',action='store',dest='X_NOISE',
+                        default=0.0, type=float, help='Gaussian noise to add'
+                        'to the target')
 
     args = parser.parse_args()
      
@@ -52,8 +58,11 @@ if __name__ == '__main__':
 
     if args.DATASET_DIR.endswith('.tsv.gz'):
         datasets = [args.DATASET_DIR]
+    elif args.DATASET_DIR.endswith('*'):
+        datasets = glob(args.DATASET_DIR+'/*.tsv.gz')
     else:
         datasets = glob(args.DATASET_DIR+'/*/*.tsv.gz')
+    print('found',len(datasets),'datasets:',datasets)
     # write run commands
     all_commands = []
     job_info=[]
@@ -81,11 +90,16 @@ if __name__ == '__main__':
                                     '{DATASET}'
                                     ' -ml {ML}'
                                     ' -results_path {RDIR}'
-                                    ' -seed {RS} {TEST}'.format(
+                                    ' -seed {RS} '
+                                    ' -target_noise {TN} '
+                                    ' -feature_noise {FN} '
+                                    '{TEST}'.format(
                                         ML=ml,
                                         DATASET=dataset,
                                         RDIR=results_path,
                                         RS=random_state,
+                                        TN=args.Y_NOISE,
+                                        FN=args.X_NOISE,
                                         TEST=('-test' if args.TEST
                                                 else '')
                                         )
