@@ -6,7 +6,7 @@ gs = [2500, 500, 250]
 op_lists=[
         ['n','v','+','-','*','/','exp','log','2','3', 'sqrt'],
         ['n','v','+','-','*','/', 'exp','log','2','3', 'sqrt',
-         'sin','cos','asin','acos']
+         'sin','cos']
         ]
 
 hyper_params = []
@@ -24,7 +24,7 @@ for p, g in zip(pop_sizes, gs):
 est = ellyn(selection='afp',
             lex_eps_global=False,
             lex_eps_dynamic=False,
-            islands=True,
+            islands=False,
             num_islands=10,
             island_gens=100,
             verbosity=1,

@@ -1,15 +1,15 @@
 from bsr.bsr_class import BSR
 
 hyper_params = []
-for treeNum, itrNum in zip([100,500,1000],[5000,1000,500]):
-    for val in [10,100]:
+for val, itrNum in zip([100,500,1000],[5000,1000,500]):
+    for treeNum in [3,6]:
         hyper_params.append(
                     {'treeNum': [treeNum], 
                      'itrNum': [itrNum], 
                      'val': [val],
                     })
 # initialize
-est = BSR( alpha1= 0.4, alpha2= 0.4, beta= -1)
+est = BSR( alpha1= 0.4, alpha2= 0.4, beta= -1, disp=False, max_time=2*60*60)
 
 def complexity(est):
     return est.complexity()
