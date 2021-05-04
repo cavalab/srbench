@@ -16,7 +16,7 @@ for p, g in zip(pop_sizes, gs):
 est = FeatRegressor(
                     pop_size=500,
                     gens=200,
-                    max_time=28800,  # 8 hrs
+                    max_time=2*60*60,  # 2 hrs
                     max_stall=100,
                     batch_size=100,
                     max_depth=6,

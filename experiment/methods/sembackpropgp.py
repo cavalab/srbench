@@ -28,7 +28,7 @@ hyper_params = [
 ]
 
 # Note: max size and max tree height are TBD I guess.
-est = GPG( popsize=100, generations=-1, time=-1, evaluations=500000, 
+est = GPG( popsize=100, generations=-1, time=2*60*60, evaluations=500000, 
     linearscaling=True, functions='+_-_*_aq_plog_sin_cos', erc=True, initmaxtreeheight=6, 
     maxtreeheight=20, maxsize=1000, 
     subcross=0.0, sbagx=False,

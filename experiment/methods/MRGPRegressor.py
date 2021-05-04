@@ -17,7 +17,7 @@ for p, g in zip(pop_sizes, gs):
                 }
                )
 est=MRGPRegressor(max_len=6,
-                  time_out=8*60*60
+                  time_out=2*60*60
         )
 
 def complexity(est):

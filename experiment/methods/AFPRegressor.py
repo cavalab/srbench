@@ -4,8 +4,9 @@ from ellyn import ellyn
 pop_sizes = [100, 500, 1000]
 gs = [2500, 500, 250]
 op_lists=[
-        ['n','v','+','-','*','/','sin','cos','exp','log','2','3', 'sqrt'],
-        ['n','v','+','-','*','/', 'exp','log','2','3', 'sqrt']
+        ['n','v','+','-','*','/','exp','log','2','3', 'sqrt'],
+        ['n','v','+','-','*','/', 'exp','log','2','3', 'sqrt',
+         'sin','cos','asin','acos']
         ]
 
 hyper_params = []
@@ -24,8 +25,8 @@ est = ellyn(selection='afp',
             lex_eps_global=False,
             lex_eps_dynamic=False,
             islands=False,
-            num_islands=1,
-            island_gens=1,
+            num_islands=10,
+            island_gens=100,
             verbosity=1,
             print_data=False,
             elitism=True,
