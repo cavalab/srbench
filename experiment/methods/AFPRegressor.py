@@ -6,7 +6,7 @@ gs = [2500, 500, 250]
 op_lists=[
         ['n','v','+','-','*','/','exp','log','2','3', 'sqrt'],
         ['n','v','+','-','*','/', 'exp','log','2','3', 'sqrt',
-         'sin','cos','asin','acos']
+         'sin','cos']
         ]
 
 hyper_params = []
