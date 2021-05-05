@@ -176,11 +176,12 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         json.dump(jsonify(results), out, indent=4)
 
     # store CV detailed results
-    cv_results = grid_est.cv_results_
-    cv_results['random_state'] = random_state
+    # turning off for now as I dont think we'll need this for our analysis
+    # cv_results = grid_est.cv_results_
+    # cv_results['random_state'] = random_state
 
-    with open(save_file + '_cv_results.json', 'w') as out:
-        json.dump(jsonify(cv_results), out, indent=4)
+    # with open(save_file + '_cv_results.json', 'w') as out:
+    #     json.dump(jsonify(cv_results), out, indent=4)
 
 ################################################################################
 # main entry point
