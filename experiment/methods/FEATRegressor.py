@@ -27,7 +27,7 @@ est = FeatRegressor(
                     simplify=0.005,
                     corr_delete_mutate=True,
                     cross_rate=0.75,
-                    verbosity=1
+                    verbosity=0
                    )
 
 def complexity(est):
