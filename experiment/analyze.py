@@ -23,6 +23,8 @@ if __name__ == '__main__':
             help='Run locally as opposed to on LPC')
     parser.add_argument('--slurm', action='store_true', dest='SLURM', default=False, 
             help='Run on a SLURM scheduler as opposed to on LPC')
+    parser.add_argument('-A', action='store', dest='A', default='plgbicl1', 
+            help='SLURM account')
     parser.add_argument('-metric',action='store', dest='METRIC', default='f1_macro', 
             type=str, help='Metric to compare algorithms')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=1,type=int,
@@ -47,6 +49,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
      
+    if args.SLURM and args.QUEUE == 'epistasis_long':
+        print('setting queue to plgrid-long')
+        args.QUEUE = 'plgrid-long'
 
     if args.LEARNERS == None:
         learners = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') 
@@ -75,7 +80,7 @@ if __name__ == '__main__':
             # grab regression datasets
             metadata = load(
                 open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
-                Loader=Loader)
+                    Loader=Loader)
             if metadata['task'] != 'regression':
                 continue
             
@@ -128,17 +133,21 @@ if __name__ == '__main__':
             out_file = job_info[i]['results_path'] + job_name + '_%J.out'
             error_file = out_file[:-4] + '.err'
             
-            sbatch_cmd = ('srun -o {OUT_FILE} -n {N_CORES} -J {JOB_NAME} -q {QUEUE} '
-                       '-R "span[hosts=1] rusage[mem={M}]" -M {M} ').format(
+            sbatch_cmd = ('srun -o {OUT_FILE} -N {N_CORES} -J {JOB_NAME} '
+                          '-A {A} -p {QUEUE} '
+                          '--ntasks-per-node=1 --time=48:00:00 '
+                          ' -=mem-per-cpu={M} ').format(
                                OUT_FILE=out_file,
                                JOB_NAME=job_name,
                                QUEUE=args.QUEUE,
+                               A=args.A,
                                N_CORES=args.N_JOBS,
-                               M=args.M)
+                               M=args.M
+                               )
             
-            bsub_cmd +=  '"' + run_cmd + '"'
-            print(bsub_cmd)
-            os.system(bsub_cmd)     # submit jobs 
+            sbatch_cmd +=  '"' + run_cmd + '"'
+            print(sbatch_cmd)
+            # os.system(sbatch_cmd)     # submit jobs 
     else: # LPC
         for i,run_cmd in enumerate(all_commands):
             job_name = '_'.join([
