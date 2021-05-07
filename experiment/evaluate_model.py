@@ -21,6 +21,7 @@ from utils import jsonify
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, model, test=False, 
+                   target_noise=0.0, feature_noise=0.0, 
                    n_samples=10000, scale_x = True, scale_y = True,
                    pre_train=None):
 
@@ -65,6 +66,20 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         y_train_scaled = sc_y.fit_transform(y_train.reshape(-1,1)).flatten()
     else:
         y_train_scaled = y_train
+
+    # add noise to the target
+    if target_noise > 0:
+        print('adding',target_noise,'noise to target')
+        y_train_scaled += np.random.normal(0, 
+                            target_noise*np.linalg.norm(y_train_scaled),
+                            size=len(y_train_scaled))
+    # add noise to the features
+    if feature_noise > 0:
+        print('adding',target_noise,'noise to features')
+        X_train_scaled = np.array([x + np.random.normal(0, 
+                                            feature_noise*np.linalg.norm(x), 
+                                            size=len(x))
+                            for x in X_train_scaled.T]).T
 
     # run any method-specific pre_train routines
     if pre_train:
@@ -208,6 +223,12 @@ if __name__ == '__main__':
                         default=42, type=int, help='Seed / trial')
     parser.add_argument('-test',action='store_true', dest='TEST', 
                        help='Used for testing a minimal version')
+    parser.add_argument('-target_noise',action='store',dest='Y_NOISE',
+                        default=0.0, type=float, help='Gaussian noise to add'
+                        'to the target')
+    parser.add_argument('-feature_noise',action='store',dest='X_NOISE',
+                        default=0.0, type=float, help='Gaussian noise to add'
+                        'to the target')
 
     args = parser.parse_args()
     # import algorithm 
@@ -230,4 +251,6 @@ if __name__ == '__main__':
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,
-                   algorithm.model, test = args.TEST, **eval_kwargs)
+                   algorithm.model, test = args.TEST, 
+                   target_noise=args.Y_NOISE, feature_noise=args.X_NOISE,
+                   **eval_kwargs)
