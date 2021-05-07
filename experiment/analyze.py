@@ -25,6 +25,8 @@ if __name__ == '__main__':
             type=str, help='Metric to compare algorithms')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=1,type=int,
             help='Number of parallel jobs')
+    parser.add_argument('-seed',action='store',dest='SEED',default=None,
+            type=int, help='A specific random seed')
     parser.add_argument('-n_trials',action='store',dest='N_TRIALS',default=1,
             type=int, help='Number of parallel jobs')
     parser.add_argument('-label',action='store',dest='LABEL',default='class',
@@ -57,23 +59,27 @@ if __name__ == '__main__':
     # write run commands
     all_commands = []
     job_info=[]
-    for dataset in datasets:
-        # grab regression datasets
-        metadata = load(
-                open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
-                Loader=Loader
-        )
-        if metadata['task'] != 'regression':
-            continue
-        
-        dataname = dataset.split('/')[-1].split('.tsv.gz')[0]
-        results_path = '/'.join([args.RDIR, dataname]) + '/'
-        if not os.path.exists(results_path):
-            os.makedirs(results_path)
-        for t in range(args.N_TRIALS):
-            # random_state = np.random.randint(2**15-1)
+    for t in range(args.N_TRIALS):
+        # random_state = np.random.randint(2**15-1)
+        if args.SEED != None:
+            assert args.N_TRIALS == 1
+            random_state = args.SEED
+        else:
             random_state = SEEDS[t]
-            # print('random_seed:',random_state)
+        # print('random_seed:',random_state)
+        for dataset in datasets:
+            # grab regression datasets
+            metadata = load(
+                    open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
+                    Loader=Loader
+            )
+            if metadata['task'] != 'regression':
+                continue
+            
+            dataname = dataset.split('/')[-1].split('.tsv.gz')[0]
+            results_path = '/'.join([args.RDIR, dataname]) + '/'
+            if not os.path.exists(results_path):
+                os.makedirs(results_path)
             
             for ml in learners:
                 
