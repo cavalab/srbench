@@ -4,22 +4,37 @@ import os
 import subprocess
 import pandas as pd
 import numpy as np
+from pandas.util import hash_pandas_object
+import hashlib
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 
 class MRGPRegressor(BaseEstimator):
   def __init__(self, g=10, popsize=100, rt_mut=0.5, 
-               rt_cross=0.5, max_len=10, time_out=10*60):
+               rt_cross=0.5, max_len=10, time_out=10*60,
+               tmp_dir=None
+               ):
     self.g = g
     self.popsize = popsize
     self.rt_cross = rt_cross
     self.rt_mut = rt_mut
     self.max_len = max_len
     self.time_out = time_out  #in seconds
+    self.tmp_dir = tmp_dir
 
   def fit(self, features, target, sample_weight=None, groups=None):
     data=pd.DataFrame(features)
     data['target']=target
-    self.dataset = THIS_DIR + '/tmp_data_' + str(np.random.randint(2**15-1))
+    rowHashes = hash_pandas_object(data).values
+    filehash = hashlib.sha256(rowHashes).hexdigest()
+    if self.tmp_dir != None:
+        data_dir = self.tmp_dir
+    else:
+        data_dir = THIS_DIR
+
+    self.dataset = (data_dir + '/tmp_data_' 
+                    + filehash + '_' 
+                    + str(np.random.randint(2**15-1))
+                    )
     # print('dataset name:',self.dataset)
     data.to_csv(self.dataset+'-train',
                 header=None, 
@@ -34,7 +49,6 @@ class MRGPRegressor(BaseEstimator):
                              str(self.rt_cross), 
                              str(self.max_len),
                              str(self.time_out)
-
                             ])
     # get complexity
     # print('reading in ', self.dataset+'best')
