@@ -185,6 +185,11 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
 
     save_file = (results_path + '/' + dataset_name + '_' + est_name + '_' 
                  + str(random_state))
+    if target_noise > 0:
+        savefile += '_target-noise'+str(target_noise)
+    if feature_noise > 0:
+        savefile += '_feature-noise'+str(feature_noise)
+
     print('save_file:',save_file)
 
     with open(save_file + '.json', 'w') as out:
