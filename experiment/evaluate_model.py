@@ -97,6 +97,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
             est.config['training']['n_samples'] = 10
             est.config['training']['batch_size'] = 10
             est.config['training']['hof'] = 5
+        if hasattr(est, 'max_time'):
+            est.max_time = 5
     else:
         n_splits = 5
 

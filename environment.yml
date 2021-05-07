@@ -43,10 +43,10 @@ dependencies:
     - shogun-cpp=6.1.4
     - wheel=0.35.*
     # AI-feynman
-    - seaborn
-    - sortedcontainers
-    - torch
-    - torchvision
+    # - seaborn
+    # - sortedcontainers
+    # - pytorch
+    # - torchvision
     # pip
     - pip=20.3.3 
     - pip:
@@ -55,3 +55,4 @@ dependencies:
         - ffx==2.0.2 # ffx
         - eigency==1.77
         - git+https://github.com/lacava/MCMC-SymReg
+        - git+https://github.com/lacava/AI-Feynman
