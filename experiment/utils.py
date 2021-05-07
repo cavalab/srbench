@@ -19,6 +19,8 @@ def jsonify(d):
         return float(d)
     elif isinstance(d, pd.DataFrame) or isinstance(d, pd.Series):
         return d.values.tolist()
+    elif isinstance(d, bool):
+        return d
     elif not isinstance(d, str):
         print("WARNING: attempting to store ",d,"as a str for json")
         return str(d)

@@ -7,7 +7,7 @@ est = SymbolicRegressor(
             generations=10000, # just large enough since we have an evaluation budget
             n_threads=1,
             random_state=None,
-            time_limit=86400 # 24 hours
+            time_limit=2*60*60 # 2 hours
             )
 
 hyper_params = [
@@ -80,7 +80,7 @@ hyper_params = [
     ]
 
 def complexity(est):
-    return est._stats['model_length'] # scaling nodes not counted
+    return est._stats['model_complexity'] # scaling nodes not counted
 
 def model(est, X):
     return est.get_model_string(3)
