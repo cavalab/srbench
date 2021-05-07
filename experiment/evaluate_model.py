@@ -146,6 +146,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         'random_state':random_state,
         'process_time': process_time, 
         'time_time': time_time, 
+        'target_noise': target_noise,
+        'feature_noise': feature_noise
     }
 
     # get the size of the final model
@@ -186,9 +188,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     save_file = (results_path + '/' + dataset_name + '_' + est_name + '_' 
                  + str(random_state))
     if target_noise > 0:
-        savefile += '_target-noise'+str(target_noise)
+        save_file += '_target-noise'+str(target_noise)
     if feature_noise > 0:
-        savefile += '_feature-noise'+str(feature_noise)
+        save_file += '_feature-noise'+str(feature_noise)
 
     print('save_file:',save_file)
 
