@@ -133,10 +133,20 @@ if __name__ == '__main__':
             out_file = job_info[i]['results_path'] + job_name + '_%J.out'
             error_file = out_file[:-4] + '.err'
             
-            sbatch_cmd = ('srun -o {OUT_FILE} -N {N_CORES} -J {JOB_NAME} '
+            batch_script = \
+"""#!usr/bin/bash 
+
+{}
+""".format(run_cmd)
+            with open('tmp_script','w') as f:
+                f.write(batch_script)
+
+            sbatch_cmd = ('sbatch -o {OUT_FILE} -N 1 -n {N_CORES} -J {JOB_NAME} '
                           '-A {A} -p {QUEUE} '
                           '--ntasks-per-node=1 --time=48:00:00 '
-                          ' -=mem-per-cpu={M} ').format(
+                          ' --mem-per-cpu={M} '
+                          ' --input=tmp_script '
+                          ' --test-only').format(
                                OUT_FILE=out_file,
                                JOB_NAME=job_name,
                                QUEUE=args.QUEUE,
@@ -144,10 +154,10 @@ if __name__ == '__main__':
                                N_CORES=args.N_JOBS,
                                M=args.M
                                )
-            
-            sbatch_cmd +=  '"' + run_cmd + '"'
+
             print(sbatch_cmd)
-            # os.system(sbatch_cmd)     # submit jobs 
+            os.system(sbatch_cmd)     # submit jobs 
+            os.remove('tmp_script')
     else: # LPC
         for i,run_cmd in enumerate(all_commands):
             job_name = '_'.join([
