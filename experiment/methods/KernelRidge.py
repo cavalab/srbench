@@ -8,7 +8,12 @@ hyper_params = [{
 
 est=kernel_ridge.KernelRidge()
 
-complexity = None
+def complexity(est):
+    # this is a loose lower bound on the model complexity, basically jsut
+    # capturing the number of parameters in the model. Could make this 
+    # kernel-specific and more accurate.
+    return est.dual_coef_.size 
+
 model = None
 eval_kwargs = {
                'scale_y': False,

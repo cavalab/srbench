@@ -23,7 +23,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                    hyper_params, complexity, model, test=False, 
                    target_noise=0.0, feature_noise=0.0, 
                    n_samples=10000, scale_x = True, scale_y = True,
-                   pre_train=None):
+                   pre_train=None, skip_tuning=False):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
 
@@ -117,10 +117,13 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     else:
         n_splits = 5
 
-    cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
+    if skip_tuning:
+        grid_est = est
+    else:
+        cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
-    grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
-            verbose=2,n_jobs=1,scoring='r2',error_score=0.0)
+        grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
+                verbose=2, n_jobs=1, scoring='r2', error_score=0.0)
 
     ################################################## 
     # Fit models
@@ -133,7 +136,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     process_time = time.process_time() - t0p
     time_time = time.time() - t0t
     print('Training time measures:',process_time, time_time)
-    best_est = grid_est.best_estimator_
+    best_est = grid_est if skip_tuning else grid_est.best_estimator_
     # best_est = grid_est
     
     ##################################################
