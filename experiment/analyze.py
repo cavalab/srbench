@@ -135,28 +135,46 @@ if __name__ == '__main__':
             
             batch_script = \
 """#!usr/bin/bash 
+#SBATCH -o {OUT_FILE} 
+#SBATCH -N 1 
+#SBATCH -n {N_CORES} 
+#SBATCH -J {JOB_NAME} 
+#SBATCH -A {A} -p {QUEUE} 
+#SBATCH --ntasks-per-node=1 --time=48:00:00 
+#SBATCH --mem-per-cpu={M} 
+#SBATCH --input=tmp_script 
+#SBATCH --test-only
 
-{}
-""".format(run_cmd)
+conda activate srbench
+{cmd}
+""".format(
+           OUT_FILE=out_file,
+           JOB_NAME=job_name,
+           QUEUE=args.QUEUE,
+           A=args.A,
+           N_CORES=args.N_JOBS,
+           M=args.M,
+           cmd=run_cmd
+        )
             with open('tmp_script','w') as f:
                 f.write(batch_script)
 
-            sbatch_cmd = ('sbatch -o {OUT_FILE} -N 1 -n {N_CORES} -J {JOB_NAME} '
-                          '-A {A} -p {QUEUE} '
-                          '--ntasks-per-node=1 --time=48:00:00 '
-                          ' --mem-per-cpu={M} '
-                          ' --input=tmp_script '
-                          ' --test-only').format(
-                               OUT_FILE=out_file,
-                               JOB_NAME=job_name,
-                               QUEUE=args.QUEUE,
-                               A=args.A,
-                               N_CORES=args.N_JOBS,
-                               M=args.M
-                               )
+            #sbatch_cmd = ('sbatch -o {OUT_FILE} -N 1 -n {N_CORES} -J {JOB_NAME} '
+            #              '-A {A} -p {QUEUE} '
+            #              '--ntasks-per-node=1 --time=48:00:00 '
+            #              ' --mem-per-cpu={M} '
+            #              ' --input=tmp_script '
+            #              ' --test-only').format(
+            #                   OUT_FILE=out_file,
+            #                   JOB_NAME=job_name,
+            #                   QUEUE=args.QUEUE,
+            #                   A=args.A,
+            #                   N_CORES=args.N_JOBS,
+            #                   M=args.M
+            #                   )
 
-            print(sbatch_cmd)
-            os.system(sbatch_cmd)     # submit jobs 
+            print(batch_script)
+            os.system('sbatch tmp_script')     # submit jobs 
             os.remove('tmp_script')
     else: # LPC
         for i,run_cmd in enumerate(all_commands):
