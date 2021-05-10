@@ -36,7 +36,6 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ##################################################
     features, labels, feature_names = read_file(dataset)
 
-
     # generate train/test split
     X_train, X_test, y_train, y_test = train_test_split(features, labels,
                                                     train_size=0.75,
@@ -242,6 +241,8 @@ if __name__ == '__main__':
     parser.add_argument('-feature_noise',action='store',dest='X_NOISE',
                         default=0.0, type=float, help='Gaussian noise to add'
                         'to the target')
+    parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', 
+                       help='Use symbolic dataset settings')
 
     args = parser.parse_args()
     # import algorithm 
@@ -251,8 +252,6 @@ if __name__ == '__main__':
                                      locals(),
                                      ['*']
                                     )
-    if args.ALG == 'mrgp':
-        algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
 
     print('algorithm:',algorithm.est)
     print('hyperparams:',algorithm.hyper_params)
@@ -261,6 +260,12 @@ if __name__ == '__main__':
     eval_kwargs = {}
     if 'eval_kwargs' in dir(algorithm):
         eval_kwargs = algorithm.eval_kwargs
+
+    # check for conflicts btw cmd line args and eval_kwargs
+    if args.SYM_DATA:
+        eval_kwargs['scale_x'] = False
+        eval_kwargs['scale_y'] = False
+        eval_kwargs['skip_tuning'] = True
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,
