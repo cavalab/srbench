@@ -17,13 +17,13 @@ import numpy as np
 import json
 import os
 import inspect
-from utils import jsonify
+from utils import jsonify, get_sym_model
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, model, test=False, 
                    target_noise=0.0, feature_noise=0.0, 
                    n_samples=10000, scale_x = True, scale_y = True,
-                   pre_train=None, skip_tuning=False):
+                   pre_train=None, skip_tuning=False, sym_data=False):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
 
@@ -35,7 +35,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     # setup data
     ##################################################
     features, labels, feature_names = read_file(dataset)
-
+    if sym_data:
+        true_model = get_sym_model(dataset)
     # generate train/test split
     X_train, X_test, y_train, y_test = train_test_split(features, labels,
                                                     train_size=0.75,
@@ -96,16 +97,15 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         n_splits = 2
         hyper_params = {}
         print('hyper_params set to',hyper_params)
-        for genname in ['generations','gens','g','itrNum','treeNum']:
+        for genname in ['generations','gens','g','itrNum','treeNum',
+                'evaluations','time','max_time']: #,'time_out']:
             if hasattr(est, genname):
                 print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
-        if hasattr(est, 'popsize'):
-            print('setting popsize=5 for test')
-            est.popsize = 20 
-        if hasattr(est, 'val'):
-            print('setting val=1 for test')
-            est.val = 1
+        for popname in ['popsize','pop_size','population_size','val']:
+            if hasattr(est, popname):
+                print('setting',popname,'=5 for test')
+                setattr(est, popname, 5)
         # deep sr setting
         if hasattr(est, 'config'):
             est.config['training']['n_samples'] = 10
@@ -117,6 +117,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         n_splits = 5
 
     if skip_tuning:
+        print('skipping tuning')
         grid_est = est
     else:
         cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
@@ -254,6 +255,8 @@ if __name__ == '__main__':
                                     )
 
     print('algorithm:',algorithm.est)
+    if 'hyper_params' not in dir(algorithm):
+        algorithm.hyper_params = {}
     print('hyperparams:',algorithm.hyper_params)
 
     # optional keyword arguments passed to evaluate
@@ -266,6 +269,7 @@ if __name__ == '__main__':
         eval_kwargs['scale_x'] = False
         eval_kwargs['scale_y'] = False
         eval_kwargs['skip_tuning'] = True
+        eval_kwargs['sym_data'] = True
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,

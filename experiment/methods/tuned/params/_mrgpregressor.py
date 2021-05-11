@@ -1,0 +1,1 @@
+params = {'g': 500, 'max_len': 6, 'popsize': 500, 'rt_cross': 0.8, 'rt_mut': 0.19999999999999996, 'time_out': 7200}
