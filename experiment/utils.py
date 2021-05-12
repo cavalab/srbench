@@ -21,7 +21,32 @@ def jsonify(d):
         return d.values.tolist()
     elif isinstance(d, bool):
         return d
+    elif d == None:
+        return None
     elif not isinstance(d, str):
         print("WARNING: attempting to store ",d,"as a str for json")
         return str(d)
     return d
+
+import sympy
+from yaml import load, Loader
+import pdb
+
+def get_sym_model(dataset, return_str=True):
+    """return sympy model from dataset metadata"""
+    metadata = load(
+            open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
+            Loader=Loader
+    )
+    df = pd.read_csv(dataset,sep='\t')
+    features = [c for c in df.columns if c != 'target']
+#     print('features:',df.columns)
+    description = metadata['description'].split('\n')
+    model_str = [ms for ms in description if '=' in ms][0].split('=')[-1]
+    if return_str:
+        return model_str
+#     print('model:',model_str)
+    model_sym = parse_expr(model_str, 
+			   local_dict = {k:Symbol(k) for k in features})
+#     print('sym model:',model_sym)
+    return model_sym
