@@ -1,9 +1,6 @@
-from ..GPGOMEARegressor import complexity,model
+from ..GPGOMEARegressor import complexity, model, est
 from pyGPGOMEA import GPGOMEARegressor as GPG
 from .params._gpgomearegressor import params
-
-est = GPG(gomea=True, time=2*60*60, generations=-1, evaluations=500000, 
-          ims=False, erc=True, linearscaling=True, silent=True, parallel=False)
 
 est.set_params(**params)
 

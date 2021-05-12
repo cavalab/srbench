@@ -11,7 +11,7 @@ from evaluate_model import evaluate_model
 import importlib
 
 TMLs = ['tuned.'+ml.split('/')[-1][:-3] for ml in glob('methods/tuned/*.py') if
-       not ml.split('/')[-1][:-3].startswith('_') and 'FEAT' not in ml]
+       not ml.split('/')[-1][:-3].startswith('_')]
 
 @pytest.mark.parametrize("ml", TMLs)
 def test_tuned_models(ml):

@@ -1,9 +1,6 @@
-from ..MRGPRegressor import complexity, model
+from ..MRGPRegressor import complexity, model, est
 from ..src.mrgp import MRGPRegressor
 from .params._mrgpregressor import params
-
-est=MRGPRegressor(max_len=6,
-                  )
 
 est.set_params(**params)
 
