@@ -1,4 +1,5 @@
 import pandas as pd
+import subprocess
 import numpy as np
 from glob import glob
 import argparse
@@ -7,6 +8,9 @@ from joblib import Parallel, delayed
 from seeds import SEEDS
 from yaml import load, Loader
 
+#TODO make this script smarter about running jobs. 
+# have it check to see whethe results for that job exist before
+# resubmitting. That way the same command can be run multiple times.
 
 if __name__ == '__main__':
     # parse command line arguments
@@ -25,8 +29,8 @@ if __name__ == '__main__':
             help='Run on a SLURM scheduler as opposed to on LPC')
     parser.add_argument('-A', action='store', dest='A', default='plgbicl1', 
             help='SLURM account')
-    parser.add_argument('-metric',action='store', dest='METRIC', default='f1_macro', 
-            type=str, help='Metric to compare algorithms')
+    parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', default=False, 
+            help='Specify a symbolic dataset')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=1,type=int,
             help='Number of parallel jobs')
     parser.add_argument('-seed',action='store',dest='SEED',default=None,
@@ -42,8 +46,6 @@ if __name__ == '__main__':
                         type=str,help='LSF queue')
     parser.add_argument('-m',action='store',dest='M',default=8192,type=int,
             help='LSF memory request and limit (MB)')
-    parser.add_argument('-seed',action='store',dest='SEED',default=None,type=int,
-            help='specific seed to run')
     parser.add_argument('-starting_seed',action='store',dest='START_SEED',
                         default=0,type=int, help='seed position to start with')
     parser.add_argument('-test',action='store_true', dest='TEST', 
@@ -73,7 +75,8 @@ if __name__ == '__main__':
     if args.DATASET_DIR.endswith('.tsv.gz'):
         datasets = [args.DATASET_DIR]
     elif args.DATASET_DIR.endswith('*'):
-        datasets = glob(args.DATASET_DIR+'/*.tsv.gz')
+        print('capturing glob',args.DATASET_DIR+'/*.tsv.gz')
+        datasets = glob(args.DATASET_DIR+'*/*.tsv.gz')
     else:
         datasets = glob(args.DATASET_DIR+'/*/*.tsv.gz')
     print('found',len(datasets),'datasets:',datasets)
@@ -109,7 +112,7 @@ if __name__ == '__main__':
                                     ' -seed {RS} '
                                     ' -target_noise {TN} '
                                     ' -feature_noise {FN} '
-                                    '{TEST}'.format(
+                                    '{TEST} {SYM_DATA}'.format(
                                         ML=ml,
                                         DATASET=dataset,
                                         RDIR=results_path,
@@ -117,7 +120,8 @@ if __name__ == '__main__':
                                         TN=args.Y_NOISE,
                                         FN=args.X_NOISE,
                                         TEST=('-test' if args.TEST
-                                                else '')
+                                                else ''),
+                                        SYM_DATA='-sym_data' if args.SYM_DATA else ''
                                         )
                                     )
                 job_info.append({'ml':ml,
@@ -150,7 +154,7 @@ if __name__ == '__main__':
             error_file = out_file[:-4] + '.err'
             
             batch_script = \
-"""#!usr/bin/bash 
+"""#!/usr/bin/bash 
 #SBATCH -o {OUT_FILE} 
 #SBATCH -N 1 
 #SBATCH -n {N_CORES} 
@@ -158,10 +162,10 @@ if __name__ == '__main__':
 #SBATCH -A {A} -p {QUEUE} 
 #SBATCH --ntasks-per-node=1 --time=48:00:00 
 #SBATCH --mem-per-cpu={M} 
-#SBATCH --input=tmp_script 
-#SBATCH --test-only
 
-conda activate srbench
+conda info 
+source plg_modules
+
 {cmd}
 """.format(
            OUT_FILE=out_file,
@@ -175,22 +179,13 @@ conda activate srbench
             with open('tmp_script','w') as f:
                 f.write(batch_script)
 
-            #sbatch_cmd = ('sbatch -o {OUT_FILE} -N 1 -n {N_CORES} -J {JOB_NAME} '
-            #              '-A {A} -p {QUEUE} '
-            #              '--ntasks-per-node=1 --time=48:00:00 '
-            #              ' --mem-per-cpu={M} '
-            #              ' --input=tmp_script '
-            #              ' --test-only').format(
-            #                   OUT_FILE=out_file,
-            #                   JOB_NAME=job_name,
-            #                   QUEUE=args.QUEUE,
-            #                   A=args.A,
-            #                   N_CORES=args.N_JOBS,
-            #                   M=args.M
-            #                   )
-
             print(batch_script)
-            os.system('sbatch tmp_script')     # submit jobs 
+            sbatch_response = subprocess.check_output(['sbatch tmp_script'],shell=True)     # submit jobs 
+            if not os.path.exists('job_scripts/success/'):
+                os.makedirs('job_scripts/success/')
+            with open('job_scripts/success/'+job_name+'.sh','w') as f:
+                f.write(batch_script)
+
             os.remove('tmp_script')
     else: # LPC
         for i,run_cmd in enumerate(all_commands):
