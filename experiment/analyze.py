@@ -90,7 +90,7 @@ if __name__ == '__main__':
     if args.SLURM:
         res = subprocess.check_output(['squeue -o "%j"'],shell=True)
         current_jobs = res.decode().split('\n')
-    elif args.LSF:
+    elif not args.LOCAL:
         res = subprocess.check_output(['bjobs -o "JOB_NAME" -noheader'],shell=True)
         current_jobs = res.decode().split('\n')
     current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
@@ -124,7 +124,7 @@ if __name__ == '__main__':
                                  + str(random_state))
                     if args.Y_NOISE > 0:
                         save_file += '_target-noise'+str(args.Y_NOISE)
-                    if feature_noise > 0:
+                    if args.X_NOISE > 0:
                         save_file += '_feature-noise'+str(args.X_NOISE)
 
                     if os.path.exists(save_file+'.json'):
@@ -237,4 +237,4 @@ source plg_modules
             
             bsub_cmd +=  '"' + run_cmd + '"'
             print(bsub_cmd)
-            os.system(bsub_cmd)     # submit jobs 
+            # os.system(bsub_cmd)     # submit jobs 
