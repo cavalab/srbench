@@ -60,3 +60,4 @@ jobs:
             # pip install pytest
             cd experiment
             python -m pytest -v test_evaluate_model.py
+            python -m pytest -v test_tuned_models.py

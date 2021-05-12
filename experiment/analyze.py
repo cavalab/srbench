@@ -1,4 +1,5 @@
 import pandas as pd
+import subprocess
 import numpy as np
 from glob import glob
 import argparse
@@ -7,6 +8,9 @@ from joblib import Parallel, delayed
 from seeds import SEEDS
 from yaml import load, Loader
 
+#TODO make this script smarter about running jobs. 
+# have it check to see whether results for that job exist before
+# resubmitting. That way the same command can be run multiple times.
 
 if __name__ == '__main__':
     # parse command line arguments
@@ -21,8 +25,14 @@ if __name__ == '__main__':
             'correspond to a py file name in methods/)')
     parser.add_argument('--local', action='store_true', dest='LOCAL', default=False, 
             help='Run locally as opposed to on LPC')
-    parser.add_argument('-metric',action='store', dest='METRIC', default='f1_macro', 
-            type=str, help='Metric to compare algorithms')
+    parser.add_argument('--slurm', action='store_true', dest='SLURM', default=False, 
+            help='Run on a SLURM scheduler as opposed to on LPC')
+    parser.add_argument('--noskips', action='store_true', dest='NOSKIPS', default=False, 
+            help='Overwite existing results if found')
+    parser.add_argument('-A', action='store', dest='A', default='plgsrbench', 
+            help='SLURM account')
+    parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', default=False, 
+            help='Specify a symbolic dataset')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=1,type=int,
             help='Number of parallel jobs')
     parser.add_argument('-seed',action='store',dest='SEED',default=None,
@@ -38,6 +48,8 @@ if __name__ == '__main__':
                         type=str,help='LSF queue')
     parser.add_argument('-m',action='store',dest='M',default=8192,type=int,
             help='LSF memory request and limit (MB)')
+    parser.add_argument('-starting_seed',action='store',dest='START_SEED',
+                        default=0,type=int, help='seed position to start with')
     parser.add_argument('-test',action='store_true', dest='TEST', 
                        help='Used for testing a minimal version')
     parser.add_argument('-target_noise',action='store',dest='Y_NOISE',
@@ -49,6 +61,10 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
      
+    if args.SLURM and args.QUEUE == 'epistasis_long':
+        print('setting queue to plgrid')
+        args.QUEUE = 'plgrid'
+
     if args.LEARNERS == None:
         learners = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') 
                 if not ml.split('/')[-1].startswith('_')]
@@ -61,17 +77,30 @@ if __name__ == '__main__':
     if args.DATASET_DIR.endswith('.tsv.gz'):
         datasets = [args.DATASET_DIR]
     elif args.DATASET_DIR.endswith('*'):
-        datasets = glob(args.DATASET_DIR+'/*.tsv.gz')
+        print('capturing glob',args.DATASET_DIR+'/*.tsv.gz')
+        datasets = glob(args.DATASET_DIR+'*/*.tsv.gz')
     else:
         datasets = glob(args.DATASET_DIR+'/*/*.tsv.gz')
     print('found',len(datasets),'datasets:',datasets)
+
+    #####################################################
+    ## look for existing jobs
+    ########################
+    current_jobs = []
+    if args.SLURM:
+        res = subprocess.check_output(['squeue -o "%j"'],shell=True)
+        current_jobs = res.decode().split('\n')
+    elif args.LSF:
+        res = subprocess.check_output(['bjobs -o "JOB_NAME" -noheader'],shell=True)
+        current_jobs = res.decode().split('\n')
+    current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
+
     # write run commands
     all_commands = []
     job_info=[]
-    for t in range(args.N_TRIALS):
+    for t in range(args.START_SEED, args.START_SEED+args.N_TRIALS):
         # random_state = np.random.randint(2**15-1)
-        if args.SEED != None:
-            assert args.N_TRIALS == 1
+        if args.SEED and args.N_TRIALS==1:
             random_state = args.SEED
         else:
             random_state = SEEDS[t]
@@ -79,9 +108,8 @@ if __name__ == '__main__':
         for dataset in datasets:
             # grab regression datasets
             metadata = load(
-                    open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
-                    Loader=Loader
-            )
+                open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
+                    Loader=Loader)
             if metadata['task'] != 'regression':
                 continue
             
@@ -89,8 +117,22 @@ if __name__ == '__main__':
             results_path = '/'.join([args.RDIR, dataname]) + '/'
             if not os.path.exists(results_path):
                 os.makedirs(results_path)
-            
+                
             for ml in learners:
+                if not args.NOSKIPS:
+                    save_file = (results_path + '/' + dataname + '_' + ml + '_' 
+                                 + str(random_state))
+                    if args.Y_NOISE > 0:
+                        save_file += '_target-noise'+str(args.Y_NOISE)
+                    if feature_noise > 0:
+                        save_file += '_feature-noise'+str(args.X_NOISE)
+
+                    if os.path.exists(save_file+'.json'):
+                        print(save_file,'already exists, skipping. Override with --noskips.')
+                        continue
+                    elif save_file in current_jobs:
+                        print(save_file,'is already queued, skipping. Override with --noskips.')
+                        continue
                 
                 all_commands.append('python evaluate_model.py '
                                     '{DATASET}'
@@ -99,7 +141,7 @@ if __name__ == '__main__':
                                     ' -seed {RS} '
                                     ' -target_noise {TN} '
                                     ' -feature_noise {FN} '
-                                    '{TEST}'.format(
+                                    '{TEST} {SYM_DATA}'.format(
                                         ML=ml,
                                         DATASET=dataset,
                                         RDIR=results_path,
@@ -107,7 +149,8 @@ if __name__ == '__main__':
                                         TN=args.Y_NOISE,
                                         FN=args.X_NOISE,
                                         TEST=('-test' if args.TEST
-                                                else '')
+                                                else ''),
+                                        SYM_DATA='-sym_data' if args.SYM_DATA else ''
                                         )
                                     )
                 job_info.append({'ml':ml,
@@ -121,6 +164,59 @@ if __name__ == '__main__':
             print(run_cmd)
             Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
                                      for run_cmd in all_commands)
+    elif args.SLURM:
+        # sbatch
+        #SBATCH -J scikit
+        #SBATCH -N 1
+        #SBATCH --ntasks-per-node=1
+        #SBATCH --time=168:00:00
+        #SBATCH --mem-per-cpu=20GB
+        #SBATCH -A  plgbicl1
+        #SBATCH -p plgrid-long
+        for i,run_cmd in enumerate(all_commands):
+            job_name = '_'.join([
+                                 job_info[i]['dataset'],
+                                 job_info[i]['ml'],
+                                 job_info[i]['seed']
+                                ])
+            out_file = job_info[i]['results_path'] + job_name + '_%J.out'
+            error_file = out_file[:-4] + '.err'
+            
+            batch_script = \
+"""#!/usr/bin/bash 
+#SBATCH -o {OUT_FILE} 
+#SBATCH -N 1 
+#SBATCH -n {N_CORES} 
+#SBATCH -J {JOB_NAME} 
+#SBATCH -A {A} -p {QUEUE} 
+#SBATCH --ntasks-per-node=1 --time=48:00:00 
+#SBATCH --mem-per-cpu={M} 
+
+conda info 
+source plg_modules
+
+{cmd}
+""".format(
+           OUT_FILE=out_file,
+           JOB_NAME=job_name,
+           QUEUE=args.QUEUE,
+           A=args.A,
+           N_CORES=args.N_JOBS,
+           M=args.M,
+           cmd=run_cmd
+        )
+            with open('tmp_script','w') as f:
+                f.write(batch_script)
+
+            print(batch_script)
+            sbatch_response = subprocess.check_output(['sbatch tmp_script'],
+                                                      shell=True)     # submit jobs 
+            # if not os.path.exists('job_scripts/success/'):
+            #     os.makedirs('job_scripts/success/')
+            # with open('job_scripts/success/'+job_name+'.sh','w') as f:
+            #     f.write(batch_script)
+
+            os.remove('tmp_script')
     else: # LPC
         for i,run_cmd in enumerate(all_commands):
             job_name = '_'.join([

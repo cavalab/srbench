@@ -1,6 +1,7 @@
 import sys
 import itertools
 import pandas as pd
+from sklearn.base import clone
 from sklearn.experimental import enable_halving_search_cv # noqa
 from sklearn.model_selection import HalvingGridSearchCV
 from sklearn.model_selection import GridSearchCV, KFold, train_test_split
@@ -17,13 +18,13 @@ import numpy as np
 import json
 import os
 import inspect
-from utils import jsonify
+from utils import jsonify, get_sym_model
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, model, test=False, 
                    target_noise=0.0, feature_noise=0.0, 
                    n_samples=10000, scale_x = True, scale_y = True,
-                   pre_train=None):
+                   pre_train=None, skip_tuning=False, sym_data=False):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
 
@@ -35,8 +36,8 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     # setup data
     ##################################################
     features, labels, feature_names = read_file(dataset)
-
-
+    if sym_data:
+        true_model = get_sym_model(dataset)
     # generate train/test split
     X_train, X_test, y_train, y_test = train_test_split(features, labels,
                                                     train_size=0.75,
@@ -97,34 +98,40 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         n_splits = 2
         hyper_params = {}
         print('hyper_params set to',hyper_params)
-        for genname in ['generations','gens','g','itrNum','treeNum']:
+        for genname in ['generations','gens','g','itrNum','treeNum',
+                'evaluations']:
             if hasattr(est, genname):
                 print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
-        if hasattr(est, 'popsize'):
-            print('setting popsize=5 for test')
-            est.popsize = 20 
-        if hasattr(est, 'val'):
-            print('setting val=1 for test')
-            est.val = 1
+        for popname in ['popsize','pop_size','population_size','val']:
+            if hasattr(est, popname):
+                print('setting',popname,'=20 for test')
+                setattr(est, popname, 20)
+        for timename in ['time','max_time','time_out','BF_try_time']:
+            if hasattr(est, timename):
+                print('setting',timename,'= 10 for test')
+                setattr(est, timename, 10)
         # deep sr setting
         if hasattr(est, 'config'):
             est.config['training']['n_samples'] = 10
             est.config['training']['batch_size'] = 10
             est.config['training']['hof'] = 5
-        if hasattr(est, 'max_time'):
-            est.max_time = 5
     else:
         n_splits = 5
 
-    cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
+    if skip_tuning:
+        print('skipping tuning')
+        grid_est = clone(est)
+    else:
+        cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
-    grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
-            verbose=2,n_jobs=1,scoring='r2',error_score=0.0)
+        grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
+                verbose=2, n_jobs=1, scoring='r2', error_score=0.0)
 
     ################################################## 
     # Fit models
     ################################################## 
+    print('training',grid_est)
     t0p = time.process_time()
     t0t = time.time()
     with warnings.catch_warnings():
@@ -133,7 +140,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     process_time = time.process_time() - t0p
     time_time = time.time() - t0t
     print('Training time measures:',process_time, time_time)
-    best_est = grid_est.best_estimator_
+    best_est = grid_est if skip_tuning else grid_est.best_estimator_
     # best_est = grid_est
     
     ##################################################
@@ -143,14 +150,15 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     results = {
         'dataset':dataset_name,
         'algorithm':est_name,
-        'params':{k:v for k,v in best_est.get_params().items() 
-                  if any(isinstance(v, t) for t in [bool,int,float,str])},
+        'params':jsonify(best_est.get_params()),
         'random_state':random_state,
         'process_time': process_time, 
         'time_time': time_time, 
         'target_noise': target_noise,
-        'feature_noise': feature_noise
+        'feature_noise': feature_noise,
     }
+    if sym_data:
+        results['true_model'] = true_model
 
     # get the size of the final model
     if complexity == None:
@@ -238,6 +246,8 @@ if __name__ == '__main__':
     parser.add_argument('-feature_noise',action='store',dest='X_NOISE',
                         default=0.0, type=float, help='Gaussian noise to add'
                         'to the target')
+    parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', 
+                       help='Use symbolic dataset settings')
 
     args = parser.parse_args()
     # import algorithm 
@@ -247,16 +257,23 @@ if __name__ == '__main__':
                                      locals(),
                                      ['*']
                                     )
-    if args.ALG == 'mrgp':
-        algorithm.est.dataset=args.INPUT_FILE.split('/')[-1][:-7]
 
     print('algorithm:',algorithm.est)
+    if 'hyper_params' not in dir(algorithm):
+        algorithm.hyper_params = {}
     print('hyperparams:',algorithm.hyper_params)
 
     # optional keyword arguments passed to evaluate
     eval_kwargs = {}
     if 'eval_kwargs' in dir(algorithm):
         eval_kwargs = algorithm.eval_kwargs
+
+    # check for conflicts btw cmd line args and eval_kwargs
+    if args.SYM_DATA:
+        eval_kwargs['scale_x'] = False
+        eval_kwargs['scale_y'] = False
+        eval_kwargs['skip_tuning'] = True
+        eval_kwargs['sym_data'] = True
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,

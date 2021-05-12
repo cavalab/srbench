@@ -1,6 +1,7 @@
 import itertools
 from sklearn.base import BaseEstimator
 import os
+import re
 import subprocess
 import pandas as pd
 import numpy as np
@@ -50,17 +51,8 @@ class MRGPRegressor(BaseEstimator):
                              str(self.max_len),
                              str(self.time_out)
                             ])
-    # get complexity
-    # print('reading in ', self.dataset+'best')
-    df = pd.read_csv(self.dataset+'-best',header=None)
-    # print(self.dataset+'-best:',df)
-    self.model_ = open(self.dataset+'-best','r').readline()
-    # self.model_ = df[4]
-    # print('model_:',self.model_)
-    # count up model components to get complexity
-    self.complexity = len(list(itertools.chain(
-        *[m.split(' ') for m in self.model_.split(',')])))
-    # print('complexity:',self.complexity)
+    # get model and complexity
+    self.model_, self.complexity_ = self._get_model()
 
     # print('deleting training file',self.dataset+'-train')
     os.remove(self.dataset+'-train')
@@ -90,6 +82,34 @@ class MRGPRegressor(BaseEstimator):
     os.remove(self.dataset+'-test')
     return y_pred
 
+  def _get_model(self):
+    """reads in best model and gets a string version with complexity"""
+    best_data = open(self.dataset+'-best','r').readline().split(',')
+    # file structure:
+    # 0 mintarget, 1 maxtarget, 2 weights, 3 intercept, 4 model_str
+    internal_weights=best_data[2]
+    intercept = best_data[3]
+    model_form = best_data[4]
+    # rename functions to python operator names
+    model_form = model_form.replace('mydivide','div')
+    model_form = model_form.replace('*','mul')
+    model_form = model_form.replace('-','sub')
+    # move starting paren to other side of functions
+    model_form = re.sub(
+                    pattern=r'\((.+?(?= ))',
+                    repl=r'\1(',
+                    string=model_form
+                   )
+    #TODO: replace square,cube,quart with pow function
+    # currently matching parens are not captured properly
+    # for op,i in [['square',2],['cube',3],['quart',4]]:
+    #     pattern = op+r'\((.*?)\)'
+    #     model_form = re.sub(pattern=pattern,
+    #                         repl=r'pow(\1,'+str(i)+')',
+    #                         string=model_form
+    #       )
+    complexity_ = 2+len(internal_weights)*3
+    model_ = ' '.join([b+'*'+ m for b,m in zip(internal_weights.split(' '),
+                                      model_form.split(' '))])
 
-
-
+    return model_, complexity_

@@ -21,7 +21,7 @@ est=MRGPRegressor(max_len=6,
         )
 
 def complexity(est):
-    return est.complexity
+    return est.complexity_
 
 def model(est):
     return str(est.model_)
