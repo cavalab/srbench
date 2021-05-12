@@ -27,7 +27,9 @@ if __name__ == '__main__':
             help='Run locally as opposed to on LPC')
     parser.add_argument('--slurm', action='store_true', dest='SLURM', default=False, 
             help='Run on a SLURM scheduler as opposed to on LPC')
-    parser.add_argument('-A', action='store', dest='A', default='plgbicl1', 
+    parser.add_argument('--noskips', action='store_true', dest='NOSKIPS', default=False, 
+            help='Overwite existing results if found')
+    parser.add_argument('-A', action='store', dest='A', default='plgsrbench', 
             help='SLURM account')
     parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', default=False, 
             help='Specify a symbolic dataset')
@@ -60,8 +62,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
      
     if args.SLURM and args.QUEUE == 'epistasis_long':
-        print('setting queue to plgrid-long')
-        args.QUEUE = 'plgrid-long'
+        print('setting queue to plgrid')
+        args.QUEUE = 'plgrid'
 
     if args.LEARNERS == None:
         learners = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') 
@@ -104,6 +106,16 @@ if __name__ == '__main__':
                 os.makedirs(results_path)
                 
             for ml in learners:
+                save_file = (results_path + '/' + dataname + '_' + ml + '_' 
+                             + str(random_state))
+                if args.Y_NOISE > 0:
+                    save_file += '_target-noise'+str(args.Y_NOISE)
+                if feature_noise > 0:
+                    save_file += '_feature-noise'+str(args.X_NOISE)
+
+                if os.path.exists(save_file+'.json') and not args.NOSKIPS:
+                    print(save_file,'already exists, skipping. Override with --noskips.')
+                    continue
                 
                 all_commands.append('python evaluate_model.py '
                                     '{DATASET}'
