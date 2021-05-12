@@ -18,9 +18,11 @@ est = FeatRegressor(
                     verbosity=0
                    )
 est.set_params(**params)
-print('blah')
+
 est.functions = '+,-,*,/,^2,^3,sqrt,sin,cos,exp,log' 
+est.otype = 'f'
+est.verbosity = 2
 # double the evals
-est.max_time=8*60*60,  # 8 hrs
+est.max_time=int(8*60*60)  # 8 hrs
 est.gens = int(est.gens*2**0.5)
 est.pop_size = int(est.pop_size*2**0.5)
