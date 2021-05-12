@@ -22,5 +22,5 @@ est.set_params(**params)
 print('blah')
 est.functions = '+,-,*,/,^2,^3,sqrt,sin,cos,exp,log' 
 # double the evals
-est.gens *= 2**0.5
-est.pop_size *= 2**0.5
+est.gens = int(est.gens*2**0.5)
+est.pop_size = int(est.pop_size*2**0.5)

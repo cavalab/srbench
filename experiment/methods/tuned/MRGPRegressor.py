@@ -8,5 +8,5 @@ est=MRGPRegressor(max_len=6,
 est.set_params(**params)
 
 # double the evals
-est.g *= 2**0.5
-est.popsize *= 2**0.5
+est.g = int(est.g*2**0.5)
+est.popsize = int(est.popsize*2**0.5)
