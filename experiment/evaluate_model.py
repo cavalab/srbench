@@ -151,14 +151,14 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         'dataset':dataset_name,
         'algorithm':est_name,
         'params':jsonify(best_est.get_params()),
-        # 'params':{k:v for k,v in best_est.get_params().items() 
-        #           if any(isinstance(v, t) for t in [bool,int,float,str])},
         'random_state':random_state,
         'process_time': process_time, 
         'time_time': time_time, 
         'target_noise': target_noise,
-        'feature_noise': feature_noise
+        'feature_noise': feature_noise,
     }
+    if sym_data:
+        results['true_model'] = true_model
 
     # get the size of the final model
     if complexity == None:
