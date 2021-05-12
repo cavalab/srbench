@@ -21,6 +21,10 @@ if __name__ == '__main__':
             'correspond to a py file name in methods/)')
     parser.add_argument('--local', action='store_true', dest='LOCAL', default=False, 
             help='Run locally as opposed to on LPC')
+    parser.add_argument('--slurm', action='store_true', dest='SLURM', default=False, 
+            help='Run on a SLURM scheduler as opposed to on LPC')
+    parser.add_argument('-A', action='store', dest='A', default='plgbicl1', 
+            help='SLURM account')
     parser.add_argument('-metric',action='store', dest='METRIC', default='f1_macro', 
             type=str, help='Metric to compare algorithms')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=1,type=int,
@@ -36,8 +40,12 @@ if __name__ == '__main__':
     parser.add_argument('-q',action='store',dest='QUEUE',
                         default='epistasis_long',
                         type=str,help='LSF queue')
-    parser.add_argument('-m',action='store',dest='M',default=4096,type=int,
+    parser.add_argument('-m',action='store',dest='M',default=8192,type=int,
             help='LSF memory request and limit (MB)')
+    parser.add_argument('-seed',action='store',dest='SEED',default=None,type=int,
+            help='specific seed to run')
+    parser.add_argument('-starting_seed',action='store',dest='START_SEED',
+                        default=0,type=int, help='seed position to start with')
     parser.add_argument('-test',action='store_true', dest='TEST', 
                        help='Used for testing a minimal version')
     parser.add_argument('-target_noise',action='store',dest='Y_NOISE',
@@ -49,6 +57,10 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
      
+    if args.SLURM and args.QUEUE == 'epistasis_long':
+        print('setting queue to plgrid-long')
+        args.QUEUE = 'plgrid-long'
+
     if args.LEARNERS == None:
         learners = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') 
                 if not ml.split('/')[-1].startswith('_')]
@@ -68,10 +80,9 @@ if __name__ == '__main__':
     # write run commands
     all_commands = []
     job_info=[]
-    for t in range(args.N_TRIALS):
+    for t in range(args.START_SEED, args.START_SEED+args.N_TRIALS):
         # random_state = np.random.randint(2**15-1)
-        if args.SEED != None:
-            assert args.N_TRIALS == 1
+        if args.SEED and args.N_TRIALS==1:
             random_state = args.SEED
         else:
             random_state = SEEDS[t]
@@ -79,9 +90,8 @@ if __name__ == '__main__':
         for dataset in datasets:
             # grab regression datasets
             metadata = load(
-                    open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
-                    Loader=Loader
-            )
+                open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
+                    Loader=Loader)
             if metadata['task'] != 'regression':
                 continue
             
@@ -89,7 +99,7 @@ if __name__ == '__main__':
             results_path = '/'.join([args.RDIR, dataname]) + '/'
             if not os.path.exists(results_path):
                 os.makedirs(results_path)
-            
+                
             for ml in learners:
                 
                 all_commands.append('python evaluate_model.py '
@@ -121,6 +131,67 @@ if __name__ == '__main__':
             print(run_cmd)
             Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
                                      for run_cmd in all_commands)
+    elif args.SLURM:
+        # sbatch
+        #SBATCH -J scikit
+        #SBATCH -N 1
+        #SBATCH --ntasks-per-node=1
+        #SBATCH --time=168:00:00
+        #SBATCH --mem-per-cpu=20GB
+        #SBATCH -A  plgbicl1
+        #SBATCH -p plgrid-long
+        for i,run_cmd in enumerate(all_commands):
+            job_name = '_'.join([
+                                 job_info[i]['dataset'],
+                                 job_info[i]['ml'],
+                                 job_info[i]['seed']
+                                ])
+            out_file = job_info[i]['results_path'] + job_name + '_%J.out'
+            error_file = out_file[:-4] + '.err'
+            
+            batch_script = \
+"""#!usr/bin/bash 
+#SBATCH -o {OUT_FILE} 
+#SBATCH -N 1 
+#SBATCH -n {N_CORES} 
+#SBATCH -J {JOB_NAME} 
+#SBATCH -A {A} -p {QUEUE} 
+#SBATCH --ntasks-per-node=1 --time=48:00:00 
+#SBATCH --mem-per-cpu={M} 
+#SBATCH --input=tmp_script 
+#SBATCH --test-only
+
+conda activate srbench
+{cmd}
+""".format(
+           OUT_FILE=out_file,
+           JOB_NAME=job_name,
+           QUEUE=args.QUEUE,
+           A=args.A,
+           N_CORES=args.N_JOBS,
+           M=args.M,
+           cmd=run_cmd
+        )
+            with open('tmp_script','w') as f:
+                f.write(batch_script)
+
+            #sbatch_cmd = ('sbatch -o {OUT_FILE} -N 1 -n {N_CORES} -J {JOB_NAME} '
+            #              '-A {A} -p {QUEUE} '
+            #              '--ntasks-per-node=1 --time=48:00:00 '
+            #              ' --mem-per-cpu={M} '
+            #              ' --input=tmp_script '
+            #              ' --test-only').format(
+            #                   OUT_FILE=out_file,
+            #                   JOB_NAME=job_name,
+            #                   QUEUE=args.QUEUE,
+            #                   A=args.A,
+            #                   N_CORES=args.N_JOBS,
+            #                   M=args.M
+            #                   )
+
+            print(batch_script)
+            os.system('sbatch tmp_script')     # submit jobs 
+            os.remove('tmp_script')
     else: # LPC
         for i,run_cmd in enumerate(all_commands):
             job_name = '_'.join([
