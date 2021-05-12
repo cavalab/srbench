@@ -172,13 +172,6 @@ if __name__ == '__main__':
                                      for run_cmd in all_commands)
     elif args.SLURM:
         # sbatch
-        #SBATCH -J scikit
-        #SBATCH -N 1
-        #SBATCH --ntasks-per-node=1
-        #SBATCH --time=168:00:00
-        #SBATCH --mem-per-cpu=20GB
-        #SBATCH -A  plgbicl1
-        #SBATCH -p plgrid-long
         for i,run_cmd in enumerate(all_commands):
             job_name = '_'.join([
                                  job_info[i]['dataset'],
@@ -199,7 +192,7 @@ if __name__ == '__main__':
 #SBATCH --mem-per-cpu={M} 
 
 conda info 
-source plg_modules
+source plg_modules.sh
 
 {cmd}
 """.format(
@@ -217,8 +210,8 @@ source plg_modules
             # print(batch_script)
             print(job_name)
             sbatch_response = subprocess.check_output(['sbatch tmp_script'],
-                                                      shell=True)     # submit jobs 
-            print(sbatch_response.decode())
+                                                      shell=True).decode()     # submit jobs 
+            print(sbatch_response)
             # if not os.path.exists('job_scripts/success/'):
             #     os.makedirs('job_scripts/success/')
             # with open('job_scripts/success/'+job_name+'.sh','w') as f:
