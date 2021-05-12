@@ -1,3 +1,4 @@
+from ..GPGOMEARegressor import complexity,model
 from pyGPGOMEA import GPGOMEARegressor as GPG
 from .params._gpgomearegressor import params
 
@@ -9,10 +10,4 @@ est.set_params(**params)
 est.functions = '+_-_*_p/_plog_sqrt_sin_cos'
 
 # double the evals
-est.evaluations *= 2
-
-def complexity(est):
-    return est.get_n_nodes()
-
-def model(est):
-    return est.get_model()
+est.evaluations = 1000000

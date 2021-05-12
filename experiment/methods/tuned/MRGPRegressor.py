@@ -1,3 +1,4 @@
+from ..MRGPRegressor import complexity, model
 from ..src.mrgp import MRGPRegressor
 from .params._mrgpregressor import params
 
@@ -9,9 +10,3 @@ est.set_params(**params)
 # double the evals
 est.g *= 2**0.5
 est.popsize *= 2**0.5
-
-def complexity(est):
-    return est.complexity
-
-def model(est):
-    return str(est.model_)

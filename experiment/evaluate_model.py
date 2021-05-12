@@ -1,6 +1,7 @@
 import sys
 import itertools
 import pandas as pd
+from sklearn.base import clone
 from sklearn.experimental import enable_halving_search_cv # noqa
 from sklearn.model_selection import HalvingGridSearchCV
 from sklearn.model_selection import GridSearchCV, KFold, train_test_split
@@ -98,7 +99,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         hyper_params = {}
         print('hyper_params set to',hyper_params)
         for genname in ['generations','gens','g','itrNum','treeNum',
-                'evaluations','time','max_time','time_out']:
+                'evaluations']:
             if hasattr(est, genname):
                 print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
@@ -106,19 +107,21 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
             if hasattr(est, popname):
                 print('setting',popname,'=20 for test')
                 setattr(est, popname, 20)
+        for timename in ['time','max_time','time_out','BF_try_time']:
+            if hasattr(est, timename):
+                print('setting',timename,'= 10 for test')
+                setattr(est, timename, 10)
         # deep sr setting
         if hasattr(est, 'config'):
             est.config['training']['n_samples'] = 10
             est.config['training']['batch_size'] = 10
             est.config['training']['hof'] = 5
-        if hasattr(est, 'max_time'):
-            est.max_time = 5
     else:
         n_splits = 5
 
     if skip_tuning:
         print('skipping tuning')
-        grid_est = est
+        grid_est = clone(est)
     else:
         cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
@@ -128,6 +131,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # Fit models
     ################################################## 
+    print('training',grid_est)
     t0p = time.process_time()
     t0t = time.time()
     with warnings.catch_warnings():

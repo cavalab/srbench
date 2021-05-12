@@ -1,3 +1,4 @@
+from ..OperonRegressor import complexity,model
 from operon.sklearn import SymbolicRegressor
 import operon._operon as op
 from .params._operonregressor import params
@@ -15,10 +16,3 @@ est.allowed_symbols = 'add,mul,aq,exp,log,sin,tanh,constant,variable'
 
 # double the evals
 est.max_evaluations = 1000000
-
-
-def complexity(est):
-    return est._stats['model_complexity'] # scaling nodes not counted
-
-def model(est, X):
-    return est.get_model_string(3)

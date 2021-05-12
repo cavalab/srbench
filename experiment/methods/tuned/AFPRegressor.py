@@ -1,3 +1,4 @@
+from ..AFPRegressor import complexity,model
 from ellyn import ellyn
 from .params._afpregressor import params
 
@@ -23,9 +24,3 @@ est.op_list = ['n','v','+','-','*','/','exp','log','2','3','sqrt','sin','cos']
 # double the evals
 est.g *= 2**0.5
 est.popsize *= 2**0.5
-
-def complexity(est):
-    return len(est.best_estimator_)
-
-def model(est):
-    return est.stack_2_eqn(est.best_estimator_)

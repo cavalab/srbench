@@ -1,3 +1,4 @@
+from ..BSRRegressor import complexity,model
 from bsr.bsr_class import BSR
 from .params._bsrregressor import params
 
@@ -10,8 +11,5 @@ est.set_params(**params)
 est.itrNum *= 2**0.5
 est.val *= 2**0.5
 
-def complexity(est):
-    return est.complexity()
 
-def model(est):
-    return est.model()
+

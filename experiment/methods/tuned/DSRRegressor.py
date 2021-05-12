@@ -1,3 +1,4 @@
+from ..DSRRegressor import complexity,model
 from dsr import DeepSymbolicRegressor
 import numpy as np
 import copy
@@ -109,11 +110,3 @@ base_config['training']['n_samples'] = 1000000,
 # Create the model
 est = DeepSymbolicRegressor(base_config)
 
-# est.set_params(**params)
-
-# View the best expression
-def model(est):
-    return str(est.program_.sympy_expr)
-
-def complexity(est):
-    return len(est.program_.traversal)

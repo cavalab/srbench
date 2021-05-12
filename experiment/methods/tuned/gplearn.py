@@ -1,3 +1,4 @@
+from ..gplearn import complexity,model
 from gplearn.genetic import SymbolicRegressor
 import re
 from .params._gplearn import params
@@ -22,10 +23,3 @@ est.function_set = ('add', 'sub', 'mul', 'div', 'log','sqrt', 'sin','cos')
 # double the evals
 est.population_size *= 2**0.5
 est.generations *= 2**0.5
-
-def model(est):
-    return str(est._program)
-
-def complexity(est):
-    #TODO: check
-    return len(re.split('\(|,',model(est)))

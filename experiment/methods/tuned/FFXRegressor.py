@@ -1,3 +1,4 @@
+from ..FFXRegressor import complexity,model
 from ffx import FFXRegressor
 
 # FFX has no parameters!
@@ -10,9 +11,3 @@ hyper_params = [
 ]
 
 est = FFXRegressor()
-
-def complexity(est):
-    return est.model_.complexity()
-
-def model(est):
-    return est.model_.str2()
