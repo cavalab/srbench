@@ -8,7 +8,6 @@ est = SymbolicRegressor(
             generations=100000, # just large enough since we have an evaluation budget
             n_threads=1,
             random_state=None,
-            time_limit=10*60*60 # 2 hours
             )
 
 est.set_params(**params)
@@ -16,3 +15,4 @@ est.allowed_symbols = 'add,mul,aq,exp,log,sin,tanh,constant,variable'
 
 # double the evals
 est.max_evaluations = 1000000
+est.time_limit=8*60*60 # 2 hours
