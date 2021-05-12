@@ -81,7 +81,7 @@ if __name__ == '__main__':
         datasets = glob(args.DATASET_DIR+'*/*.tsv.gz')
     else:
         datasets = glob(args.DATASET_DIR+'/*/*.tsv.gz')
-    print('found',len(datasets),'datasets:',datasets)
+    print('found',len(datasets),'datasets')
 
     #####################################################
     ## look for existing jobs
@@ -95,7 +95,9 @@ if __name__ == '__main__':
         current_jobs = res.decode().split('\n')
     current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
 
+
     # write run commands
+    skipped_jobs = []
     all_commands = []
     job_info=[]
     for t in range(args.START_SEED, args.START_SEED+args.N_TRIALS):
@@ -124,14 +126,16 @@ if __name__ == '__main__':
                                  + str(random_state))
                     if args.Y_NOISE > 0:
                         save_file += '_target-noise'+str(args.Y_NOISE)
-                    if feature_noise > 0:
+                    if args.X_NOISE > 0:
                         save_file += '_feature-noise'+str(args.X_NOISE)
 
                     if os.path.exists(save_file+'.json'):
-                        print(save_file,'already exists, skipping. Override with --noskips.')
+                        skipped_jobs.append([save_file,'exists'])
+                        # print(save_file,'already exists, skipping. Override with --noskips.')
                         continue
                     elif save_file in current_jobs:
-                        print(save_file,'is already queued, skipping. Override with --noskips.')
+                        skipped_jobs.append([save_file,'queued'])
+                        # print(save_file,'is already queued, skipping. Override with --noskips.')
                         continue
                 
                 all_commands.append('python evaluate_model.py '
@@ -158,6 +162,8 @@ if __name__ == '__main__':
                                  'seed':str(random_state),
                                  'results_path':results_path})
 
+    print('skipped',len(skipped_jobs),'jobs. Override with --noskips.')
+    print('submitting',len(all_commands),'jobs...')
     if args.LOCAL:
         # run locally  
         for run_cmd in all_commands: 
@@ -189,7 +195,7 @@ if __name__ == '__main__':
 #SBATCH -n {N_CORES} 
 #SBATCH -J {JOB_NAME} 
 #SBATCH -A {A} -p {QUEUE} 
-#SBATCH --ntasks-per-node=1 --time=48:00:00 
+#SBATCH --ntasks-per-node=1 --time=12:00:00 
 #SBATCH --mem-per-cpu={M} 
 
 conda info 
@@ -208,9 +214,11 @@ source plg_modules
             with open('tmp_script','w') as f:
                 f.write(batch_script)
 
-            print(batch_script)
+            # print(batch_script)
+            print(job_name)
             sbatch_response = subprocess.check_output(['sbatch tmp_script'],
                                                       shell=True)     # submit jobs 
+            print(sbatch_response.decode())
             # if not os.path.exists('job_scripts/success/'):
             #     os.makedirs('job_scripts/success/')
             # with open('job_scripts/success/'+job_name+'.sh','w') as f:
