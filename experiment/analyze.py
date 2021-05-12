@@ -9,7 +9,7 @@ from seeds import SEEDS
 from yaml import load, Loader
 
 #TODO make this script smarter about running jobs. 
-# have it check to see whethe results for that job exist before
+# have it check to see whether results for that job exist before
 # resubmitting. That way the same command can be run multiple times.
 
 if __name__ == '__main__':
@@ -82,6 +82,19 @@ if __name__ == '__main__':
     else:
         datasets = glob(args.DATASET_DIR+'/*/*.tsv.gz')
     print('found',len(datasets),'datasets:',datasets)
+
+    #####################################################
+    ## look for existing jobs
+    ########################
+    current_jobs = []
+    if args.SLURM:
+        res = subprocess.check_output(['squeue -o "%j"'],shell=True)
+        current_jobs = res.decode().split('\n')
+    elif args.LSF:
+        res = subprocess.check_output(['bjobs -o "JOB_NAME" -noheader'],shell=True)
+        current_jobs = res.decode().split('\n')
+    current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
+
     # write run commands
     all_commands = []
     job_info=[]
@@ -106,16 +119,20 @@ if __name__ == '__main__':
                 os.makedirs(results_path)
                 
             for ml in learners:
-                save_file = (results_path + '/' + dataname + '_' + ml + '_' 
-                             + str(random_state))
-                if args.Y_NOISE > 0:
-                    save_file += '_target-noise'+str(args.Y_NOISE)
-                if feature_noise > 0:
-                    save_file += '_feature-noise'+str(args.X_NOISE)
+                if not args.NOSKIPS:
+                    save_file = (results_path + '/' + dataname + '_' + ml + '_' 
+                                 + str(random_state))
+                    if args.Y_NOISE > 0:
+                        save_file += '_target-noise'+str(args.Y_NOISE)
+                    if feature_noise > 0:
+                        save_file += '_feature-noise'+str(args.X_NOISE)
 
-                if os.path.exists(save_file+'.json') and not args.NOSKIPS:
-                    print(save_file,'already exists, skipping. Override with --noskips.')
-                    continue
+                    if os.path.exists(save_file+'.json'):
+                        print(save_file,'already exists, skipping. Override with --noskips.')
+                        continue
+                    elif save_file in current_jobs:
+                        print(save_file,'is already queued, skipping. Override with --noskips.')
+                        continue
                 
                 all_commands.append('python evaluate_model.py '
                                     '{DATASET}'
@@ -192,11 +209,12 @@ source plg_modules
                 f.write(batch_script)
 
             print(batch_script)
-            sbatch_response = subprocess.check_output(['sbatch tmp_script'],shell=True)     # submit jobs 
-            if not os.path.exists('job_scripts/success/'):
-                os.makedirs('job_scripts/success/')
-            with open('job_scripts/success/'+job_name+'.sh','w') as f:
-                f.write(batch_script)
+            sbatch_response = subprocess.check_output(['sbatch tmp_script'],
+                                                      shell=True)     # submit jobs 
+            # if not os.path.exists('job_scripts/success/'):
+            #     os.makedirs('job_scripts/success/')
+            # with open('job_scripts/success/'+job_name+'.sh','w') as f:
+            #     f.write(batch_script)
 
             os.remove('tmp_script')
     else: # LPC
