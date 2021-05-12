@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('-q',action='store',dest='QUEUE',
                         default='epistasis_long',
                         type=str,help='LSF queue')
-    parser.add_argument('-m',action='store',dest='M',default=4096,type=int,
+    parser.add_argument('-m',action='store',dest='M',default=8192,type=int,
             help='LSF memory request and limit (MB)')
     parser.add_argument('-test',action='store_true', dest='TEST', 
                        help='Used for testing a minimal version')

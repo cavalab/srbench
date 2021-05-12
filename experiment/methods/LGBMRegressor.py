@@ -10,13 +10,11 @@ hyper_params = {
 
 est=lightgbm.LGBMRegressor(
                            max_depth=6,
-                           objective = 'binary',
-                           metric = 'binary_logloss',
                            deterministic = True,
                            force_row_wise = True
                           )
 
-
 def complexity(est):
     return np.sum([x['num_leaves'] for x in est._Booster.dump_model()['tree_info']])
+
 model = None

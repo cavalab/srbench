@@ -33,21 +33,16 @@ dependencies:
     - mpi4py
     - dataclasses
     # itea
-    - libblas=3.9.0=8_openblas 
-    - liblapack=3.9.0=8_openblas
-    - gmp=6.2.1=h58526e2_0
-    - gsl=2.6=he838d99_2
-    - libffi=3.3=h58526e2_2
+    # - libblas=3.9.0=8_openblas 
+    # - liblapack=3.9.0=8_openblas
+    # - gmp=6.2.1=h58526e2_0
+    # - gsl=2.6=he838d99_2
+    # - libffi=3.3=h58526e2_2
     # feat
     - cython=0.29.*
     - setuptools=45.*
     - shogun-cpp=6.1.4
     - wheel=0.35.*
-    # AI-feynman
-    # - seaborn
-    # - sortedcontainers
-    # - pytorch
-    # - torchvision
     # pip
     - pip=20.3.3 
     - pip:
@@ -55,5 +50,7 @@ dependencies:
         - pmlb==1.0.1.post3
         - ffx==2.0.2 # ffx
         - eigency==1.77
+        # BSR
         - git+https://github.com/lacava/MCMC-SymReg
+        # AI-feynman
         - git+https://github.com/lacava/AI-Feynman
