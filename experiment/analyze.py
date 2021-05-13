@@ -46,7 +46,7 @@ if __name__ == '__main__':
     parser.add_argument('-q',action='store',dest='QUEUE',
                         default='epistasis_long',
                         type=str,help='LSF queue')
-    parser.add_argument('-m',action='store',dest='M',default=8192,type=int,
+    parser.add_argument('-m',action='store',dest='M',default=16384,type=int,
             help='LSF memory request and limit (MB)')
     parser.add_argument('-starting_seed',action='store',dest='START_SEED',
                         default=0,type=int, help='seed position to start with')
@@ -96,11 +96,12 @@ if __name__ == '__main__':
     elif not args.LOCAL:
         res = subprocess.check_output(['bjobs -o "JOB_NAME" -noheader'],shell=True)
         current_jobs = res.decode().split('\n')
-    current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
-
+    # pdb.set_trace()
+    # current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
 
     # write run commands
     skipped_jobs = []
+    queued_jobs = []
     all_commands = []
     job_info=[]
     for t in range(args.START_SEED, args.START_SEED+args.N_TRIALS):
@@ -140,8 +141,8 @@ if __name__ == '__main__':
                         skipped_jobs.append([save_file,'exists'])
                         # print(save_file,'already exists, skipping. Override with --noskips.')
                         continue
-                    elif save_file in current_jobs:
-                        skipped_jobs.append([save_file,'queued'])
+                    elif save_file.split('/')[-1] in current_jobs:
+                        queued_jobs.append([save_file,'queued'])
                         # print(save_file,'is already queued, skipping. Override with --noskips.')
                         continue
                 
@@ -167,12 +168,15 @@ if __name__ == '__main__':
                 job_info.append({'ml':ml,
                                  'dataset':dataname,
                                  'seed':str(random_state),
-                                 'results_path':results_path})
+                                 'results_path':results_path,
+                                 'target_noise':args.Y_NOISE
+                                 })
 
-    print('skipped',len(skipped_jobs),'jobs. Override with --noskips.')
     if len(all_commands) > args.JOB_LIMIT:
         print('shaving jobs down to job limit ({})'.format(args.JOB_LIMIT))
         all_commands = all_commands[:args.JOB_LIMIT]
+    print('skipped',len(skipped_jobs),'jobs with results. Override with --noskips.')
+    print('skipped',len(queued_jobs),'queued jobs. Override with --noskips.')
     print('submitting',len(all_commands),'jobs...')
     if args.LOCAL:
         # run locally  
@@ -180,18 +184,23 @@ if __name__ == '__main__':
             print(run_cmd)
             Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
                                      for run_cmd in all_commands)
-    elif args.SLURM:
+    else:
         # sbatch
         for i,run_cmd in enumerate(all_commands):
             job_name = '_'.join([
                                  job_info[i]['dataset'],
                                  job_info[i]['ml'],
-                                 job_info[i]['seed']
+                                 job_info[i]['seed'],
                                 ])
+            if args.Y_NOISE>0:
+                job_name += '_target-noise'+str(args.Y_NOISE)
+            if args.X_NOISE>0:
+                job_name += '_feature-noise'+str(args.X_NOISE)
             out_file = job_info[i]['results_path'] + job_name + '_%J.out'
             error_file = out_file[:-4] + '.err'
             
-            batch_script = \
+            if args.SLURM:
+                    batch_script = \
 """#!/usr/bin/bash 
 #SBATCH -o {OUT_FILE} 
 #SBATCH -N 1 
@@ -213,41 +222,31 @@ source plg_modules.sh
            N_CORES=args.N_JOBS,
            M=args.M,
            cmd=run_cmd
-        )
-            with open('tmp_script','w') as f:
-                f.write(batch_script)
+          )
+                    with open('tmp_script','w') as f:
+                        f.write(batch_script)
 
-            # print(batch_script)
-            print(job_name)
-            sbatch_response = subprocess.check_output(['sbatch tmp_script'],
-                                                      shell=True).decode()     # submit jobs 
-            print(sbatch_response)
-            # if not os.path.exists('job_scripts/success/'):
-            #     os.makedirs('job_scripts/success/')
-            # with open('job_scripts/success/'+job_name+'.sh','w') as f:
-            #     f.write(batch_script)
+                    # print(batch_script)
+                    print(job_name)
+                    sbatch_response = subprocess.check_output(['sbatch tmp_script'],
+                                                              shell=True).decode()     # submit jobs 
+                    print(sbatch_response)
 
-            os.remove('tmp_script')
-    else: # LPC
-        for i,run_cmd in enumerate(all_commands):
-            job_name = '_'.join([
-                                 job_info[i]['dataset'],
-                                 job_info[i]['ml'],
-                                 job_info[i]['seed']
-                                ])
-            out_file = job_info[i]['results_path'] + job_name + '_%J.out'
-            error_file = out_file[:-4] + '.err'
-            
-            bsub_cmd = ('bsub -o {OUT_FILE} -n {N_CORES} -J {JOB_NAME} -q {QUEUE} '
-                       '-R "span[hosts=1] rusage[mem={M}]" -M {M} ').format(
-                               OUT_FILE=out_file,
-                               JOB_NAME=job_name,
-                               QUEUE=args.QUEUE,
-                               N_CORES=args.N_JOBS,
-                               M=args.M)
-            
-            bsub_cmd +=  '"' + run_cmd + '"'
-            print(bsub_cmd)
-            os.system(bsub_cmd)     # submit jobs 
+            else: # LPC
+                # activate srbench env, load modules
+                pre_run_cmds = ["conda activate srbench",
+                                "source lpc_modules.sh"]
+                run_cmd = '; '.join(pre_run_cmds + [run_cmd])
+                bsub_cmd = ('bsub -o {OUT_FILE} -n {N_CORES} -J {JOB_NAME} -q {QUEUE} '
+                           '-R "span[hosts=1] rusage[mem={M}]" -M {M} ').format(
+                                   OUT_FILE=out_file,
+                                   JOB_NAME=job_name,
+                                   QUEUE=args.QUEUE,
+                                   N_CORES=args.N_JOBS,
+                                   M=args.M)
+                
+                bsub_cmd +=  '"' + run_cmd + '"'
+                print(bsub_cmd)
+                os.system(bsub_cmd)     # submit jobs 
 
     print('Finished submitting',len(all_commands),'jobs.')
