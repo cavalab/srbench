@@ -58,6 +58,9 @@ if __name__ == '__main__':
     parser.add_argument('-feature_noise',action='store',dest='X_NOISE',
                         default=0.0, type=float, help='Gaussian noise to add'
                         'to the target')
+    parser.add_argument('-job_limit',action='store',dest='JOB_LIMIT',
+                        default=1000, type=int, 
+                        help='Limit number of jobs submitted at once')
 
     args = parser.parse_args()
      
@@ -108,6 +111,10 @@ if __name__ == '__main__':
             random_state = SEEDS[t]
         # print('random_seed:',random_state)
         for dataset in datasets:
+            if (not args.SYM_DATA 
+                and any([n in dataset for n in ['feynman', 'strogatz']])
+               ):
+                continue
             # grab regression datasets
             metadata = load(
                 open('/'.join(dataset.split('/')[:-1])+'/metadata.yaml','r'),
@@ -163,6 +170,9 @@ if __name__ == '__main__':
                                  'results_path':results_path})
 
     print('skipped',len(skipped_jobs),'jobs. Override with --noskips.')
+    if len(all_commands) > args.JOB_LIMIT:
+        print('shaving jobs down to job limit ({})'.format(args.JOB_LIMIT))
+        all_commands = all_commands[:args.JOB_LIMIT]
     print('submitting',len(all_commands),'jobs...')
     if args.LOCAL:
         # run locally  
@@ -238,4 +248,6 @@ source plg_modules.sh
             
             bsub_cmd +=  '"' + run_cmd + '"'
             print(bsub_cmd)
-            # os.system(bsub_cmd)     # submit jobs 
+            os.system(bsub_cmd)     # submit jobs 
+
+    print('Finished submitting',len(all_commands),'jobs.')
