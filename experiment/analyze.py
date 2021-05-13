@@ -1,4 +1,3 @@
-import pdb
 import pandas as pd
 import subprocess
 import numpy as np
@@ -139,7 +138,6 @@ if __name__ == '__main__':
                         queued_jobs.append([save_file,'queued'])
                         # print(save_file,'is already queued, skipping. Override with --noskips.')
                         continue
-                    pdb.set_trace()
                 
                 all_commands.append('python evaluate_model.py '
                                     '{DATASET}'
