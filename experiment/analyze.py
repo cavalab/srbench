@@ -234,9 +234,9 @@ source plg_modules.sh
 
             else: # LPC
                 # activate srbench env, load modules
-                pre_run_cmds = ["conda activate srbench",
-                                "source lpc_modules.sh"]
-                run_cmd = '; '.join(pre_run_cmds + [run_cmd])
+                # pre_run_cmds = ["conda activate srbench",
+                #                 "source lpc_modules.sh"]
+                # run_cmd = '; '.join(pre_run_cmds + [run_cmd])
                 bsub_cmd = ('bsub -o {OUT_FILE} -n {N_CORES} -J {JOB_NAME} -q {QUEUE} '
                            '-R "span[hosts=1] rusage[mem={M}]" -M {M} ').format(
                                    OUT_FILE=out_file,
