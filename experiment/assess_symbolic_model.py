@@ -19,7 +19,8 @@ import json
 import os
 import inspect
 from utils import jsonify 
-from symbolic_utils import clean_pred_model, get_sym_model, round_floats
+from symbolic_utils import (clean_pred_model,get_sym_model,round_floats,
+                            complexity)
 from sympy import simplify
 
 def assess_symbolic_model(dataset, results_path, random_state, est_name,  
@@ -51,9 +52,11 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
     true_model = get_sym_model(dataset, return_str=False)
     r['true_model'] = str(true_model)
     raw_model = r['symbolic_model']
+
     try:
-        cleaned_model = clean_pred_model(raw_model, dataset)
+        cleaned_model = clean_pred_model(raw_model, dataset, 'MRGP' in est_name)
         r['simplified_symbolic_model'] = str(cleaned_model)
+        r['simplified_complexity'] = complexity(cleaned_model)
 
         # if the error of the model is low, check and see if it
         # is an exact symbolic match
@@ -79,7 +82,6 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
         r['symbolic_error_is_zero'] = False
         r['symbolic_error_is_constant'] = False
         r['symbolic_fraction_is_constant'] = False
-        r['simplified_symbolic_model'] = raw_model
 
     print(json.dumps(r, indent=4))
     print('saving...')

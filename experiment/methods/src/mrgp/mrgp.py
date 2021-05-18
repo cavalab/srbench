@@ -94,20 +94,13 @@ class MRGPRegressor(BaseEstimator):
     model_form = model_form.replace('mydivide','div')
     model_form = model_form.replace('*','mul')
     model_form = model_form.replace('-','sub')
+    model_form = model_form.replace('+','add')
     # move starting paren to other side of functions
     model_form = re.sub(
                     pattern=r'\((.+?(?= ))',
                     repl=r'\1(',
                     string=model_form
                    )
-    #TODO: replace square,cube,quart with pow function
-    # currently matching parens are not captured properly
-    # for op,i in [['square',2],['cube',3],['quart',4]]:
-    #     pattern = op+r'\((.*?)\)'
-    #     model_form = re.sub(pattern=pattern,
-    #                         repl=r'pow(\1,'+str(i)+')',
-    #                         string=model_form
-    #       )
     complexity_ = 2+len(internal_weights)*3
     model_ = ' '.join([b+'*'+ m for b,m in zip(internal_weights.split(' '),
                                       model_form.split(' '))])

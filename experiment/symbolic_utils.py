@@ -7,11 +7,32 @@ from sympy.parsing.sympy_parser import parse_expr
 from read_file import read_file
 import re
 
+###############################################################################
+# fn definitions from the algorithms
+def square(x):
+    return sympy.Pow(x,2)
+def cube(x):
+    return sympy.Pow(x,3)
+def quart(x):
+    return sympy.Pow(x,4)
+def PLOG(x):
+    if isinstance(x, sympy.Float):
+        if x < 0:
+            return sympy.log(sympy.Abs(x))
+    return sympy.log(x)
+
+def PSQRT(x):
+    if isinstance(x, sympy.Float):
+        if x < 0:
+            return sympy.sqrt(sympy.Abs(x))
+    return sympy.sqrt(x)
+###############################################################################
+
 def complexity(expr):
-    complexity=1
-    for arg in expr.args:
-        complexity += complexity(expr.args)
-    return 1
+    c=0
+    for arg in preorder_traversal(expr):
+        c += 1
+    return c
         
 def round_floats(ex1):
     ex2 = ex1
@@ -20,10 +41,20 @@ def round_floats(ex1):
             ex2 = ex2.subs(a, round(a, 6))
     return ex2
 
+def add_commas(model):
+    return ''.join([m + ',' if not m.endswith('(') else m 
+                    for m in model.split()])
+
 def clean_pred_model(model_str, dataset, mrgp=False):
+    model_str = model_str.strip()    
+
     if mrgp:
-        model_str = process_mrgp(model_str)
-        
+
+        model_str = model_str.replace('+','add')
+        model_str = add_commas(model_str)
+        print('commad model:',model_str)
+
+
     X, labels, features = read_file(dataset)
    
     local_dict = {k:Symbol(k) for k in features}
@@ -40,42 +71,34 @@ def clean_pred_model(model_str, dataset, mrgp=False):
     new_model_str = new_model_str.replace('^','**')
     #GP-GOMEA
     new_model_str = new_model_str.replace('p/','/') 
-    new_model_str = new_model_str.replace('plog','log') 
+    new_model_str = new_model_str.replace('plog','PLOG') 
     new_model_str = new_model_str.replace('aq','/') 
+    # MRGP
+    new_model_str = new_model_str.replace('mylog','PLOG')
     # ITEA
-    new_model_str = new_model_str.replace('sqrtAbs','sqrt')
+    new_model_str = new_model_str.replace('sqrtAbs','PSQRT')
     # new_model_str = re.sub(pattern=r'sqrtAbs\((.*?)\)',
     #        repl=r'sqrt(abs(\1))',
     #        string=new_model_str
     #       )
     new_model_str = new_model_str.replace('np.','') 
     # ellyn & FEAT
-    # pdb.set_trace()
     new_model_str = new_model_str.replace('|','')
+    new_model_str = new_model_str.replace('log','PLOG') 
+    new_model_str = new_model_str.replace('sqrt','PSQRT') 
 
+
+    local_dict.update({'PLOG':PLOG,'PSQRT':PSQRT})
     # gplearn
     for op in ('add', 'sub', 'mul', 'div'):
         new_model_str = new_model_str.replace(op,op.title()) 
 
-#         new_model_str = new_model_str.replace('Sqrt','/') 
-
-    # replace floating point digits with constants
-#     constants = re.findall(r'[-+]?\d*\.*\d+',new_model_str)
-#     print('constants:',constants)
-#     for i,c in enumerate(constants):
-#         new_model = new_model_str.replace(c,'C'+str(i))
-        
     print('parsing',new_model_str)
     model_sym = parse_expr(new_model_str, local_dict = local_dict)
-#     simp = model_sym
-#     print('factor...')
-#     simp = factor(model_sym)
     print('simplify...')
-    simp = simplify(model_sym, ratio=1)
+    simp = round_floats(simplify(model_sym, ratio=1))
     print('simplified:',simp)
-#     simp = simplify(simp)
-    # return model_sym, simp
-    return round_floats(simp)
+    return simp
 
 
 def get_sym_model(dataset, return_str=True):
