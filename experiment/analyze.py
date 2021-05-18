@@ -1,3 +1,4 @@
+import pdb
 import pandas as pd
 import subprocess
 import numpy as np
@@ -33,6 +34,8 @@ if __name__ == '__main__':
             help='SLURM account')
     parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', default=False, 
             help='Specify a symbolic dataset')
+    parser.add_argument('-tuned',action='store_true', dest='TUNED', default=False, 
+            help='Run tuned version of estimators. Only applies when ml=None')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=1,type=int,
             help='Number of parallel jobs')
     parser.add_argument('-seed',action='store',dest='SEED',default=None,
@@ -46,6 +49,9 @@ if __name__ == '__main__':
     parser.add_argument('-q',action='store',dest='QUEUE',
                         default='epistasis_long',
                         type=str,help='LSF queue')
+    parser.add_argument('-script',action='store',dest='SCRIPT',
+                        default='evaluate_model',
+                        type=str,help='Python script to run')
     parser.add_argument('-m',action='store',dest='M',default=16384,type=int,
             help='LSF memory request and limit (MB)')
     parser.add_argument('-starting_seed',action='store',dest='START_SEED',
@@ -69,8 +75,11 @@ if __name__ == '__main__':
         args.QUEUE = 'plgrid'
 
     if args.LEARNERS == None:
-        learners = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') 
+        prefix = 'methods/tuned/' if args.TUNED else 'methods/'
+        learners = [ml.split('/')[-1][:-3] for ml in glob(prefix+'*.py') 
                 if not ml.split('/')[-1].startswith('_')]
+        if args.TUNED:
+            learners = ['tuned.'+ml for ml in learners]
     else:
         learners = [ml for ml in args.LEARNERS.split(',')]  # learners
     print('learners:',learners)
@@ -101,6 +110,8 @@ if __name__ == '__main__':
 
     # write run commands
     skipped_jobs = []
+    suffix = ('.json.updated' if args.SCRIPT=='assess_symbolic_model' else
+                  '.json')
     queued_jobs = []
     all_commands = []
     job_info=[]
@@ -137,7 +148,7 @@ if __name__ == '__main__':
                     if args.X_NOISE > 0:
                         save_file += '_feature-noise'+str(args.X_NOISE)
 
-                    if os.path.exists(save_file+'.json'):
+                    if os.path.exists(save_file+suffix):
                         skipped_jobs.append([save_file,'exists'])
                         # print(save_file,'already exists, skipping. Override with --noskips.')
                         continue
@@ -146,7 +157,7 @@ if __name__ == '__main__':
                         # print(save_file,'is already queued, skipping. Override with --noskips.')
                         continue
                 
-                all_commands.append('python evaluate_model.py '
+                all_commands.append('python {SCRIPT}.py '
                                     '{DATASET}'
                                     ' -ml {ML}'
                                     ' -results_path {RDIR}'
@@ -154,6 +165,7 @@ if __name__ == '__main__':
                                     ' -target_noise {TN} '
                                     ' -feature_noise {FN} '
                                     '{TEST} {SYM_DATA}'.format(
+                                        SCRIPT=args.SCRIPT,
                                         ML=ml,
                                         DATASET=dataset,
                                         RDIR=results_path,
@@ -171,12 +183,12 @@ if __name__ == '__main__':
                                  'results_path':results_path,
                                  'target_noise':args.Y_NOISE
                                  })
-
     if len(all_commands) > args.JOB_LIMIT:
         print('shaving jobs down to job limit ({})'.format(args.JOB_LIMIT))
         all_commands = all_commands[:args.JOB_LIMIT]
-    print('skipped',len(skipped_jobs),'jobs with results. Override with --noskips.')
-    print('skipped',len(queued_jobs),'queued jobs. Override with --noskips.')
+    if not args.NOSKIPS:
+        print('skipped',len(skipped_jobs),'jobs with results. Override with --noskips.')
+        print('skipped',len(queued_jobs),'queued jobs. Override with --noskips.')
     print('submitting',len(all_commands),'jobs...')
     if args.LOCAL:
         # run locally  
@@ -184,6 +196,7 @@ if __name__ == '__main__':
             print(run_cmd)
             Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
                                      for run_cmd in all_commands)
+            # os.system(run_cmd)
     else:
         # sbatch
         for i,run_cmd in enumerate(all_commands):

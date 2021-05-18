@@ -18,7 +18,8 @@ import numpy as np
 import json
 import os
 import inspect
-from utils import jsonify, get_sym_model
+from utils import jsonify
+from symbolic_utils import get_sym_model
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
                    hyper_params, complexity, model, test=False, 
