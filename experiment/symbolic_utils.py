@@ -2,30 +2,48 @@ import pdb
 import pandas as pd
 from yaml import load, Loader
 import sympy
+# from sympy import *
 from sympy import Symbol, simplify, factor, Float, preorder_traversal
 from sympy.parsing.sympy_parser import parse_expr
 from read_file import read_file
 import re
+import ast 
 
 ###############################################################################
-# fn definitions from the algorithms
+# fn definitions from the algorithms, written in sympy operators
+def sub(x,y):
+    return sympy.Add(x,-y)
+
+def div(x,y):
+    return sympy.Mul(x,1/y)
+
 def square(x):
     return sympy.Pow(x,2)
+
 def cube(x):
     return sympy.Pow(x,3)
+
 def quart(x):
     return sympy.Pow(x,4)
-def PLOG(x):
+
+def PLOG(x, base=None):
     if isinstance(x, sympy.Float):
         if x < 0:
-            return sympy.log(sympy.Abs(x))
-    return sympy.log(x)
+            x = sympy.Abs(x)
+    if base:
+        return sympy.log(x,base)
+    else:
+        return sympy.log(x)
+
+def PLOG10(x):
+    return PLOG(x,10)
 
 def PSQRT(x):
     if isinstance(x, sympy.Float):
         if x < 0:
             return sympy.sqrt(sympy.Abs(x))
     return sympy.sqrt(x)
+
 ###############################################################################
 
 def complexity(expr):
@@ -41,18 +59,78 @@ def round_floats(ex1):
             ex2 = ex2.subs(a, round(a, 6))
     return ex2
 
+################################################################################
+# currently the MRGP model is put together incorrectly. this set of functions
+# corrects the MRGP model form so that it can be fed to sympy and simplified.
+################################################################################
 def add_commas(model):
     return ''.join([m + ',' if not m.endswith('(') else m 
-                    for m in model.split()])
+                    for m in model.split()])[:-1]
 
-def clean_pred_model(model_str, dataset, mrgp=False):
+def decompose_mrgp_model(model_str):
+    """split mrgp model into its betas and model parts"""
+    new_model=[]
+    # get betas
+    betas = [float(b[0]) for b in re.findall(
+                            r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\*',
+                            model_str)]
+    print('betas:',betas)
+    # get form
+    submodel = re.sub(pattern=r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\*', 
+               repl=r'', 
+               string=model_str)
+    return betas, submodel #new_model
+
+def print_model(node):
+    if hasattr(node, 'func'):
+        model_str = node.func.id + '('
+    elif hasattr(node, 'id'):
+        # model_str = node.id 
+        return node.id
+    else:
+        pdb.set_trace()
+    if hasattr(node, 'args'):
+        i = 0
+        for arg in node.args:
+            model_str += print_model(arg)
+            i += 1
+            if i < len(node.args):
+                model_str += ','
+        model_str += ')'
+
+    # print('print_model::',model_str)
+    return model_str
+
+def add_betas(node, betas):
+    beta = betas[0]
+    betas.pop(0)
+    if float(beta) > 0:
+        model_str = str(beta) + '*' + print_model(node)
+        i = 1
+    else:
+        # print('filtering fn w beta=',beta)
+        model_str = ''
+        i = 0
+    if hasattr(node, 'args'):
+        for arg in node.args:
+            submodel = add_betas(arg, betas)
+            if submodel != '':
+                model_str += '+' if i != 0 else ''
+                model_str += submodel 
+                i += 1
+    # print('add_betas::',model_str)
+    return model_str
+################################################################################
+
+def clean_pred_model(model_str, dataset, est_name):
+    mrgp = 'MRGP' in est_name
+    
     model_str = model_str.strip()    
 
     if mrgp:
-
         model_str = model_str.replace('+','add')
         model_str = add_commas(model_str)
-        print('commad model:',model_str)
+        betas, model_str = decompose_mrgp_model(model_str)
 
 
     X, labels, features = read_file(dataset)
@@ -61,6 +139,8 @@ def clean_pred_model(model_str, dataset, mrgp=False):
     new_model_str = model_str
     # rename features
     for i,f in enumerate(features): 
+        if any([n in est_name.lower() for n in ['mrgp','operon']]):
+            i = i + 1
         new_model_str = new_model_str.replace('x'+str(i),f)
         new_model_str = new_model_str.replace('x_'+str(i),f)
         new_model_str = new_model_str.replace('X_'+str(i),f)
@@ -87,13 +167,33 @@ def clean_pred_model(model_str, dataset, mrgp=False):
     new_model_str = new_model_str.replace('log','PLOG') 
     new_model_str = new_model_str.replace('sqrt','PSQRT') 
 
+    # AIFeynman
+    new_model_str = new_model_str.replace('pi','3.1415926535')
 
-    local_dict.update({'PLOG':PLOG,'PSQRT':PSQRT})
+    local_dict.update({
+                       'add':sympy.Add,
+                       'mul':sympy.Mul,
+                       'max':sympy.Max,
+                       'min':sympy.Min,
+                       'sub':sub,
+                       'div':div,
+                       'square':square,
+                       'cube':cube,
+                       'quart':quart,
+                       'PLOG':PLOG,
+                       'PLOG10':PLOG,
+                       'PSQRT':PSQRT
+                       })
     # gplearn
-    for op in ('add', 'sub', 'mul', 'div'):
-        new_model_str = new_model_str.replace(op,op.title()) 
+    # for op in ('add', 'sub', 'mul', 'div'):
+    #     new_model_str = new_model_str.replace(op,op.title()) 
 
     print('parsing',new_model_str)
+    if mrgp:
+        mrgp_ast = ast.parse(new_model_str, "","eval")
+        new_model_str = add_betas(mrgp_ast.body,betas)
+        assert(len(betas)==0)
+
     model_sym = parse_expr(new_model_str, local_dict = local_dict)
     print('simplify...')
     simp = round_floats(simplify(model_sym, ratio=1))
