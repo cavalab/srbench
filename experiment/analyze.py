@@ -105,7 +105,6 @@ if __name__ == '__main__':
     elif not args.LOCAL:
         res = subprocess.check_output(['bjobs -o "JOB_NAME" -noheader'],shell=True)
         current_jobs = res.decode().split('\n')
-    # pdb.set_trace()
     # current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
 
     # write run commands
@@ -204,12 +203,15 @@ if __name__ == '__main__':
                                  job_info[i]['dataset'],
                                  job_info[i]['ml'],
                                  job_info[i]['seed'],
+                                 args.SCRIPT
                                 ])
             if args.Y_NOISE>0:
                 job_name += '_target-noise'+str(args.Y_NOISE)
             if args.X_NOISE>0:
                 job_name += '_feature-noise'+str(args.X_NOISE)
-            out_file = job_info[i]['results_path'] + job_name + '_%J.out'
+            out_file = (job_info[i]['results_path']
+                        + job_name 
+                        + '.%J.out')
             error_file = out_file[:-4] + '.err'
             
             if args.SLURM:

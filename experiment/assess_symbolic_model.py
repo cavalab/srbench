@@ -53,35 +53,35 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
     r['true_model'] = str(true_model)
     raw_model = r['symbolic_model']
 
-    # try:
-    cleaned_model = clean_pred_model(raw_model, dataset, est_name)
-    r['simplified_symbolic_model'] = str(cleaned_model)
-    r['simplified_complexity'] = complexity(cleaned_model)
+    try:
+        cleaned_model = clean_pred_model(raw_model, dataset, est_name)
+        r['simplified_symbolic_model'] = str(cleaned_model)
+        r['simplified_complexity'] = complexity(cleaned_model)
 
-    # if the model is somewhat accurate, check and see if it
-    # is an exact symbolic match
-    if r['r2_test'] > 0.5:
-        sym_diff = round_floats(true_model - cleaned_model)
-        sym_frac = round_floats(cleaned_model/true_model)
-        print('sym_diff:',sym_diff)
-        print('sym_frac:',sym_frac)
-        # check if we can skip simplification
-        
-        if not sym_diff.is_constant() or sym_frac.is_constant():
-            sym_diff = simplify(sym_diff, ratio=1)
-            print('simplified sym_diff:',sym_diff)
-        r['symbolic_error'] = str(sym_diff)
-        r['symbolic_fraction'] = str(sym_frac)
-        r['symbolic_error_is_zero'] = str(sym_diff) == '0'
-        r['symbolic_error_is_constant'] = sym_diff.is_constant()
-        r['symbolic_fraction_is_constant'] = sym_frac.is_constant()
-    else:
-        raise ValueError("Model isnt accurate enough to check")
-    # except Exception as e:
-        # r['sympy_exception'] = str(e)
-        # r['symbolic_error_is_zero'] = False
-        # r['symbolic_error_is_constant'] = False
-        # r['symbolic_fraction_is_constant'] = False
+        # if the model is somewhat accurate, check and see if it
+        # is an exact symbolic match
+        if r['r2_test'] > 0.5:
+            sym_diff = round_floats(true_model - cleaned_model)
+            sym_frac = round_floats(cleaned_model/true_model)
+            print('sym_diff:',sym_diff)
+            print('sym_frac:',sym_frac)
+            # check if we can skip simplification
+            
+            if not sym_diff.is_constant() or sym_frac.is_constant():
+                sym_diff = simplify(sym_diff, ratio=1)
+                print('simplified sym_diff:',sym_diff)
+            r['symbolic_error'] = str(sym_diff)
+            r['symbolic_fraction'] = str(sym_frac)
+            r['symbolic_error_is_zero'] = str(sym_diff) == '0'
+            r['symbolic_error_is_constant'] = sym_diff.is_constant()
+            r['symbolic_fraction_is_constant'] = sym_frac.is_constant()
+        else:
+            raise ValueError("Model isnt accurate enough to check")
+    except Exception as e:
+        r['sympy_exception'] = str(e)
+        r['symbolic_error_is_zero'] = False
+        r['symbolic_error_is_constant'] = False
+        r['symbolic_fraction_is_constant'] = False
 
     print(json.dumps(r, indent=4))
     print('saving...')
