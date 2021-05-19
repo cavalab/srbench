@@ -58,9 +58,9 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
         r['simplified_symbolic_model'] = str(cleaned_model)
         r['simplified_complexity'] = complexity(cleaned_model)
 
-        # if the error of the model is low, check and see if it
+        # if the model is somewhat accurate, check and see if it
         # is an exact symbolic match
-        if r['r2_test'] > 0.999:
+        if r['r2_test'] > 0.5:
             sym_diff = round_floats(true_model - cleaned_model)
             sym_frac = round_floats(cleaned_model/true_model)
             print('sym_diff:',sym_diff)
