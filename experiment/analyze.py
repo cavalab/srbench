@@ -261,6 +261,7 @@ source plg_modules.sh
                 #                 "source lpc_modules.sh"]
                 # run_cmd = '; '.join(pre_run_cmds + [run_cmd])
                 bsub_cmd = ('bsub -o {OUT_FILE} '
+                            '-e {ERR_FILE} '
                             '-n {N_CORES} '
                             '-J {JOB_NAME} '
                             '-q {QUEUE} '
@@ -268,6 +269,7 @@ source plg_modules.sh
                             '-W {TIME} '
                             '-M {M} ').format(
                                    OUT_FILE=out_file,
+                                   ERR_FILE=error_file,
                                    JOB_NAME=job_name,
                                    QUEUE=args.QUEUE,
                                    N_CORES=args.N_JOBS,
