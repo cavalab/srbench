@@ -218,6 +218,7 @@ if __name__ == '__main__':
                     batch_script = \
 """#!/usr/bin/bash 
 #SBATCH -o {OUT_FILE} 
+#SBATCH --error={ERR_FILE} 
 #SBATCH -N 1 
 #SBATCH -n {N_CORES} 
 #SBATCH -J {JOB_NAME} 
@@ -231,6 +232,7 @@ source plg_modules.sh
 {cmd}
 """.format(
            OUT_FILE=out_file,
+           ERR_FILE=error_file,
            JOB_NAME=job_name,
            QUEUE=args.QUEUE,
            A=args.A,
