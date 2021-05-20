@@ -38,6 +38,8 @@ if __name__ == '__main__':
             help='Run tuned version of estimators. Only applies when ml=None')
     parser.add_argument('-n_jobs',action='store',dest='N_JOBS',default=1,type=int,
             help='Number of parallel jobs')
+    parser.add_argument('-time_limit',action='store',dest='TIME',default='48:00',
+            type=str, help='Time limit (hr:min) e.g. 24:00')
     parser.add_argument('-seed',action='store',dest='SEED',default=None,
             type=int, help='A specific random seed')
     parser.add_argument('-n_trials',action='store',dest='N_TRIALS',default=1,
@@ -155,6 +157,11 @@ if __name__ == '__main__':
                         queued_jobs.append([save_file,'queued'])
                         # print(save_file,'is already queued, skipping. Override with --noskips.')
                         continue
+                    if 'updated' in suffix:
+                        if not os.path.exists(save_file+'.json'):
+                            skipped_jobs.append([save_file,'json result DNE'])
+                            continue
+
                 
                 all_commands.append('python {SCRIPT}.py '
                                     '{DATASET}'
@@ -223,7 +230,7 @@ if __name__ == '__main__':
 #SBATCH -n {N_CORES} 
 #SBATCH -J {JOB_NAME} 
 #SBATCH -A {A} -p {QUEUE} 
-#SBATCH --ntasks-per-node=1 --time=12:00:00 
+#SBATCH --ntasks-per-node=1 --time={TIME}:00 
 #SBATCH --mem-per-cpu={M} 
 
 conda info 
@@ -238,7 +245,8 @@ source plg_modules.sh
            A=args.A,
            N_CORES=args.N_JOBS,
            M=args.M,
-           cmd=run_cmd
+           cmd=run_cmd,
+           TIME=args.TIME
           )
                     with open('tmp_script','w') as f:
                         f.write(batch_script)
@@ -254,13 +262,20 @@ source plg_modules.sh
                 # pre_run_cmds = ["conda activate srbench",
                 #                 "source lpc_modules.sh"]
                 # run_cmd = '; '.join(pre_run_cmds + [run_cmd])
-                bsub_cmd = ('bsub -o {OUT_FILE} -n {N_CORES} -J {JOB_NAME} -q {QUEUE} '
-                           '-R "span[hosts=1] rusage[mem={M}]" -M {M} ').format(
+                bsub_cmd = ('bsub -o {OUT_FILE} '
+                            '-n {N_CORES} '
+                            '-J {JOB_NAME} '
+                            '-q {QUEUE} '
+                            '-R "span[hosts=1] rusage[mem={M}]" '
+                            '-W {TIME} '
+                            '-M {M} ').format(
                                    OUT_FILE=out_file,
                                    JOB_NAME=job_name,
                                    QUEUE=args.QUEUE,
                                    N_CORES=args.N_JOBS,
-                                   M=args.M)
+                                   M=args.M,
+                                   TIME=args.TIME
+                                   )
                 
                 bsub_cmd +=  '"' + run_cmd + '"'
                 print(bsub_cmd)
