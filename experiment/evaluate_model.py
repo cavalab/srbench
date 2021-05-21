@@ -251,6 +251,8 @@ if __name__ == '__main__':
                         'to the target')
     parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', 
                        help='Use symbolic dataset settings')
+    parser.add_argument('-skip_tuning',action='store_true', dest='SKIP_TUNE', 
+                        default=False, help='Dont tune the estimator')
 
     args = parser.parse_args()
     # import algorithm 
@@ -277,6 +279,8 @@ if __name__ == '__main__':
         eval_kwargs['scale_y'] = False
         eval_kwargs['skip_tuning'] = True
         eval_kwargs['sym_data'] = True
+    if args.SKIP_TUNE:
+        eval_kwargs['skip_tuning'] = True
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
                    algorithm.est, algorithm.hyper_params, algorithm.complexity,

@@ -180,7 +180,9 @@ if __name__ == '__main__':
                                         FN=args.X_NOISE,
                                         TEST=('-test' if args.TEST
                                                 else ''),
-                                        SYM_DATA='-sym_data' if args.SYM_DATA else ''
+                                        SYM_DATA=('-sym_data' if args.SYM_DATA
+                                                   else ''),
+                                        SKIP_TUNE=('-skip_tuning'
                                         )
                                     )
                 job_info.append({'ml':ml,
