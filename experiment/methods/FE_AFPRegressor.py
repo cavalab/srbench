@@ -39,6 +39,8 @@ est = ellyn(selection='afp',
             FE_train_size=10,
             FE_train_gens=10,
             FE_rank=True,
+            popsize=1000,
+            g=250
             )
 
 def complexity(est):
