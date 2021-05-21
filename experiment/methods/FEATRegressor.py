@@ -14,8 +14,8 @@ for p, g in zip(pop_sizes, gs):
         })
 
 est = FeatRegressor(
-                    pop_size=500,
-                    gens=200,
+                    pop_size=1000,
+                    gens=250,
                     max_time=2*60*60,  # 2 hrs
                     max_stall=100,
                     batch_size=100,
@@ -27,9 +27,7 @@ est = FeatRegressor(
                     simplify=0.005,
                     corr_delete_mutate=True,
                     cross_rate=0.75,
-                    verbosity=0
-                    pop_size=1000,
-                    gens=250
+                    verbosity=0,
                    )
 
 def complexity(est):

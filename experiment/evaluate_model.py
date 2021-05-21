@@ -110,7 +110,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                 setattr(est, popname, 20)
         if hasattr(est,'BF_try_time'):
             setattr(est,'BF_try_time',1)
-        for timename in ['time','max_time','time_out']:
+        if hasattr(est,'NN_epochs'):
+            setattr(est,'NN_epochs',1)
+        for timename in ['time','max_time','time_out', 'time_limit']:
             if hasattr(est, timename):
                 print('setting',timename,'= 10 for test')
                 setattr(est, timename, 10)

@@ -33,7 +33,7 @@ est = ellyn(selection='epsilon_lexicase',
             prto_arch_on=True,
             max_len = 64,
             max_len_init=20,
-            pop_size=500,
+            popsize=500,
             g=500
             )
 
