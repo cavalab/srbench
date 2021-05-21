@@ -30,6 +30,8 @@ if __name__ == '__main__':
             help='Run on a SLURM scheduler as opposed to on LPC')
     parser.add_argument('--noskips', action='store_true', dest='NOSKIPS', default=False, 
             help='Overwite existing results if found')
+    parser.add_argument('-skip_tuning', action='store_true', dest='SKIP_TUNE', default=False, 
+            help='Skip tuning step')
     parser.add_argument('-A', action='store', dest='A', default='plgsrbench', 
             help='SLURM account')
     parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', default=False, 
@@ -170,7 +172,7 @@ if __name__ == '__main__':
                                     ' -seed {RS} '
                                     ' -target_noise {TN} '
                                     ' -feature_noise {FN} '
-                                    '{TEST} {SYM_DATA}'.format(
+                                    '{TEST} {SYM_DATA} {SKIP_TUNE}'.format(
                                         SCRIPT=args.SCRIPT,
                                         ML=ml,
                                         DATASET=dataset,
@@ -182,7 +184,8 @@ if __name__ == '__main__':
                                                 else ''),
                                         SYM_DATA=('-sym_data' if args.SYM_DATA
                                                    else ''),
-                                        SKIP_TUNE=('-skip_tuning'
+                                        SKIP_TUNE=('-skip_tuning' if
+                                                   args.SKIP_TUNE else '')
                                         )
                                     )
                 job_info.append({'ml':ml,
