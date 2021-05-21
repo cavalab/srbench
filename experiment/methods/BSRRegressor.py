@@ -9,7 +9,15 @@ for val, itrNum in zip([100,500,1000],[5000,1000,500]):
                      'val': [val],
                     })
 # initialize
-est = BSR( alpha1= 0.4, alpha2= 0.4, beta= -1, disp=False, max_time=2*60*60)
+est = BSR(
+          val=100,
+          itrNum=5000,
+          treeNum=3,
+          alpha1= 0.4, 
+          alpha2= 0.4, 
+          beta= -1, 
+          disp=False, 
+          max_time=2*60*60)
 
 def complexity(est):
     return est.complexity()

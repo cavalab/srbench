@@ -9,9 +9,9 @@ for bftt, nne in [[60,4000],[10*60,400]]:
             ))
 
 est = AIFeynmanRegressor(
-        BF_try_time=1,
+        BF_try_time=60,
         polyfit_deg=4,
-        NN_epochs=10,
+        NN_epochs=4000,
         max_time=2*60*60
         )
 

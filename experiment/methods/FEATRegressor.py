@@ -28,6 +28,8 @@ est = FeatRegressor(
                     corr_delete_mutate=True,
                     cross_rate=0.75,
                     verbosity=0
+                    pop_size=1000,
+                    gens=250
                    )
 
 def complexity(est):

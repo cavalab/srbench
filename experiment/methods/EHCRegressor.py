@@ -38,6 +38,8 @@ est = ellyn(
             prto_arch_on=True,
             max_len = 64,
             max_len_init=20,
+            pop_size=1000,
+            g=250
             )
 
 def complexity(est):

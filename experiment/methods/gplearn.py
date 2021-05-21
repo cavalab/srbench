@@ -24,6 +24,10 @@ est = SymbolicRegressor(
                         p_point_mutation=0.01, 
                         p_point_replace=0.05,
                         max_samples=1.0
+                        function_set= ('add', 'sub', 'mul', 'div', 'log',
+                                        'sqrt', 'sin','cos'),
+                        population_size=1000,
+                        generations=500
                        )
 
 
