@@ -184,9 +184,9 @@ def clean_pred_model(model_str, dataset, est_name):
                        'PLOG10':PLOG,
                        'PSQRT':PSQRT
                        })
-    # gplearn
-    # for op in ('add', 'sub', 'mul', 'div'):
-    #     new_model_str = new_model_str.replace(op,op.title()) 
+    # BSR
+    # get rid of square brackets
+    new_model_str = new_model_str.replace('[','').replace(']','')
 
     print('parsing',new_model_str)
     if mrgp:

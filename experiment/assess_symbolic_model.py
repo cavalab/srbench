@@ -23,6 +23,13 @@ from symbolic_utils import (clean_pred_model,get_sym_model,round_floats,
                             complexity)
 from sympy import simplify
 
+def save(r,save_file):
+    print(json.dumps(r, indent=4))
+        print('saving...')
+        with open(save_file + '.json.updated', 'w') as out:
+            json.dump(jsonify(r), out, indent=4)
+
+
 def assess_symbolic_model(dataset, results_path, random_state, est_name,  
                    target_noise=0.0, feature_noise=0.0):
 
@@ -57,6 +64,9 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
         cleaned_model = clean_pred_model(raw_model, dataset, est_name)
         r['simplified_symbolic_model'] = str(cleaned_model)
         r['simplified_complexity'] = complexity(cleaned_model)
+        
+        # save simplified model in case this is as far as we get
+        save(r, save_file)
 
         # if the model is somewhat accurate, check and see if it
         # is an exact symbolic match
@@ -83,10 +93,11 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
         r['symbolic_error_is_constant'] = False
         r['symbolic_fraction_is_constant'] = False
 
-    print(json.dumps(r, indent=4))
-    print('saving...')
-    with open(save_file + '.json.updated', 'w') as out:
-        json.dump(jsonify(r), out, indent=4)
+    save(r, save_file)
+    # print(json.dumps(r, indent=4))
+    # print('saving...')
+    # with open(save_file + '.json.updated', 'w') as out:
+    #     json.dump(jsonify(r), out, indent=4)
 
     print('done.')
 

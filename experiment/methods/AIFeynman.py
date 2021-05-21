@@ -13,6 +13,7 @@ est = AIFeynmanRegressor(
         polyfit_deg=4,
         NN_epochs=4000,
         max_time=2*60*60
+        tmp_dir='/scratch/aifeynman'
         )
 
 def complexity(est):
