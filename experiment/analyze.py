@@ -151,7 +151,8 @@ if __name__ == '__main__':
                     if args.X_NOISE > 0:
                         save_file += '_feature-noise'+str(args.X_NOISE)
 
-                    if os.path.exists(save_file+suffix):
+                    if (os.path.exists(save_file+suffix) 
+                        and args.SCRIPT != 'fix_aifeynman_model_size'):
                         skipped_jobs.append([save_file,'exists'])
                         # print(save_file,'already exists, skipping. Override with --noskips.')
                         continue
@@ -159,7 +160,8 @@ if __name__ == '__main__':
                         queued_jobs.append([save_file,'queued'])
                         # print(save_file,'is already queued, skipping. Override with --noskips.')
                         continue
-                    if 'updated' in suffix:
+                    if ('updated' in suffix 
+                        or args.SCRIPT == 'fix_aifeynman_model_size'):
                         if not os.path.exists(save_file+'.json'):
                             skipped_jobs.append([save_file,'json result DNE'])
                             continue

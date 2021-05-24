@@ -24,72 +24,13 @@ from symbolic_utils import (clean_pred_model,get_sym_model,round_floats,
 from sympy import simplify
 
 def save(r,save_file):
+    print(json.dumps(r, indent=4))
     print('saving...')
-    with open(save_file + '.updated', 'w') as out:
+    with open(save_file + '.json', 'w') as out:
         json.dump(jsonify(r), out, indent=4)
 
-def assess_symbolic_model_from_file(json_file, dataset):
-    
-    print('looking for:',json_file)
 
-    if os.path.exists(json_file):
-        r = json.load(open(json_file, 'r'))
-    else:
-        raise FileNotFoundError(json_file+' not found')
-
-    est_name = r['algorithm']
-
-    true_model = get_sym_model(dataset, return_str=False)
-    r['true_model'] = str(true_model)
-    raw_model = r['symbolic_model']
-
-    if 'AIFeynman' in est_name:
-        # correct model size
-        r['model_size'] = rewrite_AIFeynman_model_size(raw_model)
-
-    try:
-        cleaned_model = clean_pred_model(raw_model, dataset, est_name)
-        r['simplified_symbolic_model'] = str(cleaned_model)
-        r['simplified_complexity'] = complexity(cleaned_model)
-        
-        # save simplified model in case this is as far as we get
-        save(r, json_file)
-
-        # if the model is somewhat accurate, check and see if it
-        # is an exact symbolic match
-        if r['r2_test'] > 0.5:
-            sym_diff = round_floats(true_model - cleaned_model)
-            sym_frac = round_floats(cleaned_model/true_model)
-            print('sym_diff:',sym_diff)
-            print('sym_frac:',sym_frac)
-            # check if we can skip simplification
-            
-            if not sym_diff.is_constant() or sym_frac.is_constant():
-                sym_diff = round_floats(simplify(sym_diff, ratio=1))
-                print('simplified sym_diff:',sym_diff)
-            r['symbolic_error'] = str(sym_diff)
-            r['symbolic_fraction'] = str(sym_frac)
-            r['symbolic_error_is_zero'] = str(sym_diff) == '0'
-            r['symbolic_error_is_constant'] = sym_diff.is_constant()
-            r['symbolic_fraction_is_constant'] = sym_frac.is_constant()
-        else:
-            raise ValueError("Model isnt accurate enough to check")
-    except Exception as e:
-        r['sympy_exception'] = str(e)
-        if 'symbolic_error_is_zero' not in r.keys():
-            r['symbolic_error_is_zero'] = False
-        if 'symbolic_error_is_constant' not in r.keys():
-            r['symbolic_error_is_constant'] = False
-        if 'symbolic_fraction_is_constant' not in r.keys():
-            r['symbolic_fraction_is_constant'] = False
-
-    print(json.dumps(r, indent=4))
-
-    save(r, json_file)
-
-    print('done.')
-
-def assess_symbolic_model(dataset, results_path, random_state, est_name,  
+def fix_aifeynman_model_size(dataset, results_path, random_state, est_name,  
                    target_noise=0.0, feature_noise=0.0):
 
     print(40*'=','Assessing '+est_name+' model for ',dataset,40*'=',sep='\n')
@@ -108,7 +49,27 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
     if feature_noise > 0:
         save_file += '_feature-noise'+str(feature_noise)
 
-    assess_symbolic_model_from_file(save_file+'.json', )
+    print('looking for:',save_file+'.json')
+
+    if os.path.exists(save_file+'.json'):
+        r = json.load(open(save_file+'.json', 'r'))
+    else:
+        raise FileNotFoundError(save_file+'.json not found')
+
+    raw_model = r['symbolic_model']
+
+    if 'AIFeynman' in est_name:
+        # correct model size
+        model_size = rewrite_AIFeynman_model_size(raw_model)
+        print('changing model size from {} to {}'.format(
+              model_size,r['model_size']))
+        r['model_size'] = model_size
+    else:
+        raise ValueError('est_name not AIFeynman (it is %s)' % est_name)
+
+    save(r, save_file)
+
+    print('done.')
 
 ################################################################################
 # main entry point
@@ -143,16 +104,11 @@ if __name__ == '__main__':
                         'to the target')
     parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', 
                        help='Use symbolic dataset settings')
-    parser.add_argument('-json_file',action='store', dest='JSON_FILE', type=str,
-                       default='',help='JSON results file')
 
     args = parser.parse_args()
 
     print(args.__dict__)
 
-    if args.JSON_FILE != '':
-        assess_symbolic_model_from_file(args.JSON_FILE, args.INPUT_FILE)
-    else:
-        assess_symbolic_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, 
-                              args.ALG, target_noise=args.Y_NOISE, 
-                              feature_noise=args.X_NOISE)
+    fix_aifeynman_model_size(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
+                   target_noise=args.Y_NOISE, feature_noise=args.X_NOISE
+                   )

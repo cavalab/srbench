@@ -3,17 +3,30 @@ import pandas as pd
 from yaml import load, Loader
 import sympy
 # from sympy import *
-from sympy import Symbol, simplify, factor, Float, preorder_traversal
+from sympy import Symbol, simplify, factor, Float, preorder_traversal, Integer
 from sympy.parsing.sympy_parser import parse_expr
 from read_file import read_file
 import re
 import ast 
+
 
 ###############################################################################
 # fn definitions from the algorithms, written in sympy operators
 def sub(x,y):
     return sympy.Add(x,-y)
 
+# def division(x,y):
+#     print('division')
+#     if isinstance(y, sympy.Float):
+#         if abs(y) < 0.00001:
+#             return x
+#             # result = sympy.Mod(x,1e-6+abs(y))
+#             # if y < 0:
+#             #     result = -result
+#             # return result
+#     return sympy.Mul(x,1/y)
+
+#TODO: handle protected division
 def div(x,y):
     return sympy.Mul(x,1/y)
 
@@ -54,9 +67,13 @@ def complexity(expr):
         
 def round_floats(ex1):
     ex2 = ex1
+
     for a in preorder_traversal(ex1):
         if isinstance(a, Float):
-            ex2 = ex2.subs(a, round(a, 6))
+            if abs(a) < 0.00001:
+                ex2 = ex2.subs(a,Integer(0))
+            else:
+                ex2 = ex2.subs(a, Float(round(a, 5),5))
     return ex2
 
 ################################################################################
@@ -139,7 +156,8 @@ def clean_pred_model(model_str, dataset, est_name):
     new_model_str = model_str
     # rename features
     for i,f in enumerate(features): 
-        if any([n in est_name.lower() for n in ['mrgp','operon']]):
+        print('replacing feature',i,'with',f)
+        if any([n in est_name.lower() for n in ['mrgp','operon','dsr']]):
             i = i + 1
         new_model_str = new_model_str.replace('x'+str(i),f)
         new_model_str = new_model_str.replace('x_'+str(i),f)
@@ -194,11 +212,15 @@ def clean_pred_model(model_str, dataset, est_name):
         new_model_str = add_betas(mrgp_ast.body,betas)
         assert(len(betas)==0)
 
+    print(local_dict)
     model_sym = parse_expr(new_model_str, local_dict = local_dict)
+    print('round_floats')
+    model_sym = round_floats(model_sym)
+    print('rounded:',model_sym)
     print('simplify...')
-    simp = round_floats(simplify(model_sym, ratio=1))
-    print('simplified:',simp)
-    return simp
+    model_sym = simplify(model_sym, ratio=1)
+    print('simplified:',model_sym)
+    return model_sym
 
 
 def get_sym_model(dataset, return_str=True):
@@ -223,3 +245,7 @@ def get_sym_model(dataset, return_str=True):
 			   local_dict = {k:Symbol(k) for k in features})
 #     print('sym model:',model_sym)
     return model_sym
+
+def rewrite_AIFeynman_model_size(model_str):
+    """AIFeynman complexity was incorrect prior to version , update it here"""
+    return complexity(parse_expr(model_str))
