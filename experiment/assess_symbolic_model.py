@@ -108,7 +108,7 @@ def assess_symbolic_model(dataset, results_path, random_state, est_name,
     if feature_noise > 0:
         save_file += '_feature-noise'+str(feature_noise)
 
-    assess_symbolic_model_from_file(save_file+'.json', )
+    assess_symbolic_model_from_file(save_file+'.json', dataset)
 
 ################################################################################
 # main entry point
