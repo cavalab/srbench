@@ -4,7 +4,7 @@ import operon._operon as op
 from .params._operonregressor import params
 
 est.set_params(**params)
-est.allowed_symbols = 'add,mul,aq,exp,log,sin,tanh,constant,variable'
+est.allowed_symbols = 'add,sub,mul,div,exp,log,sin,cos,sqrt,square,constant,variable'
 
 # double the evals
 est.max_evaluations = 1000000
