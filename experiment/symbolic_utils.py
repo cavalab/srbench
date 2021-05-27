@@ -70,10 +70,10 @@ def round_floats(ex1):
 
     for a in preorder_traversal(ex1):
         if isinstance(a, Float):
-            if abs(a) < 0.00001:
+            if abs(a) < 0.0001:
                 ex2 = ex2.subs(a,Integer(0))
             else:
-                ex2 = ex2.subs(a, Float(round(a, 5),5))
+                ex2 = ex2.subs(a, Float(round(a, 3),3))
     return ex2
 
 ################################################################################
@@ -243,6 +243,7 @@ def get_sym_model(dataset, return_str=True):
 #     print('model:',model_str)
     model_sym = parse_expr(model_str, 
 			   local_dict = {k:Symbol(k) for k in features})
+    model_sym = round_floats(model_sym)
 #     print('sym model:',model_sym)
     return model_sym
 

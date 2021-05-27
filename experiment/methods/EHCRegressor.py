@@ -1,7 +1,7 @@
 from ellyn import ellyn
 
-# 500,000 evaluations = 100,000 with 1 constant hill climbing iteration and 3
-# EHC 
+# 500,000 evaluations = 100,000 with 1 eval, 1 constant hill climbing, and 3
+# EHC iterations 
 pop_sizes = [100, 500, 1000]
 gs = [1000, 200, 100]
 op_lists=[
@@ -39,7 +39,8 @@ est = ellyn(
             max_len = 64,
             max_len_init=20,
             popsize=1000,
-            g=250
+            g=100,
+            time_limit=2*60*60
             )
 
 def complexity(est):

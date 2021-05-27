@@ -112,7 +112,8 @@ if __name__ == '__main__':
     # current_jobs = ['_'.join(cj.split('_')[:-1]) for cj in current_jobs]
 
     # write run commands
-    skipped_jobs = []
+    jobs_w_results = []
+    jobs_wout_results = [] 
     suffix = ('.json.updated' if args.SCRIPT=='assess_symbolic_model' else
                   '.json')
     queued_jobs = []
@@ -143,6 +144,15 @@ if __name__ == '__main__':
                 os.makedirs(results_path)
                 
             for ml in learners:
+                save_file = (results_path + '/' + dataname + '_' + ml + '_' 
+                             + str(random_state))
+                # if updated, check if json file exists (required)
+                if ('updated' in suffix 
+                    or args.SCRIPT.startswith('fix_')):
+                    if not os.path.exists(save_file+'.json'):
+                        jobs_wout_results.append([save_file,'json result DNE'])
+                        continue
+
                 if not args.NOSKIPS:
                     save_file = (results_path + '/' + dataname + '_' + ml + '_' 
                                  + str(random_state))
@@ -151,20 +161,15 @@ if __name__ == '__main__':
                     if args.X_NOISE > 0:
                         save_file += '_feature-noise'+str(args.X_NOISE)
 
+                    # check if there is already a result for this experiment
                     if (os.path.exists(save_file+suffix) 
                         and args.SCRIPT != 'fix_aifeynman_model_size'):
-                        skipped_jobs.append([save_file,'exists'])
-                        # print(save_file,'already exists, skipping. Override with --noskips.')
+                        jobs_w_results.append([save_file,'exists'])
                         continue
-                    elif save_file.split('/')[-1] in current_jobs:
+                    # check if there is already a queued job for this experiment
+                    if save_file.split('/')[-1] in current_jobs:
                         queued_jobs.append([save_file,'queued'])
-                        # print(save_file,'is already queued, skipping. Override with --noskips.')
                         continue
-                    if ('updated' in suffix 
-                        or args.SCRIPT == 'fix_aifeynman_model_size'):
-                        if not os.path.exists(save_file+'.json'):
-                            skipped_jobs.append([save_file,'json result DNE'])
-                            continue
 
                 
                 all_commands.append('python {SCRIPT}.py '
@@ -200,7 +205,8 @@ if __name__ == '__main__':
         print('shaving jobs down to job limit ({})'.format(args.JOB_LIMIT))
         all_commands = all_commands[:args.JOB_LIMIT]
     if not args.NOSKIPS:
-        print('skipped',len(skipped_jobs),'jobs with results. Override with --noskips.')
+        print('skipped',len(jobs_w_results),'jobs with results. Override with --noskips.')
+        print('skipped',len(jobs_wout_results),'jobs without results. Override with --noskips.')
         print('skipped',len(queued_jobs),'queued jobs. Override with --noskips.')
     print('submitting',len(all_commands),'jobs...')
     if args.LOCAL:

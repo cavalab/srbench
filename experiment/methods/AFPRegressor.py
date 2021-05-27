@@ -35,7 +35,8 @@ est = ellyn(selection='afp',
             max_len = 64,
             max_len_init=20,
             popsize=1000,
-            g = 250
+            g = 250,
+            time_limit=2*60*60
             )
 
 def complexity(est):
