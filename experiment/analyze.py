@@ -211,11 +211,11 @@ if __name__ == '__main__':
     print('submitting',len(all_commands),'jobs...')
     if args.LOCAL:
         # run locally  
-        for run_cmd in all_commands: 
-            print(run_cmd)
-            Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd) 
-                                     for run_cmd in all_commands)
-            # os.system(run_cmd)
+        Parallel(n_jobs=args.N_JOBS)(delayed(os.system)(run_cmd)
+                                 for run_cmd in all_commands)
+        #for run_cmd in all_commands:
+        #    print(run_cmd)
+        #    os.system(run_cmd)
     else:
         # sbatch
         for i,run_cmd in enumerate(all_commands):
