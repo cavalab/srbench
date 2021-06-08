@@ -1,7 +1,7 @@
 # SRBench: A Living Benchmark for Symbolic Regression
 
 This project focuses on benchmarking modern symbolic regression methods in comparison to other common machine learning methods. 
-This benchmark currently consists of 252 datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks).
+This benchmark currently consists of 14 symbolic regression methods, 7 other ML methods, and 252 datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
 
 
 # Contribute
@@ -14,18 +14,52 @@ See our [Contribution Guide.](CONTRIBUTING.md)
 
 ## Installation
 
-We have provided a [conda environment](environment.yml) and [installation script](install.sh) that should make installation straightforward.
+We have provided a [conda environment](environment.yml), [configuration script](configure.sh) and [installation script](install.sh) that should make installation straightforward.
 We've currently tested this on Ubuntu and CentOS. 
+Steps:
+
+1. Install the conda environment:
+
+```
+conda env create -f environment.yml
+conda activate srbench
+```
+
+2. Install the benchmark methods:
+
+```
+bash install.sh
+```
+
+3. Checkout the feynman PMLB branch (once these new datasets are merged, you will be able to skip this step):
+
+```
+git clone https://github.com/EpistasisLab/pmlb/tree/feynman [/path/to/pmlb/]
+cd /path/to/pmlb
+git lfs fetch
+```
 
 ## Start the benchmark
 
-Batch jobs are controlled via `submit_jobs.py`. 
-Run `python submit_jobs.py -h` to see options.
+Experiments are launched from the `experiments/` folder via the script `analyze.py`.
+The script can be configured to run the experiment in parallel locally, on an LSF job scheduler, or on a SLURM job scheduler. 
+To see the full set of options, run `python analyze.py -h`. 
 
-Results of single methods on datasets are generated using `analyze.py`. 
-Run `python analyze.py -h` to see options. 
+After installing and configuring the conda environment, the complete black-box experiment can be started via the command:
+
+```
+python analyze.py /path/to/pmlb/datasets -n_trials 10 -results ../results -time_limit 48:00
+```
+
+Similarly, the ground-truth regression experiment for strogatz datasets and a target noise of 0.0 are run by the command:
+
+```
+python analyze.py -results ../results_sym_data -target_noise 0.0 "/path/to/pmlb/datasets/strogatz*" -sym_data -n_trials 10 -time_limit 9:00 -tuned
+```
 
 # Cite
+
+A preprint of the current version of the benchmark is under review on [Open Review](https://openreview.net/forum?id=xVQMrDLyGst&noteId=4TlmQBkmXvx). 
 
 [v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
 
