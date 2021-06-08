@@ -1,6 +1,5 @@
 # SRBench: A Living Benchmark for Symbolic Regression
 
-This project focuses on benchmarking modern symbolic regression methods in comparison to other common machine learning methods. 
 The methods for symbolic regression have come a long way since the days of Koza-style genetic programming (GP).
 Our goal with this project is to keep a living benchmark of modern symbolic regression, in the context of state-of-the-art ML methods.
 This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
