@@ -69,8 +69,6 @@ python analyze.py -results ../results_sym_data -target_noise 0.0 "/path/to/pmlb/
 
 # Cite
 
-A preprint of the current version of the benchmark is under review on [Open Review](https://openreview.net/forum?id=xVQMrDLyGst&noteId=4TlmQBkmXvx). 
-
 [v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
 
 Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
