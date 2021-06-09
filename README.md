@@ -2,7 +2,6 @@
 
 The methods for symbolic regression (SR) have come a long way since the days of Koza-style genetic programming (GP).
 Our goal with this project is to keep a living benchmark of modern symbolic regression, in the context of state-of-the-art ML methods.
-This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
 
 Currently these are the challenges, as we see it:
 
@@ -16,7 +15,26 @@ To handle the lack of a unified framework, we've specified minimal requirements 
 
 # Results
 
+This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
+
 [Browse the Current Results](postprocessing/)
+
+Methods currently benchmarked:
+
+- Age-Fitness Pareto Optimization 
+- Age-Fitness Pareto Optimization with Fitness Predictors
+- Bayesian Symbolic Regression
+- Deep Symbolic Regression
+- Fast Function Extraction
+- Feature Engineering Automation Tool
+- epsilon-Lexicase Selection
+- GP-based Gene Optimal Mixing Evolutionary Algorithm
+- gplearn
+- Interaction-Transformation Evolutionary Algorithm
+- Multiple Regression GP
+- Operon
+- Semantic Backpropagation GP  
+- AIFeynman 2.0
 
 # Contribute
 
