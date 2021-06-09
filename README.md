@@ -21,20 +21,60 @@ This benchmark currently consists of **14** symbolic regression methods, **7** o
 
 Methods currently benchmarked:
 
-- Age-Fitness Pareto Optimization 
-- Age-Fitness Pareto Optimization with Fitness Predictors
-- Bayesian Symbolic Regression
-- Deep Symbolic Regression
-- Fast Function Extraction
-- Feature Engineering Automation Tool
-- epsilon-Lexicase Selection
-- GP-based Gene Optimal Mixing Evolutionary Algorithm
-- gplearn
-- Interaction-Transformation Evolutionary Algorithm
-- Multiple Regression GP
-- Operon
+- Age-Fitness Pareto Optimization (Schmidt and Lipson 2009) 
+    [paper](https://dl.acm.org/doi/pdf/10.1145/1830483.1830584)
+    , 
+    [code](https://github.com/EpistasisLab/ellyn)
+- Age-Fitness Pareto Optimization with Co-evolved Fitness Predictors (Schmidt and Lipson 2009) 
+    [paper](https://dl.acm.org/doi/pdf/10.1145/1830483.1830584?casa_token=8fAFUrPlfuUAAAAA:u0QJvX-cC8rPtdZri-Jd4ZxcnRSIF_Fu2Vn5n-oXVNu_i71J6ZECx28ucLPOLQY628drsEbg4aFvTw)
+    , 
+    [code](https://github.com/EpistasisLab/ellyn)
+- AIFeynman 2.0 (Udrescu et al. 2020)
+    [paper](https://arxiv.org/abs/2006.10782)
+    ,
+    [code](https://github.com/SJ001/AI-Feynman)
+- Bayesian Symbolic Regression (Jin et al. 2020)
+    [paper](https://arxiv.org/abs/1910.08892)
+    ,
+    [code](https://github.com/EpistasisLab/ellyn)
+- Deep Symbolic Regression (Petersen et al. 2020)
+    [paper](https://arxiv.org/pdf/1912.04871)
+    , 
+    [code](https://github.com/EpistasisLab/ellyn)
+- Fast Function Extraction (McConaghy 2011)
+    [paper](http://trent.st/content/2011-GPTP-FFX-paper.pdf)
+    ,
+    [code](https://github.com/EpistasisLab/ellyn)
+- Feature Engineering Automation Tool (La Cava et al. 2017)
+    [paper](https://arxiv.org/abs/1807.00981)
+    ,
+    [code](https://github.com/EpistasisLab/ellyn)
+- epsilon-Lexicase Selection (La Cava et al. 2016)
+    [paper](https://arxiv.org/abs/1905.13266)
+    ,
+    [code](https://github.com/EpistasisLab/ellyn)
+- GP-based Gene-pool Optimal Mixing Evolutionary Algorithm (Virgolin et al. 2017)
+    [paper](https://dl.acm.org/doi/pdf/10.1145/3071178.3071287?casa_token=CHa8EK_ic5gAAAAA:mOAOCu6CL-jHobGWKD2wco4NbpCyS-XTY5thb1dPPsyUkTkLHzmLMF41MWMGWLyFv1G8n-VFaqmXSw)
+    ,
+    [code](https://github.com/marcovirgolin/GP-GOMEA/)
+- gplearn (Stephens)
+    [code](https://github.com/trevorstephens/gplearn)
+- Interaction-Transformation Evolutionary Algorithm (de Franca and Aldeia, 2020)
+    [paper](https://www.mitpressjournals.org/doi/abs/10.1162/evco_a_00285)
+    ,
+    [code](https://github.com/folivetti/ITEA/)
+- Multiple Regression GP (Arnaldo et al. 2014)
+    [paper](https://dl.acm.org/doi/pdf/10.1145/2576768.2598291?casa_token=Oh2e7jDBgl0AAAAA:YmYJhFniOrU0yIhsqrHGzUN_60veH56tfwizre94uImDpYyp9RcadUyv_VZf8gH7v3uo5SxjjIPPUA)
+    ,
+    [code](https://github.com/flexgp/gp-learners)
+- Operon (Burcalu et al. 2020)
+    [paper](https://dl.acm.org/doi/pdf/10.1145/3377929.3398099?casa_token=HJgFp342K0sAAAAA:3Xbelm-5YjcIgjMvqLcyoTYdB0wNR0S4bYcQBGUiwOuwqbFfV6YnE8YKGINija_V6wCi6dahvQ3Pxg)
+    ,
+    [code](https://github.com/heal-research/operon)
 - Semantic Backpropagation GP  
-- AIFeynman 2.0
+    [paper](https://dl.acm.org/doi/pdf/10.1145/3321707.3321758?casa_token=v43VobsGalkAAAAA:Vj8S9mHAv-H4tLm_GCL4DJdfW3e5SVUtD6J3gIQh0vrNzM3s6psjl-bwO2NMnxLN0thRJ561OZ0sQA)
+    ,
+    [code](https://github.com/marcovirgolin/GP-GOMEA)
 
 # Contribute
 
