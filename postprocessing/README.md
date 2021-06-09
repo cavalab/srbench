@@ -1,6 +1,5 @@
 # Benchmarking Results
 
-The current results for SRBench are found in the `results/` folder.
 This page summarizes the results of the postprocessing notebooks found in this folder. 
 
 Results are summarized over datasets. 
