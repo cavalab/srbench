@@ -1,5 +1,3 @@
-# SRBench: A Living Benchmark for Symbolic Regression
-
 The methods for symbolic regression (SR) have come a long way since the days of Koza-style genetic programming (GP).
 Our goal with this project is to keep a living benchmark of modern symbolic regression, in the context of state-of-the-art ML methods.
 
