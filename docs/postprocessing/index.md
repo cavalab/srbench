@@ -6,7 +6,7 @@ Results are summarized over datasets.
 
 ## Problems
 
-<img src="../../postprocessing/figs/pmlb_size.png" alt="problem_sizes" width="400"/>
+<img src="https://github.com/EpistasisLab/srbench/blob/master/postprocessing/figs/pmlb_size.png?raw=true" alt="problem_sizes" width="400"/>
 
 We analyze two types of problems:
 
