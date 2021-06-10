@@ -6,7 +6,7 @@ Results are summarized over datasets.
 
 ## Problems
 
-<img src="figs/pmlb_size.png" alt="problem_sizes" width="400"/>
+<img src="../../postprocessing/figs/pmlb_size.png" alt="problem_sizes" width="400"/>
 
 We analyze two types of problems:
 
@@ -21,14 +21,14 @@ Includes datasets from the [Feynman Symbolic Regression Database](https://space.
 
 # Results for Black-box Regression
 
-![bb_overall](figs/black-box/pairgrid-pointplot_r2_test_model_size_training-time-(s).png)
+![bb_overall](../../postprocessing/figs/black-box/pairgrid-pointplot_r2_test_model_size_training-time-(s).png)
 
 ## Accuracy-Complexity Trade-offs
 
 Considering the accuracy and simplicity of models simultaneously, this figure illustrates the trade-offs made by each method. 
 Methods lower and to the left produce models with better trade-offs between accuracy and simplicity. 
 
-![pareto_rankings](figs/black-box/pareto_plot_r2_test_rank_model_size_rank.png)
+![pareto_rankings](../../postprocessing/figs/black-box/pareto_plot_r2_test_rank_model_size_rank.png)
 
 # Results for Ground-truth Problems
 
@@ -36,11 +36,11 @@ Methods lower and to the left produce models with better trade-offs between accu
 
 How often a method finds a model symbolically equivalent to the ground-truth process
 
-![solution_rates](figs/ground-truth/cat-pointplot-Symbolic-Solution-Rate-(pct)-by-Algorithm_Data-Group.png)
+![solution_rates](../../postprocessing/figs/ground-truth/cat-pointplot-Symbolic-Solution-Rate-(pct)-by-Algorithm_Data-Group.png)
 
 ## Accuracy Solutions
 
 How often a method finds a model with test set $$R^2>0.999$$
 
-![accuracy_solution_rates](figs/ground-truth/cat-pointplot-Accuracy-Solution-by-Algorithm_Data-Group.png)
+![accuracy_solution_rates](../../postprocessing/figs/ground-truth/cat-pointplot-Accuracy-Solution-by-Algorithm_Data-Group.png)
 
