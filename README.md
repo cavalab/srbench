@@ -106,7 +106,7 @@ bash install.sh
 3. Checkout the feynman PMLB branch (once these new datasets are merged, you will be able to skip this step):
 
 ```
-git clone https://github.com/EpistasisLab/pmlb/tree/feynman [/path/to/pmlb/]
+git clone -b feynman https://github.com/EpistasisLab/pmlb/ [/path/to/pmlb/]
 cd /path/to/pmlb
 git lfs fetch
 ```
