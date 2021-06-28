@@ -105,7 +105,8 @@ base_config = {
 hyper_params = {'config':[]} 
 # for hyper_params, vary batch_size, which varies num of expressions 
 # evaluated per epoch (total sampled expressions is fixed by n_samples)
-for bs in np.logspace(1,5,5,dtype=int):
+batch_sizes = np.logspace(1,5,5,dtype=int)
+for bs in batch_sizes:
     new_config = copy.deepcopy(base_config)
     new_config['training']['batch_size'] = bs
     hyper_params['config'].append(new_config)
