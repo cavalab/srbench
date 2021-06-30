@@ -67,7 +67,7 @@ Methods currently benchmarked:
     [paper](https://dl.acm.org/doi/pdf/10.1145/2576768.2598291?casa_token=Oh2e7jDBgl0AAAAA:YmYJhFniOrU0yIhsqrHGzUN_60veH56tfwizre94uImDpYyp9RcadUyv_VZf8gH7v3uo5SxjjIPPUA)
     ,
     [code](https://github.com/flexgp/gp-learners)
-- Operon (Burcalu et al. 2020)
+- Operon (Burlacu et al. 2020)
     [paper](https://dl.acm.org/doi/pdf/10.1145/3377929.3398099?casa_token=HJgFp342K0sAAAAA:3Xbelm-5YjcIgjMvqLcyoTYdB0wNR0S4bYcQBGUiwOuwqbFfV6YnE8YKGINija_V6wCi6dahvQ3Pxg)
     ,
     [code](https://github.com/heal-research/operon)
