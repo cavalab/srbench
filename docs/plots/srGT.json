@@ -72,7 +72,7 @@
   "data": [
     {
       "name": "all",
-      "url": "https://folivetti.github.io/regression-benchmark/csv/groundtruth.csv",
+      "url": "/srbench/csv/groundtruth.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {

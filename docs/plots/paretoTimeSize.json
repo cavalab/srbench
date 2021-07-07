@@ -3,7 +3,7 @@
   "description": "A basic error bar visualization example.",
   "width": 600,
   "height": 400,
-  "data": {"url": "https://folivetti.github.io/regression-benchmark/csv/pareto.csv"},
+  "data": {"url": "/srbench/csv/pareto.csv"},
   "layer": [
     {
       "encoding": {

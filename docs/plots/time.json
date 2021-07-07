@@ -78,7 +78,7 @@
   "data": [
     {
       "name": "barley",
-      "url": "https://folivetti.github.io/regression-benchmark/csv/blackbox_results.csv",
+      "url": "/srbench/csv/blackbox_results.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {
