@@ -7,10 +7,6 @@
 <script type="text/javascript">
     var view;
 
-    fetch('../plots/datasets.json')
-      .then(res => res.json())
-      .then(spec => render(spec, "#view"))
-      .catch(err => console.error(err));
     fetch('../plots/r2test.json')
       .then(res => res.json())
       .then(spec => render(spec, "#r2test"))
@@ -22,14 +18,6 @@
     fetch('../plots/time.json')
       .then(res => res.json())
       .then(spec => render(spec, "#time"))
-      .catch(err => console.error(err));
-    fetch('../plots/srGT.json')
-      .then(res => res.json())
-      .then(spec => render(spec, "#srGT"))
-      .catch(err => console.error(err));
-    fetch('../plots/accGT.json')
-      .then(res => res.json())
-      .then(spec => render(spec, "#accGT"))
       .catch(err => console.error(err));
   vegaEmbed('#paretoR2Size', "../plots/paretoR2Size.json").then(function(result) {
     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
@@ -51,28 +39,12 @@
       return view.runAsync();
     }
   </script>
+
 # Benchmarking Results
 
 This page summarizes the results of the postprocessing notebooks found in this folder. 
 
 Results are summarized over datasets. 
-
-## Problems
-
-<div id="view"></div>
-(click on legend name to select the points, shift+click to select both groups.)
-
-
-We analyze two types of problems:
-
-**Black-box Regression Problems**: problems for which the ground-truth model is not known/ not sought. 
-Includes a mix of real-world and synthetic datasets from [PMLB](https://epistasislab.github.io/pmlb'). 
-122 total. 
-
-**Ground-truth Regression Problems**: problems for which the ground-truth model known. 
-Includes datasets from the [Feynman Symbolic Regression Database](https://space.mit.edu/home/tegmark/aifeynman.html) and dynamical systems from the [ODE-Strogatz Database](https://lacava.github.io/ode-strogatz/). 
-130 total. 
-
 
 # Results for Black-box Regression
 
@@ -112,18 +84,4 @@ Methods lower and to the left produce models with better trade-offs between accu
 <div id="paretoTimeSize"></div>
 
 <br><br>
-
-# Results for Ground-truth Problems
-
-## Symbolically-verfied Solutions
-
-How often a method finds a model symbolically equivalent to the ground-truth process
-
-<div id="srGT"></div>
-
-## Accuracy Solutions
-
-How often a method finds a model with test set $$R^2>0.999$$
-
-<div id="accGT"></div>
 

@@ -1,0 +1,151 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Information about datasets",
+  "width": 600,
+  "height": 600,
+  "padding": 5,
+
+"signals": [   
+    {
+      "name": "shift", "value": false,
+      "on": [
+        {
+          "events": "@legendSymbol:click, @legendLabel:click",
+          "update": "event.shiftKey",
+          "force":  true
+        }
+      ]
+    },
+    {
+      "name": "clicked", "value": null,
+      "on": [
+        {
+          "events": "@legendSymbol:click, @legendLabel:click",
+          "update": "{value: datum.value}",
+          "force":  true
+        }
+      ]
+    }
+  ],
+
+  "data": [
+    {
+      "name": "source",
+      "url": "https://folivetti.github.io/regression-benchmark/csv/datasets_info.csv",
+      "format": {"type": "csv", "parse": "auto"}
+    },
+    {
+      "name": "selected",
+      "on": [        
+        {"trigger": "!shift", "remove": true},
+        {"trigger": "!shift && clicked", "insert": "clicked"},
+        {"trigger": "shift && clicked", "toggle": "clicked"}
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "x",
+      "type": "log",
+      "round": true,
+      "nice": true,
+      "zero": false,
+      "domain": {"data": "source", "field": "npoints"},
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "type": "log",
+      "round": true,
+      "nice": true,
+      "zero": false,
+      "domain": {"data": "source", "field": "nfeatures"},
+      "range": "height"
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "range": {"scheme": "category10"},
+      "domain": {"data": "source", "field": "Group"}
+    }
+
+  ],
+
+  "axes": [
+    {
+      "scale": "x",
+      "grid": true,
+      "domain": false,
+      "orient": "bottom",
+      "tickCount": 5,
+      "title": "No. of Samples"
+    },
+    {
+      "scale": "y",
+      "grid": true,
+      "domain": false,
+      "orient": "left",
+      "titlePadding": 5,
+      "title": "No. of Features"
+    }
+  ],
+
+  "legends": [
+    {
+      "stroke": "color",
+      "title": "Type",
+      "encode": {
+        "symbols": {
+          "name": "legendSymbol",
+          "interactive": true,
+          "update": {
+            "fill": {"value": "transparent"},
+            "strokeWidth": {"value": 2},
+            "opacity": [
+              {"test": "!length(data('selected')) || indata('selected', 'value', datum.value)", "value": 0.7},
+              {"value": 0.15}
+            ],
+            "size": {"value": 64}
+          }
+        },
+        "labels": {
+          "name": "legendLabel",
+          "interactive": true,
+          "update": {
+            "opacity": [
+              {"test": "!length(data('selected')) || indata('selected', 'value', datum.value)", "value": 1},
+              {"value": 0.25}
+            ]
+          }
+        }
+      }
+    }
+  ],
+  
+  "marks": [
+    {
+      "name": "marks",
+      "type": "symbol",
+      "from": {"data": "source"},
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": {"scale": "x", "field": "npoints"},
+          "y": {"scale": "y", "field": "nfeatures"},
+          "shape": {"value": "circle"},
+          "strokeWidth": {"value": 2},
+          "opacity": [
+            {"test": "(!length(data('selected')) || indata('selected', 'value', datum.Group))", "value": 0.7 },
+            {"value": 0.15}
+          ],
+          "stroke": [
+            {"test": "!length(data('selected')) || (indata('selected', 'value', datum.Group))", "scale": "color", "field": "Group"},            
+            {"value": "#ccc"}
+          ],
+          "fill": {"value": "transparent"}
+        }
+      }
+    }
+  ]
+}
