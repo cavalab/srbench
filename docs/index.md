@@ -142,4 +142,3 @@ William La Cava (@lacava), lacava at upenn dot edu
 
 Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
 
-{% include_relative ../README.md %}
