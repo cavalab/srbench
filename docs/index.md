@@ -141,3 +141,5 @@ GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://w
 William La Cava (@lacava), lacava at upenn dot edu
 
 Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
+
+{% include_relative ../README.md %}

@@ -81,7 +81,4 @@ Methods lower and to the left produce models with better trade-offs between accu
 
 <br><br>
 
-<div id="paretoTimeSize"></div>
-
-<br><br>
 
