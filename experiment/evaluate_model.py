@@ -73,15 +73,15 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     if target_noise > 0:
         print('adding',target_noise,'noise to target')
         y_train_scaled += np.random.normal(0, 
-                            target_noise*np.linalg.norm(y_train_scaled),
-                            size=len(y_train_scaled))
+                    target_noise*np.sqrt(np.mean(np.square(y_train_scaled))),
+                    size=len(y_train_scaled))
     # add noise to the features
     if feature_noise > 0:
         print('adding',target_noise,'noise to features')
-        X_train_scaled = np.array([x + np.random.normal(0, 
-                                            feature_noise*np.linalg.norm(x), 
-                                            size=len(x))
-                            for x in X_train_scaled.T]).T
+        X_train_scaled = np.array([x 
+            + np.random.normal(0, feature_noise*np.sqrt(np.mean(np.square(x))),
+                               size=len(x))
+                                   for x in X_train_scaled.T]).T
 
     # run any method-specific pre_train routines
     if pre_train:
