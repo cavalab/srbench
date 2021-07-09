@@ -40,7 +40,7 @@ How often a method finds a model symbolically equivalent to the ground-truth pro
 
 ## Accuracy Solutions
 
-How often a method finds a model with test set $$R^2>0.999$$
+How often a method finds a model with test set R2>0.999
 
 ![accuracy_solution_rates](figs/ground-truth/cat-pointplot-Accuracy-Solution-by-Algorithm_Data-Group.png)
 
