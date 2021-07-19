@@ -1,0 +1,197 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A basic error bar visualization example.",
+  "width": 600,
+  "height": 400,
+  "padding": 2,
+
+  "config": {
+    "axisBand": {
+      "bandPosition": 1,
+      "tickExtra": true,
+      "tickOffset": 0
+    }
+  },
+
+  "signals": [
+    {
+      "name": "datasets", "value": "All",
+      "bind": {"input": "select", "options": [
+        "All",
+        "No Friedman",
+        "Only Friedman"
+      ]}
+    },
+    {
+      "name": "datalook",
+      "value": {
+        "All": 0,
+        "No Friedman": -1,
+        "Only Friedman": 1
+      }
+    },
+    {
+      "name": "exprData",
+      "update": "datalook[datasets]"
+
+    },
+    {
+      "name": "agg", "value": "Median",
+      "bind": {"input": "select", "options": [
+        "Mean",
+        "Median"
+      ]}
+    },
+    {
+      "name": "midlook",
+      "value": {
+        "Mean": "mean",
+        "Median": "median"       
+      }
+    },
+    {
+      "name": "midMeasure",
+      "update": "midlook[agg]"
+    },
+    {
+      "name": "errorMeasure", "value": "Standard Error",
+      "bind": {"input": "select", "options": [
+        "Interquartile Range",
+        "Standard Error",
+        "Standard Deviation"
+      ]}
+    },
+    {
+      "name": "lookup",
+      "value": {
+        "Interquartile Range": "iqr",
+        "Standard Deviation": "stdev",
+        "Standard Error": "stderr"        
+      }
+    },
+    {
+      "name": "measure",
+      "update": "lookup[errorMeasure]"
+    }    
+  ],
+
+  "data": [
+    {
+      "name": "barley",
+      "url": "/srbench/csv/blackbox_results.csv",
+      "format": {"type": "csv", "parse": "auto"}
+    },
+    {
+      "name": "summary",
+      "source": "barley",
+      "transform": [        
+        {
+          "type": "formula", "as": "flt",
+          "expr": "min(indexof(datum.dataset,'_fri_'),1)"
+        },
+        {
+          "type": "filter",
+          "expr": "(exprData == 0 || datum.flt == exprData)"
+        },
+     
+        {
+          "type": "aggregate",
+          "groupby": ["algorithm"],
+          "fields": ["model_size", "model_size","model_size", "model_size", "model_size", "model_size", "model_size", "model_size"],
+          "ops": ["mean", "median", "stdev", "stderr", "ci0", "ci1", "q1", "q3"],
+          "as": ["mean", "median", "stdev", "stderr", "ci0", "ci1", "iqr0", "iqr1"]
+        },
+        {
+          "type": "formula", "as": "stdev0",
+          "expr": "datum[midMeasure] - datum.stdev"
+        },
+        {
+          "type": "formula", "as": "stdev1",
+          "expr": "datum[midMeasure] + datum.stdev"
+        },
+        {
+          "type": "formula", "as": "stderr0",
+          "expr": "datum[midMeasure] - datum.stderr"
+        },
+        {
+          "type": "formula", "as": "stderr1",
+          "expr": "datum[midMeasure] + datum.stderr"
+        },
+        {
+          "type": "formula", "as": "order",
+          "expr": "datum[midMeasure]"
+        },
+        {
+          "type": "formula", "as": "cl",
+          "expr": "datum[midMeasure]"
+        }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "yscale",
+      "type": "band",
+      "range": "height",
+      "domain": {
+        "data": "summary",
+        "field": "algorithm",
+        "sort": {"op": "max", "field": "order", "order": "ascending"}
+      }
+    },
+    {
+      "name": "xscale",
+      "type": "log",
+      "range": "width", "round": true,
+      "domain": {"data": "summary", "field": "median"},
+      "zero": false, "nice": true
+    },
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": {"data": "summary", "field": "order"},
+      "range": {"scheme": "RedBlue"}
+    }
+   ],
+
+  "axes": [
+    {"orient": "bottom", "scale": "xscale", "zindex": 1, "title": "Model Size"},
+    {"orient": "left", "scale": "yscale", "grid":true, "tickCount": 5, "zindex": 1}
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "summary"},
+      "encode": {
+        "enter": {
+          "height": {"value": 2}
+        },
+        "update": {
+          "fill": {"scale": "color", "field": "order"},
+          "y": {"scale": "yscale", "field": "algorithm", "band": 0.5},
+          "x": {"scale": "xscale", "signal": "datum[measure+'0']"},
+          "x2": {"scale": "xscale", "signal": "datum[measure+'1']"},
+          "tooltip": {"signal": "{'Algorithm': datum.algorithm, 'Size' : (round(10000*datum[midMeasure])/10000)}", "type": "quantitative"}
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "summary"},
+      "encode": {
+        "enter": {
+          "size": {"value": 80}
+        },
+        "update": {
+          "fill": {"scale": "color", "field": "order"},
+          "x": {"scale": "xscale", "signal": "datum[midMeasure]"},
+          "y": {"scale": "yscale", "field": "algorithm", "band": 0.5},
+          "tooltip": {"signal": "{'Algorithm': datum.algorithm, 'Size' : (round(10000*datum[midMeasure])/10000)}", "type": "quantitative"}
+        }
+      }
+    }
+  ]
+}
+
