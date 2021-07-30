@@ -13,8 +13,6 @@ To handle the lack of a unified framework, we've specified minimal requirements 
 
 # Results
 
-[Browse the Current Results](postprocessing/)
-
 This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
 
 Methods currently benchmarked:
