@@ -13,8 +13,6 @@ To handle the lack of a unified framework, we've specified minimal requirements 
 
 # Results
 
-[Browse the Current Results](postprocessing/)
-
 This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
 
 Methods currently benchmarked:
@@ -78,13 +76,13 @@ Methods currently benchmarked:
 
 We are actively updating and expanding this benchmark. 
 Want to add your method? 
-See our [Contribution Guide.](CONTRIBUTING.md)
+See our [Contribution Guide.](https://github.com/EpistasisLab/srbench/blob/master/CONTRIBUTING.md)
 
 # How to run
 
 ## Installation
 
-We have provided a [conda environment](environment.yml), [configuration script](configure.sh) and [installation script](install.sh) that should make installation straightforward.
+We have provided a [conda environment](https://github.com/EpistasisLab/srbench/blob/master/environment.yml), [configuration script](https://github.com/EpistasisLab/srbench/blob/master/configure.sh) and [installation script](https://github.com/EpistasisLab/srbench/blob/master/install.sh) that should make installation straightforward.
 We've currently tested this on Ubuntu and CentOS. 
 Steps:
 
@@ -129,12 +127,18 @@ python analyze.py -results ../results_sym_data -target_noise 0.0 "/path/to/pmlb/
 
 # Cite
 
-[v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
+A pre-print of the current version of the benchmark is available:
+
+- La Cava, W., Orzechowski, P., Burlacu, B., de França, F. O., Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
+Contemporary Symbolic Regression Methods and their Relative Performance. 
+Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks. 
+[Preprint](https://openreview.net/pdf?id=xVQMrDLyGst)
+
+[v1.0](https://github.com/EpistasisLab/srbench/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
 
 Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
 Where are we now? A large benchmark study of recent symbolic regression methods. 
 GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://www.researchgate.net/profile/Patryk_Orzechowski/publication/324769381_Where_are_we_now_A_large_benchmark_study_of_recent_symbolic_regression_methods/links/5ae779b70f7e9b837d392dc9/Where-are-we-now-A-large-benchmark-study-of-recent-symbolic-regression-methods.pdf)
-
 
 # Contact
 

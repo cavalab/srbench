@@ -32,7 +32,7 @@
 We analyze two types of problems:
 
 **Black-box Regression Problems**: problems for which the ground-truth model is not known/ not sought. 
-Includes a mix of real-world and synthetic datasets from [PMLB](https://epistasislab.github.io/pmlb'). 
+Includes a mix of real-world and synthetic datasets from [PMLB](https://epistasislab.github.io/pmlb). 
 122 total. 
 
 **Ground-truth Regression Problems**: problems for which the ground-truth model known. 
