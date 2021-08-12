@@ -54,8 +54,7 @@ public class SRLearnerMenuManager {
     
     public void parseSymbolicRegressionTrain(String args[]) throws IOException{
         String dataPath;
-        int numMinutes=10*60;
-        int threads = 4;
+        int numMinutes = 10*60;
         String propsFile = "";
         SymbRegMOO srEvoGPj;
         dataPath = args[1];
@@ -64,13 +63,14 @@ public class SRLearnerMenuManager {
         String  mut_rate = args[4];
         String  crossover_rate = args[5];
         String  max_length = args[6];
+        String  external_threads = "4";
         // Add a time limit if specified by user
         if (args.length >= 8){
         	    numMinutes = Integer.parseInt(args[7]);
 	    }
 	// Add a maximum number of threads if specified by user
         if (args.length >= 9){
-                   threads = Integer.parseInt(args[8]);
+                   external_threads = args[8];
            }
 
         // run evogpj with standard properties
@@ -85,7 +85,7 @@ public class SRLearnerMenuManager {
         props.put(Parameters.Names.TREE_MUTATE_MAX_DEPTH, max_length);
         props.put(Parameters.Names.TREE_XOVER_MAX_DEPTH, max_length);
         if (args.length >= 9){
-                   props.put(Parameters.Defaults.EXTERNAL_THREADS, threads);
+                   props.put(Parameters.Names.EXTERNAL_THREADS, external_threads);
            }
 
 /*            if (args[2].equals("-minutes")) {
