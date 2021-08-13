@@ -43,21 +43,22 @@ int main(int argc, const char **argv){
         if(strncmp(argv[i],"-train_file",11) == 0) {
             strcat(path_in,argv[++i]);
         }
-        else if(strncmp(argv[i],"-test_file",10) == 0) {
-                strcat(path_test,argv[++i]);
-	     }
-       	if (strncmp(argv[i],"-name",5) == 0) {
+        if(strncmp(argv[i],"-test_file",10) == 0) {
+            strcat(path_test,argv[++i]);
+       	}
+		if (strncmp(argv[i],"-name",5) == 0) {
             strcat(dataset_name,argv[++i]);
-       	}                        
+       	}
    	}
 	std::string dataset(dataset_name);
     std::cout << "path_in: " << path_in << endl;
     std::cout << "path_test: " << path_test << endl;
     std::cout << "dataset: " << dataset << endl;
-	
+
+
 	// initialization of the seed for the generation of random numbers
 	//srand(time (NULL));
-        srand(42);    
+    srand(42); 
 	// reading the parameters of the GP algorithm
 	read_config_file(dataset, &config);	
 	// creation of an empty population
@@ -70,7 +71,7 @@ int main(int argc, const char **argv){
 		fstream in(path_test,ios::in);
 		
 		if (!in.is_open()) {
-			cout<<endl<<"ERRORE: IMPOSSIBILE APRIRE IL FILE" << endl;
+			cerr << endl << "ERROR: CANNOT OPEN FILE " << path_test << endl;
 			exit(-1);
 		}
 		else{
@@ -112,7 +113,6 @@ int main(int argc, const char **argv){
 		*/
 		string fitness_test_file=dataset+"-fitnesstest.txt";
 		ofstream fitness_test(fitness_test_file.c_str(),ios::out);
-
 		// reading training and test files
 		read_input_data(path_in,path_test);
 		// creation of terminal and functional symbols

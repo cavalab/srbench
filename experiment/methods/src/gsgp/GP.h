@@ -987,7 +987,9 @@ void read_config_file(string dataset, cfg *config){
 	}	
     f.close();
     if(config->p_crossover<0 || config->p_mutation<0 || config->p_crossover+config->p_mutation>1){
-        cout<<"ERROR: CROSSOVER RATE AND MUTATION RATE MUST BE GREATER THAN (OR EQUAL TO) 0 AND THEIR SUM SMALLER THAN (OR EQUAL TO) 1.";
+        cerr << "ERROR: CROSSOVER RATE AND MUTATION RATE MUST BE GREATER THAN (OR EQUAL TO) 0 AND THEIR SUM SMALLER THAN (OR EQUAL TO) 1.";
+		cerr << " (p_cross=" << config->p_crossover << ", p_mut=" << config->p_mutation << ")" << endl;
+		//cout<<"ERROR: CROSSOVER RATE AND MUTATION RATE MUST BE GREATER THAN (OR EQUAL TO) 0 AND THEIR SUM SMALLER THAN (OR EQUAL TO) 1.";
         exit(-1);
     }
 }
@@ -1180,7 +1182,8 @@ void create_population(string dataset, population **p, int i){
 		string indname=dataset+"-individuals.txt";
 		fstream f(indname.c_str(), ios::in);
 		if (!f.is_open()) {
-    			cerr<<"ERROR: FILE NOT FOUND." << endl;
+	    		cerr<<"ERROR: FILE " << indname << " NOT FOUND." << endl;
+    			//cerr<<"ERROR: FILE NOT FOUND." << endl;
     			exit(-1);
 		}
 		while(!f.eof()){
@@ -1300,7 +1303,7 @@ double eval(node *tree){
 	else{
 		return (tree->root->value);
 	}
-	cout<<"ERROR: UNDEFINED SYMBOL"<<endl;
+	cerr<<"ERROR: UNDEFINED SYMBOL"<<endl;
     exit(-1);
 }
 
@@ -1593,12 +1596,14 @@ void update_tables(){
 void read_input_data(char *train_file, char *test_file){
 	fstream in(train_file,ios::in);
 	if (!in.is_open()) {
-        cout<<endl<<"ERROR: TRAINING FILE NOT FOUND." << endl;
+        cerr<<"TRAINING FILE ( " << train_file << ") NOT FOUND." << endl;
+		//cout<<endl<<"ERROR: TRAINING FILE NOT FOUND." << endl;
     	exit(-1);
 	}
 	fstream in_test(test_file,ios::in);
 	if (!in_test.is_open()) {
-        cout<<endl<<"ERROR: TEST FILE NOT FOUND." << endl;
+        cerr<<"TEST FILE ( " << test_file << ") NOT FOUND." << endl;
+		//cout<<endl<<"ERROR: TEST FILE NOT FOUND." << endl;
     	exit(-1);
 	}
     char str[255];
@@ -1670,7 +1675,7 @@ void mark_trace(){
 }
 
 void save_trace(string dataset){
-        string trfile=dataset+"-trace.txt";
+    string trfile=dataset+"-trace.txt";
 	ofstream trace(trfile.c_str(),ios::out);
     for(int unsigned i=0;i<vector_traces.size();i++){
         for(int j=0;j<config.population_size;j++){
@@ -1698,11 +1703,12 @@ void evaluate_unseen_new_data(string dataset, population **p, ofstream& OUT){
 		
 	for(int i=0; i<config.random_tree; i++)
 		eval_random.push_back(-1);
-        
-        string trfile=dataset+"-trace.txt";
+           
+    string trfile=dataset+"-trace.txt";
 	fstream in(trfile.c_str(),ios::in);
     if(!in.is_open()) {
-    	cout<<endl<<"ERROR: FILE trace.txt NOT FOUND." << endl;
+    	cerr<<"TRACE FILE ( " << trfile << ") NOT FOUND." << endl;
+		//cout<<endl<<"ERROR: FILE trace.txt NOT FOUND." << endl;
     	exit(-1);
     }
     else{
