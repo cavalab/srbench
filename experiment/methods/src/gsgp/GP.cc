@@ -39,6 +39,7 @@ int main(int argc, const char **argv){
     // name of the file with test instances
     char path_test[1000]="";
     char dataset_name[1000]="";
+	int seed=-1;
    	for (int i=1; i<argc-1; i++) {
         if(strncmp(argv[i],"-train_file",11) == 0) {
             strcat(path_in,argv[++i]);
@@ -49,6 +50,9 @@ int main(int argc, const char **argv){
 		if (strncmp(argv[i],"-name",5) == 0) {
             strcat(dataset_name,argv[++i]);
        	}
+       	if (strncmp(argv[i],"-seed",5) == 0) {
+			seed = atoi(argv[++i]);
+       	} 
    	}
 	std::string dataset(dataset_name);
     std::cout << "path_in: " << path_in << endl;
@@ -57,8 +61,13 @@ int main(int argc, const char **argv){
 
 
 	// initialization of the seed for the generation of random numbers
-	//srand(time (NULL));
-    srand(42); 
+	if(seed < 0) { // random seed
+		srand(time (NULL));
+	}
+	else { // seed defined by user
+		srand(seed);
+	}
+
 	// reading the parameters of the GP algorithm
 	read_config_file(dataset, &config);	
 	// creation of an empty population

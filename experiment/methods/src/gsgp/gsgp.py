@@ -13,7 +13,7 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 class GSGPRegressor(BaseEstimator):  
 
   def __init__(self, g=100, popsize=200, rt_mut=0.5, rt_cross=0.5,
-              max_len=6, n_jobs=1, random_state=42):
+              max_len=6, n_jobs=1, random_state=None):
     env = dict(os.environ)
     self.g = g
     self.popsize = popsize
@@ -81,7 +81,7 @@ USE_TEST_SET = 0
                      '-train_file '+train_file,
                      '-test_file', empty_test_data,
                      ' -name '+self.dataset,
-                     '-seed '+str(self.random_state)]),
+                     (self.random_state != None)*('-seed '+str(self.random_state))]),
                      shell=True)
     time.sleep(1)
     os.remove(self.dataset+"-train")
@@ -110,7 +110,6 @@ USE_TEST_SET = 0
       for line in f:
         y_pred.append(float(line.strip()))
     y_pred=y_pred[:-1]
-    print("test finished")
     assert(len(y_pred) == len(X_test))
     os.remove(self.dataset+"-test")
     return y_pred
