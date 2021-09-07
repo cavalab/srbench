@@ -108,7 +108,7 @@ bash install.sh
 ```
 git clone -b feynman https://github.com/EpistasisLab/pmlb/ [/path/to/pmlb/]
 cd /path/to/pmlb
-git lfs fetch
+git lfs pull
 ```
 
 ## Start the benchmark
