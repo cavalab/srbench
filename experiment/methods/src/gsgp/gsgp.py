@@ -13,7 +13,7 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 class GSGPRegressor(BaseEstimator):  
 
   def __init__(self, g=100, popsize=200, rt_mut=0.5, rt_cross=0.5,
-              max_len=6, n_jobs=1, random_state=None):
+              max_len=6, random_state=None):
     env = dict(os.environ)
     self.g = g
     self.popsize = popsize
