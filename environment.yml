@@ -4,7 +4,7 @@ channels:
 dependencies:
     - python
     - cmake=3.19.1 # operon, feat 
-    - eigen=3.3.9 # operon, feat, ellyn
+    - eigen=3.4.0 # operon, feat, ellyn
     - boost=1.74.0 # gpgomea, ellyn
     - pkg-config # gpgomea
     - scikit-learn=0.24.1 
