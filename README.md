@@ -156,7 +156,7 @@ python analyze.py /path/to/pmlb/datasets -n_trials 10 -results ../results_blackb
 ```bash
 # submit the ground-truth dataset experiment. 
 
-for data in "$PMLB/datasets/strogatz_" "$PMLB/datasets/feynman_" ; do # feynman and strogatz datasets
+for data in "/path/to/pmlb/datasets/strogatz_" "/path/to/pmlb/datasets/feynman_" ; do # feynman and strogatz datasets
     for TN in 0 0.001 0.01 0.1; do # noise levels
         python analyze.py \
             $data"*" \ #data folder
@@ -181,7 +181,7 @@ Use `analyze.py` to generate batch calls to this function as follows:
 
 ```bash
 # assess the ground-truth models that were produced using sympy
-for data in "$PMLB/datasets/strogatz_" "$PMLB/datasets/feynman_" ; do # feynman and strogatz datasets
+for data in "/path/to/pmlb/datasets/strogatz_" "/path/to/pmlb/datasets/feynman_" ; do # feynman and strogatz datasets
     for TN in 0 0.001 0.01 0.1; do # noise levels
         python analyze.py \
             -script assess_symbolic_model \
