@@ -125,10 +125,10 @@ conda activate srbench
 bash install.sh
 ```
 
-3. Checkout the feynman PMLB branch (once these new datasets are merged, you will be able to skip this step):
+3. Download the PMLB datasets:
 
 ```bash
-git clone -b feynman https://github.com/EpistasisLab/pmlb/ [/path/to/pmlb/]
+git clone https://github.com/EpistasisLab/pmlb/ [/path/to/pmlb/]
 cd /path/to/pmlb
 git lfs pull
 ```
