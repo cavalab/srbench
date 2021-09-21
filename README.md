@@ -82,6 +82,28 @@ We are actively updating and expanding this benchmark.
 Want to add your method? 
 See our [Contribution Guide.](CONTRIBUTING.md)
 
+# Cite
+
+A pre-print of the current version of the benchmark is available:
+
+La Cava, W., Orzechowski, P., Burlacu, B., de França, F. O., Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
+Contemporary Symbolic Regression Methods and their Relative Performance. 
+To appear in _Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks._
+[arXiv](https://arxiv.org/abs/2107.14351)
+
+[v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
+
+Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
+Where are we now? A large benchmark study of recent symbolic regression methods. 
+GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://www.researchgate.net/profile/Patryk_Orzechowski/publication/324769381_Where_are_we_now_A_large_benchmark_study_of_recent_symbolic_regression_methods/links/5ae779b70f7e9b837d392dc9/Where-are-we-now-A-large-benchmark-study-of-recent-symbolic-regression-methods.pdf)
+
+
+# Contact
+
+William La Cava (@lacava), william dot lacava at childrens dot harvard dot edu
+
+Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
+
 # Using SRBench
 
 ## Installation
@@ -92,20 +114,20 @@ Steps:
 
 1. Install the conda environment:
 
-```
+```bash
 conda env create -f environment.yml
 conda activate srbench
 ```
 
 2. Install the benchmark methods:
 
-```
+```bash
 bash install.sh
 ```
 
 3. Checkout the feynman PMLB branch (once these new datasets are merged, you will be able to skip this step):
 
-```
+```bash
 git clone -b feynman https://github.com/EpistasisLab/pmlb/ [/path/to/pmlb/]
 cd /path/to/pmlb
 git lfs pull
@@ -123,7 +145,7 @@ Use accordingly.
 ### Black-box experiment
 After installing and configuring the conda environment, the complete black-box experiment can be started via the command:
 
-```
+```bash
 python analyze.py /path/to/pmlb/datasets -n_trials 10 -results ../results_blackbox -time_limit 48:00
 ```
 
@@ -131,7 +153,7 @@ python analyze.py /path/to/pmlb/datasets -n_trials 10 -results ../results_blackb
 
 **Train the models**: we train the models subject to varying levels of noise using the options below. 
 
-```
+```bash
 # submit the ground-truth dataset experiment. 
 
 for data in "$PMLB/datasets/strogatz_" "$PMLB/datasets/feynman_" ; do # feynman and strogatz datasets
@@ -157,7 +179,7 @@ done
 This is handled in [assess_symbolic_model.py](experiment/assess_symbolic_model.py). 
 Use `analyze.py` to generate batch calls to this function as follows:
 
-```
+```bash
 # assess the ground-truth models that were produced using sympy
 for data in "$PMLB/datasets/strogatz_" "$PMLB/datasets/feynman_" ; do # feynman and strogatz datasets
     for TN in 0 0.001 0.01 0.1; do # noise levels
@@ -200,24 +222,3 @@ python collate_groundtruth_results.py
 - [statistical_comparisons.ipynb](postprocessing/statistical_comparisons.ipynb): post-hoc statistical comparisons
 - [pmlb_plots](postprocessing/pmlb_plots.ipynb): the [PMLB](https://github.com/EpistasisLab/pmlb) datasets visualization 
 
-# Cite
-
-A pre-print of the current version of the benchmark is available:
-
-La Cava, W., Orzechowski, P., Burlacu, B., de França, F. O., Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
-Contemporary Symbolic Regression Methods and their Relative Performance. 
-To appear in _Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks._
-[arXiv](https://arxiv.org/abs/2107.14351)
-
-[v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
-
-Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
-Where are we now? A large benchmark study of recent symbolic regression methods. 
-GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://www.researchgate.net/profile/Patryk_Orzechowski/publication/324769381_Where_are_we_now_A_large_benchmark_study_of_recent_symbolic_regression_methods/links/5ae779b70f7e9b837d392dc9/Where-are-we-now-A-large-benchmark-study-of-recent-symbolic-regression-methods.pdf)
-
-
-# Contact
-
-William La Cava (@lacava), lacava at upenn dot edu
-
-Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
