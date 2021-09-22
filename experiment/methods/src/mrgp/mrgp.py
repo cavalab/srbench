@@ -12,7 +12,7 @@ THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 class MRGPRegressor(BaseEstimator):
   def __init__(self, g=10, popsize=100, rt_mut=0.5, 
                rt_cross=0.5, max_len=10, time_out=10*60,
-               tmp_dir=None
+               tmp_dir=None, n_jobs=1, random_state=None
                ):
     self.g = g
     self.popsize = popsize
@@ -21,6 +21,8 @@ class MRGPRegressor(BaseEstimator):
     self.max_len = max_len
     self.time_out = time_out  #in seconds
     self.tmp_dir = tmp_dir
+    self.n_jobs = n_jobs
+    self.random_state = random_state
 
   def fit(self, features, target, sample_weight=None, groups=None):
     data=pd.DataFrame(features)
@@ -40,17 +42,19 @@ class MRGPRegressor(BaseEstimator):
     data.to_csv(self.dataset+'-train',
                 header=None, 
                 index=None)
-    subprocess.check_output(['java', '-jar', 
-                             THIS_DIR+'/mrgp.jar',
-                             '-train', 
-                             self.dataset, 
-                             str(self.g), 
-                             str(self.popsize), 
-                             str(self.rt_mut), 
-                             str(self.rt_cross), 
-                             str(self.max_len),
-                             str(self.time_out)
-                            ])
+    output = ['java', '-jar', THIS_DIR+'/mrgp.jar',
+             '-train',
+             self.dataset,
+             str(self.g),
+             str(self.popsize),
+             str(self.rt_mut),
+             str(self.rt_cross),
+             str(self.max_len),
+             str(self.time_out),
+             str(self.n_jobs)
+             ]
+    output = output+[str(self.random_state)] if self.random_state != None else output
+    subprocess.check_output(output)
     # get model and complexity
     self.model_, self.complexity_ = self._get_model()
 
