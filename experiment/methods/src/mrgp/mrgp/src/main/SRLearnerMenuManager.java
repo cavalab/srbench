@@ -54,7 +54,7 @@ public class SRLearnerMenuManager {
     
     public void parseSymbolicRegressionTrain(String args[]) throws IOException{
         String dataPath;
-        int numMinutes=0;
+        int numMinutes = 10*60;
         String propsFile = "";
         SymbRegMOO srEvoGPj;
         dataPath = args[1];
@@ -63,6 +63,21 @@ public class SRLearnerMenuManager {
         String  mut_rate = args[4];
         String  crossover_rate = args[5];
         String  max_length = args[6];
+        String  external_threads = "4";
+        String  rng_seed = "";
+        // Add a time limit if specified by user
+        if (args.length >= 8){
+        	    numMinutes = Integer.parseInt(args[7]);
+	    }
+	// Add a maximum number of threads if specified by user
+        if (args.length >= 9){
+                   external_threads = args[8];
+           }
+      	// Add a seed if specified by user
+        if (args.length >= 10){
+                   rng_seed = args[9];
+           }
+
         // run evogpj with standard properties
         Properties props = new Properties();
         //System.out.print(dataPath);
@@ -74,6 +89,12 @@ public class SRLearnerMenuManager {
         props.put(Parameters.Names.TREE_INIT_MAX_DEPTH, max_length);
         props.put(Parameters.Names.TREE_MUTATE_MAX_DEPTH, max_length);
         props.put(Parameters.Names.TREE_XOVER_MAX_DEPTH, max_length);
+        if (args.length >= 9){
+                   props.put(Parameters.Names.EXTERNAL_THREADS, external_threads);
+           }
+        if (args.length >= 10){
+                   props.put(Parameters.Names.SEED, rng_seed);
+           }
 
 /*            if (args[2].equals("-minutes")) {
                 ;
@@ -105,8 +126,8 @@ public class SRLearnerMenuManager {
             System.exit(-1);
         }
      */
-        //allow each job to run <10mins
-        srEvoGPj = new SymbRegMOO(props,10*60);
+        //allow each job to run around numMinutes
+        srEvoGPj = new SymbRegMOO(props,numMinutes);
         Individual bestIndi = srEvoGPj.run_population();
 
     }
