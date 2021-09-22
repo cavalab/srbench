@@ -21,7 +21,7 @@ dependencies:
     # operon 
     - pybind11=2.6.1 
     - fmt=7.1.3 
-    - ceres-solver=2.0.0 
+    - ceres-solver=2.0.0=h1a78537_2
     - tbb-devel=2020.2 
     - openlibm 
     #deep-symbolic-regression 
