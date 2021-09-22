@@ -51,7 +51,8 @@ Assure the returned model meets these requirements:
 
 1. The variable names appearing in the model are identical to those in the training data.
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
-If they are not, they need to be defined in Python and referenced appropriately. 
+If they are not, they need to be defined in the model's script and referenced appropriately in the `model()` function, so that sympy can find them. 
 
 We are still working out how to handle operators uniformly and appropriately, and currently rely on [experiment/symbolic_utils.py](https://github.com/EpistasisLab/srbench/blob/master/experiment/symbolic_utils.py) to post-process models.  
 However, new additions to the repo should not require post-processing for compatibility.
+See issue #58 for more details.
