@@ -133,6 +133,11 @@ cd /path/to/pmlb
 git lfs pull
 ```
 
+For Docker users,
+```bash
+docker build --pull --rm -f "Dockerfile" -t srbench:latest "."
+```
+
 ## Reproducing the benchmark results
 
 Experiments are launched from the `experiments/` folder via the script `analyze.py`.
