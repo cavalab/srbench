@@ -53,5 +53,5 @@ Assure the returned model meets these requirements:
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
 If they are not, they need to be defined in Python and referenced appropriately. 
 
-We are still working out how to handle operators uniformly and appropriately, and currently rely on [experiment/symbolic_utils.py](experiment/symbolic_utils.py) to post-process models.  
+We are still working out how to handle operators uniformly and appropriately, and currently rely on [experiment/symbolic_utils.py](https://github.com/EpistasisLab/srbench/blob/master/experiment/symbolic_utils.py) to post-process models.  
 However, new additions to the repo should not require post-processing for compatibility.
