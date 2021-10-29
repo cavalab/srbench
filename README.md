@@ -24,11 +24,11 @@ Methods currently benchmarked:
 - Age-Fitness Pareto Optimization (Schmidt and Lipson 2009) 
     [paper](https://dl.acm.org/doi/pdf/10.1145/1830483.1830584)
     , 
-    [code](https://github.com/EpistasisLab/ellyn)
+    [code](https://github.com/cavalab/ellyn)
 - Age-Fitness Pareto Optimization with Co-evolved Fitness Predictors (Schmidt and Lipson 2009) 
     [paper](https://dl.acm.org/doi/pdf/10.1145/1830483.1830584?casa_token=8fAFUrPlfuUAAAAA:u0QJvX-cC8rPtdZri-Jd4ZxcnRSIF_Fu2Vn5n-oXVNu_i71J6ZECx28ucLPOLQY628drsEbg4aFvTw)
     , 
-    [code](https://github.com/EpistasisLab/ellyn)
+    [code](https://github.com/cavalab/ellyn)
 - AIFeynman 2.0 (Udrescu et al. 2020)
     [paper](https://arxiv.org/abs/2006.10782)
     ,
@@ -36,23 +36,23 @@ Methods currently benchmarked:
 - Bayesian Symbolic Regression (Jin et al. 2020)
     [paper](https://arxiv.org/abs/1910.08892)
     ,
-    [code](https://github.com/EpistasisLab/ellyn)
+    [code](https://github.com/ying531/MCMC-SymReg)
 - Deep Symbolic Regression (Petersen et al. 2020)
     [paper](https://arxiv.org/pdf/1912.04871)
     , 
-    [code](https://github.com/EpistasisLab/ellyn)
+    [code](https://github.com/brendenpetersen/deep-symbolic-optimization)
 - Fast Function Extraction (McConaghy 2011)
     [paper](http://trent.st/content/2011-GPTP-FFX-paper.pdf)
     ,
-    [code](https://github.com/EpistasisLab/ellyn)
+    [code](https://github.com/natekupp/ffx)
 - Feature Engineering Automation Tool (La Cava et al. 2017)
     [paper](https://arxiv.org/abs/1807.00981)
     ,
-    [code](https://github.com/EpistasisLab/ellyn)
+    [code](https://github.com/lacava/feat)
 - epsilon-Lexicase Selection (La Cava et al. 2016)
     [paper](https://arxiv.org/abs/1905.13266)
     ,
-    [code](https://github.com/EpistasisLab/ellyn)
+    [code](https://github.com/cavalab/ellyn)
 - GP-based Gene-pool Optimal Mixing Evolutionary Algorithm (Virgolin et al. 2017)
     [paper](https://dl.acm.org/doi/pdf/10.1145/3071178.3071287?casa_token=CHa8EK_ic5gAAAAA:mOAOCu6CL-jHobGWKD2wco4NbpCyS-XTY5thb1dPPsyUkTkLHzmLMF41MWMGWLyFv1G8n-VFaqmXSw)
     ,
