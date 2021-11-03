@@ -12,8 +12,6 @@ if [ -d operon ]; then
     rm -rf operon
 fi
 
-conda install -c conda-forge gcc gxx eigen=3.4.0 taskflow=3.2.0 -y
-
 git clone https://github.com/heal-research/operon
 cd operon
 # fix version

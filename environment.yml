@@ -2,6 +2,8 @@ name: srbench
 channels:
     - conda-forge
 dependencies:
+    - compilers
+    - make
     - python
     - cmake=3.19.1 # operon, feat 
     - eigen=3.3.9 # operon, feat, ellyn
@@ -22,7 +24,8 @@ dependencies:
     - pybind11=2.6.1 
     - fmt=7.1.3 
     - ceres-solver=2.0.0=h1a78537_2
-    - tbb-devel=2020.2 
+    - taskflow=3.2.0
+    - tbb-devel=2020.2
     - openlibm 
     #deep-symbolic-regression 
     - tensorflow=1.14 
