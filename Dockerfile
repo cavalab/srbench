@@ -29,7 +29,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
     wget \
     vim \
     jq \
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Python packages.
 RUN pip install --upgrade pip
