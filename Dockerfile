@@ -25,23 +25,18 @@ RUN apt-get update --fix-missing && apt-get install -y \
     bzip2 \
     ca-certificates \
     curl \
-    gcc \
     git \
     wget \
     vim \
-    build-essential \
     jq \
-    python3.7-dev  && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python packages.
 RUN pip install --upgrade pip
 
-RUN ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
-
 # Checkout the latest version as of August 24th, 2021
 WORKDIR /opt/app/
-RUN git clone https://github.com/EpistasisLab/srbench.git
+RUN git clone https://github.com/foolnotion/srbench.git
 WORKDIR /opt/app/srbench/
 
 RUN conda update conda -y
