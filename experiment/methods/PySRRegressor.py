@@ -54,7 +54,7 @@ class PySRRegressor:
             return best_row(self.equations)
 
     def fit(self, X, y):
-        self.equations = self.pysr_call(
+        self.equations = pysr(
             X=X,
             y=y,
             binary_operators=self.binary_operators,
