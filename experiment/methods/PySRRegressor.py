@@ -48,10 +48,14 @@ class PySRRegressor:
         return f"PySRRegressor(equations={self.get_best()['sympy_format']})"
 
     def get_best(self):
+        if self.equations is None:
+            return 0.0
         if self.model_selection == "accuracy":
             return self.equations.iloc[-1]
         elif self.model_selection == "best":
             return best_row(self.equations)
+        else:
+            raise NotImplementedError
 
     def fit(self, X, y):
         self.equations = pysr(
