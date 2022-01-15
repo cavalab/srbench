@@ -145,7 +145,7 @@ def complexity(est):
     return est.get_best()['complexity']
 
 def model(est):
-    return est.get_best()['sympy_format']
+    return str(est.get_best()['sympy_format'])
 
 
 est = PySRRegressor()
