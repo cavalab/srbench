@@ -67,6 +67,11 @@ class PySRRegressor:
             maxsize=self.maxsize,
             npop=self.npop,
             parsimony=self.parsimony,
+            extra_sympy_mappings={
+                "square": lambda x: x ** 2,
+                "cube": lambda x: x ** 3,
+                "quart": lambda x: x ** 4
+            },
         )
         return self
 
@@ -84,12 +89,15 @@ def model(est):
 
 
 est = PySRRegressor()
+poly_basis = ["square(x) = x^2", "cube(x) = x^3", "quart(x) = x^4"]
+trig_basis = ["cos", "sin"]
+exp_basis = ["exp", "log", "sqrt"]
 hyper_params = [
     {
         "annealing": (True, False),
         "denoise": (True, False),
         "binary_operators": (["+", "-", "*", "/"],),
-        "unary_operators": ([], ["cos", "sin"], ["exp", "log", "sqrt"])
+        "unary_operators": ([], poly_basis, poly_basis + trig_basis, poly_basis + exp_basis)
         "populations": (40, 80),
         "alpha": (0.01, 0.1, 1.0, 10.0),
         "model_selection": ("accuracy", "best"),
