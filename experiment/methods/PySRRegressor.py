@@ -70,7 +70,7 @@ class PySRRegressor:
             extra_sympy_mappings={
                 "square": lambda x: x ** 2,
                 "cube": lambda x: x ** 3,
-                "quart": lambda x: x ** 4
+                "quart": lambda x: x ** 4,
             },
         )
         return self
@@ -81,11 +81,13 @@ class PySRRegressor:
 
         return np_format(X)
 
+
 def complexity(est):
-    return est.get_best()['complexity']
+    return est.get_best()["complexity"]
+
 
 def model(est):
-    return str(est.get_best()['sympy_format'])
+    return str(est.get_best()["sympy_format"])
 
 
 est = PySRRegressor()
@@ -97,7 +99,12 @@ hyper_params = [
         "annealing": (True, False),
         "denoise": (True, False),
         "binary_operators": (["+", "-", "*", "/"],),
-        "unary_operators": ([], poly_basis, poly_basis + trig_basis, poly_basis + exp_basis)
+        "unary_operators": (
+            [],
+            poly_basis,
+            poly_basis + trig_basis,
+            poly_basis + exp_basis,
+        ),
         "populations": (40, 80),
         "alpha": (0.01, 0.1, 1.0, 10.0),
         "model_selection": ("accuracy", "best"),
