@@ -49,7 +49,11 @@ class PySRRegressor:
 
     def get_best(self):
         if self.equations is None:
-            return 0.0
+            return dict(
+                sympy_format=0.0,
+                complexity=1,
+                lambda_format=lambda x: 0.0,
+            )
         if self.model_selection == "accuracy":
             return self.equations.iloc[-1]
         elif self.model_selection == "best":
