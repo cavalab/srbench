@@ -1,4 +1,4 @@
-FROM mambaorg/micromamba:0.19.1
+FROM continuumio/anaconda3:2021.05
 
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
@@ -43,7 +43,7 @@ RUN ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
 WORKDIR /opt/app/srbench/
 COPY . .
 
-RUN micromamba update micromamba -y
+RUN conda update conda -y
 RUN bash configure.sh
-SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 RUN bash install.sh
