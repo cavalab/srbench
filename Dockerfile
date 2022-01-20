@@ -1,4 +1,4 @@
-FROM continuumio/anaconda3:2021.05
+FROM mambaorg/micromamba:0.19.1
 
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
@@ -40,11 +40,10 @@ RUN pip install --upgrade pip
 RUN ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
 
 # Checkout the latest version as of August 24th, 2021
-WORKDIR /opt/app/
-RUN git clone https://github.com/EpistasisLab/srbench.git
 WORKDIR /opt/app/srbench/
+COPY . .
 
-RUN conda update conda -y
+RUN micromamba update micromamba -y
 RUN bash configure.sh
-SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
+SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 RUN bash install.sh
