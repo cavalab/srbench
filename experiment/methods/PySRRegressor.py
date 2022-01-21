@@ -92,7 +92,8 @@ class PySRRegressor(BaseEstimator, RegressorMixin):
 
         return np_format(X)
 
-    def get_params(self):
+    def get_params(self, deep=True):
+        del deep
         return {
             "model_selection": self.model_selection,
             "binary_operators": self.binary_operators,
