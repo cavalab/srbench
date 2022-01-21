@@ -1,6 +1,4 @@
 from operon.sklearn import SymbolicRegressor
-import operon._operon as op
-
 
 est = SymbolicRegressor(
             local_iterations=5,
