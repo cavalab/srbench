@@ -3,8 +3,11 @@ from multiprocessing import cpu_count
 from functools import partial
 import numpy as np
 
+# Import base estimator and regressor mixin:
+from sklearn.base import BaseEstimator, RegressorMixin
 
-class PySRRegressor:
+
+class PySRRegressor(BaseEstimator, RegressorMixin):
     def __init__(
         self,
         model_selection="accuracy",
@@ -88,6 +91,21 @@ class PySRRegressor:
         np_format = equation_row["lambda_format"]
 
         return np_format(X)
+
+    def get_params(self):
+        return {
+            "model_selection": self.model_selection,
+            "binary_operators": self.binary_operators,
+            "unary_operators": self.unary_operators,
+            "populations": self.populations,
+            "niterations": self.niterations,
+            "ncyclesperiteration": self.ncyclesperiteration,
+            "annealing": self.annealing,
+            "nprocs": self.nprocs,
+            "maxsize": self.maxsize,
+            "npop": self.npop,
+            "parsimony": self.parsimony,
+        }
 
 
 def complexity(est):
