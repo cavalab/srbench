@@ -11,15 +11,16 @@ from evaluate_model import evaluate_model
 import importlib
 
 # WARNING: this glob assumes tests are running from project experiment directory
-# MLs = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') if
-#        not ml.split('/')[-1][:-3].startswith('_')]
-# print('MLs:',MLs)
+MLs = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') if
+       not ml.split('/')[-1][:-3].startswith('_')]
+print('MLs:',MLs)
 
-algorithm_to_test = sys.argv[1]
-MLs = [algorithm_to_test]
+@pytest.fixture()
+def ml(pytestconfig):
+    return pytestconfig.getoption("ml")
 
-@pytest.mark.parametrize("ml", MLs)
 def test_evaluate_model(ml):
+    assert ml in MLs
     print('running test_evaluate_model with ml=',ml)
     dataset = 'test/192_vineyard_small.tsv.gz'
     results_path = 'tmp_results'

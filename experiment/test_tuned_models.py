@@ -14,14 +14,12 @@ TMLs = ['tuned.'+ml.split('/')[-1][:-3] for ml in glob('methods/tuned/*.py') if
        not ml.split('/')[-1][:-3].startswith('_')]
 
 
-chosen_TML = sys.argv[1]
-if 'tuned.' + chosen_TML not in TMLs:
-    exit(0)
+@pytest.fixture()
+def name(pytestconfig):
+    return pytestconfig.getoption("ml")
 
-TMLs = ['tuned.' + chosen_TML]
-
-@pytest.mark.parametrize("ml", TMLs)
 def test_tuned_models(ml):
+    assert ml in TMLs
     print('running test_evaluate_model with ml=',ml)
     dataset = 'test/strogatz_shearflow1.tsv.gz'
     results_path = 'tmp_results'
