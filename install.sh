@@ -13,7 +13,7 @@ echo "///////////////////////////"
 ml=$1
 
 # Get install scripts:
-install_files=$(python get_install_script.py $ml)
+install_files=( $(python get_install_script.py $ml) )
 
 # move to methods folder
 cd experiment/methods/src/
