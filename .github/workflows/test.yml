@@ -56,7 +56,7 @@ jobs:
       - name: Install SR methods
         run: |
             conda info
-            bash install.sh
+            ./install.sh ${{ matrix.algorithm }}
       
       - name: Test analysis 
         run: |

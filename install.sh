@@ -10,11 +10,17 @@ echo "///////////////////////////"
 echo "installing GP methods..."
 echo "///////////////////////////"
 
+ml=$1
+
+# Get install scripts:
+install_files=$(python get_install_script.py $ml)
+
 # move to methods folder
 cd experiment/methods/src/
 
-# install all methods
-for install_file in $(ls *.sh) ; do
+
+# install methods for this algorithm:
+for install_file in "${install_files[@]}"; do
     echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
     echo "Running $install_file"
     echo "////////////////////////////////////////////////////////////////////////////////"
