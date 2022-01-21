@@ -18,26 +18,18 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        julia-version: ['1.7.1']
+        os: [ubuntu-latest]
+        algorithm: ["AFPRegressor", "AIFeynman", "BSRRegressor", "DSRRegressor", "EHCRegressor", "FFXRegressor", "FEATRegressor", "FE_AFPRegressor", "EPLEXRegressor", "GPGOMEARegressor", "gplearn", "ITEARegressor", "MRGPRegressor", "OperonRegressor", "PySRRegressor", "sembackpropgp"]
     defaults:
       run:
         shell: bash -l {0}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      # Caches the conda environment
-      # - name: Cache conda
-      #   uses: actions/cache@v1
-      #   env:
-      #     # Increase this value to reset cache if environment.yml has not changed
-      #     CACHE_NUMBER: 0
-      #   with:
-      #     path: ~/conda_pkgs_dir
-      #     key:
-      #       ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
-      #       hashFiles('etc/example-environment.yml') }}
-      # Sets up the conda environment
       - name: Set up Conda Environment 
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -52,7 +44,7 @@ jobs:
       - name: Set up Julia
         uses: julia-actions/setup-julia@v1.6.0
         with:
-          version: '1.6'
+          version: ${{ matrix.julia-version }}
 
       - name: "Change julia package server"
         shell: bash
@@ -60,15 +52,16 @@ jobs:
             JULIA_PKG_SERVER: ""
         run: julia -e 'using Pkg; Pkg.Registry.add("General")'
 
+      # TODO: Only install algorithm required.
       - name: Install SR methods
         run: |
             conda info
             bash install.sh
-
+      
       - name: Test analysis 
         run: |
             conda info 
             # pip install pytest
             cd experiment
-            python -m pytest -v test_evaluate_model.py
-            python -m pytest -v test_tuned_models.py
+            python -m pytest -v test_evaluate_model.py ${{ matrix.algorithm }}
+            python -m pytest -v test_tuned_models.py ${{ matrix.algorithm }}
