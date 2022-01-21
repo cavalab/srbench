@@ -15,7 +15,7 @@ TMLs = ['tuned.'+ml.split('/')[-1][:-3] for ml in glob('methods/tuned/*.py') if
 
 
 @pytest.fixture()
-def name(pytestconfig):
+def ml(pytestconfig):
     return pytestconfig.getoption("ml")
 
 def test_tuned_models(ml):
