@@ -41,6 +41,11 @@ jobs:
           activate-environment: srbench
           environment-file: environment.yml
           auto-activate-base: false
+          # Use mamba:
+          mamba-version: "*"
+          channels: conda-forge,defaults
+          channel-priority: true
+
       - run: |
           conda info
           conda list
