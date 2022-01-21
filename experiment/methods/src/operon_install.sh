@@ -1,32 +1,110 @@
-# # Installing operon
-# export CC=gcc-9
-# export CXX=gcc-9
-# # Dependencies
-# # - TBB - installed via conda
-# # - Eigen- installed via conda
-# # - Ceres- installed via conda
-# # - {fmt}- installed via conda
+#!/bin/bash
 
-# # remove directory if it exists
-if [ -d operon ]; then
-    rm -rf operon
-fi
+PYTHON_SITE=${CONDA_PREFIX}/lib/python`pkg-config --modversion python3`/site-packages
 
-conda install -c conda-forge gcc gxx eigen=3.4.0 taskflow=3.2.0 -y
+## aria-csv
+mkdir -p ${CONDA_PREFIX}/include/aria-csv
+wget https://raw.githubusercontent.com/AriaFallah/csv-parser/master/parser.hpp -O ${CONDA_PREFIX}/include/aria-csv/parser.hpp
 
-git clone https://github.com/heal-research/operon
-cd operon
-# fix version
-git checkout 015d420944a64353a37e0493ae9be74c645b4198
+## vectorclass
+git clone https://github.com/vectorclass/version2.git vectorclass
+mkdir -p ${CONDA_PREFIX}/include/vectorclass
+cp vectorclass/*.h ${CONDA_PREFIX}/include/vectorclass/
+rm -rf vectorclass
+cat > ${CONDA_PREFIX}/lib/pkgconfig/vectorclass.pc << EOF
+prefix=${CONDA_PREFIX}/include/vectorclass
+includedir=${CONDA_PREFIX}/include/vectorclass
 
-# run cmake
-rm -rf build
-mkdir build; cd build;
-SOURCE_DATE_EPOCH=`date +%s` cmake .. -DCMAKE_BUILD_TYPE=Release  -DBUILD_PYBIND=ON -DUSE_OPENLIBM=ON -DUSE_SINGLE_PRECISION=ON -DCERES_TINY_SOLVER=ON -DPython3_FIND_VIRTUALENV=ONLY #-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX/lib/python3.7/site-packages/ #-DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DPython3_LIBRARY=$CONDA_PREFIX/lib/ -DPython3_INCLUDE_DIR=$CONDA_PREFIX/include/ 
-#-DPython3_ROOT_DIR=$CONDA_PREFIX
-# -DPython3_FIND_STRATEGY=LOCATION 
-# build
-make VERBOSE=1 -j pyoperon
+Name: Vectorclass
+Description: C++ class library for using the Single Instruction Multiple Data (SIMD) instructions to improve performance on modern microprocessors with the x86 or x86/64 instruction set.
+Version: 2.01.04
+Cflags: -I${CONDA_PREFIX}/include/vectorclass
+EOF
 
-# install
-make install
+## vstat
+git clone https://github.com/heal-research/vstat.git
+pushd vstat
+mkdir build
+cmake -S . -B build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTING=OFF \
+    -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX}
+cmake --install build
+popd
+rm -rf vstat
+
+## pratt-parser
+git clone https://github.com/foolnotion/pratt-parser-calculator.git
+pushd pratt-parser-calculator
+mkdir build
+cmake -S . -B build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTING=OFF \
+    -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX}
+cmake --install build
+popd
+rm -rf pratt-parser-calculator
+
+## fast-float
+git clone https://github.com/fastfloat/fast_float.git
+pushd fast_float
+mkdir build
+cmake -S . -B build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DFASTLOAT_TEST=OFF \
+    -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX}
+cmake --install build
+popd
+rm -rf fast_float
+
+## span-lite
+git clone https://github.com/martinmoene/span-lite.git
+pushd span-lite
+mkdir build
+cmake -S . -B build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DSPAN_LITE_OPT_BUILD_TESTS=OFF \
+    -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX}
+cmake --install build
+popd
+rm -rf span-lite
+
+## robin_hood
+git clone https://github.com/martinus/robin-hood-hashing.git
+pushd robin-hood-hashing
+mkdir build
+cmake -S . -B build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DRH_STANDALONE_PROJECT=OFF \
+    -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX}
+cmake --install build
+popd
+rm -rf robin-hood-hashing
+
+# operon
+git clone https://github.com/heal-research/operon.git
+pushd operon
+mkdir build
+cmake -S . -B build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTING=OFF \
+    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_CLI_PROGRAMS=OFF \
+    -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} \
+    -DCMAKE_PREFIX_PATH=${CONDA_PREFIX}/lib64/cmake
+cmake --build build -j -t operon_operon
+cmake --install build
+popd
+rm -rf operon
+
+## pyoperon
+git clone https://github.com/heal-research/pyoperon.git
+pushd pyoperon
+mkdir build
+cmake -S . -B build \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=${PYTHON_SITE}
+cmake --build build -j -t pyoperon_pyoperon
+cmake --install build
+popd
+rm -rf pyoperon

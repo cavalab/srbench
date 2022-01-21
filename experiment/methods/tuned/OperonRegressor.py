@@ -1,6 +1,5 @@
 from ..OperonRegressor import complexity,model,est
 from operon.sklearn import SymbolicRegressor
-import operon._operon as op
 from .params._operonregressor import params
 
 est.set_params(**params)
