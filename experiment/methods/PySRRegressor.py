@@ -20,7 +20,7 @@ class PySRRegressor(BaseEstimator, RegressorMixin):
         maxsize=20,
         npop=100,
         parsimony=0.0,
-        nprocs=cpu_count(),
+        procs=cpu_count(),
     ):
         super().__init__()
         self.model_selection = model_selection
@@ -39,7 +39,7 @@ class PySRRegressor(BaseEstimator, RegressorMixin):
         self.niterations = niterations
         self.ncyclesperiteration = ncyclesperiteration
         self.annealing = annealing
-        self.nprocs = nprocs
+        self.procs = procs
         self.maxsize = maxsize
         self.npop = npop
         self.parsimony = parsimony
@@ -74,7 +74,7 @@ class PySRRegressor(BaseEstimator, RegressorMixin):
             niterations=self.niterations,
             ncyclesperiteration=self.ncyclesperiteration,
             annealing=self.annealing,
-            nprocs=self.nprocs,
+            procs=self.procs,
             maxsize=self.maxsize,
             npop=self.npop,
             parsimony=self.parsimony,
@@ -102,7 +102,7 @@ class PySRRegressor(BaseEstimator, RegressorMixin):
             "niterations": self.niterations,
             "ncyclesperiteration": self.ncyclesperiteration,
             "annealing": self.annealing,
-            "nprocs": self.nprocs,
+            "procs": self.procs,
             "maxsize": self.maxsize,
             "npop": self.npop,
             "parsimony": self.parsimony,
