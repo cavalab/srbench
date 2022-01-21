@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: "*"
   pull_request:
     branches: [ master ]
 
@@ -24,6 +24,8 @@ jobs:
         julia-version: ['1.7.1']
         os: [ubuntu-latest]
         algorithm: ["AFPRegressor", "AIFeynman", "BSRRegressor", "DSRRegressor", "EHCRegressor", "FFXRegressor", "FEATRegressor", "FE_AFPRegressor", "EPLEXRegressor", "GPGOMEARegressor", "gplearn", "ITEARegressor", "MRGPRegressor", "OperonRegressor", "PySRRegressor", "sembackpropgp"]
+      # Keep running even with some algorithms failing:
+      fail-fast: false
     defaults:
       run:
         shell: bash -l {0}
