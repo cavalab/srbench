@@ -1,0 +1,35 @@
+# This lists all algorithms with their corresponding install files.
+
+# Install scripts needed by everything:
+install:
+  - gsgp_install.sh
+
+# Only install selective part:
+algorithms:
+  - name: AFPRegressor
+    install: ellyn_install.sh
+  - name: AIFeynman
+  - name: BSRRegressor
+  - name: DSRRegressor
+    install: dsr_install.sh
+  - name: EHCRegressor
+    install: ellyn_install.sh
+  - name: FFXRegressor
+  - name: FEATRegressor
+    install: feat_install.sh
+  - name: FE_AFPRegressor
+    install: ellyn_install.sh
+  - name: EPLEXRegressor
+    install: ellyn_install.sh
+  - name: GPGOMEARegressor
+    install: gpgomea_install.sh
+  - name: gplearn
+  - name: ITEARegressor
+    install: itea_install.sh
+  - name: MRGPRegressor
+  - name: OperonRegressor
+    install: operon_install.sh
+  - name: PySRRegressor
+    install: pysr_install.sh
+  - name: sembackpropgp
+    install: gpgomea_install.sh
