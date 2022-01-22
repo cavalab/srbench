@@ -21,7 +21,7 @@ def ml(pytestconfig):
 def test_tuned_models(ml):
     if ml not in TMLs:
         # Some algorithms not tuned.
-        pytest.exit()
+        pytest.exit(f"{ml} not found in list of tuned algorithms. Skipping.")
 
     print('running test_evaluate_model with ml=',ml)
     dataset = 'test/strogatz_shearflow1.tsv.gz'
