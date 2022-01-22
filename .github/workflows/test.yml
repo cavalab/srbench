@@ -46,7 +46,7 @@ jobs:
           path: ~/conda_pkgs_dir
           key:
             ${{ matrix.os }}-conda-${{ env.CACHE_NUMBER }}-${{
-            hashFiles('environment.yml') }}-${{ matrix.algorithm }}
+            hashFiles('environment.yml') }}
 
       - name: Set up Conda Environment 
         uses: conda-incubator/setup-miniconda@v2
