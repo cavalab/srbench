@@ -37,6 +37,17 @@ jobs:
           python clean_environment.py ${{ matrix.algorithm }}
           mv clean_environment.yml environment.yml
 
+      - name: Cache conda
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if etc/example-environment.yml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/conda_pkgs_dir
+          key:
+            ${{ matrix.os }}-conda-${{ env.CACHE_NUMBER }}-${{
+            hashFiles('environment.yml') }}-${{ matrix.algorithm }}
+
       - name: Set up Conda Environment 
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -46,7 +57,9 @@ jobs:
           # Use mamba:
           mamba-version: "*"
           channels: conda-forge,defaults
-          channel-priority: true
+          channel-priority: strict
+          # For caching:
+          use-only-tar-bz2: true
 
       - run: |
           conda info
