@@ -69,7 +69,7 @@ jobs:
       - name: Set up Julia
         uses: julia-actions/setup-julia@v1.6.0
         # Only do this step for PySR:        
-        if: ${{ matrix.algorithm }} == "PySRRegressor"
+        if: matrix.algorithm == 'PySRRegressor'
         with:
           version: ${{ matrix.julia-version }}
 
