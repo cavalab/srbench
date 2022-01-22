@@ -28,7 +28,7 @@ dependencies:
     - openlibm 
     - taskflow
     - xxhash
-    - tensorflow=1.14 # only: deep-symbolic-regression 
+    - tensorflow=1.14 # only: DSRRegressor
     - cython
     - numba
     - click
