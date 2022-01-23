@@ -110,7 +110,7 @@ class PySRRegressor(BaseEstimator, RegressorMixin):
 
 
 def complexity(est):
-    return est.get_best()["complexity"]
+    return est.get_best()["Complexity"]
 
 
 def model(est):
