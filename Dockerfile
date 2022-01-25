@@ -21,5 +21,12 @@ RUN apt update && apt install -y \
 
 USER $MAMBA_USER
 RUN micromamba install -y --name base -c conda-forge conda
-# SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
-# RUN ./install.sh
+ENV PATH=$PATH:/opt/conda/bin
+
+# Always run inside srbench:
+RUN conda init bash
+RUN echo "conda activate srbench" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+
+RUN ./install.sh
+CMD ["/bin/bash", "--login"]
