@@ -19,7 +19,7 @@ for install_file in $(ls *.sh) ; do
     echo "Running $install_file"
     echo "////////////////////////////////////////////////////////////////////////////////"
 
-    $install_file
+    bash $install_file
 
     if [ $? -gt 0 ]
     then
