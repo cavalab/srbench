@@ -28,9 +28,8 @@ RUN echo 'export PATH=$PATH:/opt/conda/bin' >> ~/.bashrc
 # Always run inside srbench:
 RUN conda init bash
 RUN echo "conda activate srbench" >> ~/.bashrc
-SHELL ["/bin/bash", "--login", "-c"]
 
 # Copy remaining files and install
 COPY  --chown=$MAMBA_USER:$MAMBA_USER . .
-RUN ./install.sh
+RUN bash -l install.sh
 CMD ["/bin/bash", "--login"]
