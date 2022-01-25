@@ -5,18 +5,21 @@ RUN micromamba env create -y -f /tmp/environment.yml && \
     micromamba clean --all --yes
 
 # Install base packages.
-# RUN apt-get update --fix-missing && apt-get install -y \
-#     default-jdk \
-#     bzip2 \
-#     ca-certificates \
-#     curl \
-#     gcc \
-#     git \
-#     wget \
-#     vim \
-#     build-essential \
-#     jq && \
-#     rm -rf /var/lib/apt/lists/*
+USER root
+RUN apt update && apt install -y \
+    default-jdk \
+    bzip2 \
+    ca-certificates \
+    curl \
+    gcc \
+    git \
+    wget \
+    vim \
+    build-essential \
+    jq && \
+    rm -rf /var/lib/apt/lists/*
 
+USER $MAMBA_USER
+RUN micromamba install -y --name base -c conda-forge conda
 # SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 # RUN ./install.sh
