@@ -46,6 +46,8 @@ dependencies:
     - setuptools=45.*
     - shogun-cpp=6.1.4
     - wheel=0.35.*
+    # PySR:
+    - julia=1.7.* # Note that this is julia itself.
     # pip
     - pip=20.3.3 
     - pip:
@@ -57,3 +59,6 @@ dependencies:
         - git+https://github.com/lacava/MCMC-SymReg
         # AI-feynman
         - git+https://github.com/lacava/AI-Feynman
+        # PySR:
+        - julia=0.5.7 # Note that this is PyJulia (pip name julia)
+        - pysr==0.7.0a3
