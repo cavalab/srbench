@@ -1,3 +1,4 @@
+#!/bin/bash
 # note: make sure conda environment is installed 
 # before running install. see configure.sh
 conda activate srbench
@@ -19,7 +20,7 @@ for install_file in $(ls *.sh) ; do
     echo "Running $install_file"
     echo "////////////////////////////////////////////////////////////////////////////////"
 
-    bash -l $install_file
+    $install_file
 
     if [ $? -gt 0 ]
     then
