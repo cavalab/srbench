@@ -28,5 +28,6 @@ RUN conda init bash
 RUN echo "conda activate srbench" >> ~/.bashrc
 SHELL ["/bin/bash", "--login", "-c"]
 
+COPY . .
 RUN ./install.sh
 CMD ["/bin/bash", "--login"]
