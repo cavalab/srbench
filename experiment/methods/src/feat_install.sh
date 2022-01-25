@@ -1,3 +1,4 @@
+#!/bin/bash
 #install feat
 
 # remove directory if it exists

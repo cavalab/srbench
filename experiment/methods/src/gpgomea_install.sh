@@ -1,3 +1,4 @@
+#!/bin/bash
 # install GOMEA
 
 # remove directory if it exists

@@ -1,3 +1,4 @@
+#!/bin/bash
 # install deep-symbolic-regression
 
 if [ -d deep-symbolic-regression ] ; then

@@ -1,3 +1,4 @@
+#!/bin/bash
 #install ellyn
 
 # remove directory if it exists
