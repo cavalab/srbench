@@ -25,11 +25,13 @@ RUN micromamba install -y --name base -c conda-forge conda
 ENV PATH=$PATH:/opt/conda/bin
 RUN echo 'export PATH=$PATH:/opt/conda/bin' >> ~/.bashrc
 
+SHELL ["/bin/bash", "-c"]
+
 # Always run inside srbench:
-RUN conda init bash
+RUN source ~/.bashrc && conda init bash
 RUN echo "conda activate srbench" >> ~/.bashrc
 
 # Copy remaining files and install
 COPY  --chown=$MAMBA_USER:$MAMBA_USER . .
-RUN bash -l install.sh
+RUN source ~/.bashrc && ./install.sh
 CMD ["/bin/bash", "--login"]
