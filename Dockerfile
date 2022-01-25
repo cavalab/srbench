@@ -23,6 +23,7 @@ RUN micromamba env create -y -f /tmp/environment.yml && \
 # modification.
 RUN micromamba install -y --name base -c conda-forge conda
 ENV PATH=$PATH:/opt/conda/bin
+RUN echo 'export PATH=$PATH:/opt/conda/bin' >> ~/.bashrc
 
 # Always run inside srbench:
 RUN conda init bash
