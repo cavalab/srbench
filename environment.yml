@@ -48,6 +48,8 @@ dependencies:
     - wheel=0.35.*
     # PySR:
     - julia=1.7.* # Note that this is julia itself.
+    - openlibm
+    - llvm
     # pip
     - pip=20.3.3 
     - pip:
