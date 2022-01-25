@@ -61,5 +61,5 @@ dependencies:
         # AI-feynman
         - git+https://github.com/lacava/AI-Feynman
         # PySR:
-        - julia=0.5.7 # Note that this is PyJulia (pip name julia)
+        - julia==0.5.7 # Note that this is PyJulia (pip name julia)
         - pysr==0.7.0a3
