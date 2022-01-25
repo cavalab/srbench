@@ -7,11 +7,9 @@ RUN apt update && apt install -y \
     bzip2 \
     ca-certificates \
     curl \
-    gcc \
     git \
     wget \
     vim \
-    build-essential \
     jq && \
     rm -rf /var/lib/apt/lists/*
 
