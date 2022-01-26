@@ -39,4 +39,4 @@ def test_evaluate_model(ml):
 if __name__ == '__main__':
     args = parser.parse_args()
     ml = args.ml
-    print(ml)
+    test_evaluate_model(ml)
