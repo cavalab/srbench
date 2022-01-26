@@ -1,4 +1,18 @@
-FROM --platform=linux/amd64 mambaorg/micromamba:0.19.1
+FROM --platform=linux/x86_64 mambaorg/micromamba:0.19.1
+
+################################################################################
+# Nvidia code ##################################################################
+################################################################################
+ENV PATH /usr/local/nvidia/bin/:$PATH
+ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:$LD_LIBRARY_PATH
+# Tell nvidia-docker the driver spec that we need as well as to
+# use all available devices, which are mounted at /usr/local/nvidia.
+# The LABEL supports an older version of nvidia-docker, the env
+# variables a newer one.
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+################################################################################
 
 # Install base packages.
 USER root
@@ -33,5 +47,5 @@ RUN echo "conda activate srbench" >> ~/.bashrc
 
 # Copy remaining files and install
 COPY  --chown=$MAMBA_USER:$MAMBA_USER . .
-RUN source ~/.bashrc && ./install.sh
+RUN source ~/.bashrc && source install.sh
 CMD ["/bin/bash", "--login"]
