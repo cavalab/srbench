@@ -1,4 +1,4 @@
-FROM --platform=linux/x86_64 mambaorg/micromamba:0.19.1
+FROM --platform=linux/amd64 mambaorg/micromamba:0.19.1
 
 ################################################################################
 # Nvidia code ##################################################################
