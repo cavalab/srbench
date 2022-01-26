@@ -1,21 +1,18 @@
 import sys
 from os.path import dirname as d
-from os.path import abspath, join
+from os.path import abspath
 root_dir = d(d(abspath(__file__)))
 sys.path.append(root_dir)
 print('appended',root_dir,'to sys.path')
 
-import pytest
-from glob import glob
 from evaluate_model import evaluate_model
 import importlib
 
-# WARNING: this glob assumes tests are running from project experiment directory
-MLs = [ml.split('/')[-1][:-3] for ml in glob('methods/*.py') if
-       not ml.split('/')[-1][:-3].startswith('_')]
-print('MLs:',MLs)
+# Take --ml={ML} as input, using argparse.
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--ml', type=str, default='AdaBoostRegressor')
 
-@pytest.mark.parametrize("ml", MLs)
 def test_evaluate_model(ml):
     print('running test_evaluate_model with ml=',ml)
     dataset = 'test/192_vineyard_small.tsv.gz'
@@ -37,3 +34,9 @@ def test_evaluate_model(ml):
                    algorithm.model,
                    test=True # testing
                   )
+
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+    ml = args.ml
+    print(ml)
