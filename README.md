@@ -88,7 +88,7 @@ A pre-print of the current version of the benchmark is available:
 
 La Cava, W., Orzechowski, P., Burlacu, B., de França, F. O., Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
 Contemporary Symbolic Regression Methods and their Relative Performance. 
-Neurips Track on Datasets and Benchmarks._
+_Neurips Track on Datasets and Benchmarks._
 [arXiv](https://arxiv.org/abs/2107.14351)
 
 [v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
