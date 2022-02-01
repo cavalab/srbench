@@ -9,7 +9,7 @@ permalink: /competition-2022/
 
 # Call for Participation: Interpretable Symbolic Regression for Data Science
 
-SRBench will host its first competition at [GECCO 2022](https://gecco-2022.sigevo.org/) conference in Boston,MA. 
+SRBench will host its first competition at [GECCO 2022](https://gecco-2022.sigevo.org/) conference in Boston, MA. 
 Symbolic regression methods have made tremendous advances in the past decade, and have recently gained interest as the broader scientific community has recognized the importance of interpretable machine learning. 
 Despite this, there is little agreement in the field about which algorithms are “state-of-the-art”, and how to best design symbolic regression methods for use in the real world. 
 This competition seeks to distill algorithmic design choices and improve the practice of symbolic regression by evaluating the submitted symbolic regression methods on previously unseen, real-world and synthetic datasets. 
@@ -73,7 +73,6 @@ For any assistance, [open an issue in the srbench repository](http://github.com/
 
 ## Dissemination
 
-Because of our desire to propel symbolic regression science forward, all submissions are required to be open-source. 
 Participants retain copyright of their entries. 
 The results of the competition, including comparison code and full results, will be made available through SRBench.
 A summary of the competition will be published, and participants will be invited to co-author. 
