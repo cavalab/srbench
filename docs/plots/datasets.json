@@ -31,7 +31,7 @@
   "data": [
     {
       "name": "source",
-      "url": "/srbench/csv/datasets_info.csv",
+      "url": "/srbench/docs/csv/datasets_info.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {
