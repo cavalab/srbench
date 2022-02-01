@@ -72,7 +72,7 @@
   "data": [
     {
       "name": "all",
-      "url": "/srbench/csv/groundtruth.csv",
+      "url": "https://raw.githubusercontent.com/cavalab/srbench/master/docs/csv/groundtruth.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {

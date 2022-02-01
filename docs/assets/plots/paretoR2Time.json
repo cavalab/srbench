@@ -3,7 +3,7 @@
   "description": "A basic error bar visualization example.",
   "width": 600,
   "height": 400,
-  "data": {"url": "/srbench/csv/pareto.csv"},
+  "data": {"url": "https://raw.githubusercontent.com/cavalab/srbench/master/docs/csv/pareto.csv"},
   "layer": [
     {
       "encoding": {

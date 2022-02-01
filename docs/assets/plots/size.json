@@ -78,7 +78,7 @@
   "data": [
     {
       "name": "barley",
-      "url": "/srbench/csv/blackbox_results.csv",
+      "url": "https://raw.githubusercontent.com/cavalab/srbench/master/docs/csv/blackbox_results.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {
