@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Current Results
+permalink: /results/
 ---
 
 * This will become a table of contents (this text will be scrapped).

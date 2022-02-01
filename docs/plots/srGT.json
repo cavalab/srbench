@@ -72,7 +72,7 @@
   "data": [
     {
       "name": "all",
-      "url": "/csv/groundtruth.csv",
+      "url": "/srbench/csv/groundtruth.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {

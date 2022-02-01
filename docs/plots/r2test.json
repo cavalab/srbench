@@ -107,7 +107,7 @@
   "data": [
     {
       "name": "all",
-      "url": "/csv/blackbox_results.csv",
+      "url": "/srbench/csv/blackbox_results.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {
