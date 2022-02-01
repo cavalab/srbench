@@ -15,7 +15,7 @@ Despite this, there is little agreement in the field about which algorithms are 
 This competition seeks to distill algorithmic design choices and improve the practice of symbolic regression by evaluating the submitted symbolic regression methods on previously unseen, real-world and synthetic datasets. 
 These datasets will be sourced mainly from the domains of physics, epidemiology and bioinformatics.
 
-Participants are asked to adapt and submit their symbolic regression algorithms to [SRBench](https://github.com/cavalab/srbench), following the [contributing guidelines](https://github.com/cavalab/srbench/blob/master/CONTRIBUTING.md). 
+Participants are asked to adapt and submit their symbolic regression algorithms to [SRBench](https://github.com/cavalab/srbench), following the [contributing guidelines](/contributing). 
 SRBench will automatically test these methods for conformance with the competition.
 
 After the submission deadline, methods will be tested on previously unseen datasets. 
