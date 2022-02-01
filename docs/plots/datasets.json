@@ -31,7 +31,7 @@
   "data": [
     {
       "name": "source",
-      "url": "/srbench/docs/csv/datasets_info.csv",
+      "url": "https://raw.githubusercontent.com/cavalab/srbench/master/docs/csv/datasets_info.csv",
       "format": {"type": "csv", "parse": "auto"}
     },
     {

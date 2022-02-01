@@ -16,15 +16,15 @@ permalink: /results/
 <script type="text/javascript">
     var view;
 
-    fetch('./plots/r2test.json')
+    fetch('/plots/r2test.json')
       .then(res => res.json())
       .then(spec => render(spec, "#r2test"))
       .catch(err => console.error(err));
-    fetch('./plots/size.json')
+    fetch('/plots/size.json')
       .then(res => res.json())
       .then(spec => render(spec, "#size"))
       .catch(err => console.error(err));
-    fetch('./plots/time.json')
+    fetch('/plots/time.json')
       .then(res => res.json())
       .then(spec => render(spec, "#time"))
       .catch(err => console.error(err));
