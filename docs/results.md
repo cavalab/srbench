@@ -16,25 +16,25 @@ permalink: /results/
 <script type="text/javascript">
     var view;
 
-    fetch('/plots/r2test.json')
+    fetch('../assets/plots/r2test.json')
       .then(res => res.json())
       .then(spec => render(spec, "#r2test"))
       .catch(err => console.error(err));
-    fetch('/plots/size.json')
+    fetch('../assets/plots/size.json')
       .then(res => res.json())
       .then(spec => render(spec, "#size"))
       .catch(err => console.error(err));
-    fetch('/plots/time.json')
+    fetch('../assets/plots/time.json')
       .then(res => res.json())
       .then(spec => render(spec, "#time"))
       .catch(err => console.error(err));
-  vegaEmbed('#paretoR2Size', "./plots/paretoR2Size.json").then(function(result) {
+  vegaEmbed('#paretoR2Size', "../assets/plots/paretoR2Size.json").then(function(result) {
     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
   }).catch(console.error);
-  vegaEmbed('#paretoR2Time', "./plots/paretoR2Time.json").then(function(result) {
+  vegaEmbed('#paretoR2Time', "../assets/plots/paretoR2Time.json").then(function(result) {
     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
   }).catch(console.error);
-  vegaEmbed('#paretoTimeSize', "./plots/paretoTimeSize.json").then(function(result) {
+  vegaEmbed('#paretoTimeSize', ".../assets/plots/paretoTimeSize.json").then(function(result) {
     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
   }).catch(console.error);
 
@@ -98,11 +98,11 @@ Methods lower and to the left produce models with better trade-offs between accu
 <script type="text/javascript">
     var view;
 
-    fetch('plots/srGT.json')
+    fetch('../assets/plots/srGT.json')
       .then(res => res.json())
       .then(spec => render(spec, "#srGT"))
       .catch(err => console.error(err));
-    fetch('plots/accGT.json')
+    fetch('../assets/plots/accGT.json')
       .then(res => res.json())
       .then(spec => render(spec, "#accGT"))
       .catch(err => console.error(err));

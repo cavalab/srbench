@@ -1,10 +1,7 @@
 ---
 layout: page
-title: Contributing
+title: Contribution Guide
 ---
-
-Contribution Guide
-==================
 
 To contribute a symbolic regression method for benchmarking, fork the repo, make the changes listed below, and submit a pull request. 
 Once your method passes the basic tests and we've reviewed it, congrats! 
