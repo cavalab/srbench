@@ -13,7 +13,7 @@ permalink: /datasets/
 <script type="text/javascript">
     var view;
 
-    fetch('assets/plots/datasets.json')
+    fetch('../assets/plots/datasets.json')
       .then(res => res.json())
       .then(spec => render(spec, "#view"))
       .catch(err => console.error(err));
