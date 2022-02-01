@@ -1,0 +1,32 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A basic error bar visualization example.",
+  "width": 600,
+  "height": 400,
+  "data": {"url": "/csv/pareto.csv"},
+  "layer": [
+    {
+      "encoding": {
+        "x": {"field": "training time (s)", "type": "quantitative", "scale":{"type": "symlog"}},
+        "y": {"field": "model_size", "type": "quantitative", "scale":{"type": "symlog"}},
+        "color": {"field": "g3", "type": "nominal"},
+        "text": {"field" : "algorithm", "type": "nominal"}
+      },
+      "layer": [
+        {"mark": {"type": "line", "interpolate": "monotone"}},       
+        {"mark":"point", "encoding": {"opacity":{"value":1}, "size": {"value": 80}, "tooltip": {"field": "algorithm"}}},
+        {
+      "mark": {
+        "type": "text",
+        "dx": 4,
+        "dy": 4,
+        "angle":0,
+        "align":"left",
+        "fontSize": 7
+      },
+      "encoding": {"text": {"field": "algorithm"}}
+    }
+      ]
+    }
+  ]
+}
