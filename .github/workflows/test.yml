@@ -49,14 +49,6 @@ jobs:
           conda list
           conda activate srbench
 
-      # This is useful for up-to-date CI, but
-      # not necessary.
-      - name: "Update julia package server"
-        shell: bash
-        env:
-            JULIA_PKG_SERVER: ""
-        run: julia -e 'using Pkg; Pkg.Registry.add("General")'
-
       - name: Install SR methods
         run: |
             conda info
