@@ -10,11 +10,11 @@ img {
 }
 </style>
 
-<a href="http://www.chip.org" ><img style="float:center;" src="/assets/chip-logo_0.png"></a>
-<a href="http://www.chip.org" ><img style="float:center; height:60px;" src="/assets/bch-hvd.png"></a>
+<a href="http://www.chip.org" ><img style="float:center;" src="/docs/assets/chip-logo_0.png"></a>
+<a href="http://www.chip.org" ><img style="float:center; height:60px;" src="/docs/assets/bch-hvd.png"></a>
 <br>
-<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;" src="/assets/20211004_HEAL-Logo_v7.png"></a>
-<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;height:60px;" src="/assets/uasau.png"></a>
+<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;" src="/docs/assets/20211004_HEAL-Logo_v7.png"></a>
+<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;height:60px;" src="/docs/assets/uasau.png"></a>
 
 * This will become a table of contents (this text will be scrapped).
 {:toc}
