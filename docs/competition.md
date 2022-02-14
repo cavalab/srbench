@@ -3,11 +3,24 @@ layout: page
 title: Competition 2022
 permalink: /competition-2022/
 ---
+<style>
+img {
+    height: 100px;
+    margin: 5px;
+}
+</style>
+
+<a href="http://www.chip.org" ><img style="float:center;" src="/assets/chip-logo_0.png"></a>
+<a href="http://www.chip.org" ><img style="float:center; height:60px;" src="/assets/bch-hvd.png"></a>
+<br>
+<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;" src="/assets/20211004_HEAL-Logo_v7.png"></a>
+<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;height:60px;" src="/assets/uasau.png"></a>
 
 * This will become a table of contents (this text will be scrapped).
 {:toc}
 
 # Call for Participation: Interpretable Symbolic Regression for Data Science
+
 
 SRBench will host its first competition at [GECCO 2022](https://gecco-2022.sigevo.org/) conference in Boston, MA. 
 Symbolic regression methods have made tremendous advances in the past decade, and have recently gained interest as the broader scientific community has recognized the importance of interpretable machine learning. 
@@ -48,15 +61,22 @@ Exact ranking criteria will be released soon.
 
 ## Prizes
 
-Cash prizes will be awarded to the winners. 
-Exact amounts TBD. 
+A total of $2500 in cash prizes will be awarded to top 3 winners.
+
+This competition is sponsored by:
+
+- [Computational Health Informatics Program at Boston Children's Hospital / Harvard Medical School](http://www.chip.org)
+- [Heuristic and Evolutionary Algorithm Laboratory at the University of Applied Sciences Upper Austria](https://pure.fh-ooe.at/en/projects/heuristiclab)
+
 In addition, winners will be invited to speak at the [Symbolic Regression Workshop](https://gecco-2022.sigevo.org/Workshops#SymReg) during the conference. 
+Additional publication opportunities will be released as they become available.
 
 ## Who can Participate
 
 Anyone! 
-Unlike srbench, **we accept open-source _and_ closed-source entries to this competition**. 
-Methods must have a sklearn-like interface, as described below.
+Unlike srbench which is completely open-source, **we will accept open-source _and_ closed-source entries to this competition**. 
+The general requirement is that methods have a sklearn-like interface, as described below.
+In addition, closed-source methods cannot rely on external API calls: they must be completely self-contained. 
 
 ## How to Participate
 
