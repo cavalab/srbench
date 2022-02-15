@@ -41,9 +41,11 @@ Winners will be determined based on the accuracy and simplicity of the generated
 After competition, the submitted methods, evaluation procedure, and new datasets will be made publicly available.
 
 
-## Deadline
+## Important Dates
 
 Entrants should have their methods submitted by **May 1, 2022**. 
+Submissions will be accepting starting February 18, 2022.
+The winners will be announced at GECCO, July 9-13 in Boston, MA, and online.
 
 ## Previous History
 
@@ -58,38 +60,48 @@ We will leverage this aspect of SRBench to gather submissions for the competitio
 ## Judging
 
 Exact ranking criteria will be released soon. 
+Roughly, judging will be done in three stages:
+
+**Stage 1**: Submitted methods will be benchmarked on datasets from [PMLB](http://github.com/EpistasisLab/pmlb) as a filter for the subsequent stages. 
+Methods will be required to perform at least as well as penalized linear regression across this benchmark in terms of test set R2. 
+
+**Stage 2: Synthetic**: Stage 2 will consist of comparisons on synthetic benchmarks. Metrics for evaluation will include *model complexity* (TBD), *accuracy* (R2), and *solution rates* (fraction of problem instances for which a method generates an exact solution). 
+
+**Stage 3: Real-world**: Methods will be compared on a real-world prediction task and reviewed by domain experts. 
+
 
 ## Prizes
 
-A total of $2500 in cash prizes will be awarded to top 3 winners.
+1. A total of **$2500 in cash prizes** will be awarded to winning entries of stage 2 and stage 3 (exact amounts/division TBD).
+2. Winners will be invited to speak at the [Symbolic Regression Workshop](https://gecco-2022.sigevo.org/Workshops#SymReg) during the conference. 
+3. Additional publication opportunities will be released as they become available.
 
 This competition is sponsored by:
 
 - [Computational Health Informatics Program at Boston Children's Hospital / Harvard Medical School](http://www.chip.org)
 - [Heuristic and Evolutionary Algorithm Laboratory at the University of Applied Sciences Upper Austria](https://pure.fh-ooe.at/en/projects/heuristiclab)
 
-In addition, winners will be invited to speak at the [Symbolic Regression Workshop](https://gecco-2022.sigevo.org/Workshops#SymReg) during the conference. 
-Additional publication opportunities will be released as they become available.
 
 ## Who can Participate
 
 Anyone! 
-Unlike srbench which is completely open-source, **we will accept open-source _and_ closed-source entries to this competition**. 
-The general requirement is that methods have a sklearn-like interface, as described below.
-In addition, closed-source methods cannot rely on external API calls: they must be completely self-contained. 
+Whereas SRBench is completely open-source, **we will accept open-source _and_ closed-source entries to this competition**. 
+Note that methods cannot rely on external API calls: they must be completely self-contained. 
 
 ## How to Participate
 
 We plan to release a tutorial video demonstrating how to enter the competition; stay tuned. 
 We will provide a updates to the contributing guide as details solidify.
-We will invite submissions to provide 2-page papers, and we have arranged with the Symbolic Regression workshop organizers to invite winners to present at GECCO 2022 as invited speakers.
 
-If you have a CLI method, [see this gist for making it compatible with the competition format (sklearn Regressors).](https://gist.github.com/folivetti/609bc9b854c51968ef90aa675ccaa60d)
 
-In short, the participants must provide via Pull Request (see [Contributing](contributing)), a modification of the environment file to ensure the installation of any required library, an installation script for their open-source method (see examples in repository), a python script setting the variables est, and hyper_params, and the functions complexity, and model. 
-_This script must be named MethodRegressorCompetition2022.py (e.g., GSGPRegressorCompetition2022.py)_. 
-After submitting, Github will automatically validate the submission and return an error message in case of any problem. 
+Participants must provide files for their method via a Pull Request to the Competition2022 branch on SRBench.  
+The contribution guidelines will closely follow the guidelines for contributing a method to SRBench: see [Contributing](contributing).
+In short, submissions consist of a sklearn-like SR Method, a modification of the environment file to ensure the installation of any required library, an installation script for their method (see examples in repository), and a python script setting variables . 
+After submitting, a CI process will automatically test the submission and return an error message in case of any problem. 
 For any assistance, [open an issue in the srbench repository](http://github.com/cavalab/srbench/issues).
+Methods must pass CI and code review before the competition submission deadline to be considered.
+
+*Note*: If you have a CLI method, [see this gist for making it compatible with the competition format (sklearn Regressors).](https://gist.github.com/folivetti/609bc9b854c51968ef90aa675ccaa60d)
 
 ## Dissemination
 
@@ -97,7 +109,7 @@ Participants retain copyright of their entries.
 The results of the competition, including comparison code and full results, will be made available through SRBench.
 A summary of the competition will be published, and participants will be invited to co-author. 
 
-## Contact
+## Organizers
 
 Please address questions to william dot lacava at childrens dot harvard dot edu. 
 
