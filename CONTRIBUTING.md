@@ -7,9 +7,9 @@ Below we specify minimal requirements for contributing a method to this benchmar
 General Rules
 =============
 
-1. In general you should submit pull requests to the dev branch. 
+1. In general you should submit [pull requests](https://github.com/cavalab/srbench/compare) to the [dev branch](https://github.com/cavalab/srbench/tree/dev). 
 2. Be kind and be patient, we're all on the same team. 
-3. Make the PR detailed and reference specific issues, if the PR is responding to one. 
+3. Make the PR detailed and reference [specific issues](https://github.com/cavalab/srbench/issues) if the PR is meant to address any. 
 
 How to contribute an SR method
 ==============================
