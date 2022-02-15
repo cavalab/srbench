@@ -23,6 +23,7 @@ jobs:
           git config --global user.email 'action@github.com'
           git fetch                         # fetch branches
           git checkout $TARGET_BRANCH       # checkout to your branch
+          git pull origin $TARGET_BRANCH
           git checkout ${GITHUB_REF##*/} -- $SRC_FILE # copy files from the source branch
           mkdir -p $TARGET_DIR
           mv $SRC_FILE $TARGET_DIR
