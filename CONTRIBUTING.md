@@ -4,12 +4,12 @@ Contribution Guide
 We are happy to accept contributions of methods, as well as updates to the benchmarking framework. 
 Below we specify minimal requirements for contributing a method to this benchmark.
 
-General Rules
+Ground Rules
 =============
 
 1. In general you should submit [pull requests](https://github.com/cavalab/srbench/compare) to the [dev branch](https://github.com/cavalab/srbench/tree/dev). 
-2. Be kind and be patient, we're all on the same team. 
-3. Make the PR detailed and reference [specific issues](https://github.com/cavalab/srbench/issues) if the PR is meant to address any. 
+2. Make the PR detailed and reference [specific issues](https://github.com/cavalab/srbench/issues) if the PR is meant to address any. 
+3. Please be kind and please be patient; we will be, too.  
 
 How to contribute an SR method
 ==============================
