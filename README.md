@@ -1,7 +1,9 @@
-:tada: **Special Announcement: 2022 SRBench Competition** :tada:
+| **Special Announcement: 2022 SRBench Competition** |
+|:--------------------------------------------------:|
 
 We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](https://cavalab.org/srbench/competition-2022) which will be hosted at GECCO 2020 in Boston, MA (and online).
 Deadline for entry is May 1, 2022; see the [competition page](https://cavalab.org/srbench/competition-2022) for more information and stay tuned as details are announced.
+
 
 ---
 
