@@ -5,7 +5,7 @@ title: Symbolic Regression Benchmarks
 {% capture notice-2 %}
 # Special Announcement: 2022 SRBench Competition 
 
-We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](/competition-2022) which will be hosted at GECCO 2020 in Boston, MA (and online). 
+We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](/competition-2022/) which will be hosted at GECCO 2020 in Boston, MA (and online). 
 Deadline for entry is May 1, 2022; see the competition page for more information and stay tuned as details are announced. 
 {% endcapture %}
 
