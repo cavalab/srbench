@@ -56,7 +56,7 @@ footer:
       icon: "fab fa-fw fa-github"
       url: "https://github.com/cavalab/srbench"
     - label: "Cavalab"
-      icon: "fa-solid fa-ruler-combined"
+      icon: "fab fa-fw fa-solid fa-ruler-combined"
       url: "https://cavalab.org"
 
 author:
