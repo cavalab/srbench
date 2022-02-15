@@ -1,0 +1,29 @@
+name: Copy docs to gh-pages
+
+on: 
+  push:
+    branches: [ master ]
+    paths:
+      - CONTRIBUTING.md
+
+jobs:
+  copy:
+    name: Copy contributing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: copy
+        env:
+          SRC_FILE: 'CONTRIBUTING.md'
+          TARGET_FILE: '_includes/CONTRIBUTING.md'
+          TARGET_BRANCH: 'gh-pages'
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git fetch                         # fetch branches
+          git checkout $TARGET_BRANCH       # checkout to your branch
+          git checkout ${GITHUB_REF##*/} -- $SRC_FILE # copy files from the source branch
+          mv $SRC_FILE $TARGET_FILE
+          git add $TARGET_FILE
+          git diff-index --quiet HEAD ||  git commit -am "deploy updates to CONTRIBUTING.md"  # commit to the repository (ignore if no modification)
+          git push origin $TARGET_BRANCH # push to remote branch
