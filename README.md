@@ -1,7 +1,8 @@
-:tada: **Special Announcement: 2022 SRBench Competition** :tada:
-
-We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](https://cavalab.org/srbench/competition-2022) which will be hosted at GECCO 2020 in Boston, MA (and online).
-Deadline for entry is May 1, 2022; see the [competition page](https://cavalab.org/srbench/competition-2022) for more information and stay tuned as details are announced.
+<div class="notice">
+  <h1>Special Announcement: 2022 SRBench Competition</h1>
+  <p>We are pleased to announce the first <a href="https://cavalab.org/srbench/competition-2022">SRBench Competition: Interpretable Symbolic Regression for Data Science</a> which will be hosted at GECCO 2020 in Boston, MA (and online).
+Deadline for entry is May 1, 2022; see the <a href="https://cavalab.org/srbench/competition-2022">competition page</a> for more information and stay tuned as details are announced.</p>
+</div>
 
 ---
 
@@ -20,9 +21,7 @@ We are addressing the lack of pollination by making these comparisons open sourc
 We are trying to address the lack of strong benchmarks by providing open source benchmarking of many SR methods on large sets of problems, with strong baselines for comparison. 
 To handle the lack of a unified framework, we've specified minimal requirements for contributing a method to this benchmark: a scikit-learn compatible API.
 
-# Results
-
-[Browse the Current Results](postprocessing/)
+# Benchmarked Methods
 
 This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
 
