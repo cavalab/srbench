@@ -3,9 +3,9 @@ name: Copy docs to gh-pages
 on: 
   push:
     branches: [ master ]
-    # paths:
-    #   - CONTRIBUTING.md
-    #   - README.md
+    paths:
+      - CONTRIBUTING.md
+      - README.md
 
 jobs:
   copy:
