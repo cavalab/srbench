@@ -1,11 +1,7 @@
 ---
-layout: page
 title: Current Results
 permalink: /results/
 ---
-
-* This will become a table of contents (this text will be scrapped).
-{:toc}
 
 <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -53,7 +49,7 @@ permalink: /results/
 
 Results are summarized over datasets. 
 
-# Results for Black-box Regression
+## Results for Black-box Regression
 
 Select whether to analyze the results for every data set, Non-Friedman datasets, or Friedman datasets. You can also choose the aggregation function and the error measure.
 
@@ -75,7 +71,7 @@ Select whether to analyze the results for every data set, Non-Friedman datasets,
 
 <br><br>
 
-## Accuracy-Complexity-Time Trade-offs
+### Accuracy-Complexity-Time Trade-offs
 
 Considering the accuracy and simplicity of models simultaneously, this figure illustrates the trade-offs made by each method. 
 Methods lower and to the left produce models with better trade-offs between accuracy and simplicity. 
@@ -117,15 +113,15 @@ Methods lower and to the left produce models with better trade-offs between accu
     }
   </script>
 
-# Results for Ground-truth Problems
+## Results for Ground-truth Problems
 
-## Symbolically-verfied Solutions
+### Symbolically-verfied Solutions
 
 How often a method finds a model symbolically equivalent to the ground-truth process
 
 <div id="srGT"></div>
 
-## Accuracy Solutions
+### Accuracy Solutions
 
 How often a method finds a model with test set R^2>0.999
 

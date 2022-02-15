@@ -1,0 +1,10 @@
+# main links
+main:
+  - title: "Competition 2022"
+    url: /competition-2022/
+  - title: "Contributing"
+    url: /contributing/
+  - title: "Current Results"
+    url: /results/
+  - title: "Current Datasets"
+    url: /datasets/

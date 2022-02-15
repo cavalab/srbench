@@ -1,7 +1,7 @@
 ---
-layout: page
 title: Contribution Guide
 permalink: contributing
+toc: true
 ---
 
 To contribute a symbolic regression method for benchmarking, fork the repo, make the changes listed below, and submit a pull request. 
@@ -21,17 +21,7 @@ We will plan to benchmark your method on hundreds of regression problems.
     -   `hyper_params` : a dictionary or list of dictionaries specifying the hyperparameter search space
     -   `complexity(est)`: a function that returns the complexity of the final model produced (see below)
     -   `model(est)`: a function that returns a [**sympy-compatible**](www.sympy.org) string specifying the final model.
-  See [experiment/methods/AFPRegressor.py](experiment/methods/AFPRegressor.py) for an example.
-
-### Defining Complexity
-Contributors are responsible for defining this complexity within their provided method. 
-To compare across methods with different representations, we use this common definition of complexity. 
-Complexity is defined as the total number of elements in the model, which in Koza-style GP would be the number of _nodes_ in the solution program tree. 
-For example, the complexity of `(x + sin(3*y))` would be `len([+, x, sin, *, 3, y]) = 6`. 
-In other words, **every instance of basic math operators `(+, -, *, /, sin, cos, exp, log, %)`, constants, and input features should count toward the complexity**. 
-So, if your method uses very complex operations, for example, an operator that is defined as `Op(x,y) = (x+sin(3*y))`, you need to decompose such operators into their component parts when accounting for this complexity. 
-Note that the relative complexity of these basic math operators is not captured by this measure.
-If you are unsure about this definition, please open a discussion ticket.
+  See [experiment/methods/](https://github.com/cavalab/srbench/tree/master/experiment/methods) for an example.
 
 ### Returning a sympy compatible model string
 In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](www.sympy.org). 

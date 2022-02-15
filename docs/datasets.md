@@ -1,7 +1,7 @@
 ---
-layout: page
 title: Datasets
 permalink: /datasets/
+toc: false
 ---
 
 <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -28,8 +28,6 @@ permalink: /datasets/
       return view.runAsync();
     }
   </script>
-
-# Datasets
 
 <div id="view"></div>
 (click on legend name to select the points, shift+click to select both groups.)

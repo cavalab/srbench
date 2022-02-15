@@ -1,7 +1,8 @@
 ---
-layout: page
 title: Competition 2022
 permalink: /competition-2022/
+toc: true
+layout: single
 ---
 <style>
 img {
@@ -16,8 +17,7 @@ img {
 <a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;" src="../assets/20211004_HEAL-Logo_v7.png"></a>
 <a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;height:60px;" src="../assets/uasau.png"></a>
 
-* This will become a table of contents (this text will be scrapped).
-{:toc}
+{% include toc %}
 
 # Call for Participation: Interpretable Symbolic Regression for Data Science
 
@@ -44,6 +44,8 @@ After competition, the submitted methods, evaluation procedure, and new datasets
 ## Important Dates
 
 Entrants should have their methods submitted by **May 1, 2022**. 
+{: notice}
+
 Submissions will be accepting starting February 18, 2022.
 The winners will be announced at GECCO, July 9-13 in Boston, MA, and online.
 
@@ -90,18 +92,19 @@ Note that methods cannot rely on external API calls: they must be completely sel
 
 ## How to Participate
 
-We plan to release a tutorial video demonstrating how to enter the competition; stay tuned. 
+We plan to release a tutorial video demonstrating how to enter the competition; stay tuned.
 We will provide a updates to the contributing guide as details solidify.
 
 
-Participants must provide files for their method via a Pull Request to the Competition2022 branch on SRBench.  
-The contribution guidelines will closely follow the guidelines for contributing a method to SRBench: see [Contributing](contributing).
+Participants must provide files for their method via a Pull Request to the Competition2022 branch on SRBench. 
+The contribution guidelines will closely follow the [guidelines for contributing a method to SRBench.](contributing)
 In short, submissions consist of a sklearn-like SR Method, a modification of the environment file to ensure the installation of any required library, an installation script for their method (see examples in repository), and a python script setting variables . 
 After submitting, a CI process will automatically test the submission and return an error message in case of any problem. 
 For any assistance, [open an issue in the srbench repository](http://github.com/cavalab/srbench/issues).
 Methods must pass CI and code review before the competition submission deadline to be considered.
 
-*Note*: If you have a CLI method, [see this gist for making it compatible with the competition format (sklearn Regressors).](https://gist.github.com/folivetti/609bc9b854c51968ef90aa675ccaa60d)
+If you have a CLI method, [see this gist](https://gist.github.com/folivetti/609bc9b854c51968ef90aa675ccaa60d) for making it compatible with the competition format (sklearn Regressors).
+{: .notice}
 
 ## Dissemination
 

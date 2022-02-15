@@ -1,18 +1,15 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
-layout: home
 title: Symbolic Regression Benchmarks
 ---
 
-* This will become a table of contents (this text will be scrapped).
-{:toc}
+{% capture notice-2 %}
+# Special Announcement: 2022 SRBench Competition 
 
-## Special Announcement: 2022 SRBench Competition 
-
-We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](https://cavalab.org/srbench/competition-2022) which will be hosted at GECCO 2020 in Boston, MA (and online). 
+We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](/competition-2022) which will be hosted at GECCO 2020 in Boston, MA (and online). 
 Deadline for entry is May 1, 2022; see the competition page for more information and stay tuned as details are announced. 
+{% endcapture %}
+
+<div class="notice--info">{{ notice-2 | markdownify }}</div>
 
 ---
 
@@ -28,6 +25,25 @@ Currently these are the challenges, as we see it:
 We are addressing the lack of pollination by making these comparisons open source, reproduceable and public, and hoping to share them widely with the entire ML research community.
 We are trying to address the lack of strong benchmarks by providing open source benchmarking of many SR methods on large sets of problems, with strong baselines for comparison. 
 To handle the lack of a unified framework, we've specified minimal requirements for contributing a method to this benchmark: a scikit-learn compatible API.
+
+# References
+
+[v2.0](https://github.com/EpistasisLab/srbench/releases/tag/v2.0) of the benchmark is described in a Neurips 2021 paper:
+
+La Cava, W., Orzechowski, P., Burlacu, B., França, F. O. de, Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
+Contemporary Symbolic Regression Methods and their Relative Performance. 
+*Neurips Track on Datasets and Benchmarks*.
+[PMLR](https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/c0c7c76d30bd3dcaefc96f40275bdc0a-Abstract-round1.html)
+, [arXiv](https://arxiv.org/abs/2107.14351)
+
+
+[v1.0](https://github.com/EpistasisLab/srbench/releases/tag/v1.0) was reported in a GECCO 2018 paper: 
+
+Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
+Where are we now? A large benchmark study of recent symbolic regression methods. 
+GECCO 2018. 
+[ACM](https://doi.org/10.1145/3205455.3205539)
+, [arXiv](http://arxiv.org/abs/1804.09331)
 
 
 # Benchmarked Methods
@@ -107,20 +123,20 @@ Steps:
 
 1. Install the conda environment:
 
-```
+```bash
 conda env create -f environment.yml
 conda activate srbench
 ```
 
 2. Install the benchmark methods:
 
-```
+```bash
 bash install.sh
 ```
 
 3. Checkout the feynman PMLB branch (once these new datasets are merged, you will be able to skip this step):
 
-```
+```bash
 git clone https://github.com/EpistasisLab/pmlb/tree/feynman [/path/to/pmlb/]
 cd /path/to/pmlb
 git lfs fetch
@@ -134,34 +150,16 @@ To see the full set of options, run `python analyze.py -h`.
 
 After installing and configuring the conda environment, the complete black-box experiment can be started via the command:
 
-```
+```bash
 python analyze.py /path/to/pmlb/datasets -n_trials 10 -results ../results -time_limit 48:00
 ```
 
 Similarly, the ground-truth regression experiment for strogatz datasets and a target noise of 0.0 are run by the command:
 
-```
+```bash
 python analyze.py -results ../results_sym_data -target_noise 0.0 "/path/to/pmlb/datasets/strogatz*" -sym_data -n_trials 10 -time_limit 9:00 -tuned
 ```
 
-# Cite
-
-A pre-print of the current version of the benchmark is available:
-
-- La Cava, W., Orzechowski, P., Burlacu, B., de França, F. O., Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
-Contemporary Symbolic Regression Methods and their Relative Performance. 
-Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks. 
-[Preprint](https://openreview.net/pdf?id=xVQMrDLyGst)
-
-[v1.0](https://github.com/EpistasisLab/srbench/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
-
-Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
-Where are we now? A large benchmark study of recent symbolic regression methods. 
-GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://www.researchgate.net/profile/Patryk_Orzechowski/publication/324769381_Where_are_we_now_A_large_benchmark_study_of_recent_symbolic_regression_methods/links/5ae779b70f7e9b837d392dc9/Where-are-we-now-A-large-benchmark-study-of-recent-symbolic-regression-methods.pdf)
-
 # Contact
 
-William La Cava (@lacava), lacava at upenn dot edu
-
-Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
-
+William La Cava ([@lacava](https://github.com/lacava)), william dot lacava at childrens dot harvard dot edu
