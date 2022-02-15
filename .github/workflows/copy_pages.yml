@@ -23,6 +23,7 @@ jobs:
           git fetch                         # fetch branches
           git checkout $TARGET_BRANCH       # checkout to your branch
           git checkout ${GITHUB_REF##*/} -- $SRC_FILE # copy files from the source branch
+          mkdir -p $TARGET_DIR
           mv $SRC_FILE $TARGET_DIR
           file_path="${TARGET_DIR}/${SRC_FILE}"
           git add $file_path
