@@ -1,6 +1,6 @@
 ---
 title: Contribution Guide
-permalink: contributing
+permalink: /contributing/
 toc: true
 ---
 

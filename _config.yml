@@ -48,16 +48,23 @@ defaults:
         nav: "main"
       layout: single
       toc: true
+      author_profile: true
 
 footer:
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/cavalab/srbench"
+    - label: "Cavalab"
+      icon: "fa-solid fa-ruler-combined"
+      url: "https://cavalab.org"
+
 author:
+  bio: "Maintained by [@cavalab](https://github.com/cavalab) and many open-source contributors"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/cavalab/srbench"
+
 atom_feed:
   hide: true

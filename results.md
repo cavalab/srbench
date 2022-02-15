@@ -1,5 +1,5 @@
 ---
-title: Current Results
+title: Results
 permalink: /results/
 ---
 
