@@ -61,7 +61,7 @@ jobs:
             conda info 
             # pip install pytest
             cd experiment
-            python -m pytest -v test_evaluate_model.py
+            ./test_evaluate_model.sh
             python -m pytest -v test_tuned_models.py
   
   docker_build: # Test if docker image builds

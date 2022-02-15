@@ -1,3 +1,10 @@
+## Special Announcement: 2022 SRBench Competition
+
+We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](https://cavalab.org/srbench/competition-2022) which will be hosted at GECCO 2020 in Boston, MA (and online).
+Deadline for entry is May 1, 2022; see the competition page for more information and stay tuned as details are announced.
+
+---
+
 # SRBench: A Living Benchmark for Symbolic Regression
 
 The methods for symbolic regression (SR) have come a long way since the days of Koza-style genetic programming (GP).
@@ -71,6 +78,8 @@ Methods currently benchmarked:
     [paper](https://dl.acm.org/doi/pdf/10.1145/3377929.3398099?casa_token=HJgFp342K0sAAAAA:3Xbelm-5YjcIgjMvqLcyoTYdB0wNR0S4bYcQBGUiwOuwqbFfV6YnE8YKGINija_V6wCi6dahvQ3Pxg)
     ,
     [code](https://github.com/heal-research/operon)
+- PySR (Cranmer 2020)
+    [code](https://github.com/MilesCranmer/PySR)
 - Semantic Backpropagation GP (Virgolin et al. 2019)
     [paper](https://dl.acm.org/doi/pdf/10.1145/3321707.3321758?casa_token=v43VobsGalkAAAAA:Vj8S9mHAv-H4tLm_GCL4DJdfW3e5SVUtD6J3gIQh0vrNzM3s6psjl-bwO2NMnxLN0thRJ561OZ0sQA)
     ,
@@ -88,7 +97,7 @@ A pre-print of the current version of the benchmark is available:
 
 La Cava, W., Orzechowski, P., Burlacu, B., de França, F. O., Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
 Contemporary Symbolic Regression Methods and their Relative Performance. 
-To appear in _Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks._
+_Neurips Track on Datasets and Benchmarks._
 [arXiv](https://arxiv.org/abs/2107.14351)
 
 [v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
