@@ -20,26 +20,9 @@ We are addressing the lack of pollination by making these comparisons open sourc
 We are trying to address the lack of strong benchmarks by providing open source benchmarking of many SR methods on large sets of problems, with strong baselines for comparison. 
 To handle the lack of a unified framework, we've specified minimal requirements for contributing a method to this benchmark: a scikit-learn compatible API.
 
-# References
+# Results
 
-[v2.0](https://github.com/EpistasisLab/srbench/releases/tag/v2.0) of the benchmark is described in a Neurips 2021 paper:
-
-La Cava, W., Orzechowski, P., Burlacu, B., França, F. O. de, Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
-Contemporary Symbolic Regression Methods and their Relative Performance. 
-*Neurips Track on Datasets and Benchmarks*.
-[PMLR](https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/c0c7c76d30bd3dcaefc96f40275bdc0a-Abstract-round1.html)
-, [arXiv](https://arxiv.org/abs/2107.14351)
-
-
-[v1.0](https://github.com/EpistasisLab/srbench/releases/tag/v1.0) was reported in a GECCO 2018 paper: 
-
-Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
-Where are we now? A large benchmark study of recent symbolic regression methods. 
-GECCO 2018. 
-[ACM](https://doi.org/10.1145/3205455.3205539)
-, [arXiv](http://arxiv.org/abs/1804.09331)
-
-# Benchmarked Methods
+[Browse the Current Results](postprocessing/)
 
 This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
 
@@ -106,11 +89,29 @@ Methods currently benchmarked:
 
 We are actively updating and expanding this benchmark. 
 Want to add your method? 
-See our [Contribution Guide.](https://github.com/EpistasisLab/srbench/blob/master/CONTRIBUTING.md)
+See our [Contribution Guide.](CONTRIBUTING.md)
+
+# Cite
+
+A pre-print of the current version of the benchmark is available:
+
+La Cava, W., Orzechowski, P., Burlacu, B., de França, F. O., Virgolin, M., Jin, Y., Kommenda, M., & Moore, J. H. (2021). 
+Contemporary Symbolic Regression Methods and their Relative Performance. 
+_Neurips Track on Datasets and Benchmarks._
+[arXiv](https://arxiv.org/abs/2107.14351)
+
+[v1.0](https://github.com/EpistasisLab/regression-benchmark/releases/tag/v1.0) was reported in our GECCO 2018 paper: 
+
+Orzechowski, P., La Cava, W., & Moore, J. H. (2018). 
+Where are we now? A large benchmark study of recent symbolic regression methods. 
+GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://www.researchgate.net/profile/Patryk_Orzechowski/publication/324769381_Where_are_we_now_A_large_benchmark_study_of_recent_symbolic_regression_methods/links/5ae779b70f7e9b837d392dc9/Where-are-we-now-A-large-benchmark-study-of-recent-symbolic-regression-methods.pdf)
+
 
 # Contact
 
-William La Cava ([@lacava](https://github.com/lacava)), william dot lacava at childrens dot harvard dot edu
+William La Cava (@lacava), william dot lacava at childrens dot harvard dot edu
+
+Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
 
 # Using SRBench
 
