@@ -9,7 +9,7 @@ Ground Rules
 
 1. In general you should submit [pull requests](https://github.com/cavalab/srbench/compare) to the [dev branch](https://github.com/cavalab/srbench/tree/dev). 
 2. Make the PR detailed and reference [specific issues](https://github.com/cavalab/srbench/issues) if the PR is meant to address any. 
-3. Please be kind and please be patient; we will be, too.  
+3. Please be kind and please be patient. We will be, too.  
 
 How to contribute an SR method
 ==============================
