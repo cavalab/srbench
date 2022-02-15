@@ -3,8 +3,8 @@ name: Copy docs to gh-pages
 on: 
   push:
     branches: [ master ]
-    paths:
-      - CONTRIBUTING.md
+    # paths:
+    #   - CONTRIBUTING.md
 
 jobs:
   copy:
@@ -15,7 +15,7 @@ jobs:
       - name: copy
         env:
           SRC_FILE: 'CONTRIBUTING.md'
-          TARGET_FILE: '_includes/CONTRIBUTING.md'
+          TARGET_DIR: '_includes/'
           TARGET_BRANCH: 'gh-pages'
         run: |
           git config --global user.name 'GitHub Action'
@@ -23,7 +23,8 @@ jobs:
           git fetch                         # fetch branches
           git checkout $TARGET_BRANCH       # checkout to your branch
           git checkout ${GITHUB_REF##*/} -- $SRC_FILE # copy files from the source branch
-          mv $SRC_FILE $TARGET_FILE
-          git add $TARGET_FILE
+          mv $SRC_FILE $TARGET_DIR
+          file_path="${TARGET_DIR}/${SRC_FILE}"
+          git add $file_path
           git diff-index --quiet HEAD ||  git commit -am "deploy updates to CONTRIBUTING.md"  # commit to the repository (ignore if no modification)
           git push origin $TARGET_BRANCH # push to remote branch
