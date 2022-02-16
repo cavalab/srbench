@@ -22,19 +22,19 @@ We will plan to benchmark your method on hundreds of regression problems.
 
 1. An open-source method with a [scikit-learn compatible API](https://scikit-learn.org/stable/developers/develop.html)
 2. If your method uses a random seed, it should have a `random_state` attribute that can be set.
-3. If your method is installable via pip or conda, add it to the [environment file](environment.yml). 
+3. If your method is installable via pip or conda, add it to the [environment file](https://github.com/cavalab/srbench/blob/master/environment.yml). 
   Otherwise, a bash install script in `experiment/methods/src/` named `your-method_install.sh` that installs your method. 
-  See [ellyn_install.sh](experiment/methods/src/ellyn_install.sh) as an example. 
-  Our [Github actions workflow](.github/workflows/test.yml) will automatically recognize it. 
+  See [ellyn_install.sh](https://github.com/cavalab/srbench/blob/master/experiment/methods/src/ellyn_install.sh) as an example. 
+  Our [Github actions workflow](https://github.com/cavalab/srbench/blob/master/.github/workflows/test.yml) will automatically recognize it. 
 4. A minimal script in `experiment/methods/` that defines these items:
     -   `est`: a sklearn-compatible `Regressor` object 
     -   `hyper_params` : a dictionary or list of dictionaries specifying the hyperparameter search space
-    -   `model(est)`: a function that returns a [**sympy-compatible**](www.sympy.org) string specifying the final model.
+    -   `model(est)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model.
     -   (optional): a dictionary named `eval_kwargs` that can specify method-specific arguments to [evaluate_model()](https://github.com/cavalab/srbench/blob/e3ba2c71dd08b1aaa76414a0af10411b98db59ee/experiment/evaluate_model.py#L24).
-  See [experiment/methods/AFPRegressor.py](experiment/methods/AFPRegressor.py) and/or other methods in that folder for examples.
+  See the [experiment/methods/AFPRegressor.py](https://github.com/cavalab/srbench/blob/master/experiment/methods/AFPRegressor.py) and/or other methods in that folder for examples.
 
 ### Returning a sympy compatible model string
-In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](www.sympy.org). 
+In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](https://www.sympy.org). 
 Assure the returned model meets these requirements:
 
 1. The variable names appearing in the model are identical to those in the training data.
