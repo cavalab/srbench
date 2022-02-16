@@ -43,10 +43,10 @@ jobs:
         with:
           context: .
           load: true
-          tags: ${{ env.USER }}/${{ env.APP }}:latest #TODO: change to "test"
-          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:latest
+          tags: ${{ env.USER }}/${{ env.APP }}:test #TODO: change to "test"
+          cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
-          cache-to: type=inline
+          cache-to: type=gha,mode=max
   docker_test:
     runs-on: ubuntu-latest
     container: lacava/srbench:latest
@@ -79,6 +79,6 @@ jobs:
           context: .
           push: true
           tags: ${{ env.USER }}/${{ env.APP }}:latest
-          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:latest
+          cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
-          cache-to: type=inline
+          cache-to: type=gha,mode=max
