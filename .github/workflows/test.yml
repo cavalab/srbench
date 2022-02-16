@@ -16,7 +16,9 @@ on:
       - dev 
 
 env:
-  TEST_TAG: user/myapp:test
+  USER: ${{ secrets.DOCKER_HUB_USERNAME }}
+  PASS: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+  APP: srbench
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -33,27 +35,27 @@ jobs:
         name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          username: ${{ env.USER }}
+          password: ${{ env.PASS }}
       -
         name: Build 
         uses: docker/build-push-action@v2
         with:
           context: .
           load: true
-          tags: ${{ env.TEST_TAG }}
-          cache-from: type=registry,ref=user/app:buildcache
-          cache-to: type=registry,ref=user/app:buildcache,mode=max
+          tags: ${{ env.USER }}/${{ env.APP }}:test
+          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache
+          cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
       -
         name: Test
         run: |
-          docker run --rm ${{ env.TEST_TAG }} "cd experiment; bash test_evaluate_model.sh; python -m pytest -v test_tuned_models.py"
+          docker run --rm ${{ env.USER }}/${{ env.APP }}:test "cd experiment; bash test_evaluate_model.sh; python -m pytest -v test_tuned_models.py"
       -
         name: Build 
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: user/app:latest
-          cache-from: type=registry,ref=user/app:buildcache
-          cache-to: type=registry,ref=user/app:buildcache,mode=max
+          tags: ${{ env.USER }}/${{ env.APP }}:latest
+          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache
+          cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
