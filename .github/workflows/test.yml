@@ -43,7 +43,7 @@ jobs:
         with:
           context: .
           load: true
-          tags: ${{ env.USER }}/${{ env.APP }}:test #TODO: change to "test"
+          tags: ${{ env.USER }}/${{ env.APP }}:test 
           cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
           cache-to: type=gha,mode=max

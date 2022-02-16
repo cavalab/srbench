@@ -49,6 +49,8 @@ SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 # Copy remaining files and install
 COPY  --chown=$MAMBA_USER:$MAMBA_USER . .
 # RUN source ~/.bashrc && source install.sh
-# CMD ["/bin/bash", "--login"]
 # RUN bash configure.sh
 RUN bash install.sh
+
+CMD ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
+# CMD ["/bin/bash", "--login"]
