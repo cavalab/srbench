@@ -37,20 +37,34 @@ jobs:
         with:
           username: ${{ env.USER }}
           password: ${{ env.PASS }}
-      # -
-      #   name: Build 
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     load: true
-      #     tags: ${{ env.USER }}/${{ env.APP }}:test
-      #     cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache
-      #     cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
-      # -
-      #   name: Test
-      #   run: |
-      #     docker run --rm ${{ env.USER }}/${{ env.APP }}:test "cd experiment; bash test_evaluate_model.sh; python -m pytest -v test_tuned_models.py"
       -
+        name: Build 
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          load: true
+          tags: ${{ env.USER }}/${{ env.APP }}:latest #TODO: change to "test"
+          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache
+          cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
+  docker_test:
+    runs-on: ubuntu-latest
+    container: ${{ env.USER }}/${{ env.APP }}:latest
+    needs: docker_build
+    steps:
+      -
+        name: Evaluate Model
+        run: |
+          cd experiment
+          bash test_evaluate_model.sh
+      -
+        name: Evaluate Tuned Model
+        run: |
+          cd experiment
+          python -m pytest -v test_tuned_models.py
+  docker_push:
+    runs-on: ubuntu-latest
+    needs: docker_build
+    steps:
         name: Build 
         uses: docker/build-push-action@v2
         with:
