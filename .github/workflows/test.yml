@@ -55,17 +55,21 @@ jobs:
       -
         name: Conda
         run: | 
-          cd experiment
+          ls 
           eval "$(conda shell.bash hook)"
           conda init bash
           conda activate srbench
       -
         name: Evaluate Model
         run: |
+          ls
+          cd experiment
           bash test_evaluate_model.sh
       -
         name: Evaluate Tuned Model
         run: |
+          ls
+          cd experiment
           python -m pytest -v test_tuned_models.py
   docker_push:
     runs-on: ubuntu-latest
