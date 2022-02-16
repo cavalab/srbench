@@ -15,62 +15,44 @@ on:
       - master 
       - dev 
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+env:
+  TEST_TAG: user/myapp:test
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      # Caches the conda environment
-      # - name: Cache conda
-      #   uses: actions/cache@v1
-      #   env:
-      #     # Increase this value to reset cache if environment.yml has not changed
-      #     CACHE_NUMBER: 0
-      #   with:
-      #     path: ~/conda_pkgs_dir
-      #     key:
-      #       ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
-      #       hashFiles('etc/example-environment.yml') }}
-      # Sets up the conda environment
-      - name: Set up Conda Environment 
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          activate-environment: srbench
-          environment-file: environment.yml
-          auto-activate-base: false
-      - run: |
-          conda info
-          conda list
-          conda activate srbench
-
-      - name: Install SR methods
-        run: |
-            conda info
-            bash install.sh
-
-      - name: Test analysis 
-        run: |
-            conda info 
-            cd experiment
-            bash ./test_evaluate_model.sh
-            python -m pytest -v test_tuned_models.py
-  
   docker_build: # Test if docker image builds
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Build docker
-        run: docker build -t srbench .
-# Can optionally do tests here as well, but for now we
-# just test whether building works.
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build 
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          load: true
+          tags: ${{ env.TEST_TAG }}
+          cache-from: type=registry,ref=user/app:buildcache
+          cache-to: type=registry,ref=user/app:buildcache,mode=max
+      -
+        name: Test
+          docker run --rm ${{ env.TEST_TAG }} "cd experiment; bash test_evaluate_model.sh; python -m pytest -v test_tuned_models.py"
+      -
+        name: Build 
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: user/app:latest
+          cache-from: type=registry,ref=user/app:buildcache
+          cache-to: type=registry,ref=user/app:buildcache,mode=max
