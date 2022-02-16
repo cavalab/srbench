@@ -1,21 +1,21 @@
-name: Copy CONTRIBUTING to gh-pages
+name: Copy README to gh-pages
 
 on: 
   push:
     branches: [ master ]
     paths:
-      - CONTRIBUTING.md
+      - README.md
 
 jobs:
   copy:
-    name: Copy contributing
+    name: Copy readme
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: contributing
+      - name: readme
         env:
-          SRC_FILE: 'CONTRIBUTING.md'
+          SRC_FILE: 'README.md'
           TARGET_DIR: '_includes/'
           TARGET_BRANCH: 'gh-pages'
         run: |
-          source ci/copy_page.sh 
+          source ci/copy_page.sh
