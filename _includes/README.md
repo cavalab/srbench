@@ -88,9 +88,9 @@ Methods currently benchmarked:
 
 We are actively updating and expanding this benchmark. 
 Want to add your method? 
-See our [Contribution Guide.](CONTRIBUTING.md)
+See our [Contribution Guide.](https://cavalab.org/srbench/contributing/)
 
-# Cite
+# References
 
 A pre-print of the current version of the benchmark is available:
 
@@ -109,8 +109,6 @@ GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://w
 # Contact
 
 William La Cava (@lacava), william dot lacava at childrens dot harvard dot edu
-
-Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
 
 # Using SRBench
 
