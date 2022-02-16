@@ -6,7 +6,7 @@ if [ -d "feat" ]; then
     rm -rf feat
 fi
 
-git clone http://github.com/lacava/feat
+git clone http://github.com/cavalab/feat
 
 cd feat
 

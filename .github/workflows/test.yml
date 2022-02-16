@@ -4,13 +4,16 @@ name: CI
 
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the master and dev branches
   push:
     branches:
       - master
+      - dev
       - docker-fix  # temporary for testing
   pull_request:
-    branches: [ master ]
+    branches: 
+      - master 
+      - dev 
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -59,9 +62,8 @@ jobs:
       - name: Test analysis 
         run: |
             conda info 
-            # pip install pytest
             cd experiment
-            ./test_evaluate_model.sh
+            bash ./test_evaluate_model.sh
             python -m pytest -v test_tuned_models.py
   
   docker_build: # Test if docker image builds

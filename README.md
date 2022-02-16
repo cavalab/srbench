@@ -1,7 +1,8 @@
-## Special Announcement: 2022 SRBench Competition
-
-We are pleased to announce the first [**SRBench Competition: Interpretable Symbolic Regression for Data Science**](https://cavalab.org/srbench/competition-2022) which will be hosted at GECCO 2020 in Boston, MA (and online).
-Deadline for entry is May 1, 2022; see the competition page for more information and stay tuned as details are announced.
+<div class="notice">
+  <h1>Special Announcement: 2022 SRBench Competition</h1>
+  <p>We are pleased to announce the first <a href="https://cavalab.org/srbench/competition-2022">SRBench Competition: Interpretable Symbolic Regression for Data Science</a> which will be hosted at GECCO 2020 in Boston, MA (and online).
+Deadline for entry is May 1, 2022; see the <a href="https://cavalab.org/srbench/competition-2022">competition page</a> for more information and stay tuned as details are announced.</p>
+</div>
 
 ---
 
@@ -20,9 +21,7 @@ We are addressing the lack of pollination by making these comparisons open sourc
 We are trying to address the lack of strong benchmarks by providing open source benchmarking of many SR methods on large sets of problems, with strong baselines for comparison. 
 To handle the lack of a unified framework, we've specified minimal requirements for contributing a method to this benchmark: a scikit-learn compatible API.
 
-# Results
-
-[Browse the Current Results](postprocessing/)
+# Benchmarked Methods
 
 This benchmark currently consists of **14** symbolic regression methods, **7** other ML methods, and **252** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks), including real-world and synthetic datasets from processes with and without ground-truth models.
 
@@ -89,9 +88,9 @@ Methods currently benchmarked:
 
 We are actively updating and expanding this benchmark. 
 Want to add your method? 
-See our [Contribution Guide.](CONTRIBUTING.md)
+See our [Contribution Guide.](https://cavalab.org/srbench/contributing/)
 
-# Cite
+# References
 
 A pre-print of the current version of the benchmark is available:
 
@@ -110,8 +109,6 @@ GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://w
 # Contact
 
 William La Cava (@lacava), william dot lacava at childrens dot harvard dot edu
-
-Patryk Orzechowski (@athril), patryk dot orzechowski at gmail dot com
 
 # Using SRBench
 

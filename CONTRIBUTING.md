@@ -1,22 +1,20 @@
 Contribution Guide
 ==================
 
-The methods for symbolic regression have come a long way since the days of Koza-style genetic programming (GP).
-Our goal with this project is to keep a living benchmark of modern symbolic regression, in the context of state-of-the-art ML methods.
-Currently these are the challenges, as we see it, to achieving this:
+We are happy to accept contributions of methods, as well as updates to the benchmarking framework. 
+Below we specify minimal requirements for contributing a method to this benchmark.
 
-- Lack of cross-pollination between the GP community and the ML community (different conferences, journals, societies etc)
-- Lack of strong benchmarks in GP literature (small problems, toy datasets, weak comparator methods)
-- Lack of a unified framework for SR, or GP
+Ground Rules
+=============
 
-We are addressing the lack of pollination by making these comparisons open source, reproduceable and public, and hoping to share them widely with the entire ML research community.
-We are trying to address the lack of strong benchmarks by providing open source benchmarking of many SR methods on large sets of problems, with strong baselines for comparison. 
-To handle the lack of a unified framework, we've specified minimal requirements for contributing a method to this benchmark: a scikit-learn compatible API.
+1. In general you should submit [pull requests](https://github.com/cavalab/srbench/compare) to the [dev branch](https://github.com/cavalab/srbench/tree/dev). 
+2. Make the PR detailed and reference [specific issues](https://github.com/cavalab/srbench/issues) if the PR is meant to address any. 
+3. Please be kind and please be patient. We will be, too.  
 
-How to contribute
-=================
+How to contribute an SR method
+==============================
 
-To contribute a symbolic regression method for benchmarking, fork the repo, make the changes listed below, and submit a pull request. 
+To contribute a symbolic regression method for benchmarking, fork the repo, make the changes listed below, and submit a pull request to the `dev` branch. 
 Once your method passes the basic tests and we've reviewed it, congrats! 
 We will plan to benchmark your method on hundreds of regression problems. 
 
@@ -24,29 +22,19 @@ We will plan to benchmark your method on hundreds of regression problems.
 
 1. An open-source method with a [scikit-learn compatible API](https://scikit-learn.org/stable/developers/develop.html)
 2. If your method uses a random seed, it should have a `random_state` attribute that can be set.
-3. If your method is installable via pip or conda, add it to the [environment file](environment.yml). 
+3. If your method is installable via pip or conda, add it to the [environment file](https://github.com/cavalab/srbench/blob/master/environment.yml). 
   Otherwise, a bash install script in `experiment/methods/src/` named `your-method_install.sh` that installs your method. 
-  See [ellyn_install.sh](experiment/methods/src/ellyn_install.sh) as an example. 
-  Our [Github actions workflow](.github/workflows/test.yml) will automatically recognize it. 
+  See [ellyn_install.sh](https://github.com/cavalab/srbench/blob/master/experiment/methods/src/ellyn_install.sh) as an example. 
+  Our [Github actions workflow](https://github.com/cavalab/srbench/blob/master/.github/workflows/test.yml) will automatically recognize it. 
 4. A minimal script in `experiment/methods/` that defines these items:
     -   `est`: a sklearn-compatible `Regressor` object 
     -   `hyper_params` : a dictionary or list of dictionaries specifying the hyperparameter search space
-    -   `complexity(est)`: a function that returns the complexity of the final model produced (see below)
-    -   `model(est)`: a function that returns a [**sympy-compatible**](www.sympy.org) string specifying the final model.
-  See [experiment/methods/AFPRegressor.py](experiment/methods/AFPRegressor.py) for an example.
-
-### Defining Complexity
-Contributors are responsible for defining this complexity within their provided method. 
-To compare across methods with different representations, we use this common definition of complexity. 
-Complexity is defined as the total number of elements in the model, which in Koza-style GP would be the number of _nodes_ in the solution program tree. 
-For example, the complexity of `(x + sin(3*y))` would be `len([+, x, sin, *, 3, y]) = 6`. 
-In other words, **every instance of basic math operators `(+, -, *, /, sin, cos, exp, log, %)`, constants, and input features should count toward the complexity**. 
-So, if your method uses very complex operations, for example, an operator that is defined as `Op(x,y) = (x+sin(3*y))`, you need to decompose such operators into their component parts when accounting for this complexity. 
-Note that the relative complexity of these basic math operators is not captured by this measure.
-If you are unsure about this definition, please open a discussion ticket.
+    -   `model(est)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model.
+    -   (optional): a dictionary named `eval_kwargs` that can specify method-specific arguments to [evaluate_model()](https://github.com/cavalab/srbench/blob/e3ba2c71dd08b1aaa76414a0af10411b98db59ee/experiment/evaluate_model.py#L24).
+  See the [experiment/methods/AFPRegressor.py](https://github.com/cavalab/srbench/blob/master/experiment/methods/AFPRegressor.py) and/or other methods in that folder for examples.
 
 ### Returning a sympy compatible model string
-In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](www.sympy.org). 
+In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](https://www.sympy.org). 
 Assure the returned model meets these requirements:
 
 1. The variable names appearing in the model are identical to those in the training data.

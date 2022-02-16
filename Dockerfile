@@ -16,6 +16,7 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 
 # Install base packages.
 USER root
+
 RUN apt update && apt install -y \
     default-jdk \
     bzip2 \
@@ -39,13 +40,15 @@ RUN micromamba install -y --name base -c conda-forge conda
 ENV PATH=$PATH:/opt/conda/bin
 RUN echo 'export PATH=$PATH:/opt/conda/bin' >> ~/.bashrc
 
-SHELL ["/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 
 # Always run inside srbench:
-RUN source ~/.bashrc && conda init bash
-RUN echo "conda activate srbench" >> ~/.bashrc
+# RUN source ~/.bashrc && conda init bash
+# RUN echo "conda activate srbench" >> ~/.bashrc
 
 # Copy remaining files and install
 COPY  --chown=$MAMBA_USER:$MAMBA_USER . .
-RUN source ~/.bashrc && source install.sh
-CMD ["/bin/bash", "--login"]
+# RUN source ~/.bashrc && source install.sh
+# CMD ["/bin/bash", "--login"]
+# RUN bash configure.sh
+RUN bash install.sh
