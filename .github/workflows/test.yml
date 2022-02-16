@@ -44,8 +44,9 @@ jobs:
           context: .
           load: true
           tags: ${{ env.USER }}/${{ env.APP }}:latest #TODO: change to "test"
-          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache
-          cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:latest
+          # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
+          cache-to: type=inline
   docker_test:
     runs-on: ubuntu-latest
     container: lacava/srbench:latest
@@ -68,7 +69,9 @@ jobs:
           python -m pytest -v test_tuned_models.py
   docker_push:
     runs-on: ubuntu-latest
-    needs: docker_build
+    needs: 
+      - docker_build
+      - docker_test
     steps:
       - name: Build 
         uses: docker/build-push-action@v2
@@ -76,5 +79,6 @@ jobs:
           context: .
           push: true
           tags: ${{ env.USER }}/${{ env.APP }}:latest
-          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache
-          cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ env.USER }}/${{ env.APP }}:latest
+          # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
+          cache-to: type=inline
