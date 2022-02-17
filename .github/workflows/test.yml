@@ -69,7 +69,7 @@ jobs:
           bash test_evaluate_model.sh
       -
         name: Evaluate Tuned Model
-        shell:bash
+        shell: bash
         run: |
           ls
           cd experiment
