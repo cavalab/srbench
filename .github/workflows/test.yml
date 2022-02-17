@@ -19,7 +19,8 @@ env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
   PASS: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
   APP: srbench
-  TAG: ${{ env.USER }}/${{ env.APP }}
+env:
+  TAG: ${{ USER }}/${{ APP }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
