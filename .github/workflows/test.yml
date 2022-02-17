@@ -19,18 +19,27 @@ env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
   PASS: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
   APP: srbench
+  TAG: ${{ env.USER }}/${{ env.APP }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  docker_build: # Test if docker image builds
+  ################################################################################
+  # base docker image
+  ################################################################################
+  docker_base: # Test if docker image builds
     runs-on: ubuntu-latest
     steps:
       -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+      -
+        name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.TAG }}-base
+          restore-keys: |
+            ${{ runner.os }}-buildx-
       -
         name: Login to DockerHub
         uses: docker/login-action@v1 
@@ -41,48 +50,208 @@ jobs:
         name: Build 
         uses: docker/build-push-action@v2
         with:
-          context: .
-          load: true
-          tags: ${{ env.USER }}/${{ env.APP }}:test 
-          cache-from: type=gha
+          context: 
+          file: Dockerfile.base
+          tags: ${{ env.TAG }}:base 
+          # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
-          cache-to: type=gha,mode=max
-  docker_test:
+          # cache-to: type=gha,mode=max
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      -
+        name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: base_image
+          path: /tmp/base_image.tar
+      -
+        # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+  ################################################################################
+  # parallel methods install
+  ################################################################################
+  install_setup:
     runs-on: ubuntu-latest
-    container: lacava/srbench:latest
-    needs: docker_build
+    # needs: docker_base
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      -
-        name: Conda
-        run: | 
-          ls 
-          eval "$(conda shell.bash hook)"
-          conda init bash
-          conda activate srbench
-      -
-        name: Evaluate Model
+      - id: set-matrix
         run: |
-          ls
-          cd experiment
-          bash test_evaluate_model.sh
-      -
-        name: Evaluate Tuned Model
-        run: |
-          ls
-          cd experiment
-          python -m pytest -v test_tuned_models.py
-  docker_push:
-    runs-on: ubuntu-latest
+          # bash ci/get_install_list.sh
+          # echo "::set-output name=matrix::${cat ci/installs.json}"
+          bash ci/make_dockerfile_installs.sh
+          echo "::set-output name=matrix::${cat ci/dockerfiles.json}"
+  docker_installs:
     needs: 
-      - docker_build
-      - docker_test
+      - docker_base
+      - install_setup
+    runs-on: ubuntu-latest
+    # container: lacava/srbench:base
+    strategy:
+      matrix: ${{fromJSON(needs.install_setup.outputs.matrix)}}
+    # steps:
+    #   - run: | 
+    #       cd experiment/methods/src
+    #       bash ${{ install_file }}
     steps:
-      - name: Build 
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      # -
+      #   name: Cache Docker layers
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.TAG }}-${{ matrix.dockerfile}}
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-
+      # -
+      #   name: Login to DockerHub
+      #   uses: docker/login-action@v1 
+      #   with:
+      #     username: ${{ env.USER }}
+      #     password: ${{ env.PASS }}
+      -
+        name: Build 
         uses: docker/build-push-action@v2
         with:
           context: .
-          push: true
-          tags: ${{ env.USER }}/${{ env.APP }}:latest
-          cache-from: type=gha
+          file: ${{ matrix.dockerfile }}
+          tags: ${{ matrix.dockerfile }}
+          # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
-          cache-to: type=gha,mode=max
+          # cache-to: type=gha,mode=max
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+      # -
+      #   name: Upload artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: image.${{ matrix.dockerfile }}
+      #     path: /tmp/image.${{ matrix.dockerfile }}.tar
+      -
+        # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+  ################################################################################
+  # final docker image 
+  ################################################################################
+  docker_push:
+    runs-on: ubuntu-latest
+    needs: 
+      - docker_base
+      - docker_installs
+    steps:
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.TAG }}-latest
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Build 
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile.combo  #TODO: change to target stage
+          push: true
+          tags: ${{ env.TAG }}:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          # cache-from: type=gha
+          # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
+          # cache-to: type=gha,mode=max
+      -
+        # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+  ################################################################################
+  # parallel tests 
+  ################################################################################
+  # test_setup:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     matrix: ${{ steps.set-matrix.outputs.matrix }}
+  #     matrix-tuned: ${{ steps.set-matrix-tuned.outputs.matrix }}
+  #   steps:
+  #     - id: generate alg list
+  #       run: bash get_algorithm_list.sh
+  #     - id: set-matrix
+  #       run: |
+  #         echo "::set-output name=matrix::${cat ci/algs.json}"
+  #     - id: set-matrix-tuned
+  #       run: |
+  #         echo "::set-output name=matrix::${cat ci/algs-tuned.json}"
+  # test_evaluate:
+  #   runs-on: ubuntu-latest
+  #   needs: test_setup
+  #   strategy:
+  #     matrix: ${{fromJSON(needs.test_setup.outputs.matrix)}}
+  #   steps:
+  #     -
+  #       name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
+  #     -
+  #       name: Download artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: latest_image
+  #         path: /tmp
+  #     -
+  #       name: Load image
+  #       run: |
+  #         docker load --input /tmp/latest_image.tar
+  #         docker image ls -a
+  #     - 
+  #       name: Evaluate Model
+  #       run: |
+  #         docker run lacava/srbench:latest "micromamba run -n srbench bash ci/test_evaluate.sh ${{ matrix.ml }}"
+  # test_tuned:
+  #   runs-on: ubuntu-latest
+  #   needs: test_setup
+  #   strategy:
+  #     matrix: ${{fromJSON(needs.test_setup.outputs.matrix-tuned)}}
+  #   steps:
+  #     -
+  #       name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v1
+  #     -
+  #       name: Download artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: base_image
+  #         path: /tmp
+  #     -
+  #       name: Load image
+  #       run: |
+  #         docker load --input /tmp/base_image.tar
+  #         docker image ls -a
+  #     - 
+  #       name: Evaluate Tuned Models
+  #       run: |
+  #         docker run ci/test_tuned.sh ${{ matrix.ml }}

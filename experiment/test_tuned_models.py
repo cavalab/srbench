@@ -10,10 +10,10 @@ from glob import glob
 from evaluate_model import evaluate_model
 import importlib
 
-TMLs = ['tuned.'+ml.split('/')[-1][:-3] for ml in glob('methods/tuned/*.py') if
-       not ml.split('/')[-1][:-3].startswith('_')]
+# TMLs = ['tuned.'+ml.split('/')[-1][:-3] for ml in glob('methods/tuned/*.py') if
+#        not ml.split('/')[-1][:-3].startswith('_')]
 
-@pytest.mark.parametrize("ml", TMLs)
+
 def test_tuned_models(ml):
     print('running test_evaluate_model with ml=',ml)
     dataset = 'test/strogatz_shearflow1.tsv.gz'
@@ -56,3 +56,11 @@ def test_tuned_models(ml):
                    test=True, # testing
                    **eval_kwargs
                   )
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--ml', type=str)
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+    ml = args.ml
+    test_tuned_model(ml)
