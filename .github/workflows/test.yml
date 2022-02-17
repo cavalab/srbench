@@ -28,7 +28,7 @@ jobs:
   docker_base: # Test if docker image builds
     runs-on: ubuntu-latest
     env:
-      TAG: ${{ env.USER }}/${{ env.APP }}:base
+      TAG: base
     steps:
       -
         name: Set up Docker Buildx
@@ -38,7 +38,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-$TAG
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.USER }}/${{ env.APP }}:$TAG
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
@@ -53,7 +53,7 @@ jobs:
         with:
           context: 
           file: Dockerfile.base
-          tags: $TAG 
+          tags: ${{ env.USER }}/${{ env.APP }}:$TAG 
           # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
           # cache-to: type=gha,mode=max
@@ -153,7 +153,7 @@ jobs:
       - docker_base
       - docker_installs
     env:
-      TAG: ${{ env.USER }}/${{ env.APP }}:latest
+      TAG: latest
     steps:
       -
         name: Set up Docker Buildx
@@ -163,7 +163,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-$TAG
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.USER }}/${{ env.APP }}:$TAG
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
@@ -179,7 +179,7 @@ jobs:
           context: .
           file: Dockerfile.combo  #TODO: change to target stage
           push: true
-          tags: $TAG
+          tags: ${{ env.USER }}/${{ env.APP }}:$TAG
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           # cache-from: type=gha
