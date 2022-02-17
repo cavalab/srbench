@@ -19,8 +19,6 @@ env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
   PASS: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
   APP: srbench
-env:
-  TAG: ${{ USER }}/${{ APP }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,6 +27,8 @@ jobs:
   ################################################################################
   docker_base: # Test if docker image builds
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ env.USER }}/${{ env.APP }}:base
     steps:
       -
         name: Set up Docker Buildx
@@ -38,7 +38,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.TAG }}-base
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-$TAG
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
@@ -53,7 +53,7 @@ jobs:
         with:
           context: 
           file: Dockerfile.base
-          tags: ${{ env.TAG }}:base 
+          tags: $TAG 
           # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
           # cache-to: type=gha,mode=max
@@ -152,6 +152,8 @@ jobs:
     needs: 
       - docker_base
       - docker_installs
+    env:
+      TAG: ${{ env.USER }}/${{ env.APP }}:latest
     steps:
       -
         name: Set up Docker Buildx
@@ -161,7 +163,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.TAG }}-latest
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-$TAG
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
@@ -177,7 +179,7 @@ jobs:
           context: .
           file: Dockerfile.combo  #TODO: change to target stage
           push: true
-          tags: ${{ env.TAG }}:latest
+          tags: $TAG
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           # cache-from: type=gha
