@@ -82,6 +82,9 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
       - id: set-matrix
         run: |
           # bash ci/get_install_list.sh
