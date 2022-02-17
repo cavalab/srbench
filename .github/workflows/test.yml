@@ -54,6 +54,7 @@ jobs:
     steps:
       -
         name: Conda
+        shell: bash
         run: | 
           ls 
           eval "$(conda shell.bash hook)"
@@ -61,12 +62,14 @@ jobs:
           conda activate srbench
       -
         name: Evaluate Model
+        shell: bash
         run: |
           ls
           cd experiment
           bash test_evaluate_model.sh
       -
         name: Evaluate Tuned Model
+        shell:bash
         run: |
           ls
           cd experiment
