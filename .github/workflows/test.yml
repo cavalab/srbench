@@ -38,7 +38,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.USER }}/${{ env.APP }}:$TAG
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
@@ -53,7 +53,7 @@ jobs:
         with:
           context: 
           file: Dockerfile.base
-          tags: ${{ env.USER }}/${{ env.APP }}:$TAG 
+          tags: ${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
           # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
           # cache-to: type=gha,mode=max
@@ -166,7 +166,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.USER }}/${{ env.APP }}:$TAG
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       -
@@ -182,7 +182,7 @@ jobs:
           context: .
           file: Dockerfile.combo  #TODO: change to target stage
           push: true
-          tags: ${{ env.USER }}/${{ env.APP }}:$TAG
+          tags: ${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           # cache-from: type=gha
