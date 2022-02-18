@@ -102,6 +102,7 @@ jobs:
     # container: lacava/srbench:base
     strategy:
       matrix: ${{fromJSON(needs.install_setup.outputs.matrix)}}
+      fail-fast: false
     # steps:
     #   - run: | 
     #       cd experiment/methods/src
