@@ -1,5 +1,4 @@
 FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
-
 ################################################################################
 # Nvidia code ##################################################################
 ################################################################################
@@ -29,13 +28,15 @@ RUN apt update && apt install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Install env
+FROM build as build-mamba
 USER $MAMBA_USER
-COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
-RUN micromamba create -y -f /tmp/environment.yml \
+WORKDIR /srbench/
+COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
+RUN micromamba create -y -f /srbench/environment.yml \
     && micromamba clean --all --yes
 ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 # conda is currently only needed for PySR
-RUN micromamba install -y --name base -c conda-forge conda
+# RUN micromamba install -y --name base -c conda-forge conda
 # ENV PATH=$PATH:/opt/conda/bin
  # RUN echo 'export PATH=$PATH:/opt/conda/bin' >> ~/.bashrc
 
@@ -46,12 +47,58 @@ SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 # RUN echo "conda activate srbench" >> ~/.bashrc
 
 # Copy remaining files and install
-COPY --chown=$MAMBA_USER:$MAMBA_USER . .
+FROM build-mamba as base
+RUN ls
+RUN pwd
+COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
+# COPY --chown=$MAMBA_USER:$MAMBA_USER /opt/conda/ /opt/conda
 # RUN source ~/.bashrc && source install.sh
 # RUN bash configure.sh
-RUN ls
-RUN /tmp/install.sh
+# COPY --chown=$MAMBA_USER:$MAMBA_USER . .
+# CMD ["/bin/bash", "-c"]
+CMD echo "Hello from the base image."
+ENTRYPOINT ["micromamba", "run", "-n", "srbench"]
+FROM base as dsr_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/dsr_install.sh
+WORKDIR /srbench/
+FROM base as ellyn_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/ellyn_install.sh
+WORKDIR /srbench/
+FROM base as feat_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/feat_install.sh
+WORKDIR /srbench/
+FROM base as gpgomea_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/gpgomea_install.sh
+WORKDIR /srbench/
+FROM base as gsgp_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/gsgp_install.sh
+WORKDIR /srbench/
+FROM base as itea_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/itea_install.sh
+WORKDIR /srbench/
+FROM base as operon_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/operon_install.sh
+WORKDIR /srbench/
+FROM base as pysr_install
+WORKDIR /srbench/experiment/methods/src/
+RUN /srbench/experiment/methods/src/pysr_install.sh
+WORKDIR /srbench/
 
-COPY --chown=$MAMBA_USER:$MAMBA_USER . .
-CMD ["/bin/bash", "-c"]
-# CMD ["/bin/bash", "--login"]
+#combine installations
+FROM base as final
+
+COPY --from=dsr_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=ellyn_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=feat_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=gpgomea_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=gsgp_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=itea_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=operon_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=pysr_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/

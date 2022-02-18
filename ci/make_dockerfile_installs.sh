@@ -5,23 +5,32 @@ cd $path
 files=$(ls *.sh)
 cd ../../../
 i=0
-file_list="{\"dockerfile\":["
-COMBO="#combine installations"
+target_list="{\"target\":["
+COMBO="\n#combine installations\nFROM base as final\n"
+
+dockerfile="Dockerfile"
+cp Dockerfile.base Dockerfile
+
 for install_file in ${files[@]} ; do
     
-    dockerfile="dockerfile.${install_file%*\.sh}"
+    # dockerfile="dockerfile.${install_file%*\.sh}"
+    name="${install_file%*\.sh}"
 
-    TXT="FROM lacava/srbench:base\nWORKDIR /srbench/$path\nRUN /srbench/$path$install_file\nWORKDIR /srbench/"
-    echo -e "$TXT" > "$dockerfile"
+    TXT="FROM base as $name\nWORKDIR /srbench/$path\nRUN /srbench/$path$install_file\nWORKDIR /srbench/"
+    echo -e "$TXT" >> "$dockerfile"
 
-    COMBO="${COMBO}\nFROM lacava/srbench:${dockerfile}"
+    # COMBO="${COMBO}\nFROM lacava/srbench:${dockerfile}"
+    COMBO="${COMBO}\nCOPY --from=$name /opt/conda/envs/srbench/ /opt/conda/envs/srbench/"
 
-    file_list="${file_list}\"${dockerfile}\"," 
+    target_list="${target_list}\"${name}\"," 
 
     ((i++))
 done
-file_list="${file_list%,}]}"
-echo $file_list > ci/docker_files.json
-cat ci/docker_files.json
-echo -e $COMBO > Dockerfile.combo
-cat Dockerfile.combo
+target_list="${target_list%,}]}"
+echo $target_list > ci/docker_targets.json
+echo "ci/docker_targets.json:"
+cat ci/docker_targets.json
+
+echo -e $COMBO >> Dockerfile
+echo "Dockerfile:"
+cat Dockerfile

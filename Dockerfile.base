@@ -47,7 +47,7 @@ SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 # RUN echo "conda activate srbench" >> ~/.bashrc
 
 # Copy remaining files and install
-FROM build-mamba as build-mamba-install
+FROM build-mamba as base
 RUN ls
 RUN pwd
 COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/

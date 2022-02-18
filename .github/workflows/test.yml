@@ -53,6 +53,7 @@ jobs:
         with:
           context: 
           file: Dockerfile.base
+          target: base
           tags: ${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
           # tags: srbench:base
           # cache-from: type=gha
@@ -60,7 +61,7 @@ jobs:
           # cache-to: type=gha,mode=max
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          outputs: type=docker,dest=/tmp/base_image.tar
+          # outputs: type=docker,dest=/tmp/base_image.tar
       # -
       #   name: Upload artifact
       #   uses: actions/upload-artifact@v2
@@ -121,7 +122,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.dockerfile}}
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.target}}
           restore-keys: |
             ${{ runner.os }}-buildx-
       # - 
@@ -140,8 +141,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ${{ matrix.dockerfile }}
-          tags: lacava/srbench:${{ matrix.dockerfile }}
+          target: ${{ matrix.target }}
+          tags: lacava/srbench:${{ matrix.target }}
           # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
           # cache-to: type=gha,mode=max
@@ -206,7 +207,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfile.combo  #TODO: change to target stage
+          target: final
           push: true
           tags: ${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
           cache-from: type=local,src=/tmp/.buildx-cache

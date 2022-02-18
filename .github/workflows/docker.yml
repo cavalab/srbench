@@ -1,0 +1,49 @@
+name: Docker Image
+
+on:
+  push:
+    branches:
+      - docker-fix
+      # - master
+    # tags:
+    #   - 'v*'
+
+env:
+  USER: ${{ secrets.DOCKER_HUB_USERNAME }}
+  PASS: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+  APP: srbench
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Regenerate docker files
+        run: |
+          bash ci/make_dockerfile_installs.sh
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: 
+          file: Dockerfile.base
+          target: final 
+          tags: ${{ env.USER }}/${{ env.APP }}:latest
+          push: true
+          # cache-from: type=gha
+          # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
+          # cache-to: type=gha,mode=max
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
