@@ -106,6 +106,10 @@ jobs:
     #       bash ${{ install_file }}
     steps:
       -
+        name: Regenerate docker files
+        run: |
+          bash ci/make_dockerfile_installs.sh
+      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       -
