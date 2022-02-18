@@ -8,13 +8,15 @@ i=0
 file_list="{\"dockerfile\":["
 COMBO="#combine installations"
 for install_file in ${files[@]} ; do
+    
+    dockerfile="dockerfile.${install_file%*\.sh}"
 
     TXT="FROM lacava/srbench:base\nWORKDIR /srbench/$path\nRUN /srbench/$path$install_file\nWORKDIR /srbench/"
-    echo -e "$TXT" > "dockerfile.${install_file%*\.sh}"
+    echo -e "$TXT" > "$dockerfile"
 
-    COMBO="${COMBO}\nFROM dockerfile.${i}"
+    COMBO="${COMBO}\nFROM ${dockerfile}"
 
-    file_list="${file_list}\"dockerfile.${i}\"," 
+    file_list="${file_list}\"${dockerfile}\"," 
 
     ((i++))
 done
