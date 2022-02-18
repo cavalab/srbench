@@ -59,7 +59,7 @@ jobs:
           # cache-to: type=gha,mode=max
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          load: true # for uploading the image
+          outputs: type=docker,dest=/tmp/base_image.tar
       -
         name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -139,6 +139,7 @@ jobs:
           # cache-to: type=gha,mode=max
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          # outputs: type=docker,dest=/tmp/image.${{ matrix.dockerfile }}.tar
       # -
       #   name: Upload artifact
       #   uses: actions/upload-artifact@v2
