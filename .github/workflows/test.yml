@@ -135,7 +135,7 @@ jobs:
       #   run: |
       #     docker load --input /tmp/base_image.tar
       #     docker image ls -a
-      # -
+      -
         name: Build 
         uses: docker/build-push-action@v2
         with:
