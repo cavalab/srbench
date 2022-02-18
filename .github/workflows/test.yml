@@ -59,6 +59,7 @@ jobs:
           # cache-to: type=gha,mode=max
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          load: true # for uploading the image
       -
         name: Upload artifact
         uses: actions/upload-artifact@v2
