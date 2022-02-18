@@ -93,7 +93,7 @@ jobs:
           # bash ci/get_install_list.sh
           # echo "::set-output name=matrix::${cat ci/installs.json}"
           bash ci/make_dockerfile_installs.sh
-          echo "::set-output name=matrix::$(cat ci/docker_files.json)"
+          echo "::set-output name=matrix::$(cat ci/docker_targets.json)"
   docker_installs:
     needs: 
       - docker_base
