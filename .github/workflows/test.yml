@@ -106,6 +106,9 @@ jobs:
     #       bash ${{ install_file }}
     steps:
       -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
         name: Regenerate docker files
         run: |
           bash ci/make_dockerfile_installs.sh
