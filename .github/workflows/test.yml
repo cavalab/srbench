@@ -53,8 +53,8 @@ jobs:
         with:
           context: 
           file: Dockerfile.base
-          # tags: ${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
-          tags: srbench:base
+          tags: ${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
+          # tags: srbench:base
           # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
           # cache-to: type=gha,mode=max
@@ -141,7 +141,7 @@ jobs:
         with:
           context: .
           file: ${{ matrix.dockerfile }}
-          tags: srbench:${{ matrix.dockerfile }}
+          tags: lacava/srbench:${{ matrix.dockerfile }}
           # cache-from: type=gha
           # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
           # cache-to: type=gha,mode=max

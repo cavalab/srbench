@@ -11,10 +11,10 @@ for install_file in ${files[@]} ; do
     
     dockerfile="dockerfile.${install_file%*\.sh}"
 
-    TXT="FROM srbench:base\nWORKDIR /srbench/$path\nRUN /srbench/$path$install_file\nWORKDIR /srbench/"
+    TXT="FROM lacava/srbench:base\nWORKDIR /srbench/$path\nRUN /srbench/$path$install_file\nWORKDIR /srbench/"
     echo -e "$TXT" > "$dockerfile"
 
-    COMBO="${COMBO}\nFROM srbench:${dockerfile}"
+    COMBO="${COMBO}\nFROM lacava/srbench:${dockerfile}"
 
     file_list="${file_list}\"${dockerfile}\"," 
 
