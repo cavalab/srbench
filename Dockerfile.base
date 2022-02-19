@@ -58,3 +58,9 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
 # CMD ["/bin/bash", "-c"]
 CMD echo "Hello from the base image."
 ENTRYPOINT ["micromamba", "run", "-n", "srbench"]
+
+FROM base as final
+# COPY --from=base --chown=$MAMBA_USER:$MAMBA_USER /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+COPY --from=base --chown=$MAMBA_USER:$MAMBA_USER . .
+RUN bash install.sh
+

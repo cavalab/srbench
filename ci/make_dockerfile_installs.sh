@@ -31,6 +31,7 @@ echo $target_list > ci/docker_targets.json
 echo "ci/docker_targets.json:"
 cat ci/docker_targets.json
 
-echo -e $COMBO >> Dockerfile
+# changed to hardcoding this
+# echo -e $COMBO >> Dockerfile
 echo "Dockerfile:"
 cat Dockerfile
