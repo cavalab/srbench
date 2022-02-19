@@ -1,4 +1,4 @@
-from ..gplearn import complexity,model, est
+from ..gplearnRegressor import complexity,model, est
 from .params._gplearn import params
 
 est.set_params(**params)
