@@ -1,9 +1,9 @@
 name: Docker Image
 
 on:
-  push:
-    branches:
-      - docker-fix
+  # push:
+  #   branches:
+  #     - docker-fix
       # - master
     # tags:
     #   - 'v*'

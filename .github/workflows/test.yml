@@ -1,19 +1,19 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Parallel Docker
 
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the master and dev branches
-  push:
-    branches:
-      - master
-      - dev
-      - docker-fix  # temporary for testing
-  pull_request:
-    branches: 
-      - master 
-      - dev 
+  # push:
+  #   branches:
+  #     - master
+  #     - dev
+  #     - docker-fix  # temporary for testing
+  # pull_request:
+  #   branches: 
+  #     - master 
+  #     - dev 
 
 env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -188,8 +188,8 @@ jobs:
         name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ env.USER }}
+          password: ${{ env.PASS }}
       # - 
       #   name: Download artifact
       #   uses: actions/download-artifact@v2

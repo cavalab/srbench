@@ -1,0 +1,148 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master and dev branches
+  push:
+    branches:
+      - master
+      - dev
+      - docker-fix  # temporary for testing
+  pull_request:
+    branches: 
+      - master 
+      - dev 
+
+jobs:
+  check:
+    name: Check env changes
+    outputs:
+      run_job: ${{ steps.check_files.outputs.run_job }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: check modified files
+        id: check_files
+        run: |
+          echo "=============== list modified files ==============="
+          git diff --name-only HEAD^ HEAD
+          
+          echo "========== check paths of modified files =========="
+          git diff --name-only HEAD^ HEAD > files.txt
+          while IFS= read -r file
+          do
+            echo $file
+            if [[ $file == environment.yml ]]; then
+              echo "::set-output name=run_job::true"
+            elif [[ $file != experiment/methods/src/* ]]; then
+              echo "This modified file is not under the 'src' folder."
+              echo "::set-output name=run_job::false"
+              break
+            else
+              echo "::set-output name=run_job::true"
+            fi
+          done < files.txt
+
+  ################################################################################
+  # environment setup
+  ################################################################################
+  environment:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+     steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Setup Mambaforge
+          uses: conda-incubator/setup-miniconda@v2
+          with:
+              miniforge-variant: Mambaforge
+              miniforge-version: latest
+              use-mamba: true
+  
+        - name: Set cache date
+          run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+  
+        - name: Cache conda
+          uses: actions/cache@v2
+          env: 
+            CACHE_NUMBER: 0
+          with:
+            key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+          id: cache
+  
+        - name: Update environment
+          if: steps.cache.outputs.cache-hit != 'true'
+          run: mamba env update -n srbench -f environment.yml
+  
+  ################################################################################
+  # parallel methods install
+  ################################################################################
+  install_setup:
+    name: Get methods with install scripts
+    needs: check
+    if: needs.check.outputs.run_job == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      - id: set-matrix
+        run: |
+          bash ci/get_install_list.sh
+          echo "::set-output name=matrix::${cat ci/installs.json}"
+
+  installs:
+    name: Install methods with install scripts
+    needs: 
+      - install_setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    # container: lacava/srbench:base
+    strategy:
+      matrix: ${{fromJSON(needs.install_setup.outputs.matrix)}}
+      fail-fast: false
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache conda
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+        id: cache
+      - name: Setup Mambaforge
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+            miniforge-variant: Mambaforge
+            miniforge-version: latest
+            activate-environment: srbench
+            use-mamba: true
+      - name: Check
+        run: | 
+          mamba info
+          mamba list
+      - name: Install 
+        run: | 
+          cd experiment/methods/src
+          echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+          echo "Running $install_file"
+          echo "////////////////////////////////////////////////////////////////////////////////"
+          bash ${{ install_file }}

@@ -28,39 +28,52 @@ RUN apt update && apt install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Install env
-FROM build as build-mamba
+FROM build as base
 USER $MAMBA_USER
 WORKDIR /srbench/
 COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
 RUN micromamba create -y -f /srbench/environment.yml \
     && micromamba clean --all --yes
 ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
-# conda is currently only needed for PySR
-# RUN micromamba install -y --name base -c conda-forge conda
-# ENV PATH=$PATH:/opt/conda/bin
- # RUN echo 'export PATH=$PATH:/opt/conda/bin' >> ~/.bashrc
 
-SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 
-# Always run inside srbench:
-# RUN source ~/.bashrc && conda init bash
-# RUN echo "conda activate srbench" >> ~/.bashrc
-
-# Copy remaining files and install
-FROM build-mamba as base
-RUN ls
-RUN pwd
+##################################################
+# install SR methods with install.sh files
 COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
-# COPY --chown=$MAMBA_USER:$MAMBA_USER /opt/conda/ /opt/conda
-# RUN source ~/.bashrc && source install.sh
-# RUN bash configure.sh
-# COPY --chown=$MAMBA_USER:$MAMBA_USER . .
-# CMD ["/bin/bash", "-c"]
-CMD echo "Hello from the base image."
-ENTRYPOINT ["micromamba", "run", "-n", "srbench"]
-
-FROM base as final
-# COPY --from=base --chown=$MAMBA_USER:$MAMBA_USER /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=base --chown=$MAMBA_USER:$MAMBA_USER . .
+# make the shell activate srbench
+SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 RUN bash install.sh
 
+##################################################
+# these lines use conda-pack to shrink the image size
+# https://pythonspeed.com/articles/conda-docker-image-size/
+##################################################
+# Install conda-pack:
+RUN micromamba install -c conda-forge conda-pack
+
+# Use conda-pack to create a standalone enviornment
+# in /venv:
+ENV CONDA_EXE micromamba
+RUN conda-pack -n srbench -o /tmp/env.tar && \
+  mkdir /venv && \
+  cd /venv && \
+  tar xf /tmp/env.tar && \
+  rm /tmp/env.tar
+
+# We've put venv in same path it'll be in final image,
+# so now fix up paths:
+RUN /venv/bin/conda-unpack
+
+##################################################
+
+# The runtime-stage image; we can use Debian as the
+# base image since the Conda env also includes Python
+# for us.
+FROM ubuntu:latest AS runtime
+# Copy /venv from the previous stage:
+COPY --from=base /venv /venv
+
+# When image is run, run the code with the environment
+# activated:
+SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+ENTRYPOINT ["micromamba", "run", "-n", "srbench" "micromamba info"]
