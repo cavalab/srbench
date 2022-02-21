@@ -42,7 +42,6 @@ ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 
 SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 
-
 ##################################################
 # these lines use conda-pack to shrink the image size
 # https://pythonspeed.com/articles/conda-docker-image-size/
@@ -63,6 +62,7 @@ RUN conda-pack -n srbench -o /tmp/env.tar && \
 
 # We've put venv in same path it'll be in final image,
 # so now fix up paths:
+# SHELL ["/bin/bash", "-c"]
 RUN /venv/bin/conda-unpack
 
 
@@ -75,15 +75,17 @@ FROM ubuntu:latest AS runtime
 # Copy /venv from the previous stage:
 COPY --from=base /venv /venv
 
-RUN source /venv/vin/activate
+SHELL ["/bin/bash", "-c"]
+RUN source /venv/bin/activate
 # When image is run, run the code with the environment
 # activated:
-SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 ##################################################
 # install SR methods with install.sh files
-COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
+COPY . /srbench/
+# COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
 # make the shell activate srbench
 RUN bash install.sh
 ##################################################
 
-ENTRYPOINT ["micromamba", "run", "-n", "srbench" "micromamba info"]
+ENTRYPOINT ["conda", "run", "-n", "srbench", "conda", "info"]

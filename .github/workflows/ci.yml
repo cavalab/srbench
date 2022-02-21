@@ -129,7 +129,7 @@ jobs:
           echo "::set-output name=matrix::$(cat ci/installs.json)"
 
   installs:
-    name: Install methods with install scripts
+    name: Install methods
     needs: 
       - setup_environment
       - install_setup
@@ -147,6 +147,9 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
+      - 
+        name: Set cache date
+        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
       - 
         name: Cache conda
         id: cache
@@ -167,7 +170,7 @@ jobs:
           miniforge-variant: Mambaforge
           miniforge-version: latest
           use-mamba: true
-          environment-file: environment.yml
+          # environment-file: environment.yml
           activate-environment: srbench
       - 
         name: Initialize
