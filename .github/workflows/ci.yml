@@ -105,6 +105,7 @@ jobs:
   installs:
     name: Install methods with install scripts
     needs: 
+      - setup_environment
       - install_setup
     runs-on: ubuntu-latest
     defaults:
@@ -140,4 +141,4 @@ jobs:
           echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
           echo "Running $install_file"
           echo "////////////////////////////////////////////////////////////////////////////////"
-          bash ${{ install_file }}
+          bash ${{ matrix.install_file }}
