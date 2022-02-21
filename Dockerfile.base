@@ -75,9 +75,6 @@ FROM ubuntu:latest AS runtime
 # Copy /venv from the previous stage:
 COPY --from=base /venv /venv
 
-SHELL ["/bin/bash","-c"]
-RUN source /venv/bin/activate
-SHELL ["/venv/bin/conda", "run", "-n", "srbench","/bin/bash", "-c"]
 # When image is run, run the code with the environment
 # activated:
 # SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
@@ -86,7 +83,11 @@ SHELL ["/venv/bin/conda", "run", "-n", "srbench","/bin/bash", "-c"]
 COPY . /srbench/
 # COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
 # make the shell activate srbench
-RUN bash install.sh
+SHELL ["/bin/bash","-c"]
+RUN source /venv/bin/activate
+SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
+WORKDIR /srbench/
+RUN install.sh
 ##################################################
 
 ENTRYPOINT ["conda", "run", "-n", "srbench", "conda", "info"]
