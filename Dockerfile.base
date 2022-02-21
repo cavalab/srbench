@@ -29,9 +29,10 @@ RUN apt update && apt install -y \
 
 # Install env
 FROM build as base
-USER $MAMBA_USER
+# USER $MAMBA_USER
 WORKDIR /srbench/
-COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
+# COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
+COPY environment.yml /srbench/environment.yml
 RUN micromamba create -y -f /srbench/environment.yml \
     && micromamba clean --all --yes
 ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
