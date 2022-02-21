@@ -56,6 +56,8 @@ jobs:
   ################################################################################
   setup_environment:
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.run_job == 'true'
     defaults:
       run:
         shell: bash -l {0}
@@ -75,6 +77,7 @@ jobs:
          env: 
            CACHE_NUMBER: 0
          with:
+           path: /usr/share/mamba/envs/srbench
            key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
          id: cache
        - name: Update environment
@@ -107,6 +110,8 @@ jobs:
     needs: 
       - setup_environment
       - install_setup
+      - check
+    if: needs.check.outputs.run_job == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -122,6 +127,7 @@ jobs:
       - name: Cache conda
         uses: actions/cache@v2
         with:
+          path: /usr/share/mamba/envs/srbench
           key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
         id: cache
       - name: Setup Mambaforge
