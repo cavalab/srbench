@@ -110,7 +110,7 @@ jobs:
       - id: set-matrix
         run: |
           bash ci/get_install_list.sh
-          echo "::set-output name=matrix::${cat ci/installs.json}"
+          echo "::set-output name=matrix::$(cat ci/installs.json)"
 
   installs:
     name: Install methods with install scripts
