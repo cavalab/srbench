@@ -27,13 +27,14 @@ jobs:
     env:
       skip: 'true'
     steps:
-      - name: Checkout code
+      - 
+        name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
         if: env.skip == 'false'
-
-      - name: check modified files
+      - 
+        name: check modified files
         id: check_files
         run: |
           if ${{ env.skip }} ; then
@@ -120,7 +121,9 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-      - id: set-matrix
+      - 
+        name: Get Install List
+        id: set-matrix
         run: |
           bash ci/get_install_list.sh
           echo "::set-output name=matrix::$(cat ci/installs.json)"
@@ -175,7 +178,8 @@ jobs:
           conda info -a
           conda list
           echo "CONDA: $CONDA"
-      - name: Install 
+      - 
+        name: Install 
         if: steps.cache.outputs.cache-hit != 'true'
         run: | 
           cd experiment/methods/src
