@@ -35,29 +35,30 @@ jobs:
 
       - name: check modified files
         id: check_files
-        if: env.skip == 'false'
+        outputs:
+          run_job: 
         run: |
-          echo "=============== list modified files ==============="
-          git diff --name-only HEAD^ HEAD
-          echo "========== check paths of modified files =========="
-          git diff --name-only HEAD^ HEAD > files.txt
-          while IFS= read -r file
-          do
-            echo $file
-            if [[ $file == environment.yml ]]; then
+          if ${{ env.skip }} ; then
               echo "::set-output name=run_job::true"
-            elif [[ $file != experiment/methods/src/* ]]; then
-              echo "This modified file is not under the 'src' folder."
-              echo "::set-output name=run_job::false"
-              break
-            else
-              echo "::set-output name=run_job::true"
-            fi
-          done < files.txt
-
-      - name: skip
-        if: env.skip == 'true'
-        run: echo "::set-output name=run_job::true"
+          else
+            echo "=============== list modified files ==============="
+            git diff --name-only HEAD^ HEAD
+            echo "========== check paths of modified files =========="
+            git diff --name-only HEAD^ HEAD > files.txt
+            while IFS= read -r file
+            do
+              echo $file
+              if [[ $file == environment.yml ]]; then
+                echo "::set-output name=run_job::true"
+              elif [[ $file != experiment/methods/src/* ]]; then
+                echo "This modified file is not under the 'src' folder."
+                echo "::set-output name=run_job::false"
+                break
+              else
+                echo "::set-output name=run_job::true"
+              fi
+            done < files.txt
+          fi
 
   ################################################################################
   # environment setup
