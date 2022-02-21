@@ -103,7 +103,7 @@ jobs:
       - 
         name: Test cache
         if: steps.cache.outputs.cache-hit == 'true'
-        run: echo "CONDA: $CONDA"
+        run: echo "CONDA= $CONDA"
   ################################################################################
   # parallel methods install
   ################################################################################
