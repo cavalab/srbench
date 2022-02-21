@@ -1,3 +1,4 @@
+################################################################################
 FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
 ################################################################################
 # Nvidia code ##################################################################
@@ -28,7 +29,9 @@ RUN apt update && apt install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Install env
+################################################################################
 FROM build as base
+################################################################################
 # USER $MAMBA_USER
 WORKDIR /srbench/
 # COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
@@ -66,7 +69,9 @@ RUN /venv/bin/conda-unpack
 # The runtime-stage image; we can use Debian as the
 # base image since the Conda env also includes Python
 # for us.
+################################################################################
 FROM ubuntu:latest AS runtime
+################################################################################
 # Copy /venv from the previous stage:
 COPY --from=base /venv /venv
 
