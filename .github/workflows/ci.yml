@@ -71,10 +71,10 @@ jobs:
     steps:
        - name: Checkout code
          uses: actions/checkout@v2
-       - name: Setup Miniforge
+       - name: Setup Mambaforge
          uses: conda-incubator/setup-miniconda@v2
          with:
-             miniforge-variant: Miniforge
+             miniforge-variant: Mambaforge
              miniforge-version: latest
              use-mamba: false
        - name: Set cache date
@@ -141,10 +141,10 @@ jobs:
           path: /usr/share/conda/envs/srbench
           key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
         id: cache
-      - name: Setup Miniforge
+      - name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
         with:
-            miniforge-variant: Miniforge
+            miniforge-variant: Mambaforge
             miniforge-version: latest
             use-mamba: false
             environment-file: environment.yml
