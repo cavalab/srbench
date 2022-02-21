@@ -35,8 +35,6 @@ jobs:
 
       - name: check modified files
         id: check_files
-        outputs:
-          run_job: 
         run: |
           if ${{ env.skip }} ; then
               echo "::set-output name=run_job::true"

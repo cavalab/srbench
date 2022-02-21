@@ -36,6 +36,7 @@ RUN micromamba create -y -f /srbench/environment.yml \
     && micromamba clean --all --yes
 ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 
+SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 
 ##################################################
 # install SR methods with install.sh files
