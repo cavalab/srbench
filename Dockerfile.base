@@ -41,7 +41,6 @@ ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 # install SR methods with install.sh files
 COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
 # make the shell activate srbench
-SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 RUN bash install.sh
 
 ##################################################

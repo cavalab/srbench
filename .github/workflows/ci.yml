@@ -59,27 +59,27 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
-      steps:
-         - name: Checkout code
-           uses: actions/checkout@v2
-         - name: Setup Mambaforge
-           uses: conda-incubator/setup-miniconda@v2
-           with:
-               miniforge-variant: Mambaforge
-               miniforge-version: latest
-               use-mamba: true
-         - name: Set cache date
-           run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-         - name: Cache conda
-           uses: actions/cache@v2
-           env: 
-             CACHE_NUMBER: 0
-           with:
-             key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-           id: cache
-         - name: Update environment
-           if: steps.cache.outputs.cache-hit != 'true'
-           run: mamba env update -n srbench -f environment.yml
+    steps:
+       - name: Checkout code
+         uses: actions/checkout@v2
+       - name: Setup Mambaforge
+         uses: conda-incubator/setup-miniconda@v2
+         with:
+             miniforge-variant: Mambaforge
+             miniforge-version: latest
+             use-mamba: true
+       - name: Set cache date
+         run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+       - name: Cache conda
+         uses: actions/cache@v2
+         env: 
+           CACHE_NUMBER: 0
+         with:
+           key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+         id: cache
+       - name: Update environment
+         if: steps.cache.outputs.cache-hit != 'true'
+         run: mamba env update -n srbench -f environment.yml
   ################################################################################
   # parallel methods install
   ################################################################################
