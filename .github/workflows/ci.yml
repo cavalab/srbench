@@ -24,14 +24,18 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    env:
+      skip: 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
+        if: env.skip == 'false'
 
       - name: check modified files
         id: check_files
+        if: env.skip == 'false'
         run: |
           echo "=============== list modified files ==============="
           git diff --name-only HEAD^ HEAD
@@ -50,6 +54,10 @@ jobs:
               echo "::set-output name=run_job::true"
             fi
           done < files.txt
+
+      - name: skip
+        if: env.skip == 'true'
+        run: echo "::set-output name=run_job::true"
 
   ################################################################################
   # environment setup

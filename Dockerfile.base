@@ -48,11 +48,13 @@ RUN bash install.sh
 # https://pythonspeed.com/articles/conda-docker-image-size/
 ##################################################
 # Install conda-pack:
-RUN micromamba install -c conda-forge conda-pack
+RUN micromamba install -c anaconda conda-pack
 
 # Use conda-pack to create a standalone enviornment
 # in /venv:
-ENV CONDA_EXE micromamba
+# ENV CONDA_EXE micromamba
+RUN env
+RUN micromamba list
 RUN conda-pack -n srbench -o /tmp/env.tar && \
   mkdir /venv && \
   cd /venv && \
