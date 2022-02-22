@@ -1,6 +1,8 @@
 ################################################################################
-# FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
-FROM continuumio/miniconda3 AS build
+FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
+# FROM continuumio/miniconda3 AS build
+# Container for building the environment
+# FROM condaforge/mambaforge:4.9.2-5 as conda
 ################################################################################
 # Nvidia code ##################################################################
 ################################################################################
@@ -33,15 +35,21 @@ RUN apt update && apt install -y \
 ################################################################################
 FROM build as base
 ################################################################################
+SHELL ["/bin/bash", "-c"]
 # USER $MAMBA_USER
-WORKDIR /srbench/
-# COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
-COPY environment.yml /srbench/environment.yml
-RUN conda create -y -f /srbench/environment.yml \
-    && conda clean --all --yes
+# WORKDIR /srbench/
+COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
+# COPY environment.yml /tmp/environment.yml
+RUN micromamba env create -y -p /venv/ -f /tmp/environment.yml \
+    && micromamba clean --all --yes
 # ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
+ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
-SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
+# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+
+# SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
+# WORKDIR /srbench/
+RUN install.sh
 
 ##################################################
 # these lines use conda-pack to shrink the image size
@@ -49,29 +57,31 @@ SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 ##################################################
 # Install conda-pack:
 # RUN conda install -n srbench -c anaconda conda
-RUN conda install -n srbench conda-pack
+# RUN conda install -n srbench conda-pack
 # Use conda-pack to create a standalone enviornment
 # in /venv:
 # ENV CONDA_EXE micromamba
-RUN env
-RUN conda list
-RUN conda-pack -n srbench -o /tmp/env.tar && \
-  mkdir /venv && \
-  cd /venv && \
-  tar xf /tmp/env.tar && \
-  rm /tmp/env.tar
+# RUN env
+# RUN conda list
+# RUN conda-pack -n srbench -o /tmp/env.tar && \
+#   mkdir /venv && \
+#   cd /venv && \
+#   tar xf /tmp/env.tar && \
+#   rm /tmp/env.tar
 
 # We've put venv in same path it'll be in final image,
 # so now fix up paths:
 # SHELL ["/bin/bash", "-c"]
-RUN /venv/bin/conda-unpack
+# RUN /venv/bin/conda-unpack
 
 
 # The runtime-stage image; we can use Debian as the
 # base image since the Conda env also includes Python
 # for us.
 ################################################################################
-FROM ubuntu:latest AS runtime
+# FROM ubuntu:latest AS runtime
+# Distroless for execution
+FROM gcr.io/distroless/base-debian10 as runtime
 ################################################################################
 # Copy /venv from the previous stage:
 COPY --from=base /venv /venv
@@ -84,12 +94,8 @@ COPY --from=base /venv /venv
 COPY . /srbench/
 # COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
 # make the shell activate srbench
-SHELL ["/bin/bash","-c"]
-RUN source /venv/bin/activate
+# SHELL ["/bin/bash","-c"]
+# RUN source /venv/bin/activate
 # ENV PATH /venv/bin/:$PATH
-SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
-WORKDIR /srbench/
-RUN install.sh
 ##################################################
 
-ENTRYPOINT ["conda", "run", "-n", "srbench", "conda", "info"]
