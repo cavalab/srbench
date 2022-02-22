@@ -87,7 +87,7 @@ jobs:
         name: Cache conda
         uses: actions/cache@v2
         env: 
-          CACHE_NUMBER: 0
+          CACHE_NUMBER: 1
         with:
           # path: ${{ CONDA }}
           path: /usr/share/miniconda3/envs/srbench
