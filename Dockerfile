@@ -1,4 +1,8 @@
+################################################################################
 FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
+# FROM continuumio/miniconda3 AS build
+# Container for building the environment
+# FROM condaforge/mambaforge:4.9.2-5 as conda
 ################################################################################
 # Nvidia code ##################################################################
 ################################################################################
@@ -28,77 +32,74 @@ RUN apt update && apt install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Install env
-FROM build as build-mamba
-USER $MAMBA_USER
-WORKDIR /srbench/
-COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
-RUN micromamba create -y -f /srbench/environment.yml \
+################################################################################
+FROM build as base
+################################################################################
+SHELL ["/bin/bash", "-c"]
+# USER $MAMBA_USER
+# WORKDIR /srbench/
+COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
+# COPY environment.yml /tmp/environment.yml
+# RUN micromamba create -y -p /venv/ -f /tmp/environment.yml \
+#     && micromamba clean --all --yes
+RUN micromamba create -y -f /tmp/environment.yml \
     && micromamba clean --all --yes
 ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
-# conda is currently only needed for PySR
-# RUN micromamba install -y --name base -c conda-forge conda
-# ENV PATH=$PATH:/opt/conda/bin
- # RUN echo 'export PATH=$PATH:/opt/conda/bin' >> ~/.bashrc
+ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
-SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 
-# Always run inside srbench:
-# RUN source ~/.bashrc && conda init bash
-# RUN echo "conda activate srbench" >> ~/.bashrc
+# SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
+# WORKDIR /srbench/
+COPY . .
+RUN bash install.sh
 
-# Copy remaining files and install
-FROM build-mamba as base
-RUN ls
-RUN pwd
-COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
-# COPY --chown=$MAMBA_USER:$MAMBA_USER /opt/conda/ /opt/conda
-# RUN source ~/.bashrc && source install.sh
-# RUN bash configure.sh
-# COPY --chown=$MAMBA_USER:$MAMBA_USER . .
-# CMD ["/bin/bash", "-c"]
-CMD echo "Hello from the base image."
-ENTRYPOINT ["micromamba", "run", "-n", "srbench"]
-FROM base as dsr_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/dsr_install.sh
-WORKDIR /srbench/
-FROM base as ellyn_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/ellyn_install.sh
-WORKDIR /srbench/
-FROM base as feat_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/feat_install.sh
-WORKDIR /srbench/
-FROM base as gpgomea_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/gpgomea_install.sh
-WORKDIR /srbench/
-FROM base as gsgp_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/gsgp_install.sh
-WORKDIR /srbench/
-FROM base as itea_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/itea_install.sh
-WORKDIR /srbench/
-FROM base as operon_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/operon_install.sh
-WORKDIR /srbench/
-FROM base as pysr_install
-WORKDIR /srbench/experiment/methods/src/
-RUN /srbench/experiment/methods/src/pysr_install.sh
-WORKDIR /srbench/
+##################################################
+# these lines use conda-pack to shrink the image size
+# https://pythonspeed.com/articles/conda-docker-image-size/
+##################################################
+# Install conda-pack:
+# RUN conda install -n srbench -c anaconda conda
+# RUN conda install -n srbench conda-pack
+# Use conda-pack to create a standalone enviornment
+# in /venv:
+# ENV CONDA_EXE micromamba
+# RUN env
+# RUN conda list
+# RUN conda-pack -n srbench -o /tmp/env.tar && \
+#   mkdir /venv && \
+#   cd /venv && \
+#   tar xf /tmp/env.tar && \
+#   rm /tmp/env.tar
 
-#combine installations
-FROM base as final
+# We've put venv in same path it'll be in final image,
+# so now fix up paths:
+# SHELL ["/bin/bash", "-c"]
+# RUN /venv/bin/conda-unpack
 
-COPY --from=dsr_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=ellyn_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=feat_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=gpgomea_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=gsgp_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=itea_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=operon_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
-COPY --from=pysr_install /opt/conda/envs/srbench/ /opt/conda/envs/srbench/
+
+# The runtime-stage image; we can use Debian as the
+# base image since the Conda env also includes Python
+# for us.
+################################################################################
+# FROM ubuntu:latest AS runtime
+# Distroless for execution
+# FROM gcr.io/distroless/base-debian10 as runtime
+################################################################################
+# Copy /venv from the previous stage:
+# COPY --from=base /venv /venv
+# COPY --from=base /usr/local/bin/_entrypoint.sh /usr/local/bin/
+# ENTRYPOINT ["/usr/local/bin/_entrypoint.sh"]
+# ENV PATH /venv/bin/:$PATH
+# When image is run, run the code with the environment
+# activated:
+##################################################
+# install SR methods with install.sh files
+# COPY . /srbench/
+# COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
+# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+# make the shell activate srbench
+# SHELL ["/bin/bash","-c"]
+# RUN source /venv/bin/activate
+##################################################
+
