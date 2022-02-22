@@ -125,7 +125,7 @@ jobs:
       matrix-tuned: ${{ steps.set-matrix-tuned.outputs.matrix }}
     steps:
       - name: generate alg list
-        run: bash get_algorithm_list.sh
+        run: bash ci/get_algorithm_list.sh
       - id: set-matrix
         run: |
           echo "::set-output name=matrix::${cat ci/algs.json}"
