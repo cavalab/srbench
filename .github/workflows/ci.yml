@@ -133,11 +133,11 @@ jobs:
       - 
         id: set-matrix
         run: |
-          echo "::set-output name=matrix::${cat ci/algs.json}"
+          echo "::set-output name=matrix::$(cat ci/algs.json)"
       - 
         id: set-matrix-tuned
         run: |
-          echo "::set-output name=matrix::${cat ci/algs-tuned.json}"
+          echo "::set-output name=matrix::$(cat ci/algs-tuned.json)"
   test_evaluate:
     runs-on: ubuntu-latest
     needs: 
