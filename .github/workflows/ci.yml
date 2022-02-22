@@ -171,15 +171,6 @@ jobs:
             ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}
             ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
       - 
-        name: Initialize
-        run: | 
-          eval "$(conda shell.bash hook)"
-          conda init bash
-          conda activate srbench
-          conda info -a
-          conda list
-          echo "CONDA: $CONDA"
-      - 
         name: Install 
         run: | 
           cd experiment/methods/src
