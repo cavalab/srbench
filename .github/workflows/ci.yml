@@ -145,6 +145,7 @@ jobs:
       - test_setup
     strategy:
       matrix: ${{fromJSON(needs.test_setup.outputs.matrix)}}
+      fail-fast: false
     defaults:
       run:
         shell: bash -l {0}
@@ -158,7 +159,6 @@ jobs:
         with:
           miniforge-variant: Mambaforge
           miniforge-version: latest
-          activate-environment: srbench
           use-mamba: true
       - 
         name: Set cache date
@@ -174,6 +174,8 @@ jobs:
         if: steps.cache.outputs.cache-hit == 'true'
         run: |
           cd experiment
+          conda activate srbench
+          conda info
           mamba run -n srbench python -m pytest -v test_evaluate_model.py --ml ${{ matrix.ml }}
 
   test_tuned:
@@ -186,6 +188,7 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix: ${{fromJSON(needs.test_setup.outputs.matrix-tuned)}}
+      fail-fast: false
     steps:
       - 
         name: Checkout code
@@ -196,7 +199,6 @@ jobs:
         with:
           miniforge-variant: Mambaforge
           miniforge-version: latest
-          # activate-environment: srbench
           use-mamba: true
       - 
         name: Set cache date
@@ -212,4 +214,5 @@ jobs:
         if: steps.cache.outputs.cache-hit == 'true'
         run: |
           cd experiment
+          conda info
           mamba run -n srbench python -m pytest -v test_tuned_models.py --ml ${{ matrix.ml }}
