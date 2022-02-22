@@ -65,7 +65,7 @@ jobs:
   ################################################################################
   # environment setup
   ################################################################################
-  setup_environment:
+  build:
     runs-on: ubuntu-latest
     needs: check
     if: needs.check.outputs.run_job == 'true'
@@ -82,6 +82,7 @@ jobs:
         with:
           miniforge-variant: Mambaforge
           miniforge-version: latest
+          activate-environment: srbench
           use-mamba: true
       - 
         name: Set cache date
@@ -91,90 +92,29 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /usr/share/miniconda3/envs/srbench
-          key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ env.DATE }}
           restore-keys: |
-            ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}
-            ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ env.DATE }}
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
         id: cache
       - 
         name: Update environment
         if: steps.cache.outputs.cache-hit != 'true'
-        run: mamba env update -n srbench -f environment.yml
+        run: mamba env update -n srbench -f environment.yml --prune
+      # -
+      #   name: Activate Environment
+      #   run: |
+      #     conda activate srbench
+      #     conda info
       - 
-        name: Test cache
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: echo "CONDA= $CONDA"
-  ################################################################################
-  # parallel methods install
-  ################################################################################
-  install_setup:
-    name: Get methods with install scripts
-    needs: check
-    if: needs.check.outputs.run_job == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      - 
-        name: Get Install List
-        id: set-matrix
+        name: Install SR methods
         run: |
-          bash ci/get_install_list.sh
-          echo "::set-output name=matrix::$(cat ci/installs.json)"
-
-  installs:
-    name: Install methods
-    needs: 
-      - setup_environment
-      - install_setup
-      - check
-    if: needs.check.outputs.run_job == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash -l {0}
-    # container: lacava/srbench:base
-    strategy:
-      matrix: ${{fromJSON(needs.install_setup.outputs.matrix)}}
-      fail-fast: false
-      max-parallel: 1
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
+          mamba run -n srbench bash install.sh
       - 
-        name: Setup Mambaforge
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          miniforge-variant: Mambaforge
-          miniforge-version: latest
-          use-mamba: true
-          # environment-file: environment.yml
-          # activate-environment: srbench
+        name: Test Evaluate Model 
+        run: |
+          cd experiment
+          ./test_evaluate_model.sh
       - 
-        name: Set cache date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-      - 
-        name: Cache conda
-        id: cache
-        uses: actions/cache@v2
-        with:
-          path: /usr/share/miniconda3/envs/srbench
-          key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-          restore-keys: |
-            ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}
-            ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
-      - 
-        name: Install 
-        run: | 
-          cd experiment/methods/src
-          echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-          echo "Running $install_file"
-          echo "////////////////////////////////////////////////////////////////////////////////"
-          conda run -n srbench bash ${{ matrix.install_file }}
+        name: Test Tuned Models
+        run: python -m pytest -v test_tuned_models.py
