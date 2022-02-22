@@ -49,6 +49,7 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
 # SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
 # WORKDIR /srbench/
+COPY install.sh .
 RUN install.sh
 
 ##################################################
