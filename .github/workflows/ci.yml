@@ -124,7 +124,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       matrix-tuned: ${{ steps.set-matrix-tuned.outputs.matrix }}
     steps:
-      - id: generate alg list
+      - name: generate alg list
         run: bash get_algorithm_list.sh
       - id: set-matrix
         run: |
