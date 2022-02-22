@@ -6,12 +6,11 @@
 
 failed=()
 succeeded=()
-declare -A failures=()
 
 # install methods
-echo "///////////////////////////"
-echo "installing GP methods..."
-echo "///////////////////////////"
+echo "////////////////////////////////////////"
+echo "installing SR methods from scripts..."
+echo "////////////////////////////////////////"
 
 # move to methods folder
 cd experiment/methods/src/
@@ -19,23 +18,21 @@ cd experiment/methods/src/
 # install all methods
 for install_file in $(ls *.sh) ; do
     echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-    echo "Running $install_file"
-    echo "////////////////////////////////////////////////////////////////////////////////"
+    echo "Running $install_file..."
 
     # Run install_file in same env:
-    msg=$(bash $install_file 2>&1 1>/dev/null)
+    bash $install_file 2>"${install_file}.err" 1>"${install_file}.log"
     # echo $code
     # echo $msg
-    if [ -n "$msg" ]; 
+    # if [ -n "$msg" ]; 
+    if [ $? -gt 0 ];
     then
         failed+=($install_file)
-        failures[$install_file]="$msg"
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo "$install_file FAILED"
     else
         succeeded+=($install_file)
-        echo "////////////////////////////////////////////////////////////////////////////////"
-        echo "Finished $install_file"
+        echo "$install_file complete"
         echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
     fi
 done
@@ -43,9 +40,12 @@ done
 if [ ${#failed[@]} -gt 0 ] ; then
     echo "vvvvvvvvvvvvvvv failures vvvvvvvvvvvvvvv"
     # n=0
-    for f in ${!failures[@]} ; do
+    for f in ${!failed[@]} ; do
         echo "---------- $f ----------"
-        echo "${failures[$f]}"
+        echo "---- stdout: "
+        cat  "${f}.log"
+        echo "---- stderr: "
+        echo "${f}.err"
         echo "----------------------------------------"
     done
 
@@ -54,7 +54,7 @@ if [ ${#failed[@]} -gt 0 ] ; then
         echo "  "$s
     done
     echo "${#failed[@]} failed installs:"
-    for f in ${!failures[@]} ; do
+    for f in ${!failed[@]} ; do
         echo "  "$f
     done
     exit 1
