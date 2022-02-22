@@ -16,22 +16,22 @@ echo "////////////////////////////////////////"
 cd experiment/methods/src/
 
 # install all methods
-for install_file in $(ls *.sh) ; do
+for install_file in $(ls *ellyn*.sh) ; do
     echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
     echo "Running $install_file..."
 
+    name=${install_file%.sh}
     # Run install_file in same env:
-    bash $install_file 2>"${install_file}.err" 1>"${install_file}.log"
-    # echo $code
-    # echo $msg
-    # if [ -n "$msg" ]; 
+    bash ${install_file} > "${name}.log" 2> "${name}.err"
+
     if [ $? -gt 0 ];
     then
-        failed+=($install_file)
+        # failed+=("${install_file}")
+        failed+=("$name")
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo "$install_file FAILED"
     else
-        succeeded+=($install_file)
+        succeeded+=("$install_file")
         echo "$install_file complete"
         echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
     fi
@@ -40,21 +40,21 @@ done
 if [ ${#failed[@]} -gt 0 ] ; then
     echo "vvvvvvvvvvvvvvv failures vvvvvvvvvvvvvvv"
     # n=0
-    for f in ${!failed[@]} ; do
+    for f in ${failed[@]} ; do
         echo "---------- $f ----------"
         echo "---- stdout: "
         cat  "${f}.log"
         echo "---- stderr: "
-        echo "${f}.err"
+        cat "${f}.err"
         echo "----------------------------------------"
     done
 
     echo "${#succeeded[@]} successful installs:"
-    for s in ${!succeeded[@]} ; do
+    for s in ${succeeded[@]} ; do
         echo "  "$s
     done
     echo "${#failed[@]} failed installs:"
-    for f in ${!failed[@]} ; do
+    for f in ${failed[@]} ; do
         echo "  "$f
     done
     exit 1
