@@ -40,7 +40,7 @@ SHELL ["/bin/bash", "-c"]
 # WORKDIR /srbench/
 COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 # COPY environment.yml /tmp/environment.yml
-RUN micromamba env create -y -p /venv/ -f /tmp/environment.yml \
+RUN micromamba create -y -p /venv/ -f /tmp/environment.yml \
     && micromamba clean --all --yes
 # ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
