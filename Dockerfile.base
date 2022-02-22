@@ -40,7 +40,9 @@ SHELL ["/bin/bash", "-c"]
 # WORKDIR /srbench/
 COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 # COPY environment.yml /tmp/environment.yml
-RUN micromamba create -y -p /venv/ -f /tmp/environment.yml \
+# RUN micromamba create -y -p /venv/ -f /tmp/environment.yml \
+#     && micromamba clean --all --yes
+RUN micromamba create -y -f /tmp/environment.yml \
     && micromamba clean --all --yes
 ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
@@ -82,21 +84,20 @@ RUN bash install.sh
 ################################################################################
 # FROM ubuntu:latest AS runtime
 # Distroless for execution
-FROM gcr.io/distroless/base-debian10 as runtime
+# FROM gcr.io/distroless/base-debian10 as runtime
 ################################################################################
 # Copy /venv from the previous stage:
-COPY --from=base /venv /venv
-
+# COPY --from=base /venv /venv
+# ENV PATH /venv/bin/:$PATH
 # When image is run, run the code with the environment
 # activated:
-# SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 ##################################################
 # install SR methods with install.sh files
-COPY . /srbench/
+# COPY . /srbench/
 # COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
+# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 # make the shell activate srbench
 # SHELL ["/bin/bash","-c"]
 # RUN source /venv/bin/activate
-# ENV PATH /venv/bin/:$PATH
 ##################################################
 

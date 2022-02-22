@@ -186,4 +186,4 @@ jobs:
           echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
           echo "Running $install_file"
           echo "////////////////////////////////////////////////////////////////////////////////"
-          bash ${{ matrix.install_file }}
+          conda run -n srbench bash ${{ matrix.install_file }}
