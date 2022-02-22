@@ -110,26 +110,32 @@ jobs:
         name: Install SR methods
         run: |
           mamba run -n srbench bash install.sh
-      - 
-        name: Test Evaluate Model 
-        run: |
-          cd experiment
-          ./test_evaluate_model.sh
-      - 
-        name: Test Tuned Models
-        run: python -m pytest -v test_tuned_models.py
+      # - 
+      #   name: Test Evaluate Model 
+      #   run: |
+      #     cd experiment
+      #     ./test_evaluate_model.sh
+      # - 
+      #   name: Test Tuned Models
+      #   run: python -m pytest -v test_tuned_models.py
   test_setup:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       matrix-tuned: ${{ steps.set-matrix-tuned.outputs.matrix }}
     steps:
-      - name: generate alg list
+      - 
+        name: Checkout code
+        uses: actions/checkout@v2
+      - 
+        name: generate alg list
         run: bash ci/get_algorithm_list.sh
-      - id: set-matrix
+      - 
+        id: set-matrix
         run: |
           echo "::set-output name=matrix::${cat ci/algs.json}"
-      - id: set-matrix-tuned
+      - 
+        id: set-matrix-tuned
         run: |
           echo "::set-output name=matrix::${cat ci/algs-tuned.json}"
   test_evaluate:
