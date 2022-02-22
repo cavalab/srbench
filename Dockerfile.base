@@ -1,5 +1,6 @@
 ################################################################################
-FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
+# FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
+FROM continuumio/miniconda3 AS build
 ################################################################################
 # Nvidia code ##################################################################
 ################################################################################
@@ -36,24 +37,24 @@ FROM build as base
 WORKDIR /srbench/
 # COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /srbench/environment.yml
 COPY environment.yml /srbench/environment.yml
-RUN micromamba create -y -f /srbench/environment.yml \
-    && micromamba clean --all --yes
-ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
+RUN conda create -y -f /srbench/environment.yml \
+    && conda clean --all --yes
+# ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 
-SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 
 ##################################################
 # these lines use conda-pack to shrink the image size
 # https://pythonspeed.com/articles/conda-docker-image-size/
 ##################################################
 # Install conda-pack:
-RUN micromamba install -c anaconda conda
-RUN micromamba install -c anaconda conda-pack
+# RUN conda install -n srbench -c anaconda conda
+RUN conda install -n srbench conda-pack
 # Use conda-pack to create a standalone enviornment
 # in /venv:
 # ENV CONDA_EXE micromamba
 RUN env
-RUN micromamba list
+RUN conda list
 RUN conda-pack -n srbench -o /tmp/env.tar && \
   mkdir /venv && \
   cd /venv && \
@@ -77,7 +78,7 @@ COPY --from=base /venv /venv
 
 # When image is run, run the code with the environment
 # activated:
-# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+# SHELL ["conda", "run", "-n", "srbench", "/bin/bash", "-c"]
 ##################################################
 # install SR methods with install.sh files
 COPY . /srbench/
@@ -85,6 +86,7 @@ COPY . /srbench/
 # make the shell activate srbench
 SHELL ["/bin/bash","-c"]
 RUN source /venv/bin/activate
+# ENV PATH /venv/bin/:$PATH
 SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
 WORKDIR /srbench/
 RUN install.sh
