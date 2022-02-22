@@ -42,15 +42,15 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 # COPY environment.yml /tmp/environment.yml
 RUN micromamba create -y -p /venv/ -f /tmp/environment.yml \
     && micromamba clean --all --yes
-# ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
+ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
 # SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 
 # SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
 # WORKDIR /srbench/
-COPY install.sh .
-RUN install.sh
+COPY . .
+RUN bash install.sh
 
 ##################################################
 # these lines use conda-pack to shrink the image size

@@ -15,6 +15,9 @@ on:
       - master 
       - dev 
 
+env: 
+  CACHE_NUMBER: 1
+
 jobs:
   check:
     name: Check env changes
@@ -86,8 +89,6 @@ jobs:
       - 
         name: Cache conda
         uses: actions/cache@v2
-        env: 
-          CACHE_NUMBER: 1
         with:
           path: /usr/share/miniconda3/envs/srbench
           key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
@@ -163,8 +164,6 @@ jobs:
         name: Cache conda
         id: cache
         uses: actions/cache@v2
-        env: 
-          CACHE_NUMBER: 0
         with:
           path: /usr/share/miniconda3/envs/srbench
           key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
