@@ -10,6 +10,9 @@ git clone --quiet http://github.com/cavalab/feat
 
 cd feat
 
+# fix version
+git checkout 1f9c43b60eb26bb0d7381cb3a4ebd6243f7355dd
+
 ./configure
 export SHOGUN_LIB=$CONDA_PREFIX/lib/
 export SHOGUN_DIR=$CONDA_PREFIX/include/
