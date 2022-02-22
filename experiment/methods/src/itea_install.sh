@@ -6,7 +6,7 @@ if [ -d ITEA ]; then
     rm -rf ITEA
 fi
 
-git clone https://github.com/folivetti/ITEA.git
+git clone --quiet https://github.com/folivetti/ITEA.git
 
 #cd ITEA
 #curl -sSL https://get.haskellstack.org/ | sh

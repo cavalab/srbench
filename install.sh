@@ -1,9 +1,12 @@
 # note: make sure conda environment is installed 
-# before running install. see configure.sh
-# conda activate srbench
-conda info
+# and activated before running install. 
+# see configure.sh
+# or run this as: 
+#   conda run -n srbench bash install.sh
 
 failed=()
+succeeded=()
+declare -A failures=()
 
 # install methods
 echo "///////////////////////////"
@@ -20,14 +23,17 @@ for install_file in $(ls *.sh) ; do
     echo "////////////////////////////////////////////////////////////////////////////////"
 
     # Run install_file in same env:
-    bash $install_file
-
-    if [ $? -gt 0 ]
+    msg=$(bash $install_file 2>&1 1>/dev/null)
+    # echo $code
+    # echo $msg
+    if [ -n "$msg" ]; 
     then
         failed+=($install_file)
+        failures[$install_file]="$msg"
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         echo "$install_file FAILED"
     else
+        succeeded+=($install_file)
         echo "////////////////////////////////////////////////////////////////////////////////"
         echo "Finished $install_file"
         echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
@@ -35,7 +41,23 @@ for install_file in $(ls *.sh) ; do
 done
 
 if [ ${#failed[@]} -gt 0 ] ; then
-    echo "${#failed[@]} installs failed: ${failed[*]}"
+    echo "vvvvvvvvvvvvvvv failures vvvvvvvvvvvvvvv"
+    # n=0
+    for f in ${!failures[@]} ; do
+        echo "---------- $f ----------"
+        echo "${failures[$f]}"
+        echo "----------------------------------------"
+    done
+
+    echo "${#succeeded[@]} successful installs:"
+    for s in ${!succeeded[@]} ; do
+        echo "  "$s
+    done
+    echo "${#failed[@]} failed installs:"
+    for f in ${!failures[@]} ; do
+        echo "  "$f
+    done
+    exit 1
 else
     echo "All installations completed successfully."
 fi

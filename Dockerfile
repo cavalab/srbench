@@ -52,7 +52,8 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 # SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
 # WORKDIR /srbench/
 COPY . .
-RUN micromamba run -n srbench bash install.sh
+RUN micromamba run -n srbench bash install.sh \
+    && micromamba clean --all --yes
 
 ##################################################
 # these lines use conda-pack to shrink the image size
