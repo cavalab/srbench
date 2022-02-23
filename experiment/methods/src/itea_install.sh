@@ -6,10 +6,10 @@ if [ -d ITEA ]; then
     rm -rf ITEA
 fi
 
-git clone --quiet https://github.com/folivetti/ITEA.git
+git clone https://github.com/folivetti/ITEA.git
 
 #cd ITEA
-cp ITEA $CONDA_PREFIX/lib/python3.7/site-packages/ -a
+rsync -av ITEA $CONDA_PREFIX/lib/python3.7/site-packages/ --exclude=".git" --exclude="datasets"
 #curl -sSL https://get.haskellstack.org/ | sh
 #stack build
 #conda activate srbench
