@@ -37,7 +37,17 @@ for install_file in $(ls *.sh) ; do
     echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 done
 
+echo "${#succeeded[@]} successful installs:"
+for s in ${succeeded[@]} ; do
+    echo "  "$s
+done
+echo "${#failed[@]} failed installs:"
+for f in ${failed[@]} ; do
+    echo "  "$f
+done
+
 if [ ${#failed[@]} -gt 0 ] ; then
+    exit 1
     # echo "vvvvvvvvvvvvvvv failures vvvvvvvvvvvvvvv"
     # # n=0
     # for f in ${failed[@]} ; do
@@ -49,15 +59,6 @@ if [ ${#failed[@]} -gt 0 ] ; then
     #     echo "----------------------------------------"
     # done
 
-    echo "${#succeeded[@]} successful installs:"
-    for s in ${succeeded[@]} ; do
-        echo "  "$s
-    done
-    echo "${#failed[@]} failed installs:"
-    for f in ${failed[@]} ; do
-        echo "  "$f
-    done
-    exit 1
 else
     echo "All installations completed successfully."
 fi

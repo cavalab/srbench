@@ -9,6 +9,7 @@ fi
 git clone --quiet https://github.com/folivetti/ITEA.git
 
 #cd ITEA
+cp ITEA $CONDA_PREFIX/lib/python3.7/site-packages/ -a
 #curl -sSL https://get.haskellstack.org/ | sh
 #stack build
 #conda activate srbench
