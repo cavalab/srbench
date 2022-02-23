@@ -94,6 +94,20 @@ jobs:
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
         id: cache
       - 
+        name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+      - 
+        name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}
+      - 
         name: Update environment
         if: steps.cache.outputs.cache-hit != 'true'
         run: | 
@@ -164,9 +178,6 @@ jobs:
           miniforge-version: latest
           activate-environment: srbench
           use-mamba: true
-      # - 
-      #   name: Set cache date
-      #   run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
       - 
         name: Cache conda
         uses: actions/cache@v2
@@ -174,14 +185,30 @@ jobs:
           path: /usr/share/miniconda3/envs/srbench
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
         id: cache
-      - name: Evaluate Model
+      - 
+        name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+      - 
+        name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}
+      - 
+        name: Evaluate Model
         if: steps.cache.outputs.cache-hit == 'true'
         run: |
           cd experiment
           conda env list
           conda info
           mamba run -n srbench python -m pytest -v test_evaluate_model.py --ml ${{ matrix.ml }}
-      - name: Check Cache Hit
+      - 
+        name: Check Cache Hit
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           echo "Didn't find the cache for the srbench environment :("
@@ -210,9 +237,6 @@ jobs:
           miniforge-version: latest
           activate-environment: srbench
           use-mamba: true
-      # - 
-      #   name: Set cache date
-      #   run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
       - 
         name: Cache conda
         uses: actions/cache@v2
@@ -220,13 +244,29 @@ jobs:
           path: /usr/share/miniconda3/envs/srbench
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
         id: cache
-      - name: Evaluate Tuned Model
+      - 
+        name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+      - 
+        name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}
+      - 
+        name: Evaluate Tuned Model
         if: steps.cache.outputs.cache-hit == 'true'
         run: |
           cd experiment
           conda info
           mamba run -n srbench python -m pytest -v test_tuned_models.py --ml ${{ matrix.ml }}
-      - name: Check Cache Hit
+      - 
+        name: Check Cache Hit
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           echo "Didn't find the cache for the srbench environment :("
