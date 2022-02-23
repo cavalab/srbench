@@ -94,19 +94,14 @@ jobs:
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
         id: cache
       - 
-        name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
-      - 
-        name: pip cache
+        name: Python cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
+          path: /home/runner/.cache/Python-Eggs
+          key: ${{ runner.os }}-eggs-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
-            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}
+            ${{ runner.os }}-eggs-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+            ${{ runner.os }}-eggs-${{ env.CACHE_NUMBER }}
       - 
         name: Update environment
         if: steps.cache.outputs.cache-hit != 'true'
@@ -186,19 +181,14 @@ jobs:
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
         id: cache
       - 
-        name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
-      - 
-        name: pip cache
+        name: Python cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
+          path: /home/runner/.cache/Python-Eggs
+          key: ${{ runner.os }}-eggs-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
-            ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}
+            ${{ runner.os }}-eggs-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+            ${{ runner.os }}-eggs-${{ env.CACHE_NUMBER }}
       - 
         name: Evaluate Model
         if: steps.cache.outputs.cache-hit == 'true'
