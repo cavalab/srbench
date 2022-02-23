@@ -1,5 +1,8 @@
 ################################################################################
-FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
+# Sources:
+# - https://uwekorn.com/2021/03/01/deploying-conda-environments-in-docker-how-to-do-it-right.html
+# FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
+FROM condaforge/mambaforge:4.11.0-2 as base
 # FROM continuumio/miniconda3 AS build
 # Container for building the environment
 # FROM condaforge/mambaforge:4.9.2-5 as conda
@@ -20,40 +23,53 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 # Install base packages.
 USER root
 
+#////////////////////////////////////////////////////////////////////////////////
+RUN export http_proxy=http://proxy.tch.harvard.edu:3128 \
+    && export HTTP_PROXY=$http_proxy \
+    && export https_proxy=http://proxy.tch.harvard.edu:3128 \
+    && export HTTPS_PROXY=$https_proxy \
+    && echo 'Acquire { http::Proxy "http://proxy.tch.harvard.edu:3128"; https::Proxy "http://proxy.tch.harvard.edu:3128"; }' | tee /etc/apt/apt.conf.d/proxy.conf \
+# git
+    && git config --global http.proxy http://proxy.tch.harvard.edu:3128
+#////////////////////////////////////////////////////////////////////////////////
+
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt update && apt install -y \
     default-jdk \
-    bzip2 \
-    ca-certificates \
+    rsync \
+    # bzip2 \
+    # ca-certificates \
     curl \
-    git \
-    wget \
+    # git \
+    # wget \
     vim \
     jq && \
     rm -rf /var/lib/apt/lists/*
 
+#////////////////////////////////////////////////////////////////////////////////
+#////////////////////////////////////////////////////////////////////////////////
+
 # Install env
 ################################################################################
-FROM build as base
+# FROM base AS build
 ################################################################################
-SHELL ["/bin/bash", "-c"]
-# USER $MAMBA_USER
+USER $MAMBA_USER
 # WORKDIR /srbench/
+SHELL ["/bin/bash", "-c"]
+# COPY environment.yml /tmp/environment.yml 
 COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
-# COPY environment.yml /tmp/environment.yml
-# RUN micromamba create -y -p /venv/ -f /tmp/environment.yml \
-#     && micromamba clean --all --yes
-RUN micromamba create -y -f /tmp/environment.yml \
-    && micromamba clean --all --yes
-ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
-ARG MAMBA_DOCKERFILE_ACTIVATE=1
+RUN --mount=type=cache,target=/opt/conda/pkgs mamba env create -f /tmp/environment.yml 
+# ENV CONDA_PREFIX $MAMBA_ROOT_PREFIX
+# ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
-# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
+SHELL ["mamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 
-# SHELL ["conda", "run", "-n", "srbench","/bin/bash", "-c"]
+# SHELL ["conda", "run", "-p", "/env","/bin/bash", "-c"]
 # WORKDIR /srbench/
 COPY . .
-RUN micromamba run -n srbench bash install.sh \
-    && micromamba clean --all --yes
+RUN bash install.sh #\ 
+    # && conda clean --all --yes
 
 ##################################################
 # these lines use conda-pack to shrink the image size
@@ -64,7 +80,7 @@ RUN micromamba run -n srbench bash install.sh \
 # RUN conda install -n srbench conda-pack
 # Use conda-pack to create a standalone enviornment
 # in /venv:
-# ENV CONDA_EXE micromamba
+# ENV CONDA_EXE mamba
 # RUN env
 # RUN conda list
 # RUN conda-pack -n srbench -o /tmp/env.tar && \
@@ -83,24 +99,14 @@ RUN micromamba run -n srbench bash install.sh \
 # base image since the Conda env also includes Python
 # for us.
 ################################################################################
-# FROM ubuntu:latest AS runtime
 # Distroless for execution
 # FROM gcr.io/distroless/base-debian10 as runtime
+# FROM ubuntu:latest 
 ################################################################################
-# Copy /venv from the previous stage:
-# COPY --from=base /venv /venv
-# COPY --from=base /usr/local/bin/_entrypoint.sh /usr/local/bin/
-# ENTRYPOINT ["/usr/local/bin/_entrypoint.sh"]
-# ENV PATH /venv/bin/:$PATH
-# When image is run, run the code with the environment
-# activated:
-##################################################
-# install SR methods with install.sh files
-# COPY . /srbench/
-# COPY --chown=$MAMBA_USER:$MAMBA_USER . /srbench/
-# SHELL ["micromamba", "run", "-n", "srbench", "/bin/bash", "-c"]
-# make the shell activate srbench
-# SHELL ["/bin/bash","-c"]
-# RUN source /venv/bin/activate
-##################################################
-
+# Copy /env from the previous stage:
+# COPY --from=base /env /env
+# COPY . /srbench
+# WORKDIR /srbench
+# ENV PATH /env/bin/:$PATH
+# SHELL ["conda", "run", "-p", "/env", "/bin/bash", "-c"]
+# ENTRYPOINT ["conda", "run", "-p", "/env", "/bin/bash", "-c"]
