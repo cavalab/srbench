@@ -96,7 +96,14 @@ jobs:
       - 
         name: Update environment
         if: steps.cache.outputs.cache-hit != 'true'
-        run: mamba env update -n srbench -f environment.yml --prune
+        run: | 
+          mamba env update -n srbench -f environment.yml 
+          # look at cache
+          python -m pip cache list 
+          # look at cache
+          python -m pip cache list --format=abspath
+          # turn off pip cache-dir
+          python -m pip config set global.no-cache-dir false
       # -
       #   name: Activate Environment
       #   run: |
