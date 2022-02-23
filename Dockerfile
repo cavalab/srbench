@@ -23,16 +23,6 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 # Install base packages.
 USER root
 
-#////////////////////////////////////////////////////////////////////////////////
-RUN export http_proxy=http://proxy.tch.harvard.edu:3128 \
-    && export HTTP_PROXY=$http_proxy \
-    && export https_proxy=http://proxy.tch.harvard.edu:3128 \
-    && export HTTPS_PROXY=$https_proxy \
-    && echo 'Acquire { http::Proxy "http://proxy.tch.harvard.edu:3128"; https::Proxy "http://proxy.tch.harvard.edu:3128"; }' | tee /etc/apt/apt.conf.d/proxy.conf \
-# git
-    && git config --global http.proxy http://proxy.tch.harvard.edu:3128
-#////////////////////////////////////////////////////////////////////////////////
-
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt install -y \
