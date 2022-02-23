@@ -6,8 +6,7 @@ if [ -d "feat" ]; then
     rm -rf feat
 fi
 
-git clone --quiet http://github.com/cavalab/feat
-
+git clone --quiet https://github.com/cavalab/feat.git
 cd feat
 
 # fix version
