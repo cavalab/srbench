@@ -6,7 +6,7 @@ if [ -d "GP-GOMEA" ]; then
     rm -rf GP-GOMEA
 fi
 
-git clone --quiet https://github.com/marcovirgolin/GP-GOMEA 
+git clone  https://github.com/marcovirgolin/GP-GOMEA 
 cd GP-GOMEA
 #fix version
 git checkout 6a92cb671c2772002b60df621a513d8b4df57887

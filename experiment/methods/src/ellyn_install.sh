@@ -6,7 +6,7 @@ if [ -d "ellyn" ]; then
     rm -rf ellyn
 fi
 
-git clone --quiet https://github.com/cavalab/ellyn
+git clone  https://github.com/cavalab/ellyn
 
 cd ellyn
 # fix version
