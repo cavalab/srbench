@@ -41,6 +41,7 @@ dependencies:
     # - libffi=3.3=h58526e2_2
     # feat
     - cython=0.29.*
+    - ninja
     - setuptools=45.*
     - shogun-cpp=6.1.4
     - wheel=0.35.*
