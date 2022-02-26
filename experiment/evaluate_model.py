@@ -100,11 +100,11 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
         hyper_params = {}
         print('hyper_params set to',hyper_params)
         for genname in ['generations','gens','g','itrNum','treeNum',
-                'evaluations']:
+                'evaluations','niterations']:
             if hasattr(est, genname):
                 print('setting',genname,'=2 for test')
                 setattr(est, genname, 2)
-        for popname in ['popsize','pop_size','population_size','val']:
+        for popname in ['popsize','pop_size','population_size','val','npop']:
             if hasattr(est, popname):
                 print('setting',popname,'=20 for test')
                 setattr(est, popname, 20)
