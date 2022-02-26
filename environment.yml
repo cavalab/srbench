@@ -62,3 +62,5 @@ dependencies:
         # PySR:
         - julia==0.5.7 # Note that this is PyJulia (pip name julia)
         - pysr==0.7.0a3
+        # FEAT
+        - git+https://github.com/cavalab/feat
