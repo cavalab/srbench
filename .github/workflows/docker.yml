@@ -3,10 +3,9 @@ name: Docker Image
 on:
   push:
     branches:
-      - docker-fix
-      # - master
-    # tags:
-    #   - 'v*'
+      - master
+    tags:
+      - 'v*'
 
 env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -40,12 +39,8 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          # file: Dockerfile
           tags: ${{ env.USER }}/${{ env.APP }}:${{ env.TAG }}
           push: true
-          # cache-from: type=gha
-          # cache-to: type=registry,ref=${{ env.USER }}/${{ env.APP }}:buildcache,mode=max
-          # cache-to: type=gha,mode=max
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
       -

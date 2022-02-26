@@ -9,7 +9,6 @@ on:
     branches:
       - master
       - dev
-      - docker-fix  # temporary for testing
   pull_request:
     branches: 
       - master 
