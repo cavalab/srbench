@@ -21,7 +21,7 @@ for install_file in $(ls *.sh) ; do
     echo ".................... Running $install_file..."
 
     name=${install_file%.sh}
-    # Run install_file in same env:
+    # Option to redirect logs:
     # bash ${install_file} > "${name}.log" 2> "${name}.err"
     bash ${install_file} 
 
@@ -48,17 +48,6 @@ done
 
 if [ ${#failed[@]} -gt 0 ] ; then
     exit 1
-    # echo "vvvvvvvvvvvvvvv failures vvvvvvvvvvvvvvv"
-    # # n=0
-    # for f in ${failed[@]} ; do
-    #     echo "---------- $f ----------"
-    #     echo "---- stdout: "
-    #     cat  "${f}.log"
-    #     echo "---- stderr: "
-    #     cat "${f}.err"
-    #     echo "----------------------------------------"
-    # done
-
 else
     echo "All installations completed successfully."
 fi
