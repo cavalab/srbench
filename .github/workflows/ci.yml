@@ -10,6 +10,12 @@ on:
       - master
       - dev
   pull_request:
+    types:
+      	- assigned
+        - opened
+        - edited
+        - reopened
+        - synchronize
     branches: 
       - master 
       - dev 
