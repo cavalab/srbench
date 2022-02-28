@@ -1,4 +1,4 @@
-from .src.ITEA import itea_srbench as itea
+from ITEA import itea_srbench as itea
 from itertools import product
 
 hyper_params = [
