@@ -8,11 +8,11 @@ on:
       - 'v*'
   pull_request:
     types:
-      	- assigned
-        - opened
-        - edited
-        - reopened
-        - synchronize
+      - assigned
+      - opened
+      - edited
+      - reopened
+      - synchronize
     branches: 
       - master 
 
