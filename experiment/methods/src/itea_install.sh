@@ -1,3 +1,4 @@
+#!/bin/bash
 # install ITEA
 
 # remove directory if it exists
@@ -8,6 +9,7 @@ fi
 git clone https://github.com/folivetti/ITEA.git
 
 #cd ITEA
+rsync -av ITEA $CONDA_PREFIX/lib/python3.7/site-packages/ --exclude=".git" --exclude="datasets"
 #curl -sSL https://get.haskellstack.org/ | sh
 #stack build
 #conda activate srbench

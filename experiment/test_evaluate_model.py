@@ -8,11 +8,6 @@ print('appended',root_dir,'to sys.path')
 from evaluate_model import evaluate_model
 import importlib
 
-# Take --ml={ML} as input, using argparse.
-import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument('--ml', type=str, default='AdaBoostRegressor')
-
 def test_evaluate_model(ml):
     print('running test_evaluate_model with ml=',ml)
     dataset = 'test/192_vineyard_small.tsv.gz'
@@ -34,9 +29,3 @@ def test_evaluate_model(ml):
                    algorithm.model,
                    test=True # testing
                   )
-
-
-if __name__ == '__main__':
-    args = parser.parse_args()
-    ml = args.ml
-    test_evaluate_model(ml)
