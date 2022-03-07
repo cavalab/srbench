@@ -65,14 +65,14 @@ jobs:
         name: get new folder name
         id: get-folder
         run: |
-          folder=$(ls -td submission/ | head -n 1)
+          folder=$(ls -t submission/ | head -n 1)
           echo $folder
           echo '::set-output name=folder::${folder}'
       - 
         name: get submission metadata 
         id: metadata
         run: |
-          folder=$(ls -td submission/ | head -n 1)
+          folder=$(ls -t submission/ | head -n 1)
           echo $folder
           echo '::set-output name=folder::${folder}'
       - 
@@ -105,6 +105,11 @@ jobs:
           # conda create --name "${envname}" --clone srcomp
           # echo "Installing conda dependencies"
           # mamba env update -n "${envname}" -f environment.yml
+     - name: Copy files
+       env:
+         folder: submission/${{ steps.get-folder.outputs.folder }} 
+       run: |
+         cp -R ${{ env.folder}} experiment/methods/
   ################################################################################
   # tests
   ################################################################################
@@ -118,3 +123,4 @@ jobs:
           conda env list
           conda info
           mamba run -n srcomp-submission python -m pytest -v test_evaluate_model.py --ml ${{ env.folder }}
+
