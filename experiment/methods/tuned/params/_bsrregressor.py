@@ -1,1 +1,0 @@
-params = {'alpha1': 0.4, 'alpha2': 0.4, 'beta': -1, 'disp': False, 'itrNum': 500, 'max_time': 7200, 'treeNum': 6, 'val': 1000}

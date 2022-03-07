@@ -22,7 +22,7 @@ from utils import jsonify
 from symbolic_utils import get_sym_model
 
 def evaluate_model(dataset, results_path, random_state, est_name, est, 
-                   hyper_params, complexity, model, test=False, 
+                   hyper_params, model, test=False, 
                    target_noise=0.0, feature_noise=0.0, 
                    n_samples=10000, scale_x = True, scale_y = True,
                    pre_train=None, skip_tuning=False, sym_data=False):
@@ -165,20 +165,11 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     if sym_data:
         results['true_model'] = true_model
 
-    # get the size of the final model
-    if complexity == None:
-        results['model_size'] = int(features.shape[1])
-    else:
-        results['model_size'] = int(complexity(best_est))
-
     # get the final symbolic model as a string
-    if model == None:
-        results['symbolic_model'] = 'not implemented'
+    if 'X' in inspect.signature(model).parameters.keys():
+        results['symbolic_model'] = model(best_est, X_train_scaled)
     else:
-        if 'X' in inspect.signature(model).parameters.keys():
-            results['symbolic_model'] = model(best_est, X_train_scaled)
-        else:
-            results['symbolic_model'] = model(best_est)
+        results['symbolic_model'] = model(best_est)
 
     # scores
     pred = grid_est.predict
@@ -212,13 +203,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     with open(save_file + '.json', 'w') as out:
         json.dump(jsonify(results), out, indent=4)
 
-    # store CV detailed results
-    # turning off for now as I dont think we'll need this for our analysis
-    # cv_results = grid_est.cv_results_
-    # cv_results['random_state'] = random_state
-
-    # with open(save_file + '_cv_results.json', 'w') as out:
-    #     json.dump(jsonify(cv_results), out, indent=4)
+    return save_file + '.json'
 
 ################################################################################
 # main entry point
@@ -258,8 +243,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     # import algorithm 
-    print('import from','methods.'+args.ALG)
-    algorithm = importlib.__import__('methods.'+args.ALG,
+    print('import from','methods.'+args.ALG+'.regressor')
+    algorithm = importlib.__import__('methods.'+args.ALG+'.regressor',
                                      globals(),
                                      locals(),
                                      ['*']
@@ -285,7 +270,7 @@ if __name__ == '__main__':
         eval_kwargs['skip_tuning'] = True
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
-                   algorithm.est, algorithm.hyper_params, algorithm.complexity,
+                   algorithm.est, algorithm.hyper_params, 
                    algorithm.model, test = args.TEST, 
                    target_noise=args.Y_NOISE, feature_noise=args.X_NOISE,
                    **eval_kwargs)
