@@ -105,11 +105,11 @@ jobs:
           # conda create --name "${envname}" --clone srcomp
           # echo "Installing conda dependencies"
           # mamba env update -n "${envname}" -f environment.yml
-     - name: Copy files
-       env:
-         folder: submission/${{ steps.get-folder.outputs.folder }} 
-       run: |
-         cp -R ${{ env.folder}} experiment/methods/
+      - name: Copy files
+        env:
+          folder: submission/${{ steps.get-folder.outputs.folder }} 
+        run: |
+          cp -R ${{ env.folder}} experiment/methods/
   ################################################################################
   # tests
   ################################################################################
@@ -123,4 +123,3 @@ jobs:
           conda env list
           conda info
           mamba run -n srcomp-submission python -m pytest -v test_evaluate_model.py --ml ${{ env.folder }}
-
