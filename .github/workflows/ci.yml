@@ -123,7 +123,7 @@ jobs:
           cd experiment
           pwd
           ls
-          mamba run -n srcomp-submission python -m pytest -v test_evaluate_model.py --ml ${{ env.sub_name }}
+          mamba run -n srcomp-submission python -m pytest -v test_submission.py --ml ${{ env.sub_name }}
       - 
         name: Save Competitor
         env:
