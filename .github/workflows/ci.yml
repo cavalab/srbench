@@ -48,7 +48,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /usr/share/miniconda3/envs/srcomp
-          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('environment.yml')}}-${{ github.sha }}
+          # key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('environment.yml')}}-${{ github.sha }}
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
           restore-keys: |
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
         id: cache
