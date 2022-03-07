@@ -1,4 +1,0 @@
-name: srbench-submission
-channels:
-  - defaults
-prefix: /home/bill/anaconda3/envs/srbench-submission
