@@ -65,16 +65,14 @@ jobs:
         name: get new folder name
         id: get-folder
         run: |
-          folder=$(ls -t submission/ | head -n 1)
-          echo $folder
-          echo '::set-output name=folder::${folder}'
-      - 
-        name: get submission metadata 
-        id: metadata
-        run: |
-          folder=$(ls -t submission/ | head -n 1)
-          echo $folder
-          echo '::set-output name=folder::${folder}'
+          echo '::set-output name=folder::$(ls -t submission/ | head -n 1)'
+      # - 
+      #   name: get submission metadata 
+      #   id: metadata
+      #   run: |
+      #     folder=$(ls -t submission/ | head -n 1)
+      #     echo $folder
+      #     echo '::set-output name=folder::${folder}'
       - 
         name: Install SR dependencies
         env:
