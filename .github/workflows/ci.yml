@@ -65,7 +65,8 @@ jobs:
         name: get new folder name
         id: get-folder
         run: |
-          echo '::set-output name=folder::$(ls -t submission/ | head -n 1)'
+          echo "$(ls -t submission/ | head -n 1)"
+          echo '::set-output name=folder::${ ls -t submission/ | head -n 1 }'
       # - 
       #   name: get submission metadata 
       #   id: metadata
