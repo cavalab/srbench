@@ -112,9 +112,6 @@ jobs:
           folder: submission/${{ steps.get-folder.outputs.folder }} 
         run: |
           cp -R ${{ env.folder}} experiment/methods/
-        name: Save Environment Lock
-        run: | 
-          conda env export > environment.lock.yml
   ################################################################################
   # tests
   ################################################################################
