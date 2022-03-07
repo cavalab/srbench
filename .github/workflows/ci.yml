@@ -112,17 +112,24 @@ jobs:
           folder: submission/${{ steps.get-folder.outputs.folder }} 
         run: |
           cp -R ${{ env.folder}} experiment/methods/
+        name: Save Environment Lock
+        run: | 
+          conda env export > environment.lock.yml
   ################################################################################
   # tests
   ################################################################################
       - 
         name: Test Method
         env:
-          folder: submission/${{ steps.get-folder.outputs.folder }} 
+          sub_name: ${{ steps.get-folder.outputs.folder }} 
         run: |
+          cd experiment
           pwd
           ls
-          cd experiment
-          conda env list
-          conda info
-          mamba run -n srcomp-submission python -m pytest -v test_evaluate_model.py --ml ${{ env.folder }}
+          mamba run -n srcomp-submission python -m pytest -v test_evaluate_model.py --ml ${{ env.sub_name }}
+      - name: Save Environment
+        env:
+          folder: experiment/methods/${{ steps.get-folder.outputs.folder }} 
+        run: |
+          conda env export -n srcomp-submission > "${{ env.folder}}/environment.lock.yml"
+          # commit the changes
