@@ -21,11 +21,25 @@ import inspect
 from utils import jsonify
 from symbolic_utils import get_sym_model
 
-def evaluate_model(dataset, results_path, random_state, est_name, est, 
-                   hyper_params, model, test=False, 
-                   target_noise=0.0, feature_noise=0.0, 
-                   n_samples=10000, scale_x = True, scale_y = True,
-                   pre_train=None, skip_tuning=False, sym_data=False):
+def evaluate_model(dataset, 
+                   results_path, 
+                   random_state, 
+                   est_name, 
+                   est, 
+                   model, 
+                   test=False, 
+                   target_noise=0.0, 
+                   feature_noise=0.0, 
+                   sym_data=False,
+                   ##########
+                   # valid options for eval_kwargs
+                   ##########
+                   test_params=None,
+                   max_train_samples=0, 
+                   scale_x = True, 
+                   scale_y = True,
+                   pre_train=None,
+                  ):
 
     print(40*'=','Evaluating '+est_name+' on ',dataset,40*'=',sep='\n')
 
@@ -46,9 +60,11 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                                                     random_state=random_state)
 
     # if dataset is large, subsample the training set 
-    if n_samples > 0 and len(labels) > n_samples:
-        print('subsampling training data from',len(X_train),'to',n_samples)
-        sample_idx = np.random.choice(np.arange(len(X_train)), size=n_samples)
+    if max_train_samples > 0 and len(labels) > max_train_samples:
+        print('subsampling training data
+              from',len(X_train),'to',max_train_samples)
+        sample_idx = np.random.choice(np.arange(len(X_train)),
+                                      size=max_train_samples)
         X_train = X_train[sample_idx]
         y_train = y_train[sample_idx]
 
@@ -93,60 +109,59 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     ################################################## 
     # define CV strategy for hyperparam tuning
     ################################################## 
-    # define a test mode with fewer splits, no hyper_params, and few iterations
-    if test:
-        print('test mode enabled')
-        n_splits = 2
-        hyper_params = {}
-        print('hyper_params set to',hyper_params)
-        for genname in ['generations','gens','g','itrNum','treeNum',
-                'evaluations','niterations']:
-            if hasattr(est, genname):
-                print('setting',genname,'=2 for test')
-                setattr(est, genname, 2)
-        for popname in ['popsize','pop_size','population_size','val','npop']:
-            if hasattr(est, popname):
-                print('setting',popname,'=20 for test')
-                setattr(est, popname, 20)
-        if hasattr(est,'BF_try_time'):
-            setattr(est,'BF_try_time',1)
-        if hasattr(est,'NN_epochs'):
-            setattr(est,'NN_epochs',1)
-        for timename in ['time','max_time','time_out', 'time_limit']:
-            if hasattr(est, timename):
-                print('setting',timename,'= 10 for test')
-                setattr(est, timename, 10)
-        # deep sr setting
-        if hasattr(est, 'config'):
-            est.config['training']['n_samples'] = 10
-            est.config['training']['batch_size'] = 10
-            est.config['training']['hof'] = 5
-    else:
-        n_splits = 5
+    # define a test mode using estimator test_params, if they exist
+    if test and len(test_params) != 0:
+        est.set_params(**test_params)
+    #     print('test mode enabled')
+    #     n_splits = 2
+    #     hyper_params = {}
+    #     print('hyper_params set to',hyper_params)
+    #     for genname in ['generations','gens','g','itrNum','treeNum',
+    #             'evaluations','niterations']:
+    #         if hasattr(est, genname):
+    #             print('setting',genname,'=2 for test')
+    #             setattr(est, genname, 2)
+    #     for popname in ['popsize','pop_size','population_size','val','npop']:
+    #         if hasattr(est, popname):
+    #             print('setting',popname,'=20 for test')
+    #             setattr(est, popname, 20)
+    #     if hasattr(est,'BF_try_time'):
+    #         setattr(est,'BF_try_time',1)
+    #     if hasattr(est,'NN_epochs'):
+    #         setattr(est,'NN_epochs',1)
+    #     for timename in ['time','max_time','time_out', 'time_limit']:
+    #         if hasattr(est, timename):
+    #             print('setting',timename,'= 10 for test')
+    #             setattr(est, timename, 10)
+    #     # deep sr setting
+    #     if hasattr(est, 'config'):
+    #         est.config['training']['n_samples'] = 10
+    #         est.config['training']['batch_size'] = 10
+    #         est.config['training']['hof'] = 5
+    # else:
+    #     n_splits = 5
 
-    if skip_tuning:
-        print('skipping tuning')
-        grid_est = clone(est)
-    else:
-        cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
+    # if skip_tuning:
+    #     print('skipping tuning')
+    #     grid_est = clone(est)
+    # else:
+    #     cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
 
-        grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
-                verbose=2, n_jobs=1, scoring='r2', error_score=0.0)
+    #     grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
+    #             verbose=2, n_jobs=1, scoring='r2', error_score=0.0)
 
     ################################################## 
     # Fit models
     ################################################## 
-    print('training',grid_est)
+    print('training',est)
     t0p = time.process_time()
     t0t = time.time()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        grid_est.fit(X_train_scaled, y_train_scaled)
+        est.fit(X_train_scaled, y_train_scaled)
     process_time = time.process_time() - t0p
     time_time = time.time() - t0t
     print('Training time measures:',process_time, time_time)
-    best_est = grid_est if skip_tuning else grid_est.best_estimator_
-    # best_est = grid_est
     
     ##################################################
     # store results
@@ -155,7 +170,7 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
     results = {
         'dataset':dataset_name,
         'algorithm':est_name,
-        'params':jsonify(best_est.get_params()),
+        'params':jsonify(est.get_params()),
         'random_state':random_state,
         'process_time': process_time, 
         'time_time': time_time, 
@@ -167,9 +182,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
 
     # get the final symbolic model as a string
     if 'X' in inspect.signature(model).parameters.keys():
-        results['symbolic_model'] = model(best_est, X_train_scaled)
+        results['symbolic_model'] = model(est, X_train_scaled)
     else:
-        results['symbolic_model'] = model(best_est)
+        results['symbolic_model'] = model(est)
 
     # scores
     pred = grid_est.predict
@@ -182,7 +197,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                               ('mae',mean_absolute_error),
                               ('r2', r2_score)
                              ]:
-            y_pred = sc_y.inverse_transform(pred(X)) if scale_y else pred(X)
+            y_pred = np.asarray(pred(X)).reshape(-1,1)
+            if scale_y:
+                y_pred = sc_y.inverse_transform(y_pred)
             results[score + '_' + fold] = scorer(target, y_pred) 
     
     ##################################################
@@ -238,8 +255,8 @@ if __name__ == '__main__':
                         'to the target')
     parser.add_argument('-sym_data',action='store_true', dest='SYM_DATA', 
                        help='Use symbolic dataset settings')
-    parser.add_argument('-skip_tuning',action='store_true', dest='SKIP_TUNE', 
-                        default=False, help='Dont tune the estimator')
+    # parser.add_argument('-skip_tuning',action='store_true', dest='SKIP_TUNE', 
+    #                     default=False, help='Dont tune the estimator')
 
     args = parser.parse_args()
     # import algorithm 
@@ -251,26 +268,24 @@ if __name__ == '__main__':
                                     )
 
     print('algorithm:',algorithm.est)
-    if 'hyper_params' not in dir(algorithm):
-        algorithm.hyper_params = {}
-    print('hyperparams:',algorithm.hyper_params)
 
     # optional keyword arguments passed to evaluate
-    eval_kwargs = {}
+    eval_kwargs, test_params = {},{}
     if 'eval_kwargs' in dir(algorithm):
         eval_kwargs = algorithm.eval_kwargs
+    if 'test_params' in dir(algorithm):
+        test_params = algorithm.test_params
 
     # check for conflicts btw cmd line args and eval_kwargs
     if args.SYM_DATA:
         eval_kwargs['scale_x'] = False
         eval_kwargs['scale_y'] = False
-        eval_kwargs['skip_tuning'] = True
         eval_kwargs['sym_data'] = True
-    if args.SKIP_TUNE:
-        eval_kwargs['skip_tuning'] = True
+    # if args.SKIP_TUNE:
+    #     eval_kwargs['skip_tuning'] = True
 
     evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
-                   algorithm.est, algorithm.hyper_params, 
-                   algorithm.model, test = args.TEST, 
+                   algorithm.est,  
+                   algorithm.model, test = args.TEST, test_params=test_params,
                    target_noise=args.Y_NOISE, feature_noise=args.X_NOISE,
                    **eval_kwargs)

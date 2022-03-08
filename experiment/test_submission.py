@@ -1,4 +1,5 @@
 import sys
+import types
 from os.path import dirname as d
 from os.path import abspath
 root_dir = d(d(abspath(__file__)))
@@ -24,18 +25,41 @@ def test_submission(ml):
 
     algorithm = importlib.__import__('methods.'+ml+'.regressor',globals(),
                                      locals(),
-                                   ['est','hyper_params','complexity'])
+                                     ['*'])
+
+    assert 'est' in dir(algorithm)
+    assert 'model' in dir(algorithm)
+
+    eval_kwargs, test_params = {},{}
+    if 'eval_kwargs' in dir(algorithm):
+        eval_kwargs = algorithm.eval_kwargs
+        eval_kwarg_types = {
+            'test_params':dict,
+            'max_train_samples':int 
+            'scale_x':bool,
+            'scale_y':bool,
+            'pre_train':types.FunctionType
+        }
+        for k,v in eval_kwargs.items():
+            assert k in ['test_params', 
+                         'max_train_samples', 
+                         'scale_x', 
+                         'scale_y',
+                         'pre_train'
+                        ]
+            assert isinstance(v, eval_kwarg_types[k])
 
     print('algorithm imported:',algorithm)
+
     json_file = evaluate_model(dataset, 
                    results_path, 
                    random_state, 
                    ml,
                    algorithm.est, 
                    algorithm.hyper_params, 
-                   # algorithm.complexity,
                    algorithm.model,
-                   test=True # testing
+                   test=True, # testing
+                   **eval_kwargs
                   )
 
     ########################################
@@ -48,6 +72,7 @@ def test_submission(ml):
     est_name = r['algorithm']
 
     raw_model = r['symbolic_model']
+    print('raw_model:',raw_model)
     X, labels, features = read_file(dataset)
     local_dict = {k:Symbol(k) for k in features}
 
