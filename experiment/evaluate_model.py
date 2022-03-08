@@ -61,8 +61,8 @@ def evaluate_model(dataset,
 
     # if dataset is large, subsample the training set 
     if max_train_samples > 0 and len(labels) > max_train_samples:
-        print('subsampling training data
-              from',len(X_train),'to',max_train_samples)
+        print('subsampling training data from',len(X_train),
+              'to',max_train_samples)
         sample_idx = np.random.choice(np.arange(len(X_train)),
                                       size=max_train_samples)
         X_train = X_train[sample_idx]
