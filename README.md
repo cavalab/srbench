@@ -15,7 +15,7 @@ View the [main SRBench page](https://github.com/cavalab/srbench)*
     2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. It should contain:
         -   `est`: a sklearn-compatible `Regressor` object. 
         -   `model(est, X=None)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model. It can optionally take the training data as an input argument. See [guidance below](###-returning-a-sympy-compatible-model-string). 
-    -   (optional): a dictionary named `eval_kwargs` that can specify method-specific arguments to [evaluate_model()](https://github.com/cavalab/srbench/blob/e3ba2c71dd08b1aaa76414a0af10411b98db59ee/experiment/evaluate_model.py#L24).
+        -   `eval_kwargs` (optional): a dictionary that can specify method-specific arguments to [evaluate_model()](https://github.com/cavalab/srbench/blob/e3ba2c71dd08b1aaa76414a0af10411b98db59ee/experiment/evaluate_model.py#L24).
   See the [experiment/methods/AFPRegressor.py](https://github.com/cavalab/srbench/blob/master/experiment/methods/AFPRegressor.py) and/or other methods in that folder for examples.
     3. `LICENSE` *(optional)* A license file
     4. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
@@ -23,6 +23,14 @@ View the [main SRBench page](https://github.com/cavalab/srbench)*
     To the extent possible, conda should be used to specify the dependencies you need. 
     If your method is part of conda, great! You can just put that in here and leave `install.sh` blank. 
     5. `install.sh` *(optional)*: a bash script that installs your method. 
+    6. additional files: you may include a folder containing the code for your method in the submission. Otherwise, `install.sh` should pull the source code remotely. 
+
+### Version control
+
+The install process should guarantee that the version for your algorithm that gets install is **fixed**. You can do this in many ways: 
+        1. Including the source code with the submission. 
+        2. Pulling a tagged version/release of your code from a git repository. 
+        3. Checking out a specific commit, as in the provided example. 
 
 ### Returning a sympy compatible model string
 In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](https://www.sympy.org). 

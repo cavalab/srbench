@@ -111,7 +111,10 @@ jobs:
         env:
           folder: submission/${{ steps.get-folder.outputs.folder }} 
         run: |
-          cp -R ${{ env.folder}} experiment/methods/
+          mkdir -p experiment/methods/${{ env.folder }}
+          cp ${{ env.folder}}/regressor.py experiment/methods/${{ env.folder }}/
+          cp ${{ env.folder}}/metadata.yml experiment/methods/${{ env.folder }}/
+          touch experiment/methods/${{ env.folder }}/__init__.py
   ################################################################################
   # tests
   ################################################################################
