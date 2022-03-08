@@ -56,7 +56,6 @@ def test_submission(ml):
                    random_state, 
                    ml,
                    algorithm.est, 
-                   algorithm.hyper_params, 
                    algorithm.model,
                    test=True, # testing
                    **eval_kwargs
