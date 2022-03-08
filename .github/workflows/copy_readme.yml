@@ -1,8 +1,8 @@
-name: Copy README to gh-pages
+name: Copy ContributingGuide to gh-pages
 
 on: 
   push:
-    branches: [ master ]
+    branches: [ Competition2022 ]
     paths:
       - README.md
 
@@ -11,10 +11,16 @@ jobs:
     name: Copy readme
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: readme
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: copy readme
+        run: |
+          cp README.md CompetitionGuide.md
+      - 
+        name: copy to website
         env:
-          SRC_FILE: 'README.md'
+          SRC_FILE: 'CompetitionGuide.md'
           TARGET_DIR: '_includes/'
           TARGET_BRANCH: 'gh-pages'
         run: |
