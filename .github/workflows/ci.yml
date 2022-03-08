@@ -24,7 +24,7 @@ env:
 
 jobs:
   ################################################################################
-  # environment setup
+  # basic submission checks
   ################################################################################
   check:
     runs-on: ubuntu-latest
@@ -44,7 +44,37 @@ jobs:
           ls
           echo "$(ls -t submission/ | head -n 1)"
           echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
+      - 
+        name: check files exist
+        run: |
+          required_files=("regressor.py" "metadata.yaml")
+          for [ f in ${required_files[@]} ] ; do
+            if f ; then
+              echo "::error:: missing $file"
+            fi
+          done
+      - 
+        name: Setup Mambaforge
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniforge-variant: Mambaforge
+          miniforge-version: latest
+          activate-environment: srcomp
+          use-mamba: true
+      - 
+        name: Cache conda
+        uses: actions/cache@v2
+        with:
+          path: /usr/share/miniconda3/envs/srcomp
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+        id: cache
 
+
+  ################################################################################
+  # environment setup
+  ################################################################################
   build:
     runs-on: ubuntu-latest
     defaults:
@@ -73,7 +103,6 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /usr/share/miniconda3/envs/srcomp
-          # key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('environment.yml')}}-${{ github.sha }}
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
           restore-keys: |
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
