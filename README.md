@@ -1,11 +1,17 @@
 *Note: you are on the Competition2022 branch. 
 View the [main SRBench page](https://github.com/cavalab/srbench)*
 
-# SRBench 2022 Competition
+# SRBench 2022 Competition Guidelines
 
-# Guidelines
+To participate, the steps are relatively straightforward. Participants fork this repo, add a method in the submission folder (see [submission/feat-example](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/)), and submit it as a [pull request](https://github.com/cavalab/srbench/compare) to the [Competition 2022 branch](https://github.com/cavalab/srbench/tree/Competition2022). 
+Once submitted, the continuous integration process will give feedback if there are any problems with the submission. 
+Participants can then update their PR as necessary to have it pass the tests. 
 
-1. Fork this repository
+Once everything is working, participants can basically sit tight: the competition organizers will then set about testing the methods on a variey of datasets. 
+
+## Instructions
+
+1. Fork this repository and clone it. 
 
 2. Make a folder in the `submission/` named after your method. You can start with a template by copying the `submission/example` folder, renaming and editing it. 
 
@@ -17,7 +23,7 @@ View the [main SRBench page](https://github.com/cavalab/srbench)*
         -   `model(est, X=None)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model. It can optionally take the training data as an input argument. See [guidance below](###-returning-a-sympy-compatible-model-string). 
         -   `eval_kwargs` (optional): a dictionary that can specify method-specific arguments to `evaluate_model.py`.
 
-  See `submission/feat-example/regressor.py` for complete documentation. 
+  See [submission/feat-example/regressor.py](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/regressor.py) for complete documentation. 
     3. `LICENSE` *(optional)* A license file
     4. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
     It will be used to update the baseline environment (`environment.yml` in the
@@ -25,16 +31,17 @@ View the [main SRBench page](https://github.com/cavalab/srbench)*
     To the extent possible, conda should be used to specify the dependencies you need. 
     If your method is part of conda, great! You can just put that in here and leave `install.sh` blank. 
     5. `install.sh` *(optional)*: a bash script that installs your method. 
-    6. additional files: you may include a folder containing the code for your method in the submission. Otherwise, `install.sh` should pull the source code remotely. 
+    **Note: scripts should not require sudo permissions. The library and include paths should be directed to conda environment; the environmental variable `$CONDA_PREFIX` specifies the path to the environment.
+    6. additional files *(optional)*: you may include a folder containing the code for your method in the submission. Otherwise, `install.sh` should pull the source code remotely. 
 
 ### Version control
 
 The install process should guarantee that the version for your algorithm that gets install is **fixed**. 
 You can do this in many ways: 
 
-        1. Including the source code with the submission. 
-        2. Pulling a tagged version/release of your code from a git repository. 
-        3. Checking out a specific commit, as in the provided example. 
+1. Including the source code with the submission. 
+2. Pulling a tagged version/release of your code from a git repository. 
+3. Checking out a specific commit, as in the provided example. 
 
 ### Returning a sympy compatible model string
 
@@ -68,8 +75,8 @@ Methods must adhere to a fixed time budget for the competition.
 All datasets will be less than 10,000 rows and fewer than 100 features. 
 The time limits are as follows:
 
-    - For datasets up to 1000 rows, 60 minutes
-    - For datasets up to 10000 rows, 600 minutes (10 hours)
+- For datasets up to 1000 rows, 60 minutes
+- For datasets up to 10000 rows, 600 minutes (10 hours)
 
 
 If a call to `est.fit()` takes longer than the alotted time, it will receive
