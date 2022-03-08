@@ -106,52 +106,13 @@ def evaluate_model(dataset,
     print('X_train:',X_train_scaled.shape)
     print('y_train:',y_train_scaled.shape)
     
-    ################################################## 
-    # define CV strategy for hyperparam tuning
-    ################################################## 
     # define a test mode using estimator test_params, if they exist
     if test and len(test_params) != 0:
         est.set_params(**test_params)
-    #     print('test mode enabled')
-    #     n_splits = 2
-    #     hyper_params = {}
-    #     print('hyper_params set to',hyper_params)
-    #     for genname in ['generations','gens','g','itrNum','treeNum',
-    #             'evaluations','niterations']:
-    #         if hasattr(est, genname):
-    #             print('setting',genname,'=2 for test')
-    #             setattr(est, genname, 2)
-    #     for popname in ['popsize','pop_size','population_size','val','npop']:
-    #         if hasattr(est, popname):
-    #             print('setting',popname,'=20 for test')
-    #             setattr(est, popname, 20)
-    #     if hasattr(est,'BF_try_time'):
-    #         setattr(est,'BF_try_time',1)
-    #     if hasattr(est,'NN_epochs'):
-    #         setattr(est,'NN_epochs',1)
-    #     for timename in ['time','max_time','time_out', 'time_limit']:
-    #         if hasattr(est, timename):
-    #             print('setting',timename,'= 10 for test')
-    #             setattr(est, timename, 10)
-    #     # deep sr setting
-    #     if hasattr(est, 'config'):
-    #         est.config['training']['n_samples'] = 10
-    #         est.config['training']['batch_size'] = 10
-    #         est.config['training']['hof'] = 5
-    # else:
-    #     n_splits = 5
-
-    # if skip_tuning:
-    #     print('skipping tuning')
-    #     grid_est = clone(est)
-    # else:
-    #     cv = KFold(n_splits=n_splits, shuffle=True,random_state=random_state)
-
-    #     grid_est = HalvingGridSearchCV(est,cv=cv, param_grid=hyper_params,
-    #             verbose=2, n_jobs=1, scoring='r2', error_score=0.0)
 
     ################################################## 
     # Fit models
+    #   TODO: add timeout
     ################################################## 
     print('training',est)
     t0p = time.process_time()
@@ -187,7 +148,7 @@ def evaluate_model(dataset,
         results['symbolic_model'] = model(est)
 
     # scores
-    pred = grid_est.predict
+    pred = est.predict
 
     for fold, target, X in zip(['train','test'],
                                [y_train, y_test], 
@@ -273,8 +234,6 @@ if __name__ == '__main__':
     eval_kwargs, test_params = {},{}
     if 'eval_kwargs' in dir(algorithm):
         eval_kwargs = algorithm.eval_kwargs
-    if 'test_params' in dir(algorithm):
-        test_params = algorithm.test_params
 
     # check for conflicts btw cmd line args and eval_kwargs
     if args.SYM_DATA:
@@ -284,8 +243,14 @@ if __name__ == '__main__':
     # if args.SKIP_TUNE:
     #     eval_kwargs['skip_tuning'] = True
 
-    evaluate_model(args.INPUT_FILE, args.RDIR, args.RANDOM_STATE, args.ALG,
+    evaluate_model(args.INPUT_FILE,
+                   args.RDIR,
+                   args.RANDOM_STATE,
+                   args.ALG,
                    algorithm.est,  
-                   algorithm.model, test = args.TEST, test_params=test_params,
-                   target_noise=args.Y_NOISE, feature_noise=args.X_NOISE,
-                   **eval_kwargs)
+                   algorithm.model, 
+                   test = args.TEST, 
+                   target_noise=args.Y_NOISE, 
+                   feature_noise=args.X_NOISE,
+                   **eval_kwargs
+                  )

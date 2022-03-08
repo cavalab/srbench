@@ -7,20 +7,14 @@ est: a sklearn-compatible regressor.
     see https://scikit-learn.org/stable/developers/develop.html
 """
 est = FeatRegressor(
-                    pop_size=1000,
-                    gens=250,
-                    max_time=2*60*60,  # 2 hrs
-                    max_stall=100,
-                    batch_size=100,
+                    pop_size=100,
+                    gens=100,
+                    max_time=8*60*60,  # 8 hrs
                     max_depth=6,
-                    max_dim=10,
-                    backprop=True,
-                    iters=1,
-                    n_jobs=1,
-                    simplify=0.005,
-                    corr_delete_mutate=True,
-                    cross_rate=0.75,
                     verbosity=0,
+                    batch_size=100,
+                    functions ='+,-,*,/,^2,^3,sqrt,sin,cos,exp,log',
+                    otype='f'
                    )
 # want to tune your estimator? wrap it in a sklearn CV class. 
 
@@ -62,7 +56,15 @@ def model(est, X=None):
     https://github.com/cavalab/srbench/issues/new/choose
     """
 
-    return est.get_eqn()
+    # Here we replace "|" with "" to handle
+    # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
+    model_str = est.get_eqn()
+    model_str = model_str.replace('|','')
+
+    # use python syntax for exponents
+    model_str = model_str.replace('^','**')
+
+    return model_str
 
 ################################################################################
 # Optional Settings

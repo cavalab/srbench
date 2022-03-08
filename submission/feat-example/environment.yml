@@ -5,10 +5,11 @@ dependencies:
     - python=3.*
     - cmake>=3.18
     - ninja
-    - eigen>=3.3*
-    - cython=0.29.*
+    - eigen>=3.3
+    # - cython=0.29.*
     - pandas=1.1.*
-    - setuptools=45.*
+    # - setuptools=45.*
+    - setuptools
     - shogun-cpp=6.1.4
     - wheel=0.35.*
     - pip

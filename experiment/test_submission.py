@@ -1,4 +1,7 @@
+import pytest
 import sys
+import os
+import json
 import types
 from os.path import dirname as d
 from os.path import abspath
@@ -16,21 +19,27 @@ from symbolic_utils import (complexity, round_floats,
 from read_file import read_file
 from sympy import Symbol 
 
+# shared variables
+dataset = 'test/192_vineyard_small.tsv.gz'
+results_path = 'tmp_results'
+random_state = 42
 
-def test_submission(ml):
-    print('running test_evaluate_model with ml=',ml)
-    dataset = 'test/192_vineyard_small.tsv.gz'
-    results_path = 'tmp_results'
-    random_state = 42
-
+def get_algorithm(ml):
     algorithm = importlib.__import__('methods.'+ml+'.regressor',globals(),
                                      locals(),
                                      ['*'])
+    print('algorithm imported:',algorithm)
+    return algorithm
+
+def test_import(ml):
+    """Check algorithm imports"""
+
+    algorithm = get_algorithm(ml)
 
     assert 'est' in dir(algorithm)
     assert 'model' in dir(algorithm)
 
-    eval_kwargs, test_params = {},{}
+    eval_kwargs = {}
     if 'eval_kwargs' in dir(algorithm):
         eval_kwargs = algorithm.eval_kwargs
         eval_kwarg_types = {
@@ -49,7 +58,13 @@ def test_submission(ml):
                         ]
             assert isinstance(v, eval_kwarg_types[k])
 
-    print('algorithm imported:',algorithm)
+
+def test_evaluate(ml):
+    """Dataset evaluation"""
+    algorithm = get_algorithm(ml)
+    if 'eval_kwargs' in dir(algorithm):
+        eval_kwargs = algorithm.eval_kwargs
+    
 
     json_file = evaluate_model(dataset, 
                    results_path, 
@@ -60,9 +75,15 @@ def test_submission(ml):
                    test=True, # testing
                    **eval_kwargs
                   )
+    print(json_file)
 
-    ########################################
-    # test sympy compatibility of model string
+
+@pytest.mark.order(after="test_evaluate")
+def test_sympy(ml):
+    """Sympy compatibility of model string"""
+    dataset_name = dataset.split('/')[-1][:-7]
+    json_file = (results_path + '/' + dataset_name + '_' + ml + '_' 
+                 + str(random_state) + '.json')
     if os.path.exists(json_file):
         r = json.load(open(json_file, 'r'))
     else:
