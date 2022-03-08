@@ -26,11 +26,34 @@ jobs:
   ################################################################################
   # environment setup
   ################################################################################
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - 
+        name: Checkout code
+        uses: actions/checkout@v2
+      - 
+        name: get new folder name
+        id: get-folder
+        run: |
+          ls
+          echo "$(ls -t submission/ | head -n 1)"
+          echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
+
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash -l {0}
+    needs: check
+    env:
+      SUBNAME: ${{ steps.get-folder.outputs.folder }} 
+      SUBFOLDER: submission/${{ steps.get-folder.outputs.folder }} 
+      SUBENV: srcomp-${{ jobs.check.steps.get-folder.outputs.folder }} 
+  
     steps:
       - 
         name: Checkout code
@@ -63,73 +86,41 @@ jobs:
 # install the submission
 ################################################################################
       - 
-        name: get new folder name
-        id: get-folder
-        run: |
-          ls
-          echo "$(ls -t submission/ | head -n 1)"
-          echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
-      # - 
-      #   name: get submission metadata 
-      #   id: metadata
-      #   run: |
-      #     folder=$(ls -t submission/ | head -n 1)
-      #     echo $folder
-      #     echo '::set-output name=folder::${folder}'
-      - 
         name: Install SR dependencies
-        env:
-          folder: ${{ steps.get-folder.outputs.folder }} 
-          # submission_name: ${{ steps.get-metadata.outputs.name }}
-        if: hashFiles('${{ env.folder }}/environment.yml') != ''
+        if: hashFiles('${{ jobs.build.env.SUBNAME }}/environment.yml') != ''
         run: |
-          cd "submission/${{ env.folder }}"
-          echo "Installing dependencies for ${{ env.folder }}"
+          cd $SUBFOLDER
+          pwd
+          echo "Installing dependencies for ${SUBNAME}"
           echo "Copying base environment"
-          conda create --name srcomp-submission --clone srcomp
+          conda create --name $SUBENV --clone srcomp
           echo "Installing conda dependencies"
-          mamba env update -n srcomp-submission -f environment.yml
+          mamba env update -n $SUBENV -f environment.yml
       - 
         name: Install SR method
-        env:
-          folder: submission/${{ steps.get-folder.outputs.folder }} 
-        if: hashFiles('${{ env.folder }}/install.sh') != ''
+        if: hashFiles('${{ jobs.build.env.SUBFOLDER }}/install.sh') != ''
         run: |
-          pwd
-          ls
-          cd ${{ env.folder }} 
+          cd $SUBFOLDER 
           echo "running install.sh..."
-          mamba run -n srcomp-submission bash install.sh
-          # pwd
-          # echo "Installing ${{ env.submission_name }}"
-          # echo "Copying base environment"
-          # envname="srcomp-${env.submission_name}" 
-          # conda create --name "${envname}" --clone srcomp
-          # echo "Installing conda dependencies"
-          # mamba env update -n "${envname}" -f environment.yml
-      - name: Copy files
-        env:
-          folder: ${{ steps.get-folder.outputs.folder }} 
+          mamba run -n $SUBENV bash install.sh
+      - 
+        name: Copy files
         run: |
-          mkdir -p experiment/methods/${{ env.folder }}
-          cp submission/${{ env.folder}}/regressor.py experiment/methods/${{ env.folder }}/
-          cp submission/${{ env.folder}}/metadata.yml experiment/methods/${{ env.folder }}/
-          touch experiment/methods/${{ env.folder }}/__init__.py
+          mkdir -p experiment/methods/$SUBNAME
+          cp $SUBFOLDER/regressor.py experiment/methods/$SUBNAME/
+          cp $SUBFOLDER/metadata.yml experiment/methods/$SUBNAME/
+          touch experiment/methods/$SUBNAME/__init__.py
   ################################################################################
   # tests
   ################################################################################
       - 
         name: Test Method
-        env:
-          sub_name: ${{ steps.get-folder.outputs.folder }} 
         run: |
           cd experiment
           pwd
           ls
-          mamba run -n srcomp-submission python -m pytest -v test_submission.py --ml ${{ env.sub_name }}
+          mamba run -n $SUBENV python -m pytest -v test_submission.py --ml $SUBNAME
       - 
         name: Save Competitor
-        env:
-          SUBMISSION: ${{ steps.get-folder.outputs.folder }} 
         run: |
           source ci/store_competitor.sh 
