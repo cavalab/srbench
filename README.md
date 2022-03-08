@@ -18,12 +18,12 @@ Once everything is working, participants can basically sit tight: the competitio
 3. In the folder, put the contents of your submission. This folder should contain:
 
     1. `metadata.yaml` (**required**): A file describing your submission, following the descriptions in `example/metadata.yaml`.  
-    2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. It should contain:
+    2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. See [submission/feat-example/regressor.py](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/regressor.py) for complete documentation. 
+        It should contain:
         -   `est`: a sklearn-compatible `Regressor` object. 
         -   `model(est, X=None)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model. It can optionally take the training data as an input argument. See [guidance below](###-returning-a-sympy-compatible-model-string). 
         -   `eval_kwargs` (optional): a dictionary that can specify method-specific arguments to `evaluate_model.py`.
-
-  See [submission/feat-example/regressor.py](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/regressor.py) for complete documentation. 
+        
     3. `LICENSE` *(optional)* A license file
     4. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
     It will be used to update the baseline environment (`environment.yml` in the
@@ -36,7 +36,7 @@ Once everything is working, participants can basically sit tight: the competitio
 
 ### Version control
 
-The install process should guarantee that the version for your algorithm that gets install is **fixed**. 
+The install process should guarantee that the version for your algorithm that gets installed is **fixed**. 
 You can do this in many ways: 
 
 1. Including the source code with the submission. 
