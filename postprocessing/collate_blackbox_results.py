@@ -70,7 +70,8 @@ comparison_cols = [
     'symbolic_model',
     'r2_test',
     'mse_test',
-    'mae_test'
+    'mae_test',
+    'params'
 ]
 fails = []
 import pdb
