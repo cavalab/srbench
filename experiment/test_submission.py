@@ -35,7 +35,7 @@ def test_submission(ml):
         eval_kwargs = algorithm.eval_kwargs
         eval_kwarg_types = {
             'test_params':dict,
-            'max_train_samples':int 
+            'max_train_samples':int,
             'scale_x':bool,
             'scale_y':bool,
             'pre_train':types.FunctionType
