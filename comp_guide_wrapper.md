@@ -1,6 +1,6 @@
 ---
 title: 
-permalink: /contributing/
+permalink: /competition-guide/
 toc: true
 ---
 

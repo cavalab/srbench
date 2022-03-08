@@ -40,13 +40,16 @@ Algorithm submissions will be judged by their ability to discover the ground-tru
 Winners will be determined based on the accuracy and simplicity of the generated models, both individually and in the Pareto efficient sense. 
 After competition, the submitted methods, evaluation procedure, and new datasets will be made publicly available.
 
+See the [Competition Guide](/competition-guide/) for detailed instructions. 
+{: notice}
 
 ## Important Dates
 
 Entrants should have their methods submitted by **May 1, 2022**. 
 {: notice}
 
-Submissions will be accepting starting February 18, 2022.
+Submissions will be accepted starting March 14, 2022.
+Note that submissions are tested automatically and must pass all tests; please budget time for this. 
 The winners will be announced at GECCO, July 9-13 in Boston, MA, and online.
 
 ## Previous History
@@ -92,13 +95,12 @@ Note that methods cannot rely on external API calls: they must be completely sel
 
 ## How to Participate
 
-We plan to release a tutorial video demonstrating how to enter the competition; stay tuned.
+Please the [Competition Guide](/competition-guide/). 
 We will provide a updates to the contributing guide as details solidify.
+We also plan to release a tutorial video demonstrating how to enter the competition; stay tuned.
 
-
-Participants must provide files for their method via a Pull Request to the Competition2022 branch on SRBench. 
-The contribution guidelines will closely follow the [guidelines for contributing a method to SRBench.](contributing)
-In short, submissions consist of a sklearn-like SR Method, a modification of the environment file to ensure the installation of any required library, an installation script for their method (see examples in repository), and a python script setting variables . 
+Participants must provide files for their method via a Pull Request to the [Competition2022 branch](https://github.com/cavalab/srbench/tree/Competition2022) on SRBench. 
+In short, submissions consist of a sklearn-like SR Method and an installation script for their method (see examples in repository), and a python script setting variables . 
 After submitting, a CI process will automatically test the submission and return an error message in case of any problem. 
 For any assistance, [open an issue in the srbench repository](http://github.com/cavalab/srbench/issues).
 Methods must pass CI and code review before the competition submission deadline to be considered.
