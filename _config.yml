@@ -34,8 +34,8 @@ plugins:
   - jekyll-include-cache
 
 domain: srbench.cavalab.github.io # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
-url: https://cavalab.github.io/srbench  # the base hostname and protocol for your site, e.g. http://example.com
-baseurl: "/srbench"      # place folder name if the site is served in a subfolder
+url: https://cavalab.org/srbench  # the base hostname and protocol for your site, e.g. http://example.com
+# baseurl: "/srbench"      # place folder name if the site is served in a subfolder
 
 # breadcrumbs: true
 
