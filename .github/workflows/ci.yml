@@ -31,6 +31,8 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    outputs:
+      subname: ${{ steps.get-folder.outputs.folder }}
     steps:
       - 
         name: Checkout code
@@ -50,9 +52,9 @@ jobs:
         shell: bash -l {0}
     needs: check
     env:
-      SUBNAME: ${{ jobs.check.steps.get-folder.outputs.folder }} 
-      SUBFOLDER: submission/${{ jobs.check.steps.get-folder.outputs.folder }} 
-      SUBENV: srcomp-${{ jobs.check.steps.get-folder.outputs.folder }} 
+      SUBNAME: ${{ needs.check.outputs.subname }} 
+      SUBFOLDER: submission/${{ needs.check.outputs.subname }} 
+      SUBENV: srcomp-${{ needs.check.outputs.subname }} 
   
     steps:
       - 
@@ -87,7 +89,7 @@ jobs:
 ################################################################################
       - 
         name: Install SR dependencies
-        if: hashFiles('${{ jobs.build.env.SUBNAME }}/environment.yml') != ''
+        if: hashFiles('${{ env.SUBNAME }}/environment.yml') != ''
         run: |
           cd $SUBFOLDER
           pwd
