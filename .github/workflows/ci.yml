@@ -109,11 +109,11 @@ jobs:
           # mamba env update -n "${envname}" -f environment.yml
       - name: Copy files
         env:
-          folder: submission/${{ steps.get-folder.outputs.folder }} 
+          folder: ${{ steps.get-folder.outputs.folder }} 
         run: |
           mkdir -p experiment/methods/${{ env.folder }}
-          cp ${{ env.folder}}/regressor.py experiment/methods/${{ env.folder }}/
-          cp ${{ env.folder}}/metadata.yml experiment/methods/${{ env.folder }}/
+          cp submission/${{ env.folder}}/regressor.py experiment/methods/${{ env.folder }}/
+          cp submission/${{ env.folder}}/metadata.yml experiment/methods/${{ env.folder }}/
           touch experiment/methods/${{ env.folder }}/__init__.py
   ################################################################################
   # tests

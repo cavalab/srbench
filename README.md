@@ -50,3 +50,22 @@ def model(est, X):
 
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
 
+### Regressor Settings
+
+#### CLI methods
+
+#### Time Budget
+Methods must adhere to a fixed time budget for the competition. 
+
+- All datasets will be less than 10,000 rows and fewer than 100 features. 
+
+- Maximum time per dataset is 60 minutes. 
+
+- if participants include `max_time` parameter, they can set it appropriately
+- we will send a SIGKILL (stop?) after time limit
+- require participants to have a parameter named `max_time` that controls the number of seconds that `fit()` runs
+
+**Time Limits**
+
+-  specify rows 
+-  
