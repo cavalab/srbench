@@ -131,5 +131,6 @@ jobs:
         name: Save Competitor
         env:
           SUBMISSION: ${{ steps.get-folder.outputs.folder }} 
+          
         run: |
           source ci/store_competitor.sh 
