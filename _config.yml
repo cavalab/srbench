@@ -35,7 +35,7 @@ plugins:
 
 domain: srbench.cavalab.github.io # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
 url: https://cavalab.github.io/srbench  # the base hostname and protocol for your site, e.g. http://example.com
-# baseurl: ""      # place folder name if the site is served in a subfolder
+baseurl: "/srbench"      # place folder name if the site is served in a subfolder
 
 # breadcrumbs: true
 
@@ -54,7 +54,7 @@ footer:
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/cavalab/srbench"
+      url: "https://github.com/cavalab/srbench/"
     - label: "Cavalab"
       icon: "fab fa-fw fa-solid fa-ruler-combined"
       url: "https://cavalab.org"
