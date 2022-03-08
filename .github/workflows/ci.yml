@@ -100,7 +100,7 @@ jobs:
           mamba env update -n $SUBENV -f environment.yml
       - 
         name: Install SR method
-        if: hashFiles('${{ jobs.build.env.SUBFOLDER }}/install.sh') != ''
+        if: hashFiles('${{ env.SUBFOLDER }}/install.sh') != ''
         run: |
           cd $SUBFOLDER 
           echo "running install.sh..."
