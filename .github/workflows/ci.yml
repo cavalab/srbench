@@ -50,8 +50,8 @@ jobs:
         shell: bash -l {0}
     needs: check
     env:
-      SUBNAME: ${{ steps.get-folder.outputs.folder }} 
-      SUBFOLDER: submission/${{ steps.get-folder.outputs.folder }} 
+      SUBNAME: ${{ jobs.check.steps.get-folder.outputs.folder }} 
+      SUBFOLDER: submission/${{ jobs.check.steps.get-folder.outputs.folder }} 
       SUBENV: srcomp-${{ jobs.check.steps.get-folder.outputs.folder }} 
   
     steps:
