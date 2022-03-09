@@ -14,8 +14,8 @@ on:
   pull_request:
     branches: 
       - Competition2022 
-    # paths:
-    #   - 'submission/**'
+    paths:
+      - 'submission/**'
     # paths-ignore:
     #   - 'submission/example/**'
 
@@ -48,14 +48,19 @@ jobs:
         name: check files exist
         run: |
           cd submission/${{ steps.get-folder.outputs.folder }}
+          passing=true
           required_files=("regressor.py" "metadata.yml")
           for f in ${required_files[@]} ; do
               if test -f $f ; then
                   echo ":) $f found"
               else
                   echo "::error:: missing required file $f"
+                  passing=false
               fi
           done
+          if [ "$passing" = false ]; then
+            exit 1
+          fi
   ################################################################################
   # environment setup
   ################################################################################
@@ -96,7 +101,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: | 
           mamba env update -n srcomp -f environment.yml 
-          mamba env export
 ################################################################################
 # install the submission
 ################################################################################
@@ -119,12 +123,14 @@ jobs:
           echo "running install.sh..."
           mamba run -n $SUBENV bash install.sh
       - 
-        name: Copy files
+        name: Copy files and environment
         run: |
           mkdir -p experiment/methods/$SUBNAME
           cp $SUBFOLDER/regressor.py experiment/methods/$SUBNAME/
           cp $SUBFOLDER/metadata.yml experiment/methods/$SUBNAME/
           touch experiment/methods/$SUBNAME/__init__.py
+          # export env
+          mamba run -n $SUBENV conda env export > experiment/methods/$SUBNAME/environment.lock.yml
   ################################################################################
   # tests
   ################################################################################
