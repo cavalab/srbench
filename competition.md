@@ -28,7 +28,7 @@ Despite this, there is little agreement in the field about which algorithms are 
 This competition seeks to distill algorithmic design choices and improve the practice of symbolic regression by evaluating the submitted symbolic regression methods on previously unseen, real-world and synthetic datasets. 
 These datasets will be sourced mainly from the domains of physics, epidemiology and bioinformatics.
 
-Participants are asked to adapt and submit their symbolic regression algorithms to [SRBench](https://github.com/cavalab/srbench), following the [Competition Guide](/srbench/competition-guide/). 
+**Participants are asked to adapt and submit their symbolic regression algorithms to SRBench following the [Competition Guide](/srbench/competition-guide/).**
 SRBench will automatically test these methods for conformance with the competition.
 
 After the submission deadline, methods will be tested on previously unseen datasets. 
@@ -41,12 +41,10 @@ Winners will be determined based on the accuracy and simplicity of the generated
 After competition, the submitted methods, evaluation procedure, and new datasets will be made publicly available.
 
 See the [Competition Guide](/srbench/competition-guide/) for detailed instructions. 
-{: notice}
 
 ## Important Dates
 
 Entrants should have their methods submitted by **May 1, 2022**. 
-{: notice}
 
 Submissions will be accepted starting March 14, 2022.
 Note that submissions are tested automatically and must pass all tests; please budget time for this. 
@@ -95,10 +93,9 @@ Note that methods cannot rely on external API calls: they must be completely sel
 
 ## Competition Guide 
 
-Please the [Competition Guide](/srbench/competition-guide/). 
+Detailed instructions are in the [Competition Guide](/srbench/competition-guide/). 
 We will provide a updates to the contributing guide as details solidify.
 We also plan to release a tutorial video demonstrating how to enter the competition; stay tuned.
-{: notice}
 
 Participants must provide files for their method via a Pull Request to the [Competition2022 branch](https://github.com/cavalab/srbench/tree/Competition2022) on SRBench. 
 In short, submissions consist of a sklearn-like SR Method and an installation script for their method (see examples in repository), and a python script setting variables . 
