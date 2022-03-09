@@ -47,6 +47,7 @@ jobs:
       - 
         name: check files exist
         run: |
+          cd submission/${{ steps.get-folder.outputs.folder }}
           required_files=("regressor.py" "metadata.yml")
           for f in ${required_files[@]} ; do
               if test -f $f ; then
