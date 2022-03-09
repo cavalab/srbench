@@ -1,6 +1,3 @@
-*Note: you are on the Competition2022 branch. 
-View the [main SRBench page](https://github.com/cavalab/srbench)*
-
 # SRBench 2022 Competition Guidelines
 
 To participate, the steps are relatively straightforward. Participants fork this repo, add a method in the submission folder (see [submission/feat-example](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/)), and submit it as a [pull request](https://github.com/cavalab/srbench/compare) to the [Competition 2022 branch](https://github.com/cavalab/srbench/tree/Competition2022). 
