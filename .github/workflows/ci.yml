@@ -9,15 +9,11 @@ on:
       - Competition2022
     # paths:
     #   - 'submission/**'
-    # paths-ignore:
-    #   - 'submission/example/**'
   pull_request:
     branches: 
       - Competition2022 
     paths:
       - 'submission/**'
-    # paths-ignore:
-    #   - 'submission/example/**'
 
 env: 
   CACHE_NUMBER: 0
@@ -105,8 +101,18 @@ jobs:
 # install the submission
 ################################################################################
       - 
+        name: Submission cache 
+        if: hashFiles('${{ env.SUBFOLDER }}/environment.yml') != ''
+        uses: actions/cache@v2
+        with:
+          path: /usr/share/miniconda3/envs/${{ env.SUBENV }}
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('${{ env.SUBFOLDER }}/environment.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('${{ env.SUBFOLDER }}/environment.yml') }}
+        id: cache
+      - 
         name: Install SR dependencies
-        if: hashFiles('${{ env.SUBNAME }}/environment.yml') != ''
+        if: hashFiles('${{ env.SUBFOLDER }}/environment.yml') != ''
         run: |
           cd $SUBFOLDER
           pwd
@@ -129,8 +135,8 @@ jobs:
           cp $SUBFOLDER/regressor.py experiment/methods/$SUBNAME/
           cp $SUBFOLDER/metadata.yml experiment/methods/$SUBNAME/
           touch experiment/methods/$SUBNAME/__init__.py
-          # export env
 
+          # export env
           eval "$(conda shell.bash hook)"
           conda init bash
           conda activate $SUBENV 
