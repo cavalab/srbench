@@ -1,0 +1,4 @@
+name: srbench-submission
+channels:
+  - conda-forge
+prefix: /usr/share/miniconda3/envs/srbench-submission
