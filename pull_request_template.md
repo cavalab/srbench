@@ -1,5 +1,11 @@
 <!--
-Thanks very much for submitting to the SRBench 2022 Competition!
+Thanks very much for submitting a pull request to SRBench!
+
+If this is for the 2022 Competition, use the template below. 
+
+If not, you can delete this pre-filled text.
+
+Competition Participants: 
 
 Please check the list below and make sure you have everything covered. 
 If you need help with the PR, feel free to tag @srbench-comp and we'll respond asap. 
