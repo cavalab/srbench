@@ -9,10 +9,16 @@ on:
     branches:
       - master
       - dev
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
   pull_request:
     branches: 
       - master 
       - dev 
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 
 env: 
   CACHE_NUMBER: 0

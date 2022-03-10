@@ -6,6 +6,9 @@ on:
       - master
     tags:
       - 'v*'
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 
 env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
