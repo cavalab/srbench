@@ -7,6 +7,7 @@ on:
       - CONTRIBUTING.md
       - README.md
       - docs/CompetitionGuide.md
+      - docs/cfp_competition.md
 
 jobs:
   copy:
@@ -18,6 +19,7 @@ jobs:
           - CONTRIBUTING.md
           - README.md
           - docs/CompetitionGuide.md
+          - docs/cfp_competition.md
 
     steps:
       - uses: actions/checkout@v2
@@ -35,4 +37,7 @@ jobs:
           TARGET_DIR: '_includes/'
           TARGET_BRANCH: 'gh-pages'
         run: |
+          prefix="docs/"
+          SRC_FILE=${SRC_FILE#"$prefix"}
+          echo "SRC_FILE:$SRC_FILE"
           source ci/copy_page.sh 
