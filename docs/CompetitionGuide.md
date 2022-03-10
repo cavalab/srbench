@@ -1,6 +1,8 @@
-# SRBench 2022 Competition Guidelines
+[PR]: (https://github.com/cavalab/srbench/compare/Competition2022...?template=competition_template.md)
 
-To participate, the steps are relatively straightforward. Participants fork this repo, add a method in the submission folder (see [submission/feat-example](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/)), and submit it as a [pull request](https://github.com/cavalab/srbench/compare/Competition2022...?template=pull_request_template.md) to the [Competition 2022 branch](https://github.com/cavalab/srbench/tree/Competition2022). 
+# SRBench 2022 Competition Guidelines
+To participate, the steps are relatively straightforward. 
+Participants fork this repo, add a method in the submission folder (see [submission/feat-example](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/)), and submit it as a [pull request][PR] to the [Competition 2022 branch](https://github.com/cavalab/srbench/tree/Competition2022). 
 Once submitted, the continuous integration process will give feedback if there are any problems with the submission. 
 Participants can then update their PR as necessary to have it pass the tests. 
 
@@ -31,7 +33,7 @@ Once everything is working, participants can basically sit tight: the competitio
     **Note: scripts should not require sudo permissions. The library and include paths should be directed to conda environment; the environmental variable `$CONDA_PREFIX` specifies the path to the environment.
     6. additional files *(optional)*: you may include a folder containing the code for your method in the submission. Otherwise, `install.sh` should pull the source code remotely. 
 
-    7. Commit your changes and submit your branch as a [pull request](https://github.com/cavalab/srbench/compare/Competition2022...?template=pull_request_template.md) to the [Competition 2022 branch](https://github.com/cavalab/srbench/tree/Competition2022). 
+    7. Commit your changes and submit your branch as a [pull request Competition 2022 branch][PR]. 
 
     8. Once the tests pass, you will be an official competitor!
 
