@@ -1,20 +1,37 @@
-name: Copy CONTRIBUTING to gh-pages
+name: Copy md files to gh-pages
 
 on: 
   push:
     branches: [ master ]
     paths:
       - CONTRIBUTING.md
+      - README.md
+      - docs/CompetitionGuide.md
 
 jobs:
   copy:
-    name: Copy contributing
+    name: Copy files to gh-pages
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file: 
+          - CONTRIBUTING.md
+          - README.md
+          - docs/CompetitionGuide.md
+
     steps:
       - uses: actions/checkout@v2
-      - name: contributing
+      - 
+        name: check cache 
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.file }}
+          key: ${{hashFiles('${{ matrix.file }}')}}
+        id: cache
+      - name: copy to gh-pages
+        if: steps.cache.outputs.cache-hit != 'true'
         env:
-          SRC_FILE: 'CONTRIBUTING.md'
+          SRC_FILE: ${{ matrix.file }}
           TARGET_DIR: '_includes/'
           TARGET_BRANCH: 'gh-pages'
         run: |
