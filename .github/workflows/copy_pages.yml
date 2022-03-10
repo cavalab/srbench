@@ -8,6 +8,8 @@ on:
       - README.md
       - docs/CompetitionGuide.md
       - docs/cfp_competition.md
+# allow job to be run manually
+on: workflow_dispatch
 
 jobs:
   copy:
