@@ -8,7 +8,7 @@ on:
       - 'v*'
     paths-ignore:
       - 'docs/**'
-      - '**/*.md'
+      - '**.md'
 
 env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}

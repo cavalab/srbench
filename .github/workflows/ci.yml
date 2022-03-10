@@ -11,14 +11,14 @@ on:
       - dev
     paths-ignore:
       - 'docs/**'
-      - '**/*.md'
+      - '**.md'
   pull_request:
     branches: 
       - master 
       - dev 
     paths-ignore:
       - 'docs/**'
-      - '**/*.md'
+      - '**.md'
 
 env: 
   CACHE_NUMBER: 0
