@@ -14,7 +14,7 @@ Once everything is working, participants can basically sit tight: the competitio
 
 3. In the folder, put the contents of your submission. This folder should contain:
 
-    1. `metadata.yaml` (**required**): A file describing your submission, following the descriptions in `example/metadata.yaml`.  
+    1. `metadata.yml` (**required**): A file describing your submission, following the descriptions in `example/metadata.yml`.  
     2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. See [submission/feat-example/regressor.py](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/regressor.py) for complete documentation. 
         It should contain:
         -   `est`: a sklearn-compatible `Regressor` object. 
