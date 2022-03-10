@@ -1,15 +1,15 @@
 name: Copy md files to gh-pages
 
 on: 
-  - push:
-      branches: [ master ]
-      paths:
-        - CONTRIBUTING.md
-        - README.md
-        - docs/CompetitionGuide.md
-        - docs/cfp_competition.md
+  push:
+    branches: [ master ]
+    paths:
+      - CONTRIBUTING.md
+      - README.md
+      - docs/CompetitionGuide.md
+      - docs/cfp_competition.md
 # allow job to be run manually
-  - workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   copy:
