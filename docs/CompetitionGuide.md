@@ -1,4 +1,4 @@
-[PR]: (https://github.com/cavalab/srbench/compare/Competition2022...?template=Competition2022.md)
+[PR]: https://github.com/cavalab/srbench/compare/Competition2022...?template=Competition2022.md
 
 # SRBench 2022 Competition Guidelines
 To participate, the steps are relatively straightforward. 
