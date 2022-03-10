@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ matrix.file }}
-          key: ${{ hashFiles(${{ matrix.file }}) }}
+          key: ${{ hashFiles(format('{0}', matrix.file )) }}
         id: cache
       - name: copy to gh-pages
         if: steps.cache.outputs.cache-hit != 'true'
