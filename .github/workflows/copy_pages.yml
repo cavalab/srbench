@@ -37,7 +37,8 @@ jobs:
           TARGET_DIR: '_includes/'
           TARGET_BRANCH: 'gh-pages'
         run: |
-          prefix="docs/"
-          SRC_FILE=${SRC_FILE#"$prefix"}
-          echo "SRC_FILE:$SRC_FILE"
+          if [[ $SRC_FILE == *"docs/"* ]] ; then
+            SRC_DIR="docs/"
+            SRC_FILE=${SRC_FILE#"$prefix"}
+          fi
           source ci/copy_page.sh 
