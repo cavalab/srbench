@@ -77,13 +77,19 @@ Methods currently benchmarked:
     [paper](https://dl.acm.org/doi/pdf/10.1145/3377929.3398099?casa_token=HJgFp342K0sAAAAA:3Xbelm-5YjcIgjMvqLcyoTYdB0wNR0S4bYcQBGUiwOuwqbFfV6YnE8YKGINija_V6wCi6dahvQ3Pxg)
     ,
     [code](https://github.com/heal-research/operon)
-- PySR (Cranmer 2020)
-    [code](https://github.com/MilesCranmer/PySR)
+
 - Semantic Backpropagation GP (Virgolin et al. 2019)
     [paper](https://dl.acm.org/doi/pdf/10.1145/3321707.3321758?casa_token=v43VobsGalkAAAAA:Vj8S9mHAv-H4tLm_GCL4DJdfW3e5SVUtD6J3gIQh0vrNzM3s6psjl-bwO2NMnxLN0thRJ561OZ0sQA)
     ,
     [code](https://github.com/marcovirgolin/GP-GOMEA)
 
+Methods Staged for Benchmarking:
+
+- PySR (Cranmer 2020)
+    [code](https://github.com/MilesCranmer/PySR)
+- PSTree (Zhang 2021)
+    [code](https://github.com/hengzhe-zhang/PS-Tree)
+    
 # Contribute
 
 We are actively updating and expanding this benchmark. 
