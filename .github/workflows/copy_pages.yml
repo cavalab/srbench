@@ -32,7 +32,8 @@ jobs:
           path: ${{ matrix.file }}
           key: ${{ hashFiles(format('{0}', matrix.file )) }}
         id: cache
-      - name: copy to gh-pages
+      - 
+        name: copy to gh-pages
         if: steps.cache.outputs.cache-hit != 'true'
         env:
           SRC_FILE: ${{ matrix.file }}
