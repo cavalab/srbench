@@ -191,7 +191,9 @@ def evaluate_model(dataset, results_path, random_state, est_name, est,
                               ('mae',mean_absolute_error),
                               ('r2', r2_score)
                              ]:
-            y_pred = sc_y.inverse_transform(pred(X)) if scale_y else pred(X)
+            y_pred = np.asarray(pred(X)).reshape(-1,1)
+            if scale_y:
+                y_pred = sc_y.inverse_transform(y_pred)
             results[score + '_' + fold] = scorer(target, y_pred) 
     
     ##################################################
