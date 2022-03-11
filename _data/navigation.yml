@@ -2,9 +2,35 @@
 main:
   - title: "Competition 2022"
     url: /competition-2022/
+    children:
+    - title: "Competition Guide"
+      url: /competition-guide/
+      children:
+      - title: "Competition Guide"
+        url: /competition-guide/
+        children:
+        - title: "Instructions"
+          url: /competition-guide/#instructions
+        - title: "Regressor Guide"
+          url: /competition-guide/#regressor-guide
+        - title: "Competition Details"
+          url: /competition-guide/#competition-details
   - title: "Contributing"
     url: /contributing/
   - title: "Results"
     url: /results/
   - title: "Datasets"
     url: /datasets/
+
+competition:
+  - title: "Call for Participation"
+    url: /competition-2022/
+  - title: "Competition Guide"
+    url: /competition-guide/
+    children:
+    - title: "Instructions"
+      url: /competition-guide/#instructions
+    - title: "Regressor Guide"
+      url: /competition-guide/#regressor-guide
+    - title: "Competition Details"
+      url: /competition-guide/#competition-details

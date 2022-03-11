@@ -29,6 +29,8 @@ repository: "cavalab/srbench"
 
 # Build settings
 remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+# minimal_mistakes_skin: "contrast" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+minimal_mistakes_skin:  "contrast" # "default", "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 plugins:
   - jekyll-feed
   - jekyll-include-cache
@@ -56,14 +58,16 @@ footer:
       icon: "fab fa-fw fa-github"
       url: "https://github.com/cavalab/srbench/"
     - label: "Cavalab"
-      icon: "fab fa-fw fa-solid fa-ruler-combined"
+      # icon: "fab fa-fw fa-ruler-combined"
+      icon: "fal fa-microscope"
       url: "https://cavalab.org"
 
 author:
   bio: "Maintained by [@cavalab](https://github.com/cavalab) and many open-source contributors"
   links:
-    - label: "GitHub"
+    - label: "GitHub Repo"
       icon: "fab fa-fw fa-github"
+      # icon: "fa-light fa-chart-network"
       url: "https://github.com/cavalab/srbench"
 
 atom_feed:
