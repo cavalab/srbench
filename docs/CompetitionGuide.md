@@ -1,5 +1,5 @@
 [PR]: https://github.com/cavalab/srbench/compare/Competition2022...change-to-my-fork
-[example folder]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/
+[example]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/
 [metadata]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/metadata.yml
 [regressor]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/regressor.py
 [env]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/environment.yml
