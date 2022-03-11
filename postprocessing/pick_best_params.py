@@ -36,7 +36,7 @@ sr_filenames = [
     'FFXRegressor',
     'FEATRegressor',
     'EPLEXRegressor',
-    'GPGOMEA',
+    'GPGOMEARegressor',
     'gplearn',
     'ITEARegressor',
     'MRGPRegressor',
