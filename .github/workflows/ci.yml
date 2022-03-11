@@ -9,6 +9,9 @@ on:
     branches:
       - master
       - dev
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
   pull_request:
     types:
       - assigned
@@ -19,6 +22,9 @@ on:
     branches: 
       - master 
       - dev 
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
 
 env: 
   CACHE_NUMBER: 0
