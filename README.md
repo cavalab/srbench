@@ -114,7 +114,7 @@ GECCO 2018. [DOI](https://doi.org/10.1145/3205455.3205539), [Preprint](https://w
 
 # Contact
 
-William La Cava ( @lacava ), william dot lacava at childrens dot harvard dot edu
+William La Cava ( [@lacava]( https://github.com/lacava) ), william dot lacava at childrens dot harvard dot edu
 
 # Using SRBench
 
