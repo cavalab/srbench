@@ -59,8 +59,8 @@ footer:
       url: "https://github.com/cavalab/srbench/"
     - label: "Cavalab"
       # icon: "fab fa-fw fa-ruler-combined" # doesn't work
-      # icon: "fal fa-microscope" # doesn't work
-      icon: "fas fa-fw fa-link"
+      icon: "fas fa-microscope" 
+      # icon: "fas fa-fw fa-link"
       url: "https://cavalab.org"
 
 author:
