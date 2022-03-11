@@ -21,22 +21,7 @@ Once everything is working, participants can basically sit tight: the competitio
 
 3. In the folder, put the contents of your submission. This folder should contain:
 
-    1. `metadata.yml` (**required**): A file describing your submission, following the descriptions in [submission/feat-example/metadata.yml][metadata]:
-    ```yaml
-    authors: # the participants
-      - William La Cava
-    email: william.lacava@childrens.harvard.edu
-    name: Feat # name of the submission /method
-    description: | # anything you'd like here to describe the method.
-      A feature engineering automation tool.
-      Uses symbolic regression to learn features of a linear model. 
-
-      La Cava, W., Singh, T. R., Taggart, J., Suri, S., & Moore, J. H.. Learning concise representations for regression by evolving networks of trees. ICLR 2019. arxiv:1807.0091
-
-      Really hope I win! jk
-    url: http://cavalab.org/feat # a link to the project
-
-    ```
+    1. `metadata.yml` (**required**): A file describing your submission, following the descriptions in [submission/feat-example/metadata.yml][metadata]. 
     2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. See [submission/feat-example/regressor.py][regressor] for complete documentation. 
         It should contain:
         -   `est`: a sklearn-compatible `Regressor` object. 
