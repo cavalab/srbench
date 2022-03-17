@@ -6,8 +6,7 @@ on:
     paths:
       - CONTRIBUTING.md
       - README.md
-      - docs/CompetitionGuide.md
-      - docs/cfp_competition.md
+      - docs/*.md
 # allow job to be run manually
   workflow_dispatch:
 
@@ -22,6 +21,7 @@ jobs:
           - README.md
           - docs/CompetitionGuide.md
           - docs/cfp_competition.md
+          - docs/user_guide.md
 
     steps:
       - uses: actions/checkout@v2
