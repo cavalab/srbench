@@ -14,7 +14,7 @@ main:
       url: /#references
     - title: "Contact"
       url: /#contact
-  - title: "Using SRBench"
+  - title: "User Guide"
     url: /user-guide
     children:
     - title: "Installation"
