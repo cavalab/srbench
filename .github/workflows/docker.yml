@@ -9,6 +9,15 @@ on:
     paths-ignore:
       - 'docs/**'
       - '**.md'
+  pull_request:
+    types:
+      - assigned
+      - opened
+      - edited
+      - reopened
+      - synchronize
+    branches: 
+      - master 
 
 env:
   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
