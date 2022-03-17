@@ -5,16 +5,22 @@ main:
     children:
     - title: "Competition Guide"
       url: /competition-guide/
-      children:
-      - title: "Competition Guide"
-        url: /competition-guide/
-        children:
-        - title: "Instructions"
-          url: /competition-guide/#instructions
-        - title: "Regressor Guide"
-          url: /competition-guide/#regressor-guide
-        - title: "Competition Details"
-          url: /competition-guide/#competition-details
+  - title: "SRBench"
+    url: / 
+    children:
+    - title: "Benchmarked Methods"
+      url: /#benchmarked-methods
+    - title: "References"
+      url: /#references
+    - title: "Contact"
+      url: /#contact
+  - title: "Using SRBench"
+    url: /user-guide
+    children:
+    - title: "Installation"
+      url: /user-guide/#installation
+    - title: "Reproducing the Experiment"
+      url: /user-guide/#reproducing-the-experiment
   - title: "Contributing"
     url: /contributing/
   - title: "Results"
@@ -34,3 +40,27 @@ competition:
       url: /competition-guide/#regressor-guide
     - title: "Competition Details"
       url: /competition-guide/#competition-details
+  - title: "SRBench"
+    url: / 
+    children:
+    - title: "Benchmarked Methods"
+      url: /#benchmarked-methods
+    - title: "References"
+      url: /#references
+    - title: "Contact"
+      url: /#contact
+  - title: "Using SRBench"
+    url: /user-guide
+    children:
+    - title: "Installation"
+      url: /user-guide/#installation
+    - title: "Reproducing the Experiment"
+      url: /user-guide/#reproducing-the-experiment
+  - title: "Contributing"
+    url: /contributing/
+  - title: "Results"
+    url: /results/
+  - title: "Datasets"
+    url: /datasets/
+
+
