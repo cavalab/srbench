@@ -9,8 +9,7 @@ hyper_params = [
 
 est = PSTreeRegressor(regr_class=GPRegressor, tree_class=DecisionTreeRegressor,
                       height_limit=6, n_pop=25, n_gen=500, normalize=False,
-                      basic_primitive=False, size_objective=True,
-                      select=selTournamentDCD)
+                      basic_primitive='optimal', size_objective=True)
 
 
 def complexity(est):
