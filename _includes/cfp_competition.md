@@ -8,8 +8,8 @@ img {
 <a href="http://www.chip.org" ><img style="float:center;" src="../assets/images/chip-logo_0.png"></a>
 <a href="http://www.chip.org" ><img style="float:center; height:60px;" src="../assets/images/bch-hvd.png"></a>
 <br>
-<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;" src="../assets/images/20211004_HEAL-Logo_v7.png"></a>
-<a href="https://pure.fh-ooe.at/en/projects/heuristiclab" ><img style="float:center;height:60px;" src="../assets/images/uasau.png"></a>
+<a href="https://heal.heuristiclab.com" ><img style="float:center;" src="../assets/images/20211004_HEAL-Logo_v7.png"></a>
+<a href="https://heal.heuristiclab.com" ><img style="float:center;height:60px;" src="../assets/images/uasau.png"></a>
 
 {% include toc %}
 
@@ -76,7 +76,7 @@ Methods will be required to perform at least as well as penalized linear regress
 This competition is sponsored by:
 
 - [Computational Health Informatics Program at Boston Children's Hospital / Harvard Medical School](http://www.chip.org)
-- [Heuristic and Evolutionary Algorithm Laboratory at the University of Applied Sciences Upper Austria](https://pure.fh-ooe.at/en/projects/heuristiclab)
+- [Heuristic and Evolutionary Algorithm Laboratory at the University of Applied Sciences Upper Austria](https://heal.heuristiclab.com)
 
 
 ## Who can Participate
