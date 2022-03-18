@@ -4,10 +4,11 @@
 [regressor]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/regressor.py
 [env]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/environment.yml
 [paper]: https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/c0c7c76d30bd3dcaefc96f40275bdc0a-Abstract-round1.html
+[branch]: https://github.com/cavalab/srbench/tree/Competition2022
 
 # SRBench 2022 Competition Guidelines
 To participate, the steps are relatively straightforward. 
-Participants fork this repo, add a method in the submission folder (see [submission/feat-example](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/)), and submit it as a [pull request][PR] to the [Competition 2022 branch](https://github.com/cavalab/srbench/tree/Competition2022). 
+Participants fork this repo, add a method in the submission folder (see [submission/feat-example](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/)), and submit it as a [pull request][PR] to the [Competition2022 branch][branch]. 
 Once submitted, the continuous integration process will give feedback if there are any problems with the submission. 
 Participants can then update their PR as necessary to have it pass the tests. 
 
@@ -15,7 +16,13 @@ Once everything is working, participants can basically sit tight: the competitio
 
 ## Instructions
 
-1. Fork this repository and clone it. 
+1. Fork this repository and clone it. Check out the [Competition2022 branch][branch].
+
+    ```bash
+    git clone git@github.com:your-name/srbench
+    cd srbench
+    git checkout Competition2022 # may need to "git fetch" first if this fails
+    ```
 
 2. Make a folder in the `submission/` named after your method. You can start with a template by copying the [`submission/feat-example`][example] folder, renaming and editing it. 
 
