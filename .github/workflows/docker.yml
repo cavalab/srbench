@@ -6,6 +6,9 @@ on:
       - master
     tags:
       - 'v*'
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
   pull_request:
     types:
       - assigned
