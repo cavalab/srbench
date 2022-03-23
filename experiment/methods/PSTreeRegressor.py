@@ -9,7 +9,7 @@ hyper_params = list(ParameterSampler({
     'basic_primitive': ['optimal', 'log,sqrt,sin,tanh'],
     'initial_height': [None, '0-6'],
     'max_leaf_nodes': [4, 6, 8],
-}, n_iter=6))
+}, n_iter=6, random_state=0))
 
 for g in hyper_params:
     g['select'] = selRandom if g['initial_height'] is None else selTournamentDCD
