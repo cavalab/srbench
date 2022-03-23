@@ -70,7 +70,8 @@ comparison_cols = [
     'symbolic_model',
     'r2_test',
     'mse_test',
-    'mae_test'
+    'mae_test',
+    'params'
 ]
 fails = []
 import pdb
@@ -103,6 +104,8 @@ for f in tqdm(glob(rdir + '/*/*.json')):
 print(len(fails),'fails:',fails)
 # df_results = pd.concat(frames)
 df_results = pd.DataFrame.from_records(frames)
+df_results['params_str'] = df_results['params'].apply(str)
+df_results = df_results.drop(columns=['params'])
 ##########
 # cleanup
 ##########
