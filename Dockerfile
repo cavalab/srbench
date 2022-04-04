@@ -23,6 +23,24 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 # Install base packages.
 USER root
 
+################################################################################
+# turn proxy on
+RUN echo "turning on BCH proxy..."
+# most things
+
+RUN export http_proxy=http://proxy.tch.harvard.edu:3128
+RUN export HTTP_PROXY=$http_proxy
+RUN export https_proxy=http://proxy.tch.harvard.edu:3128
+RUN export HTTPS_PROXY=$https_proxy
+
+# git
+RUN git config --global http.proxy http://proxy.tch.harvard.edu:3128
+
+#
+RUN echo 'Acquire { http::Proxy "http://proxy.tch.harvard.edu:3128"; https::Proxy "http://proxy.tch.harvard.edu:3128"; }' | tee /etc/apt/apt.conf.d/proxy.conf
+################################################################################
+
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt install -y \
