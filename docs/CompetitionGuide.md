@@ -81,11 +81,19 @@ def model(est, X):
 
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
 
+**Note:** In part of the competition (see the [judging criteria](JudgingCriteria.md)), models will be checked for symbolic equivalence with ground-truth formulae. 
+If your method uses protected operators (e.g., `my_prot_div(a,b)= a/b if b!=0 else 1` or `my_prot_log(a)=log(abs(a)+eps)`), replace these with non-protected (sympy-compatible) versions when calling `model`. For example:
+
+```python
+def model(est, X):
+    ... # any previous pre-processing
+    new_model = new_model.replace("my_prot_div","/").replace("my_prot_log","log")
+```
 
 ### CLI methods
 
 Is your SR method typically called via a command line interface? 
-Check out this [gist](https://gist.github.com/folivetti/609bc9b854c51968ef90aa675ccaa60d) to make a Sklearn interface. 
+Check out this [gist](https://gist.github.com/folivetti/609bc9b854c51968ef90aa675ccaa60d) to make a sklearn interface. 
 
 ## Competition Details
 
@@ -97,33 +105,20 @@ Each dataset will have less than 10,000 samples and fewer than 100 features.
 
 The competition consists of three stages, summarized in the table below. 
 
-| Stage     | Filter  | Synthetic | Real-World |
+| Stage     | Qualification  | Synthetic | Real-World |
 |---|---|---|---|
 | Benchmark Data | PMLB-20 | Synthetic | Real-World |
-| Criteria  | Better than ElasticNet | Accuracy, Simplicity, Exact Solutions | Accuracy, Simplicity, Expert Assessment |
+| Criteria  | Better than linear regresion | Accuracy, Simplicity, Exact Solutions | Accuracy, Simplicity, Expert Assessment |
 
+- The first stage is a simple filter: submitted methods must be better than a linear model on PMLB-20. 
+PMLB-20 is a set of 20 datasets we will select from the [Penn Machine Learning Benchmark](https://github.com/EpistasisLab/pmlb) used in our [original SRBench analysis](https://scikit-learn.org/stable/modules/classes.html#hyper-parameter-optimizers). (Participants are free to tune on this benchmark.)
+- The second and third stages are separate and independent tracks (a method can, in principle, win both): the *Synthetic* track and the *Real-World* track.
+The judging criteria for these tracks are different but share some aspects.
+For example, common judging criteria are accuracy (in terms of [R2 Score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html?highlight=r2_score#sklearn.metrics.r2_score)) and simplicity (in terms of number of model components).
 
 ### Judging Criteria
 
-Stay tuned for a detailed guide. 
-
-### Accuracy
-
-The [R2 Score](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html?highlight=r2_score#sklearn.metrics.r2_score)
-
-#### Complexity
-
-Complexity is defined as the number of nodes in the final model after it has been converted to a sympy object and symbolically simplified. 
-
-### Exact Solutions
-
-We check for _symbolic equivalence_ using sympy. 
-See the definition in our [paper][paper] for details. 
-
-### Expert Assessment
-
-The real-world task will be one in which an expert model is available for comparison. 
-In addition to the metrics above, participant solutions will be evaluated by a domain expert to determine their interpretability in the application context. 
+Full details on the judging criteria can be found [here](JudgingCriteria.md).
 
 ### Computing Environment
 
@@ -142,7 +137,6 @@ For each job, an algorithm will have access to the following resources:
 
 CPU Cores for each job will span a single host, so methods are encouraged to support CPU-level parallelism. 
 
-PMLB-20 is a set of 20 datasets we will select from the [Penn Machine Learning Benchmark](https://github.com/EpistasisLab/pmlb) used in our [original SRBench analysis](https://scikit-learn.org/stable/modules/classes.html#hyper-parameter-optimizers).  
 
 
 ### Time Budget
@@ -176,42 +170,64 @@ def pre_train_fn(est, X, y):
         max_time = 360 
     else:
         max_time = 3600
-    est.set_params(max_time )
+    est.set_params(max_time)
 
-# pass the function eval_kwargs
+# pass the function to eval_kwargs
 eval_kwargs = {
     'pre_train': pre_train_fn
 }
 ```
 
-
 ### Hyperparameter Tuning
 
 **Warning** If choose to conduct hyperparameter tuning, this counts towards the time limit. 
-Make sure to set the `max_time` accordingly.  
+In the example below we show one way to set the `max_time` accordingly.  
 {: .notice--warning}
 
 Unlike our [prior study][paper], the competition does not automatically conduct hyper-parameter tuning for each method. 
 Thus, it is up to participants to decide whether they want to include hyperparameter tuning as part of algorithm training in `regressor.py`. 
 Here is an example of how to do so:
 
+
 ```python
 from sklearn.model_selection import GridSearchCV
-from sklearn import linear_model
+from mylibrary import MyMethod
 
 hyper_params = { 'alpha': (1e-04,0.001,0.01,0.1,1,) }
 
 # define your base estimator
-base_est=linear_model.LassoLars()
+base_est=MyMethod() 
 
 # set est to be a GridSearchCV estimator
 est = GridSearchCV(estimator=base_est, 
-                   param_grid=hyper_params)
+                   param_grid=hyper_params, 
+                   cv=5,
+                   refit=True)
 
-# addition definitions
+# set max time w.r.t. hyper-param tuning
+num_combos = 5  # five values of alpha
+num_cv = 5      # 5 cross-validation splits as above
+total_runs = num_combos * num_cv + 1 # +1 because refit=True
+
+def pre_train_fn(est, X, y): 
+    """set max_time in seconds based on length of X & hyper-parameter tuning"""
+    if len(X)<=1000:
+        # account for hyper-parameter tuning, remove 1 extra second of slack to be sure it will terminate on time
+        max_time = 360 // total_runs - 1 
+    else:
+        max_time = 3600 // total_runs - 1
+    est.set_params(max_time)
+
+# pass the function eval_kwargs
+eval_kwargs = {
+    'pre_train': pre_train_fn
+}
+
+# additional definitions
 # ...
 ```
 
-In this example, the estimator is a GridSearchCV object wrapping a LassoLars model. 
+In this example, the estimator is a GridSearchCV object wrapping a custom method. 
 During fit, it will tune the `alpha` parameter using cross-validation. 
-For other hyper-parameter optimizers, see the [scikit-learn docs](https://scikit-learn.org/stable/modules/classes.html#hyper-parameter-optimizers).
+Moreover, the `pre_train_fn` is set to run the method so that the time limit will not be exceeded.
+For other hyper-parameter optimizers than GridSearchCV, see, e.g., the [scikit-learn docs](https://scikit-learn.org/stable/modules/classes.html#hyper-parameter-optimizers).
