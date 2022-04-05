@@ -5,6 +5,8 @@ main:
     children:
     - title: "Competition Guide"
       url: /competition-guide/
+    - title: "Judging Criteria"
+      url: /judging-criteria/
   - title: "SRBench"
     url: / 
     children:
@@ -40,6 +42,8 @@ competition:
       url: /competition-guide/#regressor-guide
     - title: "Competition Details"
       url: /competition-guide/#competition-details
+  - title: "Judging Criteria"
+    url: /judging-criteria/
   - title: "SRBench"
     url: / 
     children:
