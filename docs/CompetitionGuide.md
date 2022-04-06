@@ -8,7 +8,7 @@
 
 # SRBench 2022 Competition Guidelines
 To participate, the steps are relatively straightforward. 
-Participants fork this repo, add a method in the submission folder (see [submission/feat-example](https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/)), and submit it as a [pull request][PR] to the [Competition2022 branch][branch]. 
+Participants fork this repo, checkout the [Competition2022 branch][branch], add a method in the submission folder (see [submission/feat-example][example]), and submit it as a [pull request][PR] to the [Competition2022 branch][branch]. 
 Once submitted, the continuous integration process will give feedback if there are any problems with the submission. 
 Participants can then update their PR as necessary to have it pass the tests. 
 
@@ -152,7 +152,7 @@ The time limits are as follows:
 - For datasets up to 10000 rows, 600 minutes (10 hours)
 
 
-If a call to `est.fit()` takes longer than the alotted time, it will receive
+If a call to `est.fit()` takes longer than the allotted time, it will receive
 a SIGALRM signal and be terminated. Users may choose to handle this signal if
 they wish in order to return an "any time" solution. 
 
@@ -191,12 +191,14 @@ Here is an example of how to do so:
 
 ```python
 from sklearn.model_selection import GridSearchCV
-from mylibrary import MyMethod
+#from mylibrary import MyMethod
+from sklearn import linear_model
+
 
 hyper_params = { 'alpha': (1e-04,0.001,0.01,0.1,1,) }
 
 # define your base estimator
-base_est=MyMethod() 
+base_est=linear_model.LassoLars()
 
 # set est to be a GridSearchCV estimator
 est = GridSearchCV(estimator=base_est, 
@@ -227,7 +229,7 @@ eval_kwargs = {
 # ...
 ```
 
-In this example, the estimator is a GridSearchCV object wrapping a custom method. 
+In this example, the estimator is a GridSearchCV object wrapping a method (here a LassoLars model). 
 During fit, it will tune the `alpha` parameter using cross-validation. 
 Moreover, the `pre_train_fn` is set to run the method so that the time limit will not be exceeded.
-For other hyper-parameter optimizers than GridSearchCV, see, e.g., the [scikit-learn docs](https://scikit-learn.org/stable/modules/classes.html#hyper-parameter-optimizers).
+For hyper-parameter optimizers other than GridSearchCV, see, e.g., the [scikit-learn docs](https://scikit-learn.org/stable/modules/classes.html#hyper-parameter-optimizers).
