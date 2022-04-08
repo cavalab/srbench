@@ -5,8 +5,6 @@ main:
     children:
     - title: "Competition Guide"
       url: /competition-guide/
-    - title: "Judging Criteria"
-      url: /judging-criteria/
   - title: "SRBench"
     url: / 
     children:
@@ -44,27 +42,27 @@ competition:
       url: /competition-guide/#competition-details
     - title: "Judging Criteria"
       url: /judging-criteria/
-  - title: "SRBench"
-    url: / 
-    children:
-    - title: "Benchmarked Methods"
-      url: /#benchmarked-methods
-    - title: "References"
-      url: /#references
-    - title: "Contact"
-      url: /#contact
-  - title: "Using SRBench"
-    url: /user-guide
-    children:
-    - title: "Installation"
-      url: /user-guide/#installation
-    - title: "Reproducing the Experiment"
-      url: /user-guide/#reproducing-the-experiment
-  - title: "Contributing"
-    url: /contributing/
-  - title: "Results"
-    url: /results/
-  - title: "Datasets"
-    url: /datasets/
+  # - title: "SRBench"
+  #   url: / 
+  #   children:
+  #   - title: "Benchmarked Methods"
+  #     url: /#benchmarked-methods
+  #   - title: "References"
+  #     url: /#references
+  #   - title: "Contact"
+  #     url: /#contact
+  # - title: "Using SRBench"
+  #   url: /user-guide
+  #   children:
+  #   - title: "Installation"
+  #     url: /user-guide/#installation
+  #   - title: "Reproducing the Experiment"
+  #     url: /user-guide/#reproducing-the-experiment
+  # - title: "Contributing"
+  #   url: /contributing/
+  # - title: "Results"
+  #   url: /results/
+  # - title: "Datasets"
+  #   url: /datasets/
 
 
