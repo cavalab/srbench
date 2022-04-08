@@ -133,12 +133,16 @@ For each job, an algorithm will have access to the following resources:
 |-----------|--------:|----------:|-----------:|
 | RAM       | 16 GB   | 16 GB     | 16 GB      |
 | CPU Cores | 4       | 8         | 8          |
-| Wall-clock Time (H) | 24 | 1-10 | 10 |
 
 
-CPU Cores for each job will span a single host, so methods are encouraged to support CPU-level parallelism. 
+CPU cores for each job will span a single host, so methods are encouraged to support CPU-level parallelism. 
+The number of CPU cores can be determined via the environment variable **OMP_NUM_THREADS**. 
+In python, one can grab this value as follows:
 
-
+```python
+import os
+n_cpus = os.environ['OMP_NUM_THREADS']
+```
 
 ### Time Budget
 
@@ -152,12 +156,10 @@ The time limits are as follows:
 - For datasets up to 1000 rows, 60 minutes (1 hour)
 - For datasets up to 10000 rows, 600 minutes (10 hours)
 
+If a call to `est.fit()` takes longer than the allotted time, `est.fit()` will receive a `SIGALRM` and the evaluation routine will raise a `TimeOutException`. 
+Shortly thereafter (on the order of seconds), the job will be killed. 
 
-If a call to `est.fit()` takes longer than the allotted time, it will receive
-a SIGALRM signal and be terminated. Users may choose to handle this signal if
-they wish in order to return an "any time" solution. 
-
-**The preferred approach is that participants design their algorithms to converge in less than an hour for 1000x100 datasets, and less than 10 hours for 10000x100 datasets.**
+**The preferred approach is that participants design their algorithms to terminate comfortably in less than an hour for 1000x100 datasets, and less than 10 hours for 10000x100 datasets.**
 Participants are also encouraged to include a `max_time` parameter and set it appropriately. 
 
 To define dataset-specific runtime parameters, users can define a `pre_train()`
@@ -168,9 +170,9 @@ As an example, one could define the following in `regressor.py`:
 def pre_train_fn(est, X, y): 
     """set max_time in seconds based on length of X."""
     if len(X)<=1000:
-        max_time = 360 
+        max_time = 360 - 1 # 1 second of slack
     else:
-        max_time = 3600
+        max_time = 3600 - 1 # 1 second of slack
     est.set_params(max_time)
 
 # pass the function to eval_kwargs
@@ -178,6 +180,86 @@ eval_kwargs = {
     'pre_train': pre_train_fn
 }
 ```
+
+#### Timeout Handling
+
+Instead of managing runtime internally, participants may choose to handle the `SIGALRM` signal or the `TimeOutException` sent from the evaluation routine.
+However, *proceed with caution*: the exception handling runs the risk of taking an unexpected amount of time and leading to the job being killed. 
+Nonetheless, timeout handling looks like this:
+
+```python
+import signal
+
+class TimeOutException(Exception):
+    pass
+
+def alarm_handler(signum, frame):
+    print(f"raising TimeOutException")
+    raise TimeOutException
+
+def evaluate(est):
+    """model evaluation"""
+    # alarm that sends SIGALRM
+    signal.signal(signal.SIGALRM, alarm_handler)
+    signal.alarm(MAXTIME) # maximum time, defined above 
+    try:
+        est.fit()
+    except TimeOutException:
+        print('evaluate timeout')
+```
+
+Example approaches are the following: 
+
+- `HandleExceptionAlg` handles the `TimeOutException`: 
+
+```python
+# submission codebase
+
+class HandleExceptionAlg:
+    def __init__(self):
+        self.value = 'initial value'
+
+    def fit(self):
+        try:
+            # model training
+        except TimeOutException as e:
+            print('TimeOutException raised')
+            # gracefully and quickly choose final model
+            return self
+
+        return self
+```
+
+- `HandleSignalExceptionAlg` handles the `SIGALRM` with its own internal exception. This is potentially useful for methods that call external routines that can handle `SIGALRM`. 
+
+```python
+# submission codebase
+
+class InternalTimeOutException(Exception):
+    pass
+
+class HandleSignalExceptionAlg:
+    def __init__(self):
+        self.value = 'initial value'
+
+    def alarm_handler(self,signum, frame):
+        print(f"raising InternalTimeOutException")
+        raise InternalTimeOutException
+
+    def fit(self):
+        # define an internal signal handler
+        signal.signal(signal.SIGALRM, self.alarm_handler)
+        try:
+            # model training
+        except InternalTimeOutException as e:
+            print('InternalTimeOutException raised')
+            # gracefully terminate 
+            return self
+
+        return self
+```
+
+These examples are for illustration purposes only and should be independently verified for compatibility with user's code submissions.
 
 ### Hyperparameter Tuning
 
