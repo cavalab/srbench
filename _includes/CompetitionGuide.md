@@ -1,4 +1,5 @@
 [PR]: https://github.com/cavalab/srbench/compare/Competition2022...change-to-my-fork
+[judging]: https://cavalab.org/srbench/judging-criteria/
 [example]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/
 [metadata]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/metadata.yml
 [regressor]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/regressor.py
@@ -81,7 +82,7 @@ def model(est, X):
 
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
 
-**Note:** In part of the competition (see the [judging criteria](JudgingCriteria.md)), models will be checked for symbolic equivalence with ground-truth formulae. 
+**Note:** In part of the competition (see the [judging criteria][judging]), models will be checked for symbolic equivalence with ground-truth formulae. 
 If your method uses protected operators (e.g., `my_prot_div(a,b)= a/b if b!=0 else 1` or `my_prot_log(a)=log(abs(a)+eps)`), replace these with non-protected (sympy-compatible) versions when calling `model`. For example:
 
 ```python
@@ -118,7 +119,7 @@ For example, common judging criteria are accuracy (in terms of [R2 Score](https:
 
 ### Judging Criteria
 
-Full details on the judging criteria can be found [here](JudgingCriteria.md).
+Full details on the judging criteria can be found [here][judging].
 
 ### Computing Environment
 
