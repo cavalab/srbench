@@ -259,6 +259,7 @@ class HandleSignalExceptionAlg:
         return self
 ```
 
+[This gist](https://gist.github.com/lacava/77b19f2b032413ed1b5cee697b969149) gives examples of timeout handling. 
 These examples are for illustration purposes only and should be independently verified for compatibility with user's code submissions.
 
 ### Hyperparameter Tuning
