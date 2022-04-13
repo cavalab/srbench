@@ -81,7 +81,6 @@ def test_evaluate(ml):
 
 @pytest.mark.order(after="test_evaluate")
 def test_sympy(ml):
-    return
     """Sympy compatibility of model string"""
     dataset_name = dataset.split('/')[-1][:-7]
     json_file = (results_path + '/' + dataset_name + '_' + ml + '_' 
@@ -104,7 +103,3 @@ def test_sympy(ml):
 
     model_complexity = complexity(model_sym)
     print('model complexity:',model_complexity)
-
-
-if __name__ == "__main__":
-    test_evaluate("E2ET")
