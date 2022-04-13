@@ -26,14 +26,21 @@ dependencies:
   - xz=5.2.5=h516909a_1
   - zlib=1.2.11=h166bdaf_1014
   - pip:
+    - args==0.1.0
+    - attrs==21.4.0
     - certifi==2021.10.8
     - charset-normalizer==2.0.12
+    - clint==0.5.1
+    - coverage==6.3.2
     - cycler==0.11.0
     - fonttools==4.31.2
     - functorch==0.1.0
     - idna==3.3
+    - importlib-metadata==4.11.3
+    - iniconfig==1.1.1
     - joblib==1.1.0
     - kiwisolver==1.4.2
+    - mamba==0.11.2
     - matplotlib==3.5.1
     - mpmath==1.2.1
     - numexpr==2.8.1
@@ -41,9 +48,13 @@ dependencies:
     - packaging==21.3
     - pandas==1.3.5
     - pillow==9.1.0
+    - pluggy==1.0.0
+    - py==1.11.0
     - pyparsing==3.0.7
+    - pytest==7.1.1
     - python-dateutil==2.8.2
     - pytz==2022.1
+    - pyyaml==6.0
     - requests==2.27.1
     - scikit-learn==1.0.2
     - scipy==1.7.3
@@ -52,10 +63,12 @@ dependencies:
     - sklearn==0.0
     - sympy==1.10.1
     - threadpoolctl==3.1.0
-    - torch==1.11.0+cu113
-    - torchaudio==0.11.0+cu113
-    - torchvision==0.12.0+cu113
+    - tomli==2.0.1
+    - torch==1.11.0+cpu
+    - torchaudio==0.11.0+cpu
+    - torchvision==0.12.0+cpu
     - tqdm==4.64.0
     - typing-extensions==4.1.1
     - urllib3==1.26.9
+    - zipp==3.8.0
 prefix: /private/home/pakamienny/anaconda3/envs/opensource
