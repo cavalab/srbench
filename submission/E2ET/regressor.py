@@ -4,10 +4,7 @@ import symbolicregression
 
 model_path = os.path.join("/".join(__file__.split("/")[:-1]), "model1.pt")
 try:
-    if torch.cuda.is_available():
-        model = torch.load(model_path)
-    else:
-        model = torch.load(model_path, map_location=torch.device('cpu'))
+    model = torch.load(model_path, map_location=torch.device('cpu'))
     print("Model successfully loaded!")
 except Exception as e:
     print("ERROR: model not loaded! path was: {}".format(model_path))
@@ -21,7 +18,10 @@ est = symbolicregression.model.SymbolicTransformerRegressor(
                         )
 
 def model(est, X=None):
+    replace_ops = {"add": "+", "mul": "*", "sub": "-", "pow": "**", "inv": "1/"}
     model_str = est.retrieve_tree(tree_idx=0).infix()
+    for op,replace_op in replace_ops.items():
+        model_str = model_str.replace(op,replace_op)
     return model_str
 
 def my_pre_train_fn(est, X, y):

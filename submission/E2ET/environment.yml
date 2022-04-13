@@ -1,4 +1,4 @@
-name: opensource
+name: E2ET
 channels:
   - conda-forge
   - defaults
