@@ -4,7 +4,10 @@ import symbolicregression
 
 model_path = os.path.join("/".join(__file__.split("/")[:-1]), "model1.pt")
 try:
-    model = torch.load(model_path)
+    if torch.cuda.is_available():
+        model = torch.load(model_path)
+    else:
+        model = torch.load(model_path, map_location=torch.device('cpu'))
     print("Model successfully loaded!")
 except Exception as e:
     print("ERROR: model not loaded! path was: {}".format(model_path))
