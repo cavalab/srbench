@@ -1,14 +1,23 @@
 import torch
 import os, sys
 import symbolicregression
+import requests
 
-model_path = os.path.join("/".join(__file__.split("/")[:-1]), "model1.pt")
+model_path = "model.pt" 
 try:
+    if not os.path.isfile(model_path): 
+        url = "https://dl.fbaipublicfiles.com/symbolicregression/model1.pt"
+        r = requests.get(url, allow_redirects=True)
+        open(model_path, 'wb').write(r.content)
+
     model = torch.load(model_path, map_location=torch.device('cpu'))
+
     print("Model successfully loaded!")
+
 except Exception as e:
     print("ERROR: model not loaded! path was: {}".format(model_path))
-    print(e)
+    print(e)    
+
 
 est = symbolicregression.model.SymbolicTransformerRegressor(
                         model=model,
