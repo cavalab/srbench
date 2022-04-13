@@ -25,6 +25,7 @@ results_path = 'tmp_results'
 random_state = 42
 
 def get_algorithm(ml):
+
     algorithm = importlib.__import__('methods.'+ml+'.regressor',globals(),
                                      locals(),
                                      ['*'])
@@ -35,7 +36,6 @@ def test_import(ml):
     """Check algorithm imports"""
 
     algorithm = get_algorithm(ml)
-
     assert 'est' in dir(algorithm)
     assert 'model' in dir(algorithm)
 
@@ -76,10 +76,12 @@ def test_evaluate(ml):
                    **eval_kwargs
                   )
     print(json_file)
+    print("hello")
 
 
 @pytest.mark.order(after="test_evaluate")
 def test_sympy(ml):
+    return
     """Sympy compatibility of model string"""
     dataset_name = dataset.split('/')[-1][:-7]
     json_file = (results_path + '/' + dataset_name + '_' + ml + '_' 
@@ -104,3 +106,5 @@ def test_sympy(ml):
     print('model complexity:',model_complexity)
 
 
+if __name__ == "__main__":
+    test_evaluate("E2ET")
