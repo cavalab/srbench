@@ -9,15 +9,17 @@ try:
         url = "https://dl.fbaipublicfiles.com/symbolicregression/model1.pt"
         r = requests.get(url, allow_redirects=True)
         open(model_path, 'wb').write(r.content)
-
-    model = torch.load(model_path, map_location=torch.device('cpu'))
-
+    if not torch.cuda.is_available():
+        model = torch.load(model_path, map_location=torch.device('cpu'))
+    else:
+        model = torch.load(model_path)
+        model = model.cuda()
+    print(model.device)
     print("Model successfully loaded!")
 
 except Exception as e:
     print("ERROR: model not loaded! path was: {}".format(model_path))
     print(e)    
-
 
 est = symbolicregression.model.SymbolicTransformerRegressor(
                         model=model,
