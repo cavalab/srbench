@@ -60,7 +60,7 @@ jobs:
   ################################################################################
   # environment setup
   ################################################################################
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -134,13 +134,27 @@ jobs:
   ################################################################################
   # tests
   ################################################################################
-      - 
+      -
         name: Test Method
         run: |
           cd experiment
           pwd
           ls
           mamba run -n $SUBENV python -m pytest -v test_submission.py --ml $SUBNAME
+  store:
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    needs: 
+      - check
+      - build-and-test
+    env:
+      SUBNAME: ${{ needs.check.outputs.subname }} 
+      SUBFOLDER: submission/${{ needs.check.outputs.subname }} 
+      SUBENV: srcomp-${{ needs.check.outputs.subname }} 
+    steps:
       - 
         name: Save Competitor
         run: |
