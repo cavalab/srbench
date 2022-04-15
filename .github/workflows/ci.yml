@@ -141,8 +141,11 @@ jobs:
           pwd
           ls
           mamba run -n $SUBENV python -m pytest -v test_submission.py --ml $SUBNAME
+  ################################################################################
+  # save competitor
+  ################################################################################
       - 
         name: Save Competitor
-        if: ${{ github.event.pull_request.merged }}
+        # if: ${{ github.event.pull_request.merged }}
         run: |
           source ci/store_competitor.sh 
