@@ -25,6 +25,7 @@ results_path = 'tmp_results'
 random_state = 42
 
 def get_algorithm(ml):
+
     algorithm = importlib.__import__('methods.'+ml+'.regressor',globals(),
                                      locals(),
                                      ['*'])
@@ -35,7 +36,6 @@ def test_import(ml):
     """Check algorithm imports"""
 
     algorithm = get_algorithm(ml)
-
     assert 'est' in dir(algorithm)
     assert 'model' in dir(algorithm)
 
@@ -76,6 +76,7 @@ def test_evaluate(ml):
                    **eval_kwargs
                   )
     print(json_file)
+    print("hello")
 
 
 @pytest.mark.order(after="test_evaluate")
@@ -102,5 +103,3 @@ def test_sympy(ml):
 
     model_complexity = complexity(model_sym)
     print('model complexity:',model_complexity)
-
-
