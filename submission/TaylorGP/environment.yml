@@ -2,26 +2,13 @@ name: TaylorGP
 channels:
     - conda-forge
 dependencies:
-    - python=3.*
+    - python>=3.6
     - cmake>=3.18
-    - scikit-learn
-    - numpy
-    - sympy
-    - pandas
-    - time
-    - copy
-    - itertools
-    - timeout_decorator
-    - scipy
-    - joblib
-    - numbers
-    - itertools
-    - abc
-    - warnings
-    - math
-    - random
+    - scikit-learn>=0.22.1
+    - numpy>=1.19.*
+    - sympy>=1.7.*
+    - pandas>=1.2.*
+    - scipy>=1.6.2
+    - joblib>=0.13.0
     - cython=0.29.*
-    # - pip=20.*
-    - pip
-        - eigency==1.77
-        - pmlb==1.*
+    - pip=20.*

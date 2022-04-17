@@ -4,10 +4,7 @@ from taylorGP._program import print_program
 from taylorGP._global import _init,set_value
 
 import numpy as np
-from sklearn.metrics import mean_squared_error  # 均方误差
 import time
-import sys
-import argparse
 import random
 from sympy import *
 _init()
@@ -35,7 +32,7 @@ def Taylor_Based_SR(_x,X,Y,qualified_list,low_polynomial):
             return est._program.raw_fitness_,print_program(est._program.get_expression(), qualified_list, X,_x)
     else:
         return f_low_taylor_mse, f_low_taylor
-def model( X_Y=None):
+def model(X_Y=None):
     '''
     Return a sympy-compatible string of the final model.
 

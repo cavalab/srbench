@@ -3,7 +3,7 @@ import time
 from sympy import *
 import numpy as np
 from sklearn.metrics import mean_squared_error
-import timeout_decorator
+# import timeout_decorator
 import copy
 import itertools
 
@@ -2172,11 +2172,13 @@ class Metrics:
                 _sub.update({_x[j]: X[j][i]})
             y_pred.append(f.evalf(subs=_sub))
         return y_pred
-
+    '''
     @timeout_decorator.timeout(10, use_signals=False)
     def cal_critical_point(self, fx, x):
         if self.varNum == 2:
-            return solve([fx[0], fx[1]], [x[0], x[1]])
+            return solve([fx[0], fx[1]], [x[0], x[1]])    
+    '''
+
 
     def judge_Bound(self):
         if self.nihe_flag == False:
@@ -2202,6 +2204,7 @@ class Metrics:
             f_diff = []
             for i in range(len(self._X)):
                 f_diff.append(sympify(diff(self.f_taylor, self._x[i])))
+            '''
             try:
                 critical_point = self.cal_critical_point(f_diff, self._x[:len(self._X)])
             except BaseException:
@@ -2214,7 +2217,9 @@ class Metrics:
                         for i in range(len(c)):
                             _sub.update({self._x[i]: c[i]})
                         y_bound.append(self.f_taylor.evalf(subs=_sub))
-                        print('Critical Point', c)
+                        print('Critical Point', c)            
+            '''
+
             y_bound.sort()
             return [[y_bound[0], y_bound[-1]], var_bound]
 
