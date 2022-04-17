@@ -41,9 +41,7 @@ def model( X_Y=None):
 
     Parameters
     ----------
-    est: sklearn regressor
-        The fitted model.
-    X: pd.DataFrame, default=None
+    X_Y: pd.DataFrame, default=None
         The training data. This argument can be dropped if desired.
 
     Returns
