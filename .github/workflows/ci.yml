@@ -38,7 +38,8 @@ jobs:
         id: get-folder
         run: |
           ls
-          echo "$(ls -t submission/ | head -n 1)"
+          msg="Most recent submission:$(ls -t submission/ | head -n 1)"
+          echo "::notice ::$msg"
           echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
       - 
         name: check files exist
@@ -141,11 +142,3 @@ jobs:
           pwd
           ls
           mamba run -n $SUBENV python -m pytest -v test_submission.py --ml $SUBNAME
-  ################################################################################
-  # save competitor
-  ################################################################################
-      - 
-        name: Save Competitor
-        # if: ${{ github.event.pull_request.merged }}
-        run: |
-          source ci/store_competitor.sh 
