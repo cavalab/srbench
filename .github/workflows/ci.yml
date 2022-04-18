@@ -131,7 +131,9 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda init bash
           conda activate $SUBENV 
-          conda env export > experiment/methods/$SUBNAME/environment.lock.yml
+          echo "/////// Conda Environment (conda env export)/////"
+          conda env export  #> $SUBFOLDER/environment.lock.yml
+          echo "/////////////////////////////////////////////////"
   ################################################################################
   # tests
   ################################################################################
