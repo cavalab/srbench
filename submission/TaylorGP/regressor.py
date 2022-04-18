@@ -3,26 +3,27 @@ from taylorGP.calTaylor import Metrics,Metrics2 # ,cal_Taylor_features
 from taylorGP._program import print_program
 from taylorGP._global import _init,set_value
 
+import pandas as pd
 import numpy as np
 import time
 import random
 from sympy import *
 _init()
 set_value('TUIHUA_FLAG',False)
-def Taylor_Based_SR(_x,X,Y,qualified_list,low_polynomial):
+est = SymbolicRegressor(population_size=10, init_depth=(2, 5),
+                        generations=10, stopping_criteria=1e-10,
+                        function_set=['add', 'sub', 'mul', 'div', 'sin', 'cos', 'log', 'exp', 'sqrt'],
+                        p_crossover=0.7, p_subtree_mutation=0.,
+                        p_hoist_mutation=0., p_point_mutation=0.2,
+                        max_samples=1.0, verbose=1,
+                        parsimony_coefficient=0.1,
+                        n_jobs=1,  #
+                        const_range=(-1, 1),
+                        random_state=random.randint(1, 100), low_memory=True)
+def Taylor_Based_SR(est,_x,X,Y,qualified_list,low_polynomial):
     f_low_taylor = qualified_list[-5]
     f_low_taylor_mse = qualified_list[-4]
     if low_polynomial == False:
-        est = SymbolicRegressor(population_size=1000, init_depth=(2, 5),
-                                   generations=100, stopping_criteria=1e-10,
-                                   function_set= ['add', 'sub', 'mul', 'div', 'sin', 'cos', 'log', 'exp', 'sqrt'],
-                                   p_crossover=0.7, p_subtree_mutation=0.,
-                                   p_hoist_mutation=0., p_point_mutation=0.2,
-                                   max_samples=1.0, verbose=1,
-                                   parsimony_coefficient=0.1,
-                                   n_jobs=1,  #
-                                   const_range=(-1, 1),
-                                   random_state=random.randint(1,100), low_memory=True)
         print(qualified_list)
         est.fit(X, Y, qualified_list)
         if est._program.raw_fitness_ > f_low_taylor_mse:
@@ -32,19 +33,22 @@ def Taylor_Based_SR(_x,X,Y,qualified_list,low_polynomial):
             return est._program.raw_fitness_,print_program(est._program.get_expression(), qualified_list, X,_x)
     else:
         return f_low_taylor_mse, f_low_taylor
-def model(X_Y=None):
+def model(est,X=None):
     '''
     Return a sympy-compatible string of the final model.
 
     Parameters
     ----------
-    X_Y: pd.DataFrame, default=None
-        The training data. This argument can be dropped if desired.
+    X: pd.DataFrame, default=None
+        The training data existing variables and targets. This argument can be dropped if desired.
 
     Returns
     -------
     A sympy-compatible string of the final model.
     '''
+    mapping = {'x' + str(i): k for i, k in enumerate(X[0][:-1])}
+    # new_model = est.model_
+    X_Y = np.array(X)[1:].astype(np.float)
     x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19 ,x20, x21, x22, x23, x24, x25, x26, x27, x28, x29 = symbols("x0,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,x21,x22,x23,x24,x25,x26,x27,x28,x29 ")
     _x = [x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19 ,x20, x21, x22, x23, x24, x25, x26, x27, x28, x29 ]
     average_fitness = 0
@@ -91,7 +95,7 @@ def model(X_Y=None):
              metric.judge_parity(),
              metric.judge_monotonicity()])
         print(qualified_list)
-        end_fitness,program = Taylor_Based_SR(_x,X,metric.change_Y(Y),qualified_list,metric.low_nmse<1e-5)
+        end_fitness,program = Taylor_Based_SR(est,_x,X,metric.change_Y(Y),qualified_list,metric.low_nmse<1e-5)
     print('fitness_and_program',end_fitness,program,sep=' ')
     average_fitness += end_fitness
     time_end2 = time.time()
@@ -100,6 +104,8 @@ def model(X_Y=None):
     time_end1 = time.time()
     print('average_time_cost', (time_end1 - time_start1) / 3600 / repeat, 'hour')
     print('average_fitness = ',average_fitness/repeat)
+    for k, v in mapping.items():
+        program = str(program).replace(k, v)
     return program
 if __name__ == '__main__':
     '''
@@ -108,9 +114,13 @@ if __name__ == '__main__':
     argparser.add_argument('--fileName', default='example.tsv', type=str)
     args = argparser.parse_args()    
     '''
-    X_Y = np.loadtxt("example.tsv", dtype=np.float, skiprows=1)
+    # X_Y_name= np.loadtxt("example.tsv",dtype=np.str)[:1]
+    # print(X_Y_name[0][0])
+    # X_Y = np.loadtxt("example.tsv", dtype=np.float, skiprows=1)
+    #输入改为pandas格式
+    X = pd.read_csv("example.tsv",sep=' ',header=None)
     print("="*1000)
-    print("model=",model(X_Y))
+    print("model=",model(est,X))
 
 
 
