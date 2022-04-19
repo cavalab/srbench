@@ -117,8 +117,13 @@ jobs:
         if: hashFiles('${{ env.SUBFOLDER }}/install.sh') != ''
         run: |
           cd $SUBFOLDER 
-          echo "running install.sh..."
-          mamba run -n $SUBENV bash install.sh
+          if test -f "install.sh" ; then
+            echo "running install.sh..."
+            mamba run -n $SUBENV bash install.sh
+          else
+            echo "::warning::No install.sh file found in ${SUBFOLDER}. Assuming the method is a conda package specified in environment.yml."
+          fi
+
       - 
         name: Copy files and environment
         run: |
