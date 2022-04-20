@@ -13,7 +13,7 @@ import numpy as np
 from sklearn.utils.random import sample_without_replacement
 from .functions import _Function,_sympol_map
 from .utils import check_random_state
-from taylorGP._global import set_value,get_value
+from ._global import set_value,get_value
 
 def print_program(program,qualified_list,X,_x):
     n_features = X.shape[1]

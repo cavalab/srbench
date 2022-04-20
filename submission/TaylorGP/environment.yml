@@ -12,3 +12,6 @@ dependencies:
     - joblib>=0.13.0
     - cython=0.29.*
     - pip=20.*
+    - pandas>=1.2.*
+    - pytest>=7.*
+    - pyyaml>=5.*
