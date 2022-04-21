@@ -1,4 +1,4 @@
-name: feat
+name: QLattice
 channels:
     - conda-forge
 dependencies:
@@ -17,7 +17,6 @@ dependencies:
     - pip:
         - eigency==1.77
         - pmlb==1.*
-
     - numpy>=1.19.5
     - pynacl
     - pandas

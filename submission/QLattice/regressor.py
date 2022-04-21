@@ -1,4 +1,4 @@
-# This example submission shows the submission of FEAT (cavalab.org/feat). 
+from sympy.printing.printer import Printer
 import feyn
 
 
@@ -103,11 +103,6 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
         return self.models_[n].r2_score(data)
 
 
-"""
-est: a sklearn-compatible regressor. 
-    if you don't have one they are fairly easy to create. 
-    see https://scikit-learn.org/stable/developers/develop.html
-"""
 est = QLatticeRegressor(
                         kind='regression',
                         n_epochs=100,
@@ -116,12 +111,12 @@ est = QLatticeRegressor(
                    )
 # want to tune your estimator? wrap it in a sklearn CV class.
 
+#do we need to make sure features have the same name as in original data?
+def model(est):
+    printer = Printer()
+    string_model = printer.doprint(est.models_[0].sympify())
 
-def model(est, X):
-    new_model = est.models_[0].sympify()
-    mapping = {new_model.features[i]: X.columns[i] for i in range(len(X.columns))}
-    for k, v in mapping.items():
-        new_model = new_model.replace(k, v)
+    return string_model
 
 ################################################################################
 # Optional Settings
