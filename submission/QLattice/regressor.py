@@ -45,7 +45,6 @@ def auto_run_time(ql,
     ql.update_priors(priors)
 
     try:
-        start = time()
         for epoch in range(1, n_epochs + 1):
             new_sample = ql.sample_models(
                 data,
@@ -71,12 +70,12 @@ def auto_run_time(ql,
             models = feyn.prune_models(models)
             ql.update(models)
 
-            elapsed = time() - start
-
         best = feyn.get_diverse_models(models)
 
     except TimeOutException:
         best = feyn.get_diverse_models(models)
+
+    return best
 
 
 class QLatticeRegressor(BaseEstimator, RegressorMixin):
@@ -107,7 +106,7 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
         self.function_names = function_names
         self.starting_models = starting_models
         self.random_state = random_state
-        self.max_time
+        self.max_time = max_time
 
     def fit(self, X, y, sample_weight=None):
 
