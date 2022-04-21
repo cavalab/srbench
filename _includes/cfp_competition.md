@@ -38,10 +38,11 @@ See the [Competition Guide](/srbench/competition-guide/) for detailed instructio
 
 ## Important Dates
 
-Entrants should have their methods submitted by **May 1, 2022**. 
+Entrants should have their methods submitted by ~~May 1, 2022~~ **May 15, 2022**. 
 
 Submissions will be accepted starting March 14, 2022.
-Note that submissions are tested automatically and must pass all tests; please budget time for this. 
+Note that submissions are tested automatically and must pass all tests to be a competitor. 
+Please budget time for this. 
 The winners will be announced at GECCO, July 9-13 in Boston, MA, and online.
 
 ## Previous History
