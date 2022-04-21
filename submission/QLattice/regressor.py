@@ -1,5 +1,82 @@
-from sympy.printing.printer import Printer
 import feyn
+from sympy.printing.printer import Printer
+
+
+def alarm_handler(signum, frame):
+    raise TimeOutException
+
+
+def auto_run_time(ql,
+                  data,
+                  output_name,
+                  kind="regression",
+                  stypes=None,
+                  n_epochs=10,
+                  threads="auto",
+                  max_complexity=10,
+                  query_string=None,
+                  loss_function=None,
+                  criterion="wide_parsimony",
+                  sample_weights=None,
+                  function_names=None,
+                  starting_models=None,
+                  max_time=None
+                  ):
+    if max_time:
+        signal.signal(signal.SIGALRM, alarm_handler)
+        signal.alarm(max_time)
+
+    feyn.validate_data(data, kind, output_name, stypes)
+
+    if n_epochs <= 0:
+        raise ValueError("n_epochs must be 1 or higher.")
+
+    if threads == "auto":
+        threads = feyn.tools.infer_available_threads()
+    elif isinstance(threads, str):
+        raise ValueError("threads must be a number, or string 'auto'.")
+
+    models = []
+    if starting_models is not None:
+        models = [m.copy() for m in starting_models]
+    m_count = len(models)
+
+    priors = feyn.tools.estimate_priors(data, output_name)
+    ql.update_priors(priors)
+
+    try:
+        start = time()
+        for epoch in range(1, n_epochs + 1):
+            new_sample = ql.sample_models(
+                data,
+                output_name,
+                kind,
+                stypes,
+                max_complexity,
+                query_string,
+                function_names,
+            )
+            models += new_sample
+            m_count += len(new_sample)
+
+            models = feyn.fit_models(
+                models,
+                data=data,
+                loss_function=loss_function,
+                criterion=criterion,
+                n_samples=None,
+                sample_weights=sample_weights,
+                threads=threads,
+            )
+            models = feyn.prune_models(models)
+            ql.update(models)
+
+            elapsed = time() - start
+
+        best = feyn.get_diverse_models(models)
+
+    except TimeOutException:
+        best = feyn.get_diverse_models(models)
 
 
 class QLatticeRegressor(BaseEstimator, RegressorMixin):
@@ -15,7 +92,8 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
                  sample_weights=None,
                  function_names=None,
                  starting_models=None,
-                 random_state=None
+                 random_state=None,
+                 max_time=None
                  ):
         self.kind = kind
         self.stypes = stypes
@@ -29,6 +107,7 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
         self.function_names = function_names
         self.starting_models = starting_models
         self.random_state = random_state
+        self.max_time
 
     def fit(self, X, y, sample_weight=None):
 
@@ -57,21 +136,22 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
 
         ql = feyn.connect_qlattice()
         ql.reset(rseed)
-        self.models_ = ql.auto_run(
-            data=data,
-            output_name=data.columns[-1],
-            kind=self.kind,
-            stypes=self.stypes,
-            n_epochs=self.n_epochs,
-            threads=self.threads,
-            max_complexity=self.max_complexity,
-            query_string=self.query_string,
-            loss_function=self.loss_function,
-            criterion=self.criterion,
-            sample_weights=sample_weight,
-            function_names=self.function_names,
-            starting_models=self.starting_models
-        )
+        self.models_ = auto_run_time(ql=ql,
+                                     data=data,
+                                     output_name=data.columns[-1],
+                                     kind=self.kind,
+                                     stypes=self.stypes,
+                                     n_epochs=self.n_epochs,
+                                     threads=self.threads,
+                                     max_complexity=self.max_complexity,
+                                     query_string=self.query_string,
+                                     loss_function=self.loss_function,
+                                     criterion=self.criterion,
+                                     sample_weights=sample_weight,
+                                     function_names=self.function_names,
+                                     starting_models=self.starting_models,
+                                     max_time=self.max_time
+                                     )
         return self
 
     def predict(self, X, n=0):
@@ -104,19 +184,22 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
 
 
 est = QLatticeRegressor(
-                        kind='regression',
-                        n_epochs=100,
-                        max_complexity=10,
-                        criterion='wide_parsimony',
-                   )
+    kind='regression',
+    n_epochs=100,
+    max_complexity=10,
+    criterion='wide_parsimony',
+)
+
+
 # want to tune your estimator? wrap it in a sklearn CV class.
 
-#do we need to make sure features have the same name as in original data?
+# do we need to make sure features have the same name as in original data?
 def model(est):
     printer = Printer()
     string_model = printer.doprint(est.models_[0].sympify())
 
     return string_model
+
 
 ################################################################################
 # Optional Settings
@@ -149,21 +232,20 @@ Options
             y: training labels.
 """
 
-def my_pre_train_fn(est, X, y):
-    """In this example we adjust FEAT generations based on the size of X 
-       versus relative to FEAT's batch size setting. 
-    """
-    if est.batch_size < len(X):
-        est.gens = int(est.gens*len(X)/est.batch_size)
-    print('FEAT gens adjusted to',est.gens)
-    # adjust max dim
-    est.max_dim=min(max(est.max_dim, X.shape[1]), 20)
-    print('FEAT max_dim set to',est.max_dim)
+
+def pre_train_fn(est, X, y):
+    """set max_time in seconds based on length of X & hyper-parameter tuning"""
+    if len(X) <= 1000:
+        # account for hyper-parameter tuning, remove 1 extra second of slack to be sure it will terminate on time
+        max_time = 360 // total_runs - 5
+    else:
+        max_time = 3600 // total_runs - 5
+    est.set_params(max_time)
+
 
 # define eval_kwargs.
 eval_kwargs = dict(
-                   pre_train=my_pre_train_fn,
-                   test_params = {'gens': 5,
-                                  'pop_size': 10
-                                 }
-                  )
+    pre_train=pre_train_fn,
+    test_params={'n_epochs': 2,
+                 }
+)
