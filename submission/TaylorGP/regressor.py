@@ -81,7 +81,7 @@ if __name__ == '__main__':
     # X_Y = pd.read_csv("example.tsv",sep=' ',header=None)
     # print("="*1000)
     # X, Y = np.split(X_Y, (-1,), axis=1)
-    est.fit(train_X,train_y)#先加上测试，后面再删掉
+    est.fit(train_X,train_y.reshape(-1))#先加上测试，后面再删掉
     fitness = mean_squared_error(est.predict(test_X), test_y, squared=False)  # RMSE
     print('rmse_fitness: ', fitness)
     # print("model=",model(est,X))
