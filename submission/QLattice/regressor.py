@@ -1,9 +1,14 @@
+import signal
 import feyn
 from sympy.printing.printer import Printer
 
 
+class InternalTimeOutException(Exception):
+    pass
+
 def alarm_handler(signum, frame):
-    raise TimeOutException
+    print(f"raising InternalTimeOutException")
+    raise InternalTimeOutException
 
 
 def auto_run_time(ql,
@@ -72,7 +77,8 @@ def auto_run_time(ql,
 
         best = feyn.get_diverse_models(models)
 
-    except TimeOutException:
+    except InternalTimeOutException:
+        print('InternalTimeOutException raised')
         best = feyn.get_diverse_models(models)
 
     return best
