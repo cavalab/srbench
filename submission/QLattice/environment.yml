@@ -2,7 +2,7 @@ name: feat
 channels:
     - conda-forge
 dependencies:
-    - python=3.*
+    - python=3.8
     - cmake>=3.18
     - ninja
     - eigen>=3.3
@@ -17,3 +17,13 @@ dependencies:
     - pip:
         - eigency==1.77
         - pmlb==1.*
+
+    - numpy>=1.19.5
+    - pynacl
+    - pandas
+    - lark
+    - svgwrite
+    - matplotlib
+    - typing_extensions
+    - scikit-learn
+    - sympy
