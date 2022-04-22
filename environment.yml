@@ -1,4 +1,4 @@
-name: srbench2
+name: srbench
 channels:
     - conda-forge
     - anaconda

@@ -16,7 +16,7 @@ echo "////////////////////////////////////////"
 cd experiment/methods/src/
 
 # install all methods
-for install_file in $(ls *.sh) ; do
+for install_file in $(ls itea*.sh) ; do
     echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
     echo ".................... Running $install_file..."
 
