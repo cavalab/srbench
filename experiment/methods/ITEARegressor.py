@@ -1,4 +1,8 @@
-from ITEA import itea_srbench as itea
+#from ITEA 
+import sys
+sys.path.append("~/.cabal/bin/ITEA")
+
+import itea_srbench as itea
 from itertools import product
 
 hyper_params = [

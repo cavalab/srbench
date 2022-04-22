@@ -19,7 +19,9 @@ rsync -av ITEA $CONDA_PREFIX/lib/python3.7/site-packages/ --exclude=".git" --exc
 cd ITEA 
 conda activate srbench
 C_INCLUDE_PATH=$CONDA_PREFIX/include LIBRARY_PATH=$CONDA_PREFIX/lib cabal install
-cp ~/.cabal/bin/itea bin/itea 
-LD_LIBRARY_PATH=$CONDA_PREFIX/lib bin/itea
+cp ~/.cabal/bin/itea bin/itea
+cp itea_srbench.py ~/.cabal/bin/itea_srbench.py 
+
+LD_LIBRARY_PATH=$CONDA_PREFIX/lib itea
 
 #cp $CONDA_PREFIX/lib/libgsl.so bin/libgsl.so.0
