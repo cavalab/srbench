@@ -34,7 +34,7 @@ dependencies:
     - click
     - mpi4py
     - dataclasses
-    # itea
+    # itea and tir
     - gmp 
     - gsl 
     - libffi 
