@@ -35,7 +35,7 @@ hyper_params = [
 ]
 # Create the pipeline for the model
 
-est = tir.TiredRegressor(npop=1000, ngens=500, pc=0.3, pm=0.7, exponents=(-5,5), error="R^2")
+est = tir.TIRRegressor(npop=1000, ngens=500, pc=0.3, pm=0.7, exponents=(-5,5), error="R^2")
 
 eval_kwargs = {'scale_x': False, 'scale_y': False, 'pre_train': pre_train}
 
