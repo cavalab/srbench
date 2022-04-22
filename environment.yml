@@ -38,6 +38,7 @@ dependencies:
     - gmp 
     - gsl 
     - libffi 
+    - libgfortran-ng
     - libopenblas
     - liblapack
     - openblas-devel 
