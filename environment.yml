@@ -1,6 +1,7 @@
 name: srbench
 channels:
     - conda-forge
+    - anaconda
 dependencies:
     - make
     - compilers
