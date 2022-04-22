@@ -34,6 +34,14 @@ dependencies:
     - mpi4py
     - dataclasses
     # itea
+    - libblas
+    - liblapack 
+    - gmp 
+    - gsl 
+    - libffi 
+    - blas
+    - openblas 
+    - openblas-devel 
     # - libblas=3.9.0=8_openblas 
     # - liblapack=3.9.0=8_openblas
     # - gmp=6.2.1=h58526e2_0
