@@ -1,9 +1,8 @@
 #from ITEA 
 import sys
 import os
-sys.path.append(os.path.expanduser("~/.cabal/bin/"))
-
-import itea_srbench as itea
+os.environ["LD_LIBRARY_PATH"] = "$CONDA_PREFIX/lib"
+from pyITEA import ITEARegressor
 from itertools import product
 
 hyper_params = [
@@ -41,7 +40,7 @@ hyper_params = [
 
 # Create the pipeline for the model
 eval_kwargs = {'scale_x': False, 'scale_y': False}
-est = itea.ITEARegressor(npop=1000, ngens=500, exponents=(-1, 1), termlimit=(2,
+est = ITEARegressor(npop=1000, ngens=500, exponents=(-1, 1), termlimit=(2,
     2), nonzeroexps=1, 
     transfunctions= '[Id, Tanh, Sin, Cos, Log, Exp, SqrtAbs]'
     )
