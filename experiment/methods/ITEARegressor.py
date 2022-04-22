@@ -1,6 +1,7 @@
 #from ITEA 
 import sys
-sys.path.append("~/.cabal/bin/")
+import os
+sys.path.append(os.path.expanduser("~/.cabal/bin/"))
 
 import itea_srbench as itea
 from itertools import product
