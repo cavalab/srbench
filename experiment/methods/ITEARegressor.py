@@ -1,7 +1,7 @@
 #from ITEA 
 import sys
 import os
-os.environ["LD_LIBRARY_PATH"] = "$CONDA_PREFIX/lib"
+os.environ["LD_LIBRARY_PATH"] = os.environ["CONDA_PREFIX"] + "/lib"
 from pyITEA import ITEARegressor
 from itertools import product
 
