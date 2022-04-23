@@ -16,6 +16,7 @@ if [ -d tir ]; then
 fi
 
 git clone https://github.com/folivetti/tir.git
+git checkout 9c842a531b1b290ae1d8481bb12fb7fa479e155e
 
 cd tir 
 #conda activate srbench

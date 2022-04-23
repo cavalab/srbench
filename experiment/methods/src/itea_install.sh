@@ -16,6 +16,7 @@ if [ -d ITEA ]; then
 fi
 
 git clone https://github.com/folivetti/ITEA.git
+git checkout 487ebc45bb88cbeef97be553b0a8a5e021998f87 
 
 cd ITEA 
 #conda activate srbench
