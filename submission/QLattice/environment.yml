@@ -3,25 +3,12 @@ channels:
     - conda-forge
 dependencies:
     - python=3.8
-    - cmake>=3.18
-    - ninja
-    - eigen>=3.3
-    - cython=0.29.*
-    # - setuptools=45.*
-    - setuptools
-    - shogun-cpp=6.1.4
-    - wheel=0.35.*
-    # - pip=20.*
+    - numpy==1.22.3
+    - pandas==1.4.2
+    - scikit-learn==1.0.2
+    - sympy==1.10.1
     - pip
     - pip:
         - eigency==1.77
         - pmlb==1.*
-    - numpy>=1.19.5
-    - pynacl
-    - pandas
-    - lark
-    - svgwrite
-    - matplotlib
-    - typing_extensions
-    - scikit-learn
-    - sympy
+        - feyn==3.0.0

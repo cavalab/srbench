@@ -1,6 +1,7 @@
 import signal
 
 import feyn
+import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted, _check_sample_weight
@@ -9,6 +10,7 @@ from sympy.printing.printer import Printer
 
 class InternalTimeOutException(Exception):
     pass
+
 
 def alarm_handler(signum, frame):
     print(f"raising InternalTimeOutException")
@@ -88,6 +90,37 @@ def auto_run_time(ql,
     return best
 
 
+def numpy_check_to_DataFrame(X, y=None):
+    if isinstance(X, np.ndarray):
+        columns = [f'x__{i}' for i in range(X.shape[1])]
+        X = pd.DataFrame(X, columns=columns)
+
+    if y is None:
+        return X
+    elif isinstance(y, np.ndarray):
+        if y.ndim == 1:
+            y = pd.Series(y, name='target')
+        elif y.ndim == 2:
+            y = pd.DataFrame(y, columns=['target'])
+        return X, y
+
+
+def feature_names(X, y=None):
+    if hasattr(X, 'columns'):
+        input_names = X.columns
+    else:
+        input_names = None
+
+    if y is None:
+        return input_names
+    else:
+        if hasattr(y, 'name'):
+            output_name = y.name
+        else:
+            output_name = None
+        return input_names, output_name
+
+
 class QLatticeRegressor(BaseEstimator, RegressorMixin):
     def __init__(self,
                  kind='regression',
@@ -143,7 +176,7 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
         else:
             sample_weight = _check_sample_weight(sample_weight, X)
 
-        ql = feyn.connect_qlattice()
+        ql = feyn.QLattice()
         ql.reset(rseed)
         self.models_ = auto_run_time(ql=ql,
                                      data=data,
@@ -200,8 +233,6 @@ est = QLatticeRegressor(
 )
 
 
-# want to tune your estimator? wrap it in a sklearn CV class.
-
 # do we need to make sure features have the same name as in original data?
 def model(est, X):
     printer = Printer()
@@ -248,10 +279,10 @@ Options
 
 def pre_train_fn(est, X, y):
     """set max_time in seconds based on length of X."""
-    if len(X)<=1000:
-        max_time = 360 - 5
-    else:
+    if len(X) <= 1000:
         max_time = 3600 - 5
+    else:
+        max_time = 36000 - 5
     est.set_params(max_time)
 
 
