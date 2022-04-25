@@ -7,11 +7,11 @@ import numpy as np
 import time
 import random
 
-est = SymbolicRegressor(population_size=100, init_depth=(2, 5),
+est = SymbolicRegressor(population_size=10, init_depth=(2, 5),
                         generations=1000, stopping_criteria=1e-10,
                         function_set=['add', 'sub', 'mul', 'div', 'sin', 'cos', 'log', 'exp', 'sqrt'],
-                        p_crossover=0.5, p_subtree_mutation=0.,
-                        p_hoist_mutation=0., p_point_mutation=0.4,
+                        p_crossover=0.7, p_subtree_mutation=0.,
+                        p_hoist_mutation=0., p_point_mutation=0.2,
                         max_samples=1.0, verbose=0,
                         parsimony_coefficient=0.1,
                         n_jobs=1,  #
