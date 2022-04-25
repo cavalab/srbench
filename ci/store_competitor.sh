@@ -8,6 +8,7 @@ git pull origin $TARGET_BRANCH
 git checkout ${GITHUB_HEAD_REF} -- "experiment/methods/$SUBNAME/" 
 # copy files from the source branch 
 cp -R experiment/methods/$SUBNAME official_competitors/
-git diff-index --quiet HEAD ||  git commit -am "Store $SUBNAME as competitor"  # commit to the repository (ignore if no modification)
+# commit to the repository (ignore if no modification)
+git diff-index --quiet HEAD ||  git commit -am "Store $SUBNAME as competitor"  
 echo "storing competitor to $TARGET_BRANCH branch"
 git push origin $TARGET_BRANCH # push to remote branch
