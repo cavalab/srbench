@@ -6,12 +6,12 @@ name: CI
 on:
   push:
     branches:
-      - Competition2022
+      - comp-test
     # paths:
     #   - 'submission/**'
   pull_request:
     branches: 
-      - Competition2022 
+      - comp-test 
     paths:
       - 'submission/**'
 
