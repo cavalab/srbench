@@ -203,9 +203,13 @@ est = QLatticeRegressor(
 # want to tune your estimator? wrap it in a sklearn CV class.
 
 # do we need to make sure features have the same name as in original data?
-def model(est):
+def model(est, X):
     printer = Printer()
     string_model = printer.doprint(est.models_[0].sympify())
+
+    mapping = {feyn.tools._sympy.get_sanitized_name(col): col for col in X.columns}
+    for k, v in reversed(mapping.items()):
+        string_model = string_model.replace(k, v)
 
     return string_model
 
