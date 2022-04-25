@@ -238,9 +238,12 @@ def model(est, X):
     printer = Printer()
     string_model = printer.doprint(est.models_[0].sympify())
 
-    mapping = {feyn.tools._sympy.get_sanitized_name(col): col for col in X.columns}
-    for k, v in reversed(mapping.items()):
-        string_model = string_model.replace(k, v)
+    try:
+        mapping = {feyn.tools._sympy.get_sanitized_name(col): col for col in X.columns}
+        for k, v in reversed(mapping.items()):
+            string_model = string_model.replace(k, v)
+    except:
+        pass
 
     return string_model
 
