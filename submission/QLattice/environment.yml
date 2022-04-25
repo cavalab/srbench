@@ -7,8 +7,8 @@ dependencies:
     - pandas==1.4.2
     - scikit-learn==1.0.2
     - sympy==1.10.1
+    - pytest
     - pip
     - pip:
-        - eigency==1.77
         - pmlb==1.*
         - feyn==3.0.0
