@@ -176,8 +176,7 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
         else:
             sample_weight = _check_sample_weight(sample_weight, X)
 
-        ql = feyn.QLattice()
-        ql.reset(rseed)
+        ql = feyn.QLattice(random_seed=rseed)
         self.models_ = auto_run_time(ql=ql,
                                      data=data,
                                      output_name=data.columns[-1],
