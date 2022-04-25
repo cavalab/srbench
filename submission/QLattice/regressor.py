@@ -283,7 +283,7 @@ def pre_train_fn(est, X, y):
         max_time = 3600 - 5
     else:
         max_time = 36000 - 5
-    est.set_params(max_time)
+    est.set_params(max_time=max_time)
 
 
 # define eval_kwargs.
