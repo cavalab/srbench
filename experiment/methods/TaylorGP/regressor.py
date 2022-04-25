@@ -7,11 +7,11 @@ import numpy as np
 import time
 import random
 
-est = SymbolicRegressor(population_size=10, init_depth=(2, 5),
+est = SymbolicRegressor(population_size=100, init_depth=(2, 5),
                         generations=1000, stopping_criteria=1e-10,
                         function_set=['add', 'sub', 'mul', 'div', 'sin', 'cos', 'log', 'exp', 'sqrt'],
-                        p_crossover=0.7, p_subtree_mutation=0.,
-                        p_hoist_mutation=0., p_point_mutation=0.2,
+                        p_crossover=0.5, p_subtree_mutation=0.,
+                        p_hoist_mutation=0., p_point_mutation=0.4,
                         max_samples=1.0, verbose=0,
                         parsimony_coefficient=0.1,
                         n_jobs=1,  #
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     # X_Y = pd.read_csv("example.tsv",sep=' ',header=None)
     # print("="*1000)
     # X, Y = np.split(X_Y, (-1,), axis=1)
-    est.fit(train_X,train_y)#先加上测试，后面再删掉
+    est.fit(train_X,train_y.reshape(-1))#先加上测试，后面再删掉
     fitness = mean_squared_error(est.predict(test_X), test_y, squared=False)  # RMSE
     print('rmse_fitness: ', fitness)
     # print("model=",model(est,X))
