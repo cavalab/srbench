@@ -1,15 +1,16 @@
 authors: # the participants
-  - William La Cava
-email: william.lacava@childrens.harvard.edu
-name: Feat # name of the submission /method
+  - Meera Vieira Machado & Miquel Triana Iglesias
+email: meera.machado@abzu.ai & miquel.iglesias@abzu.ai
+name: QLattice # name of the submission /method
 description: | # anything you'd like here to describe the method.
-  A feature engineering automation tool.
-  Uses symbolic regression to learn features of a linear model. 
+  The QLattice is a supervised machine learning tool for symbolic regression, and is a technology developed by Abzu.
+  It composes functions together to build mathematical models betweeen the inputs and output.
+  The functions vary from elementary ones such as addition, multiplication and squaring, to more complex ones such as
+  natural logarithm, exponential and tanh.
 
-  La Cava, W., Singh, T. R., Taggart, J., Suri, S., & Moore, J. H.. 
-  Learning concise representations for regression by evolving networks of trees. 
-  ICLR 2019. arxiv:1807.0091
+  Wilstrup, Casper and Kasak, Jaan
+  Symbolic regression outperforms other models for small data sets
+  arXiv:2103.15147
 
-  Really hope I win! jk
-url: http://cavalab.org/feat # a link to the project
+url: https://docs.abzu.ai/ # a link to the project
 
