@@ -8,6 +8,9 @@ description: | # anything you'd like here to describe the method.
   The functions vary from elementary ones such as addition, multiplication and squaring, to more complex ones such as
   natural logarithm, exponential and tanh.
 
+  The library that contains the QLattice and the means to interact with it is called Feyn.
+
+  Pre-print:
   Wilstrup, Casper and Kasak, Jaan
   Symbolic regression outperforms other models for small data sets
   arXiv:2103.15147
