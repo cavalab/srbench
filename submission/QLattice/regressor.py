@@ -227,7 +227,7 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
 
 est = QLatticeRegressor(
     kind='regression',
-    n_epochs=100,
+    n_epochs=200,
     max_complexity=10,
     criterion='wide_parsimony',
 )
