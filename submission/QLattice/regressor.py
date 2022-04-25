@@ -1,5 +1,7 @@
 import signal
+
 import feyn
+from sklearn.base import BaseEstimator, RegressorMixin
 from sympy.printing.printer import Printer
 
 
@@ -239,12 +241,11 @@ Options
 
 
 def pre_train_fn(est, X, y):
-    """set max_time in seconds based on length of X & hyper-parameter tuning"""
-    if len(X) <= 1000:
-        # account for hyper-parameter tuning, remove 1 extra second of slack to be sure it will terminate on time
-        max_time = 360 // total_runs - 5
+    """set max_time in seconds based on length of X."""
+    if len(X)<=1000:
+        max_time = 360 - 5
     else:
-        max_time = 3600 // total_runs - 5
+        max_time = 3600 - 5
     est.set_params(max_time)
 
 
