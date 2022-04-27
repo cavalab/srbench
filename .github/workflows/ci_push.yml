@@ -5,11 +5,6 @@ name: CI
 # Controls when the action will run. 
 on:
   push:
-    branches:
-      - comp-test
-    # paths:
-    #   - 'submission/**'
-  pull_request:
     branches: 
       - comp-test 
     paths:
@@ -38,9 +33,12 @@ jobs:
         id: get-folder
         run: |
           ls
+          echo "Submission folder: $(ls -lt submission/)"
           msg="Most recent submission:$(ls -t submission/ | head -n 1)"
           echo "::notice ::$msg"
           echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
+          echo "git diff:"
+          git diff --name-only --diff-filter=ACMRT ${{ github.sha }} | grep submission 
       - 
         name: check files exist
         run: |
@@ -149,3 +147,19 @@ jobs:
           pwd
           ls
           mamba run -n $SUBENV python -m pytest -v test_submission.py --ml $SUBNAME
+  ################################################################################
+  # store competitor
+  ################################################################################
+      - 
+        name: Store competitor
+        run: |
+          # if $SUBNAME != 'feat-example' ; do
+          cp -R experiment/methods/$SUBNAME official_competitors/
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"  
+          git add official_competitors/
+
+          git diff-index --quiet HEAD ||  git commit -am "Store/update $SUBNAME"  
+          git push origin comp-test
+          # fi
+
