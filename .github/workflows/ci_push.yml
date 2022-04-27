@@ -155,6 +155,7 @@ jobs:
         run: |
           # if $SUBNAME != 'feat-example' ; do
           cp -R experiment/methods/$SUBNAME official_competitors/
+          rm -rf $SUBFOLDER
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"  
           git add official_competitors/
