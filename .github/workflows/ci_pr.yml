@@ -37,9 +37,8 @@ jobs:
           msg="Most recent submission:$(ls -t submission/ | head -n 1)"
           echo "::notice ::$msg"
           echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
-          echo "git diff:"
-          git diff --name-only --diff-filter=ACMRT \
-            ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep submission 
+          folder=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
+          echo "git diff folder: $folder"
       - 
         name: check files exist
         run: |

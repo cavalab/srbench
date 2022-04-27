@@ -28,17 +28,20 @@ jobs:
       - 
         name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - 
         name: get new folder name
         id: get-folder
         run: |
           ls
           echo "Submission folder: $(ls -lt submission/)"
-          msg="Most recent submission:$(ls -t submission/ | head -n 1)"
-          echo "::notice ::$msg"
-          echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
+          # msg="Most recent submission:$(ls -t submission/ | head -n 1)"
+          # echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
           echo "git diff:"
-          git diff --name-only --diff-filter=ACMRT ${{ github.sha }} | grep submission 
+          folder=$(git diff --name-only --diff-filter=ACMRT HEAD~1 | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
+          echo "::notice ::testing $folder"
+          echo "::set-output name=folder::$folder"
       - 
         name: check files exist
         run: |
