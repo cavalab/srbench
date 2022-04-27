@@ -1,0 +1,10 @@
+authors: # the participants
+  - Jano Pigos
+email: jan.pigos@gmail.com
+name: HROCH # name of the submission /method
+description: | # anything you'd like here to describe the method.
+  Simple hillclimb algorithm for symbolic regression.
+  CPU must support AVX2 instructions set.
+
+  I hope it will be useful. jp
+url: https://github.com/janoPig/HROCH # a link to the project
