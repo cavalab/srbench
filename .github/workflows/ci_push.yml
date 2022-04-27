@@ -34,14 +34,15 @@ jobs:
         name: get new folder name
         id: get-folder
         run: |
-          ls
-          echo "Submission folder: $(ls -lt submission/)"
-          # msg="Most recent submission:$(ls -t submission/ | head -n 1)"
-          # echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
           echo "git diff:"
           folder=$(git diff --name-only --diff-filter=ACMRT HEAD~1 | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
-          echo "::notice ::testing $folder"
-          echo "::set-output name=folder::$folder"
+          folder_count=$(echo $folders | wc -w)
+          if [ $folder_count -gt 1 ] ; then
+            echo "::error ::found changes to $folder_count submissions instead of 1:\n$folders . PRs should only add/change a single submission."
+          else
+            echo "::notice ::testing $folder"
+            echo "::set-output name=folder::$folder"
+          fi
       - 
         name: check files exist
         run: |
@@ -137,9 +138,7 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda init bash
           conda activate $SUBENV 
-          echo "/////// Conda Environment (conda env export)/////"
-          conda env export  #> $SUBFOLDER/environment.lock.yml
-          echo "/////////////////////////////////////////////////"
+          conda env export  > $SUBFOLDER/environment.lock.yml
   ################################################################################
   # tests
   ################################################################################

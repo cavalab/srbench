@@ -32,13 +32,15 @@ jobs:
         name: get new folder name
         id: get-folder
         run: |
-          ls
-          echo "Submission folder: $(ls -lt submission/)"
-          msg="Most recent submission:$(ls -t submission/ | head -n 1)"
-          echo "::notice ::$msg"
-          echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
+          echo "git diff:"
           folder=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
-          echo "git diff folder: $folder"
+          folder_count=$(echo $folders | wc -w)
+          if [ $folder_count -gt 1 ] ; then
+            echo "::error ::found changes to $folder_count submissions instead of 1:\n$folders . PRs should only add/change a single submission."
+          else
+            echo "::notice ::testing $folder"
+            echo "::set-output name=folder::$folder"
+          fi
       - 
         name: check files exist
         run: |
