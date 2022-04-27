@@ -156,7 +156,7 @@ jobs:
         name: Store competitor
         run: |
           # if $SUBNAME != 'feat-example' ; do
-          cp -R experiment/methods/$SUBNAME official_competitors/
+          cp -R submission/$SUBNAME official_competitors/
           rm -rf submission/$SUBNAME
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"  
