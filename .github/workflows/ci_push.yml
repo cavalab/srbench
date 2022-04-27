@@ -156,13 +156,15 @@ jobs:
         name: Store competitor
         run: |
           # if $SUBNAME != 'feat-example' ; do
-          cp -R submission/$SUBNAME official_competitors/
-          rm -rf submission/$SUBNAME
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"  
-          git add official_competitors/
+          if [ $SUBNAME != "feat-example" ] ; then
+            cp -R submission/$SUBNAME official_competitors/
+            rm -rf submission/$SUBNAME
+            git config user.name "GitHub Actions Bot"
+            git config user.email "<>"  
+            git add official_competitors/
 
-          git diff-index --quiet HEAD ||  git commit -am "Store/update $SUBNAME"  
-          git push origin comp-test
-          # fi
-
+            git diff-index --quiet HEAD ||  git commit -am "Store/update $SUBNAME"  
+            git push origin comp-test
+          else
+            echo "::notice ::skipping storage of $SUBNAME"
+          fi
