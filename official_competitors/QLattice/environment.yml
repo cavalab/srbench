@@ -10,4 +10,4 @@ dependencies:
     - pip
     - pip:
         - pmlb==1.*
-        - feyn==3.0.0
+        - feyn==3.0.1
