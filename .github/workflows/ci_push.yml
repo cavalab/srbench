@@ -6,7 +6,7 @@ name: CI
 on:
   push:
     branches: 
-      - comp-test 
+      - Competition2022
     paths:
       - 'submission/**'
 
