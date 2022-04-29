@@ -6,10 +6,10 @@ est: a sklearn-compatible regressor.
     see https://scikit-learn.org/stable/developers/develop.html
 """
 est = gengy_classifiers.GeneticProgrammingClassifier(
-        population_size = 200,
+        population_size = 50,
         n_elites = 5, 
         n_novelties = 10,
-        number_of_generations = 100,
+        number_of_generations = 50,
         max_depth = 15,
         favor_less_deep_trees = True,
         hill_climbing = False,
@@ -53,6 +53,6 @@ def model(est, X=None):
 
     # Here we replace "|" with "" to handle
     # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
-    model_str = str(est.evolved_phenotype)
+    model_str = est.sympy_compatible_phenotype
 
     return model_str
