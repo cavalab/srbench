@@ -21,7 +21,7 @@ dependencies:
   - wheel=0.37.1=pyhd8ed1ab_0
   - xz=5.2.5=h62dcd97_1
   - pip:
-    - geneticengine==0.0.11
+    - geneticengine==0.0.13
     - lark==1.1.2
     - z3-solver==4.8.15.0
 prefix: C:\Users\leoni\anaconda3\envs\gecco-comp
