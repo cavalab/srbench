@@ -1,0 +1,170 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  push:
+    branches: 
+      - Competition2022
+    paths:
+      - 'submission/**'
+
+env: 
+  CACHE_NUMBER: 0
+
+jobs:
+  ################################################################################
+  # basic submission checks
+  ################################################################################
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    outputs:
+      subname: ${{ steps.get-folder.outputs.folder }}
+    steps:
+      - 
+        name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - 
+        name: get new folder name
+        id: get-folder
+        run: |
+          echo "git diff:"
+          folder=$(git diff --name-only --diff-filter=ACMRT HEAD~1 | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
+          folder_count=$(echo $folder | wc -w)
+          if [ $folder_count -ne 1 ] ; then
+            echo "::error ::found changes to $folder_count submissions instead of 1:\n$folder . PRs should only add/change a single submission."
+          else
+            echo "::notice ::testing $folder"
+            echo "::set-output name=folder::$folder"
+          fi
+      - 
+        name: check files exist
+        run: |
+          cd submission/${{ steps.get-folder.outputs.folder }}
+          passing=true
+          required_files=("regressor.py" "metadata.yml")
+          for f in ${required_files[@]} ; do
+              if test -f $f ; then
+                  echo ":) $f found"
+              else
+                  echo "::error:: missing required file $f"
+                  passing=false
+              fi
+          done
+          if [ "$passing" = false ]; then
+            exit 1
+          fi
+  ################################################################################
+  # environment setup
+  ################################################################################
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    needs: check
+    env:
+      SUBNAME: ${{ needs.check.outputs.subname }} 
+      SUBFOLDER: submission/${{ needs.check.outputs.subname }} 
+      SUBENV: srcomp-${{ needs.check.outputs.subname }} 
+  
+    steps:
+      - 
+        name: Checkout code
+        uses: actions/checkout@v2
+      - 
+        name: Setup Mambaforge
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniforge-variant: Mambaforge
+          miniforge-version: latest
+          activate-environment: srcomp
+          use-mamba: true
+      - 
+        name: Cache conda
+        uses: actions/cache@v2
+        with:
+          path: /usr/share/miniconda3/envs/srcomp
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
+        id: cache
+      - 
+        name: Update environment
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: | 
+          mamba env update -n srcomp -f environment.yml 
+################################################################################
+# install the submission
+################################################################################
+      - 
+        name: Install SR dependencies
+        if: hashFiles('${{ env.SUBFOLDER }}/environment.yml') != ''
+        run: |
+          cd $SUBFOLDER
+          pwd
+          echo "Installing dependencies for ${SUBNAME}"
+          echo "Copying base environment"
+          conda create --name $SUBENV --clone srcomp
+          echo "Installing conda dependencies"
+          mamba env update -n $SUBENV -f environment.yml
+      - 
+        name: Install SR method
+        if: hashFiles('${{ env.SUBFOLDER }}/install.sh') != ''
+        run: |
+          cd $SUBFOLDER 
+          if test -f "install.sh" ; then
+            echo "running install.sh..."
+            mamba run -n $SUBENV bash install.sh
+          else
+            echo "::warning::No install.sh file found in ${SUBFOLDER}. Assuming the method is a conda package specified in environment.yml."
+          fi
+
+      - 
+        name: Copy files and environment
+        run: |
+          mkdir -p experiment/methods/$SUBNAME
+          cp $SUBFOLDER/regressor.py experiment/methods/$SUBNAME/
+          cp $SUBFOLDER/metadata.yml experiment/methods/$SUBNAME/
+          touch experiment/methods/$SUBNAME/__init__.py
+
+          # export env
+          eval "$(conda shell.bash hook)"
+          conda init bash
+          conda activate $SUBENV 
+          conda env export  > $SUBFOLDER/environment.lock.yml
+  ################################################################################
+  # tests
+  ################################################################################
+      -
+        name: Test Method
+        run: |
+          cd experiment
+          pwd
+          ls
+          mamba run -n $SUBENV python -m pytest -v test_submission.py --ml $SUBNAME
+  ################################################################################
+  # store competitor
+  ################################################################################
+      - 
+        name: Store competitor
+        run: |
+          # if $SUBNAME != 'feat-example' ; do
+          if [ $SUBNAME != "feat-example" ] ; then
+            cp -R submission/$SUBNAME official_competitors/
+            rm -rf submission/$SUBNAME
+            git config user.name "GitHub Actions Bot"
+            git config user.email "<>"  
+            git add official_competitors/
+
+            git diff-index --quiet HEAD ||  git commit -am "Store/update $SUBNAME"  
+            git push origin comp-test
+          else
+            echo "::notice ::skipping storage of $SUBNAME"
+          fi
