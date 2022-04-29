@@ -76,7 +76,7 @@ specify a mapping in the `model` function such as:
 def model(est, X):
     mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
     new_model = est.model_
-    for k,v in mapping.items():
+    for k,v in reversed(mapping.items()):
         new_model = new_model.replace(k,v)
 ```
 
