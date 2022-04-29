@@ -17,21 +17,18 @@ def model(est, X=None):
 
 
 def my_pre_train_fn(est, X, y):
-    # Competition 2022
     try:
         est.numThreads = os.environ['OMP_NUM_THREADS']
     except Exception as e:
         print(e)
 
-    if len(X) <= 1000:
-        max_time = 360 - 15  # 15 second of slack
-    else:
-        max_time = 3600 - 15  # 15 second of slack
+    max_time = 3600 - 15  # 15 second of slack
+    if len(X) > 1000:
+        max_time = 36000 - 15  # 15 second of slack
     est.timeLimit = max_time * 1000
 
     print(
         f'my_pre_train_fn: timeLimit={est.timeLimit} numThreads={est.numThreads}')
-    # end Competition 2022
 
 
 # define eval_kwargs.
