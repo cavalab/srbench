@@ -51,7 +51,7 @@ def my_pre_train_fn(est, X, y):
     """
 
     if len(X)>1000:
-        est.max_time = 3600 - 10 # 1 second of slack
+        est.max_time = 3600 - 10 # 10 second of slack
     print('TaylorGP max_time adjusted to',est.max_time)
 
 # define eval_kwargs.
