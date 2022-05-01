@@ -1,1 +1,1 @@
-pip install git+https://github.com/janoPig/HROCH.git@504dce17134cbb7ba95f53e30f48ed23835fe483
+pip install git+https://github.com/janoPig/HROCH.git@e0c22cf2772c599ac9ef62d38e3eccc25a355ed3
