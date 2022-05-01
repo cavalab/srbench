@@ -22,9 +22,9 @@ def my_pre_train_fn(est, X, y):
     except Exception as e:
         print(e)
 
-    max_time = 3600 - 15  # 15 second of slack
+    max_time = 3600 - 60  # 60 second of slack
     if len(X) > 1000:
-        max_time = 36000 - 15  # 15 second of slack
+        max_time = 36000 - 60  # 60 second of slack
     est.timeLimit = max_time * 1000
 
     print(
