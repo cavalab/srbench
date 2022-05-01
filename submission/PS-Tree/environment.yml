@@ -14,4 +14,4 @@ dependencies:
     - gplearn
     - scipy
     - deap
-    - yaml
+    - PyYAML
