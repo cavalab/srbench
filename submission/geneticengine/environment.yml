@@ -15,9 +15,6 @@ dependencies:
   - sqlite=3.38.2
   - tk=8.6.12
   - tzdata=2022a
-  - ucrt
-  - vc
-  - vs2015_runtime
   - wheel=0.37.1
   - xz=5.2.5
   - pip:
