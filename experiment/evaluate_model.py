@@ -34,7 +34,7 @@ def evaluate_model(dataset,
                    ##########
                    # valid options for eval_kwargs
                    ##########
-                   test_params=None,
+                   test_params={},
                    max_train_samples=0, 
                    scale_x = True, 
                    scale_y = True,
