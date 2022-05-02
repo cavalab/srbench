@@ -35,7 +35,7 @@ jobs:
         id: get-folder
         run: |
           echo "git diff:"
-          folder=$(git diff --name-only --diff-filter=ACMRT HEAD~1 | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
+          folder=$(git diff --name-only HEAD~1 | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
           folder_count=$(echo $folder | wc -w)
           if [ $folder_count -ne 1 ] ; then
             echo "::error ::found changes to $folder_count submissions instead of 1:\n$folder . PRs should only add/change a single submission."
