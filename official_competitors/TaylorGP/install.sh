@@ -1,4 +1,4 @@
-#install feat
+#install TaylorGP
 git clone https://github.com/KGAE-CUP/TaylorGP 
 cd TaylorGP
 

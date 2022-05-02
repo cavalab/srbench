@@ -39,7 +39,7 @@ dependencies:
   - fontconfig=2.14.0=h8e229c2_0
   - fonts-conda-ecosystem=1=0
   - fonts-conda-forge=1=0
-  - fonttools=4.33.2=py310h5764c6d_0
+  - fonttools=4.33.3=py310h5764c6d_0
   - freetype=2.10.4=h0708190_1
   - gettext=0.19.8.1=h73d1719_1008
   - giflib=5.2.1=h36c2ea0_2
@@ -52,7 +52,7 @@ dependencies:
   - importlib_resources=5.7.0=pyhd8ed1ab_0
   - iniconfig=1.1.1=pyh9f0ad1d_0
   - ipykernel=6.13.0=py310hfdc917e_0
-  - ipython=8.2.0=py310hff52083_0
+  - ipython=8.3.0=py310hff52083_0
   - ipython_genutils=0.2.0=py_1
   - ipywidgets=7.7.0=pyhd8ed1ab_0
   - jbig=2.1=h7f98852_2003
@@ -79,7 +79,7 @@ dependencies:
   - libbrotlienc=1.0.9=h166bdaf_7
   - libcblas=3.9.0=14_linux64_openblas
   - libclang=13.0.1=default_hc23dcda_0
-  - libcurl=7.82.0=h2283fc2_0
+  - libcurl=7.83.0=h2283fc2_0
   - libdeflate=1.10=h7f98852_0
   - libedit=3.1.20191231=he28a2e2_2
   - libev=4.33=h516909a_1
@@ -135,7 +135,7 @@ dependencies:
   - notebook=6.4.10=pyha770c72_0
   - nspr=4.32=h9c3ff4c_1
   - nss=3.77=h2350873_0
-  - numpy=1.22.3=py310h45f3432_2
+  - numpy=1.22.3=py310h4ef5377_2
   - openjpeg=2.4.0=hb52868f_1
   - openssl=3.0.2=h166bdaf_1
   - packaging=21.3=pyhd8ed1ab_0
