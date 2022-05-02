@@ -56,3 +56,12 @@ def model(est, X=None):
     model_str = est.sympy_compatible_phenotype
 
     return model_str
+
+def my_pre_train_fn():
+    pass
+
+# define eval_kwargs.
+eval_kwargs = dict(
+                   pre_train=my_pre_train_fn,
+                   test_params = {}
+                  )
