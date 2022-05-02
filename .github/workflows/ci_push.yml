@@ -164,7 +164,7 @@ jobs:
             git add official_competitors/
 
             git diff-index --quiet HEAD ||  git commit -am "Store/update $SUBNAME"  
-            git push origin comp-test
+            git push origin Competition2022
           else
             echo "::notice ::skipping storage of $SUBNAME"
           fi
