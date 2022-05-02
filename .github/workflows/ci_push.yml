@@ -157,7 +157,7 @@ jobs:
         run: |
           # if $SUBNAME != 'feat-example' ; do
           if [ $SUBNAME != "feat-example" ] ; then
-            cp -R submission/$SUBNAME official_competitors/
+            rsync -avz --exclude=".git" submission/$SUBNAME official_competitors/
             rm -rf submission/$SUBNAME
             git config user.name "GitHub Actions Bot"
             git config user.email "<>"  
