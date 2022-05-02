@@ -1,3 +1,5 @@
+experiment/datasets
+experiment/methods/geneticengine
 results_*/
 *.swp
 tmp_*
