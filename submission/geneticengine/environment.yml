@@ -3,23 +3,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - bzip2=1.0.8
-  - ca-certificates=2021.10.8
-  - libffi=3.4.2
-  - libzlib=1.2.11
-  - openssl=3.0.2
-  - pip=22.0.4
   - python=3.9.12
   - python_abi=3.9
   - setuptools=62.1.0
-  - sqlite=3.38.2
-  - tk=8.6.12
-  - tzdata=2022a
-  - ucrt=10.0.20348.0
-  - vc=14.2
-  - vs2015_runtime=14.29.30037
-  - wheel=0.37.1
-  - xz=5.2.5
+  - pip=22.0.4
   - pip:
     - geneticengine==0.0.13
     - lark==1.1.2

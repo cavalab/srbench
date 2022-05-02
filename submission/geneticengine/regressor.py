@@ -1,11 +1,11 @@
-import geneticengine.off_the_shelf.classifiers as gengy_classifiers
+import geneticengine.off_the_shelf.regressors as gengy_regressors
 
 """
 est: a sklearn-compatible regressor. 
     if you don't have one they are fairly easy to create. 
     see https://scikit-learn.org/stable/developers/develop.html
 """
-est = gengy_classifiers.GeneticProgrammingClassifier(
+est = gengy_regressors.GeneticProgrammingRegressor(
         population_size = 50,
         n_elites = 5, 
         n_novelties = 10,
