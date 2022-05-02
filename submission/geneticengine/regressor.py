@@ -57,11 +57,7 @@ def model(est, X=None):
 
     return model_str
 
-def my_pre_train_fn():
-    pass
-
 # define eval_kwargs.
 eval_kwargs = dict(
-                   pre_train=my_pre_train_fn,
                    test_params = {}
                   )
