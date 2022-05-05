@@ -1,4 +1,6 @@
+import math
 import random
+import sympy as sp
 from functools import reduce
 from random import randint
 
@@ -11,7 +13,7 @@ from utils import reduce_adder
 class Parameter:
     def __init__(
             self,
-            n_var, n_output=1,
+            n_var=None, n_output=1,
             n_row=10, n_col=10, n_constant=1,
             primitive_set=None,
             levels_back=None
@@ -60,13 +62,20 @@ class DifferentialCGP(torch.nn.Module):
 
         if genes is None:
             self.genes, self.bounds = self.initialization()
-            self.constant = torch.nn.Parameter(torch.normal(mean=0., std=1., size=(self.n_constant,)))
+            self.constant = torch.nn.Parameter(torch.normal(mean=0., std=1., size=(self.n_constant,)), requires_grad=True)
         else:
             self.genes, self.bounds = genes, bounds
-            self.constant = constant if isinstance(constant, torch.nn.Parameter) else torch.nn.Parameter(constant)
+            self.constant = constant if isinstance(constant, torch.nn.Parameter) else torch.nn.Parameter(constant, requires_grad=True)
         self.nodes = self._create_nodes(self.genes)
         self.active_paths = self._active_paths(self.nodes)
         self.active_nodes = set(reduce(reduce_adder, self.active_paths))
+
+        self.fitness = None
+        self.simplicity = None
+        self.front_rank = None
+        self.dominated_set = None
+        self.n_dominator = None
+        self.crowding_distance = None
 
     def _active_paths(self, nodes):
         stack = []
@@ -152,6 +161,8 @@ class DifferentialCGP(torch.nn.Module):
                     node.value = f(*operants)
 
         if self.n_output == 1:
+            if len(self.nodes[-1].value.shape) == 0:
+                self.nodes[-1].value = self.nodes[-1].value.repeat(X.shape[0])
             return self.nodes[-1].value
 
         outputs = []
@@ -163,7 +174,9 @@ class DifferentialCGP(torch.nn.Module):
 
         return torch.stack(outputs, dim=1)
 
-    def expr(self, variables):
+    def expr(self, variables=None):
+        if variables is None:
+            variables = list(['x{}'.format(i) for i in range(self.n_var)])
         symbol_stack = []
         results = []
         for path in self.active_paths:
@@ -201,19 +214,3 @@ class DifferentialCGP(torch.nn.Module):
             self.hyper_param,
             genes=new_genes, bounds=bounds, constant=self.constant
         )
-
-
-if __name__ == '__main__':
-    n_var = 4
-    variables = ['x{}'.format(i) for i in range(n_var)]
-    X = torch.randn(100, n_var)
-    hyper = Parameter(n_var)
-    dcgp = DifferentialCGP(hyper)
-    print(dcgp(X).shape)
-    print(dcgp.expr(variables))
-    mutated_dcgp = dcgp.mutate(0.25)
-    print(mutated_dcgp(X).shape)
-    print(mutated_dcgp.expr(variables))
-
-    print(dcgp(X).shape)
-    print(dcgp.expr(variables))
