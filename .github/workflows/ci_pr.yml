@@ -4,14 +4,9 @@ name: CI
 
 # Controls when the action will run. 
 on:
-  push:
-    branches:
-      - Competition2022
-    # paths:
-    #   - 'submission/**'
   pull_request:
     branches: 
-      - Competition2022 
+      - Competition2022
     paths:
       - 'submission/**'
 
@@ -33,13 +28,21 @@ jobs:
       - 
         name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - 
         name: get new folder name
         id: get-folder
         run: |
-          ls
-          echo "$(ls -t submission/ | head -n 1)"
-          echo "::set-output name=folder::$( ls -t submission/ | head -n 1 )"
+          echo "git diff:"
+          folder=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
+          folder_count=$(echo $folder | wc -w)
+          if [ $folder_count -ne 1 ] ; then
+            echo "::error ::found changes to $folder_count submissions instead of 1:\n$folder . PRs should only add/change a single submission."
+          else
+            echo "::notice ::testing $folder"
+            echo "::set-output name=folder::$folder"
+          fi
       - 
         name: check files exist
         run: |
@@ -60,7 +63,7 @@ jobs:
   ################################################################################
   # environment setup
   ################################################################################
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -116,8 +119,13 @@ jobs:
         if: hashFiles('${{ env.SUBFOLDER }}/install.sh') != ''
         run: |
           cd $SUBFOLDER 
-          echo "running install.sh..."
-          mamba run -n $SUBENV bash install.sh
+          if test -f "install.sh" ; then
+            echo "running install.sh..."
+            mamba run -n $SUBENV bash install.sh
+          else
+            echo "::warning::No install.sh file found in ${SUBFOLDER}. Assuming the method is a conda package specified in environment.yml."
+          fi
+
       - 
         name: Copy files and environment
         run: |
@@ -130,18 +138,16 @@ jobs:
           eval "$(conda shell.bash hook)"
           conda init bash
           conda activate $SUBENV 
-          conda env export > experiment/methods/$SUBNAME/environment.lock.yml
+          echo "/////// Conda Environment (conda env export)/////"
+          conda env export  #> $SUBFOLDER/environment.lock.yml
+          echo "/////////////////////////////////////////////////"
   ################################################################################
   # tests
   ################################################################################
-      - 
+      -
         name: Test Method
         run: |
           cd experiment
           pwd
           ls
           mamba run -n $SUBENV python -m pytest -v test_submission.py --ml $SUBNAME
-      - 
-        name: Save Competitor
-        run: |
-          source ci/store_competitor.sh 

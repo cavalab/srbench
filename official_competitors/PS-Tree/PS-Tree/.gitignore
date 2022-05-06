@@ -1,11 +1,4 @@
-experiment/datasets
-experiment/methods/
-
 .idea
-
-results_*/
-*.swp
-tmp_*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -13,10 +6,6 @@ __pycache__/
 
 # C extensions
 *.so
-
-# json
-*.json
-*.pt
 
 # Distribution / packaging
 .Python
@@ -57,6 +46,7 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+.pytest_cache/
 
 # Translations
 *.mo
@@ -111,3 +101,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# IDE settings
+.vscode/

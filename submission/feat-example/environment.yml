@@ -1,4 +1,3 @@
-name: feat
 channels:
     - conda-forge
 dependencies:
