@@ -1,4 +1,8 @@
+experiment/datasets
+experiment/methods/
+
 .idea
+
 results_*/
 *.swp
 tmp_*
