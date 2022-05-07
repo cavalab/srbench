@@ -12,7 +12,8 @@ channels:
 dependencies:
   - python=3.9.5=h49503c6_0_cpython
   - pytorch=1.8.1=py3.9_cuda11.1_cudnn8.0.5_0
+  - pip
   - pip:
     - scikit-image==0.18.2
     - scikit-learn==0.24.2
-    prefix: /home/luoyuanzhen/anaconda3/envs/pytorch-gpu
+prefix: /home/luoyuanzhen/anaconda3/envs/pytorch-gpu
