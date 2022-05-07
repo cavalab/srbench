@@ -1,6 +1,3 @@
-import numpy as np
-import pandas as pd
-
 from nsga import NSGA
 from dcgp import Parameter, DifferentialCGP
 """
@@ -16,8 +13,8 @@ dcgp_params = Parameter(
 )
 est = NSGA(
     DifferentialCGP, dcgp_params,
-    pop_size=1000, n_gen=1000, n_parent=200, prob=0.4, nsga=True,
-    newton_step=10, stop=1e-6, verbose=10
+    pop_size=1000, n_gen=10000, n_parent=200, prob=0.4, nsga=True,
+    newton_step=10, stop=1e-6, verbose=None
 )
 
 
@@ -58,8 +55,10 @@ def model(est, X=None):
     if you have further questions: 
     https://github.com/cavalab/srbench/issues/new/choose
     """
+    import sympy as sp
     mappings = {'x'+str(i): k for i, k in enumerate(X.columns)}
-    model_ = est.expr()
+    # sympify it first
+    model_ = str(sp.sympify(est.expr()))
     for k, v in reversed(mappings.items()):
         model_ = model_.replace(k, v)
     return model_
@@ -111,12 +110,3 @@ def my_pre_train_fn(est, X, y):
 eval_kwargs = dict(
     pre_train=my_pre_train_fn
 )
-
-
-"""Test myself"""
-dataset = np.loadtxt('/home/luoyuanzhen/STORAGE/dataset/sr_benchmark/Keijzer-9_train.txt')
-X, y = pd.DataFrame(dataset[:, :-1], columns=['x0']), dataset[:, -1]
-n_variable = X.shape[1]
-my_pre_train_fn(est, X, y)
-est.fit(X, y)
-print(model(est, X))

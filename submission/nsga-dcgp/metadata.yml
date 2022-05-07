@@ -3,6 +3,7 @@ authors: # the participants
 email: strugglingluo@gmail.com
 name: nsga-dcgp # name of the submission /method
 description: | # anything you'd like here to describe the method.
-  ...
-url: ... # a link to the project
+  Try to using Differential Cartesian Genetc Programming + NSGA-II to solve Symbolic Regression problem.
+  Let's see what happens when combining GP+GD+NSGA?
+url: github.com/LuoYuanzhen/srbench # a link to the project
 

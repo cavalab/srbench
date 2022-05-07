@@ -1,6 +1,3 @@
-import math
-
-import matplotlib.pyplot as plt
 import numpy as np
 import sympy as sp
 import torch
@@ -36,27 +33,11 @@ def dominate(obj_p, obj_q):
 
 def print_info(gen, indiv):
     print("Gen {}: Best EQ={} || R2Score={}, Simplicity={}".format(gen, indiv.expr(), indiv.fitness, indiv.simplicity))
+
+
 # def crowding_distance(pop, obj_names):
 #     for i in range(len(pop)):
 #         pop[i].crowding_distance = 0
 #
 #     for obj_name in obj_names:
 #         pop = sorted(pop, key=lambda indiv: getattr(indiv, obj_name), reverse=True)
-
-
-def plot_pareto(population):
-    fitness = np.array(list([indiv.fitness for indiv in population]))
-    simp = np.array(list([indiv.fitness for indiv in population]))
-    ranks = list([indiv.front_rank for indiv in population])
-
-    fitness = np.where(np.isfinite(fitness), fitness, -1000)
-    simp = np.where(np.isfinite(simp), simp, 0)
-    fitness = (fitness - fitness.min()) / (fitness.max() - fitness.min())
-    simp = (simp - simp.min()) / (simp.max() - simp.min())
-
-    plt.title('Pareto fronts')
-    plt.scatter(fitness, simp, c=ranks, cmap='coolwarm')
-    plt.xlabel('R2-Score')
-    plt.ylabel('Simplicity')
-    plt.show()
-    plt.close()

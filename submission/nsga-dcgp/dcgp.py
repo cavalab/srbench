@@ -1,7 +1,4 @@
-import copy
-import math
 import random
-import sympy as sp
 from functools import reduce
 from random import randint
 
