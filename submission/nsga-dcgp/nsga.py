@@ -1,18 +1,28 @@
+import copy
 import random
+import signal
 
 import numpy as np
+import sympy
 import torch
 from sklearn.base import RegressorMixin, BaseEstimator
-from torch.autograd import Variable, gradcheck
-
 from utils import accuracy, simplicity, dominate, print_info
+
+
+class TimeOutException(Exception):
+    pass
+
+
+def alarm_handler(signum, frame):
+    print('raising TimeOutException')
+    raise TimeOutException
 
 
 class NSGA(BaseEstimator, RegressorMixin):
     def __init__(
             self,
             indiv_class, indiv_param,
-            pop_size=100, n_gen=10000, n_parent=15, prob=0.4,
+            pop_size=100, n_gen=10000, n_parent=15, prob=0.4, nsga=True,
             newton_step=10, stop=1e-6, verbose=None
     ):
         self.indiv_class = indiv_class
@@ -21,11 +31,16 @@ class NSGA(BaseEstimator, RegressorMixin):
         self.n_gen = n_gen
         self.n_parent, self.n_offspring = n_parent, self.pop_size - n_parent
         self.prob = prob
+        self.nsga = nsga
         self.newton_step = newton_step
         self.stop = stop
         self.parent, self.best_solution, self.fronts = None, None, None
         self.verbose = verbose
         self.loss_func = torch.nn.MSELoss()
+        self.max_time = None
+
+    def set_max_time(self, max_time):
+        self.max_time = max_time
 
     def _init_pop(self):
         self.parent = list([self.indiv_class(self.indiv_param) for _ in range(self.n_parent)])
@@ -33,6 +48,7 @@ class NSGA(BaseEstimator, RegressorMixin):
 
     def _optim_constant(self, X, y, pop):
         for i in range(len(pop)):
+            old_constant = torch.FloatTensor(pop[i].constant.size()).type_as(pop[i].constant)
             for step in range(self.newton_step):
                 y_prediction = pop[i](X)
                 loss = self.loss_func(y_prediction, y)
@@ -42,6 +58,8 @@ class NSGA(BaseEstimator, RegressorMixin):
                     pop[i].constant.data -= grad_c[0].data / hessian[0].data
                 else:
                     break
+            if not torch.isfinite(pop[i].constant).all():
+                pop[i].constant.data = old_constant
 
     def _ea(self):
         # E(u+lambda)
@@ -81,62 +99,80 @@ class NSGA(BaseEstimator, RegressorMixin):
         return fronts
 
     def fit(self, X, y):
+        if self.max_time is not None:
+            signal.signal(signal.SIGALRM, alarm_handler)
+            signal.alarm(self.max_time)
         n_var = X.shape[1]
         self.indiv_param.n_var = n_var
+        # X_train, X_val, y_train, y_val = train_test_split(X.values, y)
         input_tensor = torch.from_numpy(X.values).float()
         target_tensor = torch.from_numpy(y).float()
+        # initialization
+        population = self._init_pop()
+        try:
+            for gen in range(self.n_gen):
+                # optimizer constant
+                self._optim_constant(input_tensor, target_tensor, population)
+                # calculate fitness and simplicity
+                for i in range(len(population)):
+                    population[i].fitness = accuracy(population[i], input_tensor, target_tensor)
+                    population[i].simplicity = simplicity(population[i])
+                if self.nsga:
+                    # fast non-dominated sorting
+                    self.fronts = self._fast_nondoiminated_sort(population)
+                    # plot_pareto(population)
+                    # select u parent from pareto-fronts
+                    new_parent, i = [], 0
+                    while len(new_parent) + len(self.fronts[i]) <= self.n_parent:
+                        new_parent += self.fronts[i]
+                        i += 1
+                    # here I igore the crowding distance
+                    new_parent += self.fronts[i][:self.n_parent - len(new_parent)]
+                    self.parent = new_parent
+                else:
+                    self.parent = sorted(population, key=lambda indiv: indiv.fitness)[-self.n_parent:]
+                # E(u+lambda) evolutionary strategy
+                population = self._ea()
 
-        population = None
-        for gen in range(self.n_gen):
-            # initialization
-            if population is None:
-                population = self._init_pop()
-            # optimizer constant
-            self._optim_constant(input_tensor, target_tensor, population)
-            # calculate fitness and simplicity
-            for i in range(len(population)):
-                population[i].fitness = accuracy(population[i], input_tensor, target_tensor)
-                population[i].simplicity = simplicity(population[i])
-            # fast non-dominated sorting
-            self.fronts = self._fast_nondoiminated_sort(population)
-            # select u parent from pareto-fronts
-            new_parent, i = [], 0
-            while len(new_parent) + len(self.fronts[i]) <= self.n_parent:
-                new_parent += self.fronts[i]
-                i += 1
-            # here I igore the crowding distance
-            new_parent += self.fronts[i][:self.n_parent - len(new_parent)]
-            self.parent = new_parent
-            # E(u+lambda) evolutionary strategy
-            population = self._ea()
-
+                if self.best_solution is None:
+                    self.best_solution = copy.deepcopy(max(self.parent, key=lambda indiv: indiv.fitness))
+                else:
+                    new_best = max(self.parent, key=lambda indiv: indiv.fitness)
+                    if new_best.fitness > self.best_solution.fitness:
+                        self.best_solution = copy.deepcopy(new_best)
+                if self.verbose is not None and gen % self.verbose == 0:
+                    print_info(gen, self.best_solution)
+                if (1. - self.best_solution.fitness) <= self.stop:
+                    break
+        except TimeOutException:
             if self.best_solution is None:
-                self.best_solution = max(self.fronts[0], key=lambda indiv: indiv.fitness)
-            else:
-                self.best_solution = max(self.fronts[0] + [self.best_solution], key=lambda indiv: indiv.fitness)
-            if self.verbose is not None and gen % self.verbose == 0:
-                print_info(gen, self.best_solution)
-            if (1. - self.best_solution.fitness) <= self.stop:
-                break
+                self.best_solution = max(population if self.parent is None else self.parent, key=lambda indiv: indiv.fitness)
 
     def predict(self, X):
         assert self.best_solution is not None, "Never call fit() before"
-        input_tensor = torch.from_numpy(X).float()
+        input_tensor = torch.from_numpy(X.values).float()
         with torch.no_grad():
             prediction_tensor = self.best_solution(input_tensor)
         return prediction_tensor.detach().numpy()
+
+    def expr(self, variables=None):
+        assert self.best_solution is not None, "Never call fit() before"
+        return self.best_solution.expr(variables)
 
 
 if __name__ == '__main__':
     from dcgp import Parameter, DifferentialCGP
     import pandas as pd
     hyper_param = Parameter()
-    nsga_dcgp = NSGA(DifferentialCGP, hyper_param, n_gen=100, verbose=10)
-    n_variable = 4
-    X = pd.DataFrame(np.random.randn(100, n_variable))
-    y = X.values[:, 1] ** 2 + np.sin(X.values[:, 0]) * X.values[:, 2]
+    nsga_dcgp = NSGA(DifferentialCGP, hyper_param, n_parent=15, n_gen=100, verbose=10, nsga=True)
+    dataset = np.loadtxt('/home/luoyuanzhen/STORAGE/dataset/sr_benchmark/Keijzer-9_train.txt')
+    X, y = pd.DataFrame(dataset[:, :-1]), dataset[:, -1]
+    n_variable = X.shape[1]
     nsga_dcgp.fit(X, y)
+    printed_pop = nsga_dcgp.fronts[0] if nsga_dcgp.nsga else nsga_dcgp.parent
     print('pareto front:')
-    for indiv in nsga_dcgp.fronts[0]:
-        print(indiv.expr(), indiv.fitness, indiv.simplicity)
+    for indiv in printed_pop:
+        print(sympy.sympify(indiv.expr()), indiv.fitness, indiv.simplicity)
+
+
 

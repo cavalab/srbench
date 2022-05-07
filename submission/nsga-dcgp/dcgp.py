@@ -1,3 +1,4 @@
+import copy
 import math
 import random
 import sympy as sp
@@ -205,7 +206,7 @@ class DifferentialCGP(torch.nn.Module):
             chance = random.random()
             if chance < probability:
                 low, up = bounds[gidx]
-                candicates = [g for g in range(low, up+1) if g != new_genes[gidx]]
+                candicates = [g for g in range(low, up+1) if g != self.genes[gidx]]
                 if len(candicates) == 0:
                     continue
                 new_genes[gidx] = random.choice(candicates)

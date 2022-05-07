@@ -1,5 +1,6 @@
 import math
 
+import matplotlib.pyplot as plt
 import numpy as np
 import sympy as sp
 import torch
@@ -10,13 +11,9 @@ def reduce_adder(l1, l2):
 
 
 def simplicity(indiv):
-    variables = ['x{}'.format(i) for i in range(indiv.n_var)]
-    eq = sp.simplify(indiv.expr(variables))
+    eq = sp.sympify(indiv.expr())
     s = eq.count_ops()
-    return round(100 / (100 + s), 1)
-    # if s == 0:
-    #     return 0
-    # return round(-math.log(s, 5), 1)
+    return round(30 / (30 + s), 1)
 
 
 def accuracy(indiv, X, y):
@@ -45,3 +42,21 @@ def print_info(gen, indiv):
 #
 #     for obj_name in obj_names:
 #         pop = sorted(pop, key=lambda indiv: getattr(indiv, obj_name), reverse=True)
+
+
+def plot_pareto(population):
+    fitness = np.array(list([indiv.fitness for indiv in population]))
+    simp = np.array(list([indiv.fitness for indiv in population]))
+    ranks = list([indiv.front_rank for indiv in population])
+
+    fitness = np.where(np.isfinite(fitness), fitness, -1000)
+    simp = np.where(np.isfinite(simp), simp, 0)
+    fitness = (fitness - fitness.min()) / (fitness.max() - fitness.min())
+    simp = (simp - simp.min()) / (simp.max() - simp.min())
+
+    plt.title('Pareto fronts')
+    plt.scatter(fitness, simp, c=ranks, cmap='coolwarm')
+    plt.xlabel('R2-Score')
+    plt.ylabel('Simplicity')
+    plt.show()
+    plt.close()

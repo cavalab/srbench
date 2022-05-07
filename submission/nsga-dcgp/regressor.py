@@ -1,22 +1,25 @@
-# This example submission shows the submission of FEAT (cavalab.org/feat). 
-from feat import FeatRegressor
+import numpy as np
+import pandas as pd
 
+from nsga import NSGA
+from dcgp import Parameter, DifferentialCGP
 """
 est: a sklearn-compatible regressor. 
     if you don't have one they are fairly easy to create. 
     see https://scikit-learn.org/stable/developers/develop.html
 """
-est = FeatRegressor(
-                    pop_size=100,
-                    gens=100,
-                    max_time=8*60*60,  # 8 hrs
-                    max_depth=6,
-                    verbosity=0,
-                    batch_size=100,
-                    functions ='+,-,*,/,^2,^3,sqrt,sin,cos,exp,log',
-                    otype='f'
-                   )
-# want to tune your estimator? wrap it in a sklearn CV class. 
+dcgp_params = Parameter(
+    n_output=1,
+    n_row=10, n_col=10, n_constant=1,
+    primitive_set=None,
+    levels_back=None
+)
+est = NSGA(
+    DifferentialCGP, dcgp_params,
+    pop_size=1000, n_gen=1000, n_parent=200, prob=0.4, nsga=True,
+    newton_step=10, stop=1e-6, verbose=10
+)
+
 
 def model(est, X=None):
     """
@@ -55,16 +58,11 @@ def model(est, X=None):
     if you have further questions: 
     https://github.com/cavalab/srbench/issues/new/choose
     """
-
-    # Here we replace "|" with "" to handle
-    # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
-    model_str = est.get_eqn()
-    model_str = model_str.replace('|','')
-
-    # use python syntax for exponents
-    model_str = model_str.replace('^','**')
-
-    return model_str
+    mappings = {'x'+str(i): k for i, k in enumerate(X.columns)}
+    model_ = est.expr()
+    for k, v in reversed(mappings.items()):
+        model_ = model_.replace(k, v)
+    return model_
 
 ################################################################################
 # Optional Settings
@@ -97,21 +95,28 @@ Options
             y: training labels.
 """
 
+
 def my_pre_train_fn(est, X, y):
     """In this example we adjust FEAT generations based on the size of X 
        versus relative to FEAT's batch size setting. 
     """
-    if est.batch_size < len(X):
-        est.gens = int(est.gens*len(X)/est.batch_size)
-    print('FEAT gens adjusted to',est.gens)
-    # adjust max dim
-    est.max_dim=min(max(est.max_dim, X.shape[1]), 20)
-    print('FEAT max_dim set to',est.max_dim)
+    if len(X) <= 1000:
+        max_time = 3600 - 10
+    else:
+        max_time = 36000 - 10
+    est.max_time = max_time
+
 
 # define eval_kwargs.
 eval_kwargs = dict(
-                   pre_train=my_pre_train_fn,
-                   test_params = {'gens': 5,
-                                  'pop_size': 10
-                                 }
-                  )
+    pre_train=my_pre_train_fn
+)
+
+
+"""Test myself"""
+dataset = np.loadtxt('/home/luoyuanzhen/STORAGE/dataset/sr_benchmark/Keijzer-9_train.txt')
+X, y = pd.DataFrame(dataset[:, :-1], columns=['x0']), dataset[:, -1]
+n_variable = X.shape[1]
+my_pre_train_fn(est, X, y)
+est.fit(X, y)
+print(model(est, X))
