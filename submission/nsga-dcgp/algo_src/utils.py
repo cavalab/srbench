@@ -8,8 +8,12 @@ def reduce_adder(l1, l2):
 
 
 def simplicity(indiv):
-    eq = sp.sympify(indiv.expr())
-    s = eq.count_ops()
+    expr = indiv.expr()
+    try:
+        eq = sp.sympify(expr)
+        s = eq.count_ops()
+    except BaseException:
+        s = len(expr)
     return round(30 / (30 + s), 1)
 
 

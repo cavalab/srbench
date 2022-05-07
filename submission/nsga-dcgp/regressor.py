@@ -1,5 +1,5 @@
-from .nsga import NSGA
-from .dcgp import Parameter, DifferentialCGP
+from .algo_src.dcgp import Parameter, DifferentialCGP
+from .algo_src.nsga import NSGA
 """
 est: a sklearn-compatible regressor. 
     if you don't have one they are fairly easy to create. 
@@ -69,10 +69,15 @@ def my_pre_train_fn(est, X, y):
         max_time = 3600 - 10
     else:
         max_time = 36000 - 10
-    est.max_time = max_time
+    est.set_params(max_time=max_time)
 
 
 # define eval_kwargs.
 eval_kwargs = dict(
-    pre_train=my_pre_train_fn
+    pre_train=my_pre_train_fn,
+    test_params={
+        "pop_size": 10,
+        "n_gen": 10,
+        "n_parent": 2
+    }
 )

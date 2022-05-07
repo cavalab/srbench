@@ -16,8 +16,20 @@ class Function:
         return self.sp_func(*args)
 
 
-def _binary_sp_oper(*args, op=''):
-    return f"({args[0]}){op}({args[1]})"
+def _sp_add(*args):
+    return f"Add({args[0]}, {args[1]})"
+
+
+def _sp_sub(*args):
+    return f"Add({args[0]}, -{args[1]})"
+
+
+def _sp_mul(*args):
+    return f"Mul({args[0]}, {args[1]})"
+
+
+def _sp_div(*args):
+    return f"Mul({args[0]}, 1/{args[1]})"
 
 
 def _unary_sp_oper(*args, op=''):
@@ -56,10 +68,10 @@ cos = Function(torch.cos, partial(_unary_sp_oper, op='cos'), 1)
 abs = Function(torch.abs, partial(_unary_sp_oper, op='Abs'), 1)
 # exp = Function(torch.exp, sp.exp, 1)
 
-add = Function(torch.add, partial(_binary_sp_oper, op='+'), 2)
-sub = Function(torch.sub, partial(_binary_sp_oper, op='-'), 2)
-mul = Function(torch.mul, partial(_binary_sp_oper, op='*'), 2)
-div = Function(torch.div, partial(_binary_sp_oper, op='/'), 2)
+add = Function(torch.add, _sp_add, 2)
+sub = Function(torch.sub, _sp_sub, 2)
+mul = Function(torch.mul, _sp_mul, 2)
+div = Function(torch.div, _sp_div, 2)
 
 primitive_map = {
     'sqrt': sqrt,

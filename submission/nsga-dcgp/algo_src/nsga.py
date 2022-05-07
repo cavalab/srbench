@@ -21,7 +21,8 @@ class NSGA(BaseEstimator, RegressorMixin):
             self,
             indiv_class, indiv_param,
             pop_size=100, n_gen=10000, n_parent=15, prob=0.4, nsga=True,
-            newton_step=10, stop=1e-6, verbose=None
+            newton_step=10, stop=1e-6, verbose=None,
+            max_time=None
     ):
         self.indiv_class = indiv_class
         self.indiv_param = indiv_param
@@ -35,7 +36,7 @@ class NSGA(BaseEstimator, RegressorMixin):
         self.parent, self.best_solution, self.fronts = None, None, None
         self.verbose = verbose
         self.loss_func = torch.nn.MSELoss()
-        self.max_time = None
+        self.max_time = max_time
 
     def set_max_time(self, max_time):
         self.max_time = max_time
