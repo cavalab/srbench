@@ -1,6 +1,13 @@
 name: nsga-dcgp
 channels:
-  - conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch
+  - pytorch-lts
+  - nvidia
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
   - defaults
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
