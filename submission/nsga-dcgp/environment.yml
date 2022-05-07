@@ -1,5 +1,4 @@
-name:
-    nsga-dcgp
+name: nsga-dcgp
 channels:
     - conda-forge
 dependencies:
