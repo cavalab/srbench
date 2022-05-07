@@ -1,5 +1,5 @@
-from .algo_src.dcgp import Parameter, DifferentialCGP
-from .algo_src.nsga import NSGA
+from algo_src.dcgp import Parameter, DifferentialCGP
+from algo_src.nsga import NSGA
 """
 est: a sklearn-compatible regressor. 
     if you don't have one they are fairly easy to create. 

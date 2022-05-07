@@ -4,7 +4,7 @@ import signal
 
 import torch
 from sklearn.base import RegressorMixin, BaseEstimator
-from .utils import accuracy, simplicity, dominate, print_info
+from utils import accuracy, simplicity, dominate, print_info
 
 
 class TimeOutException(Exception):
