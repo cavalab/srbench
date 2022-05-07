@@ -2,11 +2,9 @@ import copy
 import random
 import signal
 
-import numpy as np
-import sympy
 import torch
 from sklearn.base import RegressorMixin, BaseEstimator
-from utils import accuracy, simplicity, dominate, print_info
+from .utils import accuracy, simplicity, dominate, print_info
 
 
 class TimeOutException(Exception):
@@ -105,7 +103,7 @@ class NSGA(BaseEstimator, RegressorMixin):
         n_var = X.shape[1]
         self.indiv_param.n_var = n_var
         # X_train, X_val, y_train, y_val = train_test_split(X.values, y)
-        input_tensor = torch.from_numpy(X.values).float()
+        input_tensor = torch.from_numpy(X).float()
         target_tensor = torch.from_numpy(y).float()
         # initialization
         population = self._init_pop()
@@ -150,7 +148,7 @@ class NSGA(BaseEstimator, RegressorMixin):
 
     def predict(self, X):
         assert self.best_solution is not None, "Never call fit() before"
-        input_tensor = torch.from_numpy(X.values).float()
+        input_tensor = torch.from_numpy(X).float()
         with torch.no_grad():
             prediction_tensor = self.best_solution(input_tensor)
         return prediction_tensor.detach().numpy()
@@ -158,21 +156,6 @@ class NSGA(BaseEstimator, RegressorMixin):
     def expr(self, variables=None):
         assert self.best_solution is not None, "Never call fit() before"
         return self.best_solution.expr(variables)
-
-
-if __name__ == '__main__':
-    from dcgp import Parameter, DifferentialCGP
-    import pandas as pd
-    hyper_param = Parameter()
-    nsga_dcgp = NSGA(DifferentialCGP, hyper_param, n_parent=15, n_gen=100, verbose=10, nsga=True)
-    dataset = np.loadtxt('/home/luoyuanzhen/STORAGE/dataset/sr_benchmark/Keijzer-9_train.txt')
-    X, y = pd.DataFrame(dataset[:, :-1]), dataset[:, -1]
-    n_variable = X.shape[1]
-    nsga_dcgp.fit(X, y)
-    printed_pop = nsga_dcgp.fronts[0] if nsga_dcgp.nsga else nsga_dcgp.parent
-    print('pareto front:')
-    for indiv in printed_pop:
-        print(sympy.sympify(indiv.expr()), indiv.fitness, indiv.simplicity)
 
 
 

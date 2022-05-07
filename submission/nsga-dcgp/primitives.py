@@ -1,6 +1,5 @@
 from functools import partial
 
-import sympy as sp
 import torch
 
 

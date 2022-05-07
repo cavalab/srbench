@@ -1,5 +1,5 @@
-from nsga import NSGA
-from dcgp import Parameter, DifferentialCGP
+from .nsga import NSGA
+from .dcgp import Parameter, DifferentialCGP
 """
 est: a sklearn-compatible regressor. 
     if you don't have one they are fairly easy to create. 
@@ -19,46 +19,13 @@ est = NSGA(
 
 
 def model(est, X=None):
-    """
-    Return a sympy-compatible string of the final model. 
-
-    Parameters
-    ----------
-    est: sklearn regressor
-        The fitted model. 
-    X: pd.DataFrame, default=None
-        The training data. This argument can be dropped if desired.
-
-    Returns
-    -------
-    A sympy-compatible string of the final model. 
-
-    Notes
-    -----
-
-    Ensure that the variable names appearing in the model are identical to 
-    those in the training data, `X`, which is a `pd.Dataframe`. 
-    If your method names variables some other way, e.g. `[x_0 ... x_m]`, 
-    you can specify a mapping in the `model` function such as:
-
-        ```
-        def model(est, X):
-            mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
-            new_model = est.model_
-            for k,v in mapping.items():
-                new_model = new_model.replace(k,v)
-        ```
-
-    If you have special operators such as protected division or protected log,
-    you will need to handle these to assure they conform to sympy format. 
-    One option is to replace them with the unprotected versions. Post an issue
-    if you have further questions: 
-    https://github.com/cavalab/srbench/issues/new/choose
-    """
     import sympy as sp
-    mappings = {'x'+str(i): k for i, k in enumerate(X.columns)}
     # sympify it first
     model_ = str(sp.sympify(est.expr()))
+    if X is None or not hasattr(X, 'columns'):
+        return model_
+
+    mappings = {'x' + str(i): k for i, k in enumerate(X.columns)}
     for k, v in reversed(mappings.items()):
         model_ = model_.replace(k, v)
     return model_

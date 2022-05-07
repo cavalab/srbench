@@ -4,8 +4,8 @@ from random import randint
 
 import torch.nn
 
-from primitives import default_primitives, create_functions, max_arity
-from utils import reduce_adder
+from .primitives import default_primitives, create_functions, max_arity
+from .utils import reduce_adder
 
 
 class Parameter:
