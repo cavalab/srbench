@@ -19,9 +19,8 @@ est = NSGA(
 
 
 def model(est, X=None):
-    import sympy as sp
     # sympify it first
-    model_ = str(sp.sympify(est.expr()))
+    model_ = est.expr()
     if X is None or not hasattr(X, 'columns'):
         return model_
 
