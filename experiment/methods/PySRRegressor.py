@@ -12,29 +12,42 @@ def complexity(est):
 
 
 def model(est):
-    return est.get_best().equation
+    return est.get_best().equation.replace("slog", "log").replace("ssqrt", "sqrt")
 
 
 est = PySRRegressor()
-poly_basis = ["square(x) = x^2", "cube(x) = x^3", "quart(x) = x^4"]
 trig_basis = ["cos", "sin"]
-exp_basis = ["exp", "log", "sqrt"]
+exp_basis = [
+    "exp",
+    # Re-define these to prevent negative input (the default
+    # for PySR is to use log(abs(x)), but here we assume
+    # normal use of log(x))
+    "slog(x::T) where {T} = (x > 0) ? log(x) : T(-1e9)",
+    "ssqrt(x::T) where {T} = (x >= 0) ? sqrt(x) : T(-1e9)",
+]
 # Hyperparams are reduced for speed of testing:
 hyper_params = [
     {
-        "annealing": (True,), # (True, False)
-        "denoise": (True,), # (True, False)
+        "annealing": (True,),  # (True, False)
+        "denoise": (True,),  # (True, False)
         "binary_operators": (["+", "-", "*", "/"],),
         "unary_operators": (
-            [],
-            # poly_basis,
-            # poly_basis + trig_basis,
-            # poly_basis + exp_basis,
+            # trig_basis
+            trig_basis
+            + exp_basis,
         ),
-        "populations": (20,), # (40, 80),
-        "alpha": (1.0,),
+        "nested_constraints": (
+            {
+                "cos": {"cos": 0, "sin": 0},
+                "sin": {"sin": 0, "cos": 0},
+                "/": {"/": 1},
+                "slog": {"slog": 0, "exp": 0},
+                "ssqrt": {"ssqrt": 0},
+                "exp": {"exp": 0, "slog": 1},
+            },
+        ),
+        "populations": (40,),  # (40, 80),
         "model_selection": ("best",)
-        # "alpha": (0.01, 0.1, 1.0, 10.0),
         # "model_selection": ("accuracy", "best"),
     }
 ]
