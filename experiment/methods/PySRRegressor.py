@@ -28,7 +28,6 @@ exp_basis = [
 # Hyperparams are reduced for speed of testing:
 hyper_params = [
     {
-        "annealing": (True,),  # (True, False)
         "denoise": (True,),  # (True, False)
         "binary_operators": (["+", "-", "*", "/"],),
         "unary_operators": (
