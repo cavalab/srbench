@@ -4,7 +4,7 @@ from random import randint
 
 import torch.nn
 
-from nsga import default_primitives, create_functions, max_arity
+from primitives import default_primitives, create_functions, max_arity
 from utils import reduce_adder
 
 
@@ -93,7 +93,7 @@ class DifferentialCGP(torch.nn.Module):
 
             active_path.append(node.id)
 
-            for input_gene in reversed(node.inputs):
+            for input_gene in node.inputs:
                 stack.append(nodes[input_gene])
 
         if len(active_path) > 0:
@@ -212,3 +212,12 @@ class DifferentialCGP(torch.nn.Module):
             self.hyper_param,
             genes=new_genes, bounds=bounds, constant=self.constant
         )
+
+
+if __name__ == '__main__':
+    param = Parameter(n_var=2, n_constant=1, n_output=2, n_row=2, n_col=2)
+    dcgp = DifferentialCGP(param)
+    print(dcgp.expr())
+    print(dcgp.genes)
+    print(dcgp.active_paths)
+    print(dcgp.active_nodes)

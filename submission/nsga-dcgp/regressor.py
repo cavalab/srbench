@@ -4,10 +4,14 @@ from functools import partial, reduce
 from random import randint
 import random
 
+import matplotlib.pyplot as plt
 import numpy as np
 import sympy as sp
 import torch
 from sklearn.base import BaseEstimator, RegressorMixin
+
+
+MIN_SIM, MAX_SIM = 0., 1.
 
 
 def reduce_adder(l1, l2):
@@ -40,6 +44,18 @@ def dominate(obj_p, obj_q):
     # here, greater is better
     obj_p, obj_q = np.array(obj_p), np.array(obj_q)
     return (obj_p >= obj_q).all() and (obj_p > obj_q).any()
+
+
+def crowding_distance(pop, obj_names):
+    for i in range(len(pop)):
+        pop[i].crowding_distance = 0
+    for obj_name in obj_names:
+        pop.sort(key=lambda indiv: getattr(indiv, obj_name))
+        pop[0].crowding_distance = pop[-1].crowding_distance = np.inf
+        for i in range(1, len(pop)-1):
+            # since fitness is R2 score, which is range in (-inf, 1]
+            # so I ignore normalization here
+            pop[i].crowding_distance += getattr(pop[i+1], obj_name) - getattr(pop[i-1], obj_name)
 
 
 def print_info(gen, indiv):
@@ -234,7 +250,7 @@ class DifferentialCGP(torch.nn.Module):
 
             active_path.append(node.id)
 
-            for input_gene in reversed(node.inputs):
+            for input_gene in node.inputs:
                 stack.append(nodes[input_gene])
 
         if len(active_path) > 0:
@@ -473,7 +489,10 @@ class NSGA(BaseEstimator, RegressorMixin):
                     while len(new_parent) + len(self.fronts[i]) <= self.n_parent:
                         new_parent += self.fronts[i]
                         i += 1
-                    # here I igore the crowding distance
+                    # non-normalized crowding distance
+                    crowding_distance(self.fronts[i], ['fitness', 'simplicity'])
+                    # prefer the less crowded region (i.e. crowding_distance is larger)
+                    self.fronts[i].sort(key=lambda indiv: indiv.crowding_distance, reverse=True)
                     new_parent += self.fronts[i][:self.n_parent - len(new_parent)]
                     self.parent = new_parent
                 else:
@@ -583,3 +602,33 @@ eval_kwargs = dict(
         "n_parent": 2
     }
 )
+
+
+# # test here
+# test_parms = {
+#     "pop_size": 100,
+#     "n_gen": 100,
+#     "n_parent": 16,
+#     "verbose": 1
+# }
+# dataset_path = '/home/luoyuanzhen/STORAGE/dataset/sr_benchmark/Korns-3_train.txt'
+# dataset = np.loadtxt(dataset_path)
+# X, y = dataset[:, :-1], dataset[:, -1]
+#
+#
+# def true_model(x):
+#     return (-x[:, 0] + x[:, 3] + x[:, 3]/x[:, 4])/x[:, 4]
+#
+#
+# predict = true_model(X)
+# from sklearn.metrics import r2_score
+# print(r2_score(predict, y))
+# exit()
+#
+# my_pre_train_fn(est, X, y)
+# est.set_params(**test_parms)
+#
+# est.fit(X, y)
+# str_eq = model(est, X)
+# print(str_eq)
+# print(sp.sympify(str_eq))
