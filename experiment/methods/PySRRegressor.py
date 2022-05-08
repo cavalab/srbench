@@ -15,7 +15,7 @@ def model(est):
     return est.get_best().equation.replace("slog", "log").replace("ssqrt", "sqrt")
 
 
-est = PySRRegressor()
+est = PySRRegressor(max_evals=500000)
 trig_basis = ["cos", "sin"]
 exp_basis = [
     "exp",
