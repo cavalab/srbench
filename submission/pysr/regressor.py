@@ -83,6 +83,24 @@ def find_parens(s):
     return toret
 
 
+def replace_prefix_operator_with_postfix(s, prefix, postfix_replacement):
+    while re.search(prefix, s):
+        parens_map = find_parens(s)
+        # Find parentheses at start of prefix:
+        start_model_str = re.search(prefix, s).span()[0]
+        start_parens = re.search(prefix, s).span()[1]
+        end_parens = parens_map[start_parens]
+        s = (
+            s[:start_model_str]
+            + "("
+            + s[start_parens : end_parens + 1]
+            + postfix_replacement
+            + ")"
+            + s[end_parens + 1 :]
+        )
+    return s
+
+
 def model(est, X=None):
     """
     Return a sympy-compatible string of the final model.
@@ -105,35 +123,9 @@ def model(est, X=None):
     # ssqrt => sqrt
     model_str = re.sub("ssqrt", "sqrt", model_str)
     # square(...) => (...)**2
-    while re.search("square", model_str):
-        parens_map = find_parens(model_str)
-        # Find parentheses at start of square:
-        start_model_str = re.search("square", model_str).span()[0]
-        start_parens = re.search("square", model_str).span()[1]
-        end_parens = parens_map[start_parens]
-        model_str = (
-            model_str[:start_model_str]
-            + "("
-            + model_str[start_parens : end_parens + 1]
-            + "**2"
-            + ")"
-            + model_str[end_parens + 1 :]
-        )
+    model_str = replace_prefix_operator_with_postfix(model_str, "square", "**2")
     # cube(x) => (x)**3
-    while re.search("cube", model_str):
-        parens_map = find_parens(model_str)
-        # Find parentheses at start of cube:
-        start_model_str = re.search("cube", model_str).span()[0]
-        start_parens = re.search("cube", model_str).span()[1]
-        end_parens = parens_map[start_parens]
-        model_str = (
-            model_str[:start_model_str]
-            + "("
-            + model_str[start_parens : end_parens + 1]
-            + "**3"
-            + ")"
-            + model_str[end_parens + 1 :]
-        )
+    model_str = replace_prefix_operator_with_postfix(model_str, "cube", "**3")
 
     return model_str
 
