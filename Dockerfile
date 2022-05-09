@@ -43,6 +43,8 @@ USER $MAMBA_USER
 SHELL ["/bin/bash", "-c"]
 COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 RUN --mount=type=cache,target=/opt/conda/pkgs mamba env create -f /tmp/environment.yml 
+
+COPY --chown=$MAMBA_USER:$MAMBA_USER submission/pysr/environment.yml /tmp/environment2.yml
+RUN --mount=type=cache,target=/opt/conda/pkgs mamba env update -n srcomp -f /tmp/environment2.yml 
+
 SHELL ["mamba", "run", "-n", "srbench", "/bin/bash", "-c"]
-COPY . .
-RUN bash install.sh 
