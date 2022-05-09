@@ -120,7 +120,7 @@ def my_pre_train_fn(est, X, y):
     # # adjust max dim
     # est.max_dim = min(max(est.max_dim, X.shape[1]), 20)
     # print("FEAT max_dim set to", est.max_dim)
-    ...
+    est.reset()
 
 
 # define eval_kwargs.
