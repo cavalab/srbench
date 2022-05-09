@@ -23,8 +23,8 @@ est = PySRRegressor(
     procs=num_cores,
     binary_operators=["+", "-", "*", "/"],
     unary_operators=[
-        "square(x::T) where {T} = x^2",
-        "cube(x::T) where {T} = x^3",
+        "square",
+        "cube",
         "cos",
         "sin",
         "exp",
@@ -57,8 +57,6 @@ est = PySRRegressor(
         "cube": {"cube": 1, "square": 1},
     },
     extra_sympy_mappings={
-        "square": lambda x: x**2,
-        "cube": lambda x: x**3,
         "slog": sympy.log,
         "ssqrt": sympy.sqrt,
     },
