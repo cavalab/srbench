@@ -22,6 +22,8 @@ def get_best_equation(est):
     return equations.iloc[filtered.score.idxmax()]
 
 
+warmup_time_in_minutes = 5
+
 est = PySRRegressor(
     procs=num_cores,
     binary_operators=["+", "-", "*", "/"],
@@ -38,7 +40,7 @@ est = PySRRegressor(
     maxdepth=20,
     populations=50,
     niterations=1000000,
-    timeout_in_seconds=60 * 60 * 1,
+    timeout_in_seconds=60 * (60 - warmup_time_in_minutes),
     constraints={
         "square": 8,
         "cube": 8,
