@@ -4,7 +4,7 @@ import re
 import sympy
 import os
 
-num_cores = os.cpu_count()
+num_cores = os.environ["OMP_NUM_THREADS"]
 # functions ='+,-,*,/,^2,^3,sqrt,sin,cos,exp,log',
 
 
@@ -20,6 +20,7 @@ def get_best_equation(est):
 
 
 est = PySRRegressor(
+    procs=num_cores,
     binary_operators=["+", "-", "*", "/"],
     unary_operators=[
         "square(x::T) where {T} = x^2",
