@@ -4,8 +4,11 @@ import re
 import sympy
 import os
 
-num_cores = os.environ["OMP_NUM_THREADS"]
-# functions ='+,-,*,/,^2,^3,sqrt,sin,cos,exp,log',
+try:
+    num_cores = os.environ["OMP_NUM_THREADS"]
+except KeyError:
+    from multiprocessing import cpu_count
+    num_cores = cpu_count()
 
 
 def get_best_equation(est):
