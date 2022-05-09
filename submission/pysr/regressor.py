@@ -1,5 +1,6 @@
 # This example submission shows the submission of FEAT (cavalab.org/feat).
 from pysr import PySRRegressor
+import re
 import sympy
 import os
 
@@ -64,6 +65,25 @@ est = PySRRegressor(
 # want to tune your estimator? wrap it in a sklearn CV class.
 
 
+def find_parens(s):
+    """Copied from https://stackoverflow.com/questions/29991917/indices-of-matching-parentheses-in-python"""
+    toret = {}
+    pstack = []
+
+    for i, c in enumerate(s):
+        if c == "(":
+            pstack.append(i)
+        elif c == ")":
+            if len(pstack) == 0:
+                raise IndexError("No matching closing parens at: " + str(i))
+            toret[pstack.pop()] = i
+
+    if len(pstack) > 0:
+        raise IndexError("No matching opening parens at: " + str(pstack.pop()))
+
+    return toret
+
+
 def model(est, X=None):
     """
     Return a sympy-compatible string of the final model.
@@ -79,9 +99,43 @@ def model(est, X=None):
     -------
     A sympy-compatible string of the final model.
     """
-    model_str = (
-        get_best_equation(est).equation.replace("slog", "log").replace("ssqrt", "sqrt")
-    )
+    model_str = get_best_equation(est).equation
+    # Replacements:
+    # slog => log
+    model_str = re.sub("slog", "log", model_str)
+    # ssqrt => sqrt
+    model_str = re.sub("ssqrt", "sqrt", model_str)
+    # square(...) => (...)**2
+    while re.search("square", model_str):
+        parens_map = find_parens(model_str)
+        # Find parentheses at start of square:
+        start_model_str = re.search("square", model_str).span()[0]
+        start_parens = re.search("square", model_str).span()[1]
+        end_parens = parens_map[start_parens]
+        model_str = (
+            model_str[:start_model_str]
+            + "("
+            + model_str[start_parens : end_parens + 1]
+            + "**2"
+            + ")"
+            + model_str[end_parens + 1 :]
+        )
+    # cube(x) => (x)**3
+    while re.search("cube", model_str):
+        parens_map = find_parens(model_str)
+        # Find parentheses at start of cube:
+        start_model_str = re.search("cube", model_str).span()[0]
+        start_parens = re.search("cube", model_str).span()[1]
+        end_parens = parens_map[start_parens]
+        model_str = (
+            model_str[:start_model_str]
+            + "("
+            + model_str[start_parens : end_parens + 1]
+            + "**3"
+            + ")"
+            + model_str[end_parens + 1 :]
+        )
+
     return model_str
 
 
