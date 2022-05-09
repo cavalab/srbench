@@ -2,6 +2,7 @@ from pysr import PySRRegressor
 from multiprocessing import cpu_count
 from functools import partial
 import numpy as np
+import sympy
 
 # Import base estimator and regressor mixin:
 from sklearn.base import BaseEstimator, RegressorMixin
@@ -15,7 +16,9 @@ def model(est):
     return est.get_best().equation.replace("slog", "log").replace("ssqrt", "sqrt")
 
 
-est = PySRRegressor(max_evals=500000)
+est = PySRRegressor(
+    max_evals=500000, extra_sympy_mappings={"slog": sympy.log, "ssqrt": sympy.sqrt}
+)
 trig_basis = ["cos", "sin"]
 exp_basis = [
     "exp",
@@ -36,6 +39,10 @@ hyper_params = [
             + exp_basis,
         ),
         "nested_constraints": (
+            # Make the reasonable assumption that there are no
+            # nested cos(cos(x)), etc. Likewise, we assume
+            # there will never by a 1/(.../(.../...)), but
+            # 1/(.../...) might occur.
             {
                 "cos": {"cos": 0, "sin": 0},
                 "sin": {"sin": 0, "cos": 0},
