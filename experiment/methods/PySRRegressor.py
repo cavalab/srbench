@@ -8,12 +8,23 @@ import sympy
 from sklearn.base import BaseEstimator, RegressorMixin
 
 
+def get_best_equation(est):
+    """Custom metric to get the best expression.
+
+    First we filter based on loss, then we take the best score.
+    """
+    equations = est.equations
+    best_loss = equations.loss.min()
+    filtered = equations.query(f"loss < {2 * best_loss}")
+    return equations.iloc[filtered.score.idxmax()]
+
+
 def complexity(est):
-    return est.get_best().complexity
+    return get_best_equation(est).complexity
 
 
 def model(est):
-    return est.get_best().equation.replace("slog", "log").replace("ssqrt", "sqrt")
+    return get_best_equation(est).equation.replace("slog", "log").replace("ssqrt", "sqrt")
 
 
 est = PySRRegressor(
@@ -53,7 +64,5 @@ hyper_params = [
             },
         ),
         "populations": (40,),  # (40, 80),
-        "model_selection": ("best",)
-        # "model_selection": ("accuracy", "best"),
     }
 ]
