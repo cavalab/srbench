@@ -1,5 +1,6 @@
 # This example submission shows the submission of FEAT (cavalab.org/feat).
 from pysr import PySRRegressor
+import sympy
 import os
 
 num_cores = os.cpu_count()
@@ -20,8 +21,8 @@ def get_best_equation(est):
 est = PySRRegressor(
     binary_operators=["+", "-", "*", "/"],
     unary_operators=[
-        "square",
-        "cube",
+        "square(x::T) where {T} = x^2",
+        "cube(x::T) where {T} = x^3",
         "cos",
         "sin",
         "exp",
@@ -52,6 +53,12 @@ est = PySRRegressor(
         "exp": {"exp": 0, "slog": 1},
         "square": {"square": 1, "cube": 1},
         "cube": {"cube": 1, "square": 1},
+    },
+    extra_sympy_mappings={
+        "square": lambda x: x**2,
+        "cube": lambda x: x**3,
+        "slog": sympy.log,
+        "ssqrt": sympy.sqrt,
     },
 )
 # want to tune your estimator? wrap it in a sklearn CV class.
