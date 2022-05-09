@@ -2,8 +2,5 @@ channels:
     - conda-forge
 dependencies:
     - python=3.*
-    - pyjulia
+    - pysr=0.8.3
     - pyyaml
-    - pip
-    - pip:
-        - pysr
