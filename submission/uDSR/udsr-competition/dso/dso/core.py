@@ -49,7 +49,7 @@ class DeepSymbolicOptimizer():
 
     def __init__(self, config=None):
         self.set_config(config)
-        self.timer = Timer(self.config_experiment.get("max_time", None))
+        self.timer = Timer(self.config_experiment.get("max_time", np.inf))
         self.sess = None
 
     def setup(self):
