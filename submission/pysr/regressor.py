@@ -26,6 +26,7 @@ warmup_time_in_minutes = 5
 
 est = PySRRegressor(
     procs=num_cores,
+    progress=False,
     binary_operators=["+", "-", "*", "/"],
     unary_operators=[
         "square",
