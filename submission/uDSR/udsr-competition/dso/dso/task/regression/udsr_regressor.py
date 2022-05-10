@@ -1,5 +1,6 @@
 import os
-from datetime import datetime
+from math import factorial
+from time import time
 from copy import deepcopy
 import multiprocessing
 from itertools import compress, chain
@@ -21,8 +22,6 @@ def work(args):
     est = UnifiedDeepSymbolicRegressor(config)
     est.fit(X, y, max_time=max_time)
     pf = est.pf
-    # expr = est.program_.sympy_expr[0]
-    # r = est.program_.r
     return pf
 
 
@@ -33,15 +32,26 @@ class ParallelizedUnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         try:
             self.n_cpus = os.environ['OMP_NUM_THREADS']
         except KeyError:
-            self.n_cpus = 4
+            self.n_cpus = 8
 
     def fit(self, X, y, max_time=None):
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+        # Triage: Train-test split
+        if X.shape[0] > 100:
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+        else:
+            print("TRIAGE: Too few data points to perform train-test split.")
+            X_train = X_test = X
+            y_train = y_test = y
 
-        # y_train = np.sin(X_train[:, 0]) + 1.23*X_train[:, 1] + 4.56*X_train[:, 2]
-        # X = np.random.random((100, 3))
-        # y = np.sin(X[:, 0]) + 1.23*X[:, 1] + 4.56*X[:, 2]
+        # Triage: Polynomial terms
+        nCr = lambda n, r : factorial(n) / factorial(r) / factorial(n - r)
+        n_var = X.shape[1]
+        degree = self.base_config["task"]["poly_optimizer_params"]["degree"]
+        while nCr(n_var + degree - 1, degree) > 1000:
+            degree -= 1
+            print("TRIAGE: Lowering degree to {} to yield fewer terms.".format(degree))
+        self.base_config["task"]["poly_optimizer_params"]["degree"] = degree
 
         # Generate the configs
         configs = self.make_configs(X, y)
@@ -51,28 +61,43 @@ class ParallelizedUnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         # NOTE: This assumes each worker will get exactly one job
         pool = multiprocessing.Pool(self.n_cpus)
         pfs = pool.map(work, args)
-        pfs = list(chain.from_iterable(pfs))
+
+        start = time()
 
         # Pool the Pareto fronts
+        pfs = list(chain(*pfs))
 
         # Evaluate on the test data
         best_expr = None
         best_f = None
-        best_mse = np.inf
-        variables = ["x{}".format(i+1) for i in range(X.shape[1])]
+        best_nmse = np.inf
+        best_complexity = np.inf
+        variables = ["x{}".format(i + 1) for i in range(X.shape[1])]
+        var_y_test = np.var(y_test)
         for expr in pfs:            
             f = lambdify(variables, expr)
             y_hat_test = f(*X_test.T)
-            test_mse = np.mean(np.square(y_hat_test - y_test))
-            print("LAMBDIFY OUTPUT", expr, "MSE_TEST:", test_mse, "COMPLEXITY:", len(list(preorder_traversal(expr))))
-            if test_mse < best_mse:
-                best_mse = test_mse
+            complexity = len(list(preorder_traversal(expr)))
+            test_nmse = np.mean(np.square(y_hat_test - y_test)) / var_y_test
+            print("COMPLEXITY:", complexity, "NMSE_TEST:", test_nmse, "LAMBDIFY OUTPUT", expr)
+            if test_nmse < 1e-16 and complexity < best_complexity:
+                best_nmse = 0
+                best_complexity = complexity
                 best_expr = expr
                 best_f = f
+            elif test_nmse < best_nmse:
+                best_nmse = test_nmse
+                best_complexity = complexity
+                best_expr = expr
+                best_f = f
+
+        print("DEBUG: Evaluation on Pareto front took {} seconds.".format(time() - start))
 
         # Choose the best expression
         self.expr = best_expr
         self.f = best_f
+
+        print("DEBUG: Best model:", self.expr, "with complexity", best_complexity)
 
         self.is_fitted_ = True
         return self
@@ -137,12 +162,19 @@ class UnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         return self.program_.execute(X)
 
     def get_pareto_front(self):
+
+        start = time()
+
         all_programs = list(Program.cache.values())
         costs = np.array([(p.complexity, -p.r) for p in all_programs])
         pareto_efficient_mask = is_pareto_efficient(costs)  # List of bool
         pf = list(compress(all_programs, pareto_efficient_mask))
 
-        # Compute sympy expressions
+        print("DEBUG: Computation of Pareto front took {} seconds.".format(time() - start))
+
+        # Convert to sympy expressions
+        start = time()
         pf = [p.sympy_expr[0] for p in pf]
-        pf.sort(key=lambda expr: len(list(preorder_traversal(expr)))) # Sort by sympy-complexity
+        print("DEBUG: Sympy-parsing Pareto front (length {}) took {} seconds.".format(len(pf), time() - start))
+
         return pf

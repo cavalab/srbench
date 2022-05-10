@@ -17,10 +17,14 @@ def test_udsr_regressor(est):
 
     # Generate some data
     np.random.seed(0)
-    X = np.random.random(size=(10000, 10))
+    X = np.random.random(size=(10000, 17))
     y = np.random.random(size=(10000,))
 
-    est.fit(X, y, max_time=60)
+    y = np.exp(1.23 * X[:, 0] ** 3 + 4.56*X[:, 0]*X[:, 1]*X[:, 2])
+
+    y += np.random.normal(loc=0.0, scale=0.01, size=y.shape)
+
+    est.fit(X, y, max_time=600)
 
     print("Best model:", est.expr)
 

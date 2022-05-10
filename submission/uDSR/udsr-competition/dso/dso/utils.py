@@ -34,10 +34,13 @@ class Timer():
         current_time = time()
         if self.lap_time is not None:
             self.records.append(current_time - self.lap_time)
-            print("Lap:", self.records[-1])
+            # print("Lap:", self.records[-1])
 
         # Reset the lap time
         self.lap_time = current_time
+
+    def clear_records(self):
+        self.records = []
 
     def get_time_remaining(self):
         return self.end_time - time()
@@ -45,7 +48,7 @@ class Timer():
     def get_elapsed_time(self):
         return time() - self.start_time
 
-    def stop_early(self, buffer=10., safety_factor=1.0):
+    def stop_early(self, buffer=120., safety_factor=2.0):
         """
         Determine whether to stop early, based on worst-case records.
         This returns True if the amount of remaining time is less than
@@ -56,7 +59,7 @@ class Timer():
             print("Timed out! Stopping at {}, leaving {} remaining.".format(
                 self.get_elapsed_time(), self.get_time_remaining()
             ))
-            print("Records:", self.records)
+            print("Longest record:", max(self.records))
         return stop
 
 

@@ -88,6 +88,7 @@ class DeepSymbolicOptimizer():
         result = {"seed" : self.config_experiment["seed"]} # Seed listed first
 
         self.timer.lap()
+        self.timer.clear_records()
         while not self.trainer.done:
             self.trainer.run_one_step()
             self.timer.lap()

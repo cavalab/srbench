@@ -19,7 +19,6 @@ from dso.program import Program
 from dso.language_model import LanguageModelPrior as LM
 import dso.constants as constants
 from dso.utils import import_custom_source
-import dso.task.binding.utils as BU
 
 
 def make_prior(library, config_prior):
@@ -38,11 +37,7 @@ def make_prior(library, config_prior):
         "soft_length" : SoftLengthPrior,
         "uniform_arity" : UniformArityPrior,
         "domain_range" : DomainRangeConstraint,
-        "seq_positions": SequencePositionsConstraint,
-        "language_model" : LanguageModelPrior,
-        "abag_seq_model": ABAGSeqPrior,
-        "mut_dist" : MutationalDistanceConstraint,
-        "mut_prob" : MutationProbabilityPrior
+        "language_model" : LanguageModelPrior
     }
 
     count_constraints = config_prior.pop("count_constraints", False)
@@ -94,10 +89,10 @@ def make_prior(library, config_prior):
 
     joint_prior = JointPrior(library, priors, count_constraints)
 
-    print("-- BUILDING PRIOR START -------------")
-    print("\n".join(["WARNING: " + message for message in warn_messages]))
-    print(joint_prior.describe())
-    print("-- BUILDING PRIOR END ---------------\n")
+    # print("-- BUILDING PRIOR START -------------")
+    # print("\n".join(["WARNING: " + message for message in warn_messages]))
+    # print(joint_prior.describe())
+    # print("-- BUILDING PRIOR END ---------------\n")
 
     return joint_prior
 
@@ -1033,287 +1028,6 @@ class SoftLengthPrior(Prior):
             message = "'scale' and 'loc' arguments must be specified!"
             return message
         return None
-
-
-class BindingPrior(Constraint):
-    """ Super class that contains shared information for both 
-    SequencePositionsConstraint and Language Model-based priors. """
-
-    def __init__(self, library, menu_file):
-        """
-        Parameters
-        ----------       
-        menu_file : str
-            YAML file containing sequence positions constraints.
-        """
-        # lazy imports: these are specific for the binding's prior
-        import yaml
-        from collections import OrderedDict
-
-        Prior.__init__(self, library)
-        
-        task = Program.task
-        self.master_sequence = task.master_sequence # TBD: Refactor to only use master_actions
-        self.master_actions = task.master_actions
-        self.allowed_mutations = task.allowed_mutations
-        self.mode = task.mode
-
-        # Sequence length
-        self.seq_len = len(self.master_actions)
-
-
-class MutationalDistanceConstraint(BindingPrior):
-    """Class the constrains the mutational distance to fall between a given
-    minimum and maximum."""
-
-    def __init__(self, library, min_, max_):
-
-        BindingPrior.__init__(self, library, Program.task.menu_file)
-        self.min = min_
-        self.max = max_
-
-        # TBD: Add support for minimum number of mutations
-        if self.min is not None:
-            raise NotImplementedError("Minimum number of mutations constraint \
-                not yet implemented.")
-
-        # Precompute logits for each position; used when preventing a mutation
-        self.no_mut = []
-        for pos in range(self.seq_len):
-            pos_prior = np.full(self.L, fill_value=-np.inf, dtype=np.float32)
-            pos_prior[self.master_actions[pos]] = 0
-            self.no_mut.append(pos_prior)
-
-    def __call__(self, actions, parent, sibling, dangling):
-
-        pos = actions.shape[1] # Position along the sequence
-        prior = self.init_zeros(actions)
-
-        # TBD: Fix hack for "ending token"
-        if pos == self.seq_len:
-            return prior
-
-        # Compute the number of mutations so far
-        mut_dist = BU.mutational_distance(actions, 
-                                          self.master_actions[:pos],
-                                          aggfunc='sum')
-
-        # Prevent further mutation when mut_dist == max
-        prior[mut_dist == self.max] = self.no_mut[pos]
-
-        return prior
-
-
-class MutationProbabilityPrior(BindingPrior):
-    """
-    Prior that adjusts prior probabilities of mutation, independent of the
-    number of allowable AAs at each position.
-
-    This constraint handles allowable tokens, thus SequencePositionsConstraint
-    is not needed when using this.
-
-    The prior computes a desired probability vector where probability is 0 for
-    disallowed AAs, p_master for the master AA, and is uniformly distributed
-    across remaining AAs. If parameterized with "mut_dist" (expected mutational
-    distance), then p_master = (seq_len - mut_dist) / seq_len.
-
-    Desired probabilities for each AA are:
-    1. Zero for disallowed AAs.
-    2. p_master for master AA.
-    3. (1 - p_master) / n for the n allowed non-master AAs.
-
-    Parameters
-    ----------
-    p_mutate : float
-        Probability of selecting an AA different than the master sequence.
-
-    mut_dist : float
-        Expected mutational_distance.
-    """
-
-    def __init__(self, library, p_master=None, mut_dist=None):
-        BindingPrior.__init__(self, library, Program.task.menu_file)
-
-        assert (p_master is None) + (mut_dist is None) == 1, \
-            "Exactly one of [p_master, mut_dist] should be None."
-        if mut_dist is not None:
-            assert mut_dist < self.seq_len, "Expected mutational distance \
-                must be less than sequence length."
-            p_master = (self.seq_len - mut_dist) / self.seq_len
-
-        # Precompute the prior for each position
-        self.pos_prior = []
-        for i in range(self.seq_len):
-
-            # Compute allowed and master actions
-            if self.mode == "short":
-                pos = list(self.allowed_mutations.keys())[i]
-            else:
-                pos = i
-            allowed_aas = self.allowed_mutations.get(pos, None)
-            master_action = self.master_actions[i]
-
-            # Position is allowed to mutate
-            if allowed_aas is not None:
-                allowed_actions = library.actionize(allowed_aas)
-
-                # Probability for disallowed AAs
-                p = np.zeros(self.L, dtype=np.float32)
-
-                # Probability for allowed non-master AAs
-                n = len(allowed_actions) - 1
-                p_mut = (1 - p_master) / n
-                p[allowed_actions] = p_mut
-
-                # Probability for master AA
-                p[master_action] = p_master
-
-                logits = np.log(p)
-                self.pos_prior.append(logits)
-
-            # Position is not allowed to mutate
-            else:
-                assert self.mode == "full"
-                logits = np.full(self.L, -np.inf, dtype=np.float32)
-                logits[master_action] = 0
-                self.pos_prior.append(logits)
-
-    def __call__(self, actions, parent, sibling, dangling):
-        pos = actions.shape[1]
-
-        # TBD: Fix hack for "ending token"
-        if pos == self.seq_len:
-            return self.init_zeros(actions)
-
-        return self.pos_prior[pos]
-
-    def initial_prior(self):
-        return self.pos_prior[0]
-
-
-class SequencePositionsConstraint(BindingPrior):
-    """Class that constrains Tokens to follow the constraints defined in the YAML file. """
-
-    def __init__(self, library, biasing_factor):
-        """
-        Parameters
-        ----------
-        biasing_factor : float
-            Increment factor in the prior vector pushing it towards master sequence.
-        """
-        BindingPrior.__init__(self, library, Program.task.menu_file)
-        self.biasing_factor = float(biasing_factor)
-
-    def initial_prior(self):
-        """ Prior for time step 0 """
-        prior = np.zeros((1, self.L), dtype=np.float32)
-        prior = self.__calculate_prior(prior, 0)[0, :]
-        return prior
-
-    def __call__(self, actions, parent, sibling, dangling):
-        """ Prior for time-step > 0. """
-        # Initialize the prior
-        prior = self.init_zeros(actions)
-        seq_position = actions.shape[1]
-        prior = self.__calculate_prior(prior, seq_position)
-        return prior
-
-    def __calculate_prior(self, prior, seq_position):
-        """ Calculate prior logits based on the information in the yaml file. """
-        # it's the "sequence ending" token - not going to be in the sample
-        if seq_position >= len(self.master_sequence):
-            return prior
-
-        # bias sequence towards master sequence
-        if self.biasing_factor > 0:
-            idx = constants.AMINO_ACIDS.index(self.master_sequence[seq_position])
-            prior[:, idx] = np.log(self.biasing_factor)
-
-        if self.mode == 'short':
-            # it's the "sequence ending" token - not going to be in the sample
-            if seq_position >= len(self.allowed_mutations.keys()):
-                return prior
-            items = list(self.allowed_mutations.items())
-            actual_seq_position = items[seq_position][0]
-            mask = np.isin(constants.AMINO_ACIDS,
-                           self.allowed_mutations[actual_seq_position],
-                           invert=True)
-            prior[:, mask] = -np.inf
-
-        else:
-            # check if there is any restriction for this particular position
-            if seq_position in self.allowed_mutations:  # allowed to mutate
-                # not all AA are allowed, but some
-                if len(self.allowed_mutations[seq_position]) < len(constants.AMINO_ACIDS):
-                    # False: allowed to mutate
-                    # True: constrained - cannot be mutated
-                    mask = np.isin(constants.AMINO_ACIDS,
-                                   self.allowed_mutations[seq_position],
-                                   invert=True)
-                    prior[:, mask] = -np.inf
-                else:
-                    # all AAs have the same chance, then no constraint imposed
-                    pass
-            else: # mutation is not allowed
-                mask = [True] * len(constants.AMINO_ACIDS)
-                mask[constants.AMINO_ACIDS.index(self.master_sequence[seq_position])] = False
-                prior[:, mask] = -np.inf
-
-        return prior
-
-    def describe(self):
-        message = "Impose positional constraints (mutation allowance) in the sequence based "
-        message += "on YAML file definition. Using {} sequence generation mode.".format(self.mode)
-        return message
-
-
-class ABAGSeqPrior(BindingPrior):
-    """Wrapper class that applies a prior from the ABAGSeq Transformer model."""
-
-    def __init__(self, library, bert_model_file):
-        """
-        Parameters
-        ----------       
-        bert_model_file : str
-            Path to the pre-trained BERT model.
-
-        """
-        # lazy import: specific for the LM prior
-        import torch
-        from abag_seq.api.api import ABAGSequenceAPI
-        from abag_seq.api.menu_manager import MenuManager
-
-        BindingPrior.__init__(self, library, Program.task.menu_file)
-
-        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        self.lm = ABAGSequenceAPI(model_path=bert_model_file, 
-                                  load_model=True,
-                                  device=device)
-        # menu manager handles chain type 
-        self.lm_menu_manager = MenuManager(menu_fp=Program.task.menu_file)
-    
-    def initial_prior(self):
-        # empty actions for initial priors
-        priors = self.lm.batch_get_priors(actions=[[], ], orders=[[0]], manager=self.lm_menu_manager)[0].numpy()
-        prior = priors[0]
-        return prior
-    
-    def __call__(self, actions, parent, sibling, dangling):
-        # order of unmasking, assumed left to right with batch
-        lm_orders = [range(len(actions[0])+1)] * actions.shape[0]
-        priors = self.init_zeros(actions)
-        # this is necessary to handle sampling fixed positions
-        if len(actions[0]) >= len(self.allowed_mutations.keys()):
-            return priors
-        # convert to amino acid character representation
-        lm_readable_actions = [[constants.AMINO_ACIDS[aa_index] for aa_index in sample] for sample in actions]
-        priors = self.lm.batch_get_priors(actions=lm_readable_actions, orders=lm_orders, manager=self.lm_menu_manager)[0].numpy()
-        return priors
-
-    def describe(self):
-        message = "Encourage human-like sequences through the use of a "
-        message += "Language Model (BERT) pretrained on human antibodies."
-        return message
 
 
 class LanguageModelPrior(Prior):

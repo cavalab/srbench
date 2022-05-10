@@ -1,10 +1,12 @@
 """Polynomial optimizer used for deep symbolic optimization."""
 
+from itertools import compress
+from time import time
+
 import numpy as np
 import scipy
 from scipy import linalg, optimize, stats
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
-from itertools import compress
 
 from dso.library import Polynomial, StateChecker
 from qpsolvers import solve_qp
@@ -391,12 +393,14 @@ class PolyOptimizerData(PolyRegressorMixin):
         degree: int
             The (maximal) degree of the polynomials used to fit the data.
         """
+        start = time()
         self.all_exponents = generate_all_exponents(X.shape[1], degree)
         self.all_monomials_data = Polynomial.eval_monomials(X, self.all_exponents)
         if X_signature_ is None:
             self.X_signature = self.np_array_signature(X)
         else:
             self.X_signature = X_signature_
+        print("DEBUG: Generation of {} monomials took {} seconds.".format(len(self.all_exponents), time() - start))
     
 
 class PolyOptimizer(PolyRegressorMixin):
