@@ -17,7 +17,7 @@ class OptimisedGPRegressor(BaseEstimator, TransformerMixin):
         n_novelties = 10,
         favor_less_deep_trees = True,
         seed = 123,
-        max_time = 3600,
+        max_time = 100,
         optimisation_dedicated_proportion = 0.2,
         slack_time = 0.05,
     ):
@@ -38,8 +38,19 @@ class OptimisedGPRegressor(BaseEstimator, TransformerMixin):
         mutation_probs = [ 0.01, 0.05, 0.1, 0.2 ]
         crossover_probs = [ 0.8, 0.9, 0.95 ]
         
+        CVS = 2
+        
         param_grid_size = len(n_elites) * len(max_depths) * len(hill_climbings) * len(mutation_probs) * len(crossover_probs)
-        param_alloted_time = int((self.max_time * self.optimisation_dedicated_proportion) / param_grid_size)
+        param_alloted_time = int((self.max_time * self.optimisation_dedicated_proportion) / (param_grid_size * CVS))
+        if param_alloted_time < 1: # For testing
+            n_elites = [ 5 ]
+            max_depths = [ 10 ]
+            mutation_probs = [ 0.01 ]
+            crossover_probs = [ 0.8 ]
+
+            param_alloted_time = 1
+            
+        print(param_alloted_time)
         
         param_grid: Union[dict, list] = { 
                                 "population_size": [ self.population_size ],
@@ -55,7 +66,7 @@ class OptimisedGPRegressor(BaseEstimator, TransformerMixin):
                                 "timer_limit": [ param_alloted_time ]
                                 }
 
-        grid_search = GridSearchCV(gengy_regressors.GeneticProgrammingRegressor(),param_grid)
+        grid_search = GridSearchCV(gengy_regressors.GeneticProgrammingRegressor(),param_grid,cv=CVS)
         
         grid_search.fit(X,y)
         model = grid_search.best_estimator_
@@ -64,7 +75,7 @@ class OptimisedGPRegressor(BaseEstimator, TransformerMixin):
         if "timer_limit" in model.get_params():
             model.set_params(timer_limit=model_alloted_time)
         
-        model = model.fit(X,y)
+        model.fit(X,y)
         self.model = model
         
         self.sympy_compatible_phenotype = model.sympy_compatible_phenotype
@@ -132,12 +143,14 @@ def pre_train_fn(est, X, y):
     """set max_time in seconds based on length of X."""
     slack = 20
     if len(X)<=1000:
-        max_time = 3600 - slack
+        max_time = 36 - slack
     else:
         max_time = 36000 - slack
     est.set_params(max_time=max_time)
 
 # pass the function to eval_kwargs
-eval_kwargs = {
-    'pre_train': pre_train_fn
-}
+eval_kwargs = dict(
+    pre_train=pre_train_fn,
+    test_params={'max_time': 100,
+                 }
+)
