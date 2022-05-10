@@ -1,10 +1,14 @@
-from dso import ParallelUnifiedDeepSymbolicRegressor
+from dso import ParallelizedUnifiedDeepSymbolicRegressor
 
-est = ParallelUnifiedDeepSymbolicRegressor()
+est = ParallelizedUnifiedDeepSymbolicRegressor()
 
 def model(est, X=None):
 
     expr = est.expr
+
+    if X is None or not hasattr(X, 'columns'):
+        return expr
+
     features = X.columns
 
     for i in range(len(features)):
