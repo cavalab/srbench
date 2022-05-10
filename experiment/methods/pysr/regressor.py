@@ -8,6 +8,7 @@ try:
     num_cores = os.environ["OMP_NUM_THREADS"]
 except KeyError:
     from multiprocessing import cpu_count
+
     num_cores = cpu_count()
 
 
@@ -23,44 +24,48 @@ def get_best_equation(est):
 
 
 warmup_time_in_minutes = 5
+custom_operators = [
+    "slog(x::T) where {T} = (x > 0) ? log(x) : T(-1e9)",
+    "ssqrt(x::T) where {T} = (x >= 0) ? sqrt(x) : T(-1e9)",
+]
+standard_operators = [
+    "square",
+    "cube",
+    "cos",
+    "sin",
+    "exp",
+]
 
 est = PySRRegressor(
     procs=num_cores,
     progress=False,
     binary_operators=["+", "-", "*", "/"],
-    unary_operators=[
-        "square",
-        "cube",
-        "cos",
-        "sin",
-        "exp",
-        "slog(x::T) where {T} = (x > 0) ? log(x) : T(-1e9)",
-        "ssqrt(x::T) where {T} = (x >= 0) ? sqrt(x) : T(-1e9)",
-    ],
+    unary_operators=custom_operators,
     maxsize=30,
     maxdepth=20,
     populations=50,
     niterations=1000000,
     timeout_in_seconds=60 * (60 - warmup_time_in_minutes),
     constraints={
-        "square": 8,
-        "cube": 8,
-        "exp": 8,
+        # "square": 8,
+        # "cube": 8,
+        # "exp": 8,
+        # "sin": 8,
+        # "cos": 8,
+        # "/": (-1, 9),
         "slog": 8,
         "ssqrt": 8,
-        "sin": 8,
-        "cos": 8,
-        "/": (-1, 9),
     },
     nested_constraints={
-        "cos": {"cos": 0, "sin": 0},
-        "sin": {"sin": 0, "cos": 0},
-        "/": {"/": 1},
-        "slog": {"slog": 0, "exp": 0},
+        # "cos": {"cos": 0, "sin": 0},
+        # "sin": {"sin": 0, "cos": 0},
+        # "/": {"/": 1},
+        # "exp": {"exp": 0, "slog": 1},
+        # "square": {"square": 1, "cube": 1},
+        # "cube": {"cube": 1, "square": 1},
+        # "slog": {"slog": 0, "exp": 0},
+        "slog": {"slog": 0},  ##
         "ssqrt": {"ssqrt": 0},
-        "exp": {"exp": 0, "slog": 1},
-        "square": {"square": 1, "cube": 1},
-        "cube": {"cube": 1, "square": 1},
     },
     extra_sympy_mappings={
         "slog": sympy.log,
@@ -174,5 +179,14 @@ def my_pre_train_fn(est, X, y):
 
 # define eval_kwargs.
 eval_kwargs = dict(
-    pre_train=my_pre_train_fn, test_params=dict(populations=5, timeout_in_seconds=60)
+    pre_train=my_pre_train_fn,
+    test_params=dict(
+        populations=5,
+        niterations=5,
+        maxsize=10,
+        population_size=30,
+        nested_constraints={},
+        constraints={},
+        # unary_operators=[],
+    ),
 )
