@@ -3,6 +3,7 @@ channels:
     - conda-forge
 dependencies:
     - python=3.*
+    - pip
     - numpy
     - sympy
     - jax
@@ -10,4 +11,3 @@ dependencies:
     - scipy
     - flax
     - optax
-    

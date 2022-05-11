@@ -1,8 +1,8 @@
 import sympy as sy
 import jax.numpy as jnp
-import custom_functions
-from utils import get_indices, get_una_bin_funs
-from l0_dense import L0Dense
+from . import custom_functions
+from .utils import get_indices, get_una_bin_funs
+from .l0_dense import L0Dense
 from typing import List
 
 f_dict_sy = {

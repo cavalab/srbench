@@ -1,15 +1,15 @@
 from sklearn.base import BaseEstimator, RegressorMixin
 import sklearn
-import eqlearner as eql
-from symbolic import get_symbolic_expr, get_symbolic_expr_layer
+from . import eqlearner as eql
+from .symbolic import get_symbolic_expr, get_symbolic_expr_layer
 import jax
 from jax import random, numpy as jnp
-from np_utils import flatten, unflatten
+from .np_utils import flatten, unflatten
 import numpy as np
 import scipy
 import time
 from sklearn.metrics import r2_score
-from sy_utils import simplicity, round_floats
+from .sy_utils import simplicity, round_floats
 import optax
 
 

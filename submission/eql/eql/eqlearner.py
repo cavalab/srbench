@@ -3,9 +3,9 @@ from jax import lax, random, numpy as jnp
 import sympy as sy
 from flax import linen as nn
 from typing import List, Tuple, Callable
-import custom_functions
-from utils import get_indices, f_dict_jax
-from l0_dense import L0Dense
+from . import custom_functions
+from .utils import get_indices, f_dict_jax
+from .l0_dense import L0Dense
 from typing import Optional
 
 

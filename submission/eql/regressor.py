@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-from est import EQL, EQLTimed
+from eql.est import EQL
 from sklearn.model_selection import GridSearchCV
 
 
-base = EQL(n_iterations=10_000)
+base = EQL(n_iter=10_000)
 
 hp = {
     "reg": (1e-4, 1e-3, 1e-2, 5e-2),
