@@ -49,7 +49,7 @@ class DeepSymbolicOptimizer():
 
     def __init__(self, config=None):
         self.set_config(config)
-        self.timer = Timer(self.config_experiment.get("max_time", np.inf))
+        self.timer = Timer(self.config_experiment.get("max_time", None))
         self.sess = None
 
     def setup(self):
@@ -238,7 +238,6 @@ class DeepSymbolicOptimizer():
 
         # If logdir is not provided (e.g. for pytest), results are not saved
         if self.config_experiment.get("logdir") is None:
-            print("WARNING: logdir not provided. Results will not be saved to file.")
             return None
 
         # When using run.py, timestamp is already generated

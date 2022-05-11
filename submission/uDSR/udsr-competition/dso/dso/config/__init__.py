@@ -49,7 +49,6 @@ def load_config(config=None):
         task = user_config["task"]["task_type"]
     except KeyError:
         task = "regression"
-        print("WARNING: Task type not specified. Falling back to default task type '{}' to load config.".format(task))
     try:
         language_prior = user_config["prior"]["language_model"]["on"]
     except KeyError:

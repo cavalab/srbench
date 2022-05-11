@@ -18,10 +18,16 @@ from dso.utils import is_pareto_efficient
 
 
 def work(args):
-    config, X, y, max_time = args
-    est = UnifiedDeepSymbolicRegressor(config)
-    est.fit(X, y, max_time=max_time)
-    pf = est.pf
+    try:
+        config, X, y, max_time = args
+        est = UnifiedDeepSymbolicRegressor(config)
+        est.fit(X, y, max_time=max_time)
+        pf = est.pf
+    except Exception as e:
+        print("WORKER ERROR:", e)
+        print("Worker config:", config)
+        pf = []
+
     return pf
 
 
@@ -37,7 +43,7 @@ class ParallelizedUnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
     def fit(self, X, y, max_time=None):
 
         # Triage: Train-test split
-        if X.shape[0] > 100:
+        if X.shape[0] >= 100:
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
         else:
             print("TRIAGE: Too few data points to perform train-test split.")
@@ -115,13 +121,34 @@ class ParallelizedUnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
             config = deepcopy(self.base_config)
             config["experiment"]["seed"] = i # Always use a different seed
 
-            # Base
-            if i == 0:
+            # Standard config
+            if i < 3:
                 pass
 
-            # # No poly
-            # elif i == 1:
-            #     config["task"]["function_set"].remove("poly")
+            # No const/poly, LR=0
+            elif i == 3:
+                config["task"]["function_set"].remove("const")
+                config["task"]["function_set"].remove("poly")
+                config["controller"]["learning_rate"] = 0.0
+
+            # No const/poly
+            elif i == 4:
+                config["task"]["function_set"].remove("const")
+                config["task"]["function_set"].remove("poly")
+
+            # No const
+            elif i == 5:
+                config["task"]["function_set"].remove("const")
+
+            # No sin/cos?
+            elif i == 6:
+                config["task"]["function_set"].remove("sin")
+                config["task"]["function_set"].remove("cos")
+
+            # No exp/log
+            elif i == 7:
+                config["task"]["function_set"].remove("exp")
+                config["task"]["function_set"].remove("log")
 
             configs.append(config)
         return configs
