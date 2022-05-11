@@ -1,0 +1,11 @@
+name: eql
+channels:
+    - conda-forge
+dependencies:
+    - python=3.*
+    - numpy
+    - sympy
+    - jax
+    - scikit-learn
+    - scipy
+    - flax
