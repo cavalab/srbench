@@ -35,7 +35,6 @@ est = optuna.integration.OptunaSearchCV(reg, param_distributions, cv=5, refit=Tr
 
 def model(est, X=None):
     names = X.columns.tolist() if isinstance(X, pd.DataFrame) else None
-    model_vars = est.best_estimator_.model_vars_
     return est.best_estimator_.get_model_string(precision=4, names=names).replace('^', '**')
 
 ################################################################################
@@ -72,12 +71,12 @@ Options
 def pre_train_fn(est, X, y):
     #"""set max_time in seconds based on length of X."""
     timeout = 3000 if len(X) <= 1000 else 30000
-    est.set_params(timeout=timeout)
+    est.set_params(timeout=timeout, estimator__time_limit=timeout-300)
 
 
 # pass the function to eval_kwargs
 eval_kwargs = {
     'pre_train': pre_train_fn,
-    'test_params': {'timeout': 60, }
+    'test_params': {'timeout': 60, 'estimator__time_limit': 55 }
 }
 
