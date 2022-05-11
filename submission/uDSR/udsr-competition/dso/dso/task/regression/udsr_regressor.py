@@ -1,9 +1,4 @@
 import os
-
-os.environ["LC_ALL"] = "en_US.utf-8"
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
-
 from math import factorial
 from time import time
 from copy import deepcopy
@@ -15,6 +10,7 @@ from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.utils.validation import check_is_fitted
 from sklearn.model_selection import train_test_split
 import numpy as np
+import threadpoolctl
 
 from dso import DeepSymbolicOptimizer
 from dso.config import load_config
@@ -169,6 +165,10 @@ class UnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         self.config = load_config() if config is None else config
 
     def fit(self, X, y, max_time=None):
+        with threadpoolctl.threadpool_limits(limits=1, user_api="blas"):
+            return self._fit(X, y, max_time)
+
+    def _fit(self, X, y, max_time=None):
 
         # Competition guide: max time is based on X.shape[0]
         if max_time is None:
