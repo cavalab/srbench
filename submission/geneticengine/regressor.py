@@ -143,7 +143,7 @@ def pre_train_fn(est, X, y):
     """set max_time in seconds based on length of X."""
     slack = 20
     if len(X)<=1000:
-        max_time = 36 - slack
+        max_time = 3600 - slack
     else:
         max_time = 36000 - slack
     est.set_params(max_time=max_time)
