@@ -70,7 +70,7 @@ Options
 
 def pre_train_fn(est, X, y):
     #"""set max_time in seconds based on length of X."""
-    timeout = 2700 if len(X) <= 1000 else 32400
+    timeout = 2640 if len(X) <= 1000 else 32400
     est.set_params(timeout=timeout, estimator__time_limit=900)
 
 
