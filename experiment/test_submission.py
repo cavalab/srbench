@@ -19,6 +19,14 @@ from symbolic_utils import (complexity, round_floats,
 from read_file import read_file
 from sympy import Symbol 
 
+if 'OMP_NUM_THREADS' not in os.environ.keys():
+    os.environ['OMP_NUM_THREADS'] = '1'
+if 'OPENBLAS_NUM_THREADS' not in os.environ.keys():
+    os.environ['OPENBLAS_NUM_THREADS'] = '1'
+if 'MKL_NUM_THREADS' not in os.environ.keys():
+    os.environ['MKL_NUM_THREADS'] = '1'
+
+
 # shared variables
 dataset = 'test/192_vineyard_small.tsv.gz'
 results_path = 'tmp_results'
