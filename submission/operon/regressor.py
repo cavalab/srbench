@@ -77,6 +77,6 @@ def pre_train_fn(est, X, y):
 # pass the function to eval_kwargs
 eval_kwargs = {
     'pre_train': pre_train_fn,
-    'test_params': {'timeout': 60, 'estimator__time_limit': 55 }
+    'test_params': {'timeout': 60, 'estimator__time_limit': 25 }
 }
 
