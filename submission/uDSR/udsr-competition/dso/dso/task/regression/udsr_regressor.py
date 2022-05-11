@@ -3,7 +3,7 @@ from math import factorial
 from time import time
 from copy import deepcopy
 import multiprocessing
-from itertools import compress, chain
+from itertools import chain
 
 from sympy import lambdify, preorder_traversal
 from sklearn.base import BaseEstimator, RegressorMixin
@@ -14,18 +14,27 @@ import threadpoolctl
 
 from dso import DeepSymbolicOptimizer
 from dso.config import load_config
-from dso.program import Program
-from dso.utils import is_pareto_efficient
 
 
 def work(args):
+    # Create the regressor
+    config, X, y, max_time = args
+    est = UnifiedDeepSymbolicRegressor(config)
+
+    # Fit the regressor
     try:
-        config, X, y, max_time = args
-        est = UnifiedDeepSymbolicRegressor(config)
-        est.fit(X, y, max_time=max_time)
-        pf = est.pf
+        est.fit(X, y, max_time=max_time)        
     except Exception as e:
-        print("WORKER ERROR:", e)
+        print(multiprocessing.current_process())
+        print("WORKER ERROR DURING CALL TO FIT:", e)
+        print("Worker config:", config)
+
+    # Get the Pareto front
+    try:
+        pf = est.get_pf()
+    except Exception as e:
+        print(multiprocessing.current_process())
+        print("WORKER HAS NO PARETO FRONT:", e)
         print("Worker config:", config)
         pf = []
 
@@ -179,34 +188,13 @@ class UnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         self.config["experiment"]["max_time"] = max_time
 
         # Create the model
-        model = DeepSymbolicOptimizer(self.config)
-        train_result = model.train()
-        self.program_ = train_result["program"]
-        self.pf = self.get_pareto_front()
+        self.model = DeepSymbolicOptimizer(self.config)
+        self.model.train()
 
         print("(pid={}) finished. Reward: {}. Model: {}".format(multiprocessing.current_process(), self.program_.r, self.program_.sympy_expr[0]))
 
         self.is_fitted_ = True
         return self
 
-    def predict(self, X):
-        check_is_fitted(self, "program_")
-        return self.program_.execute(X)
-
-    def get_pareto_front(self):
-
-        start = time()
-
-        all_programs = list(Program.cache.values())
-        costs = np.array([(p.complexity, -p.r) for p in all_programs])
-        pareto_efficient_mask = is_pareto_efficient(costs)  # List of bool
-        pf = list(compress(all_programs, pareto_efficient_mask))
-
-        print("DEBUG: Computation of Pareto front took {} seconds.".format(time() - start))
-
-        # Convert to sympy expressions
-        start = time()
-        pf = [p.sympy_expr[0] for p in pf]
-        print("DEBUG: Sympy-parsing Pareto front (length {}) took {} seconds.".format(len(pf), time() - start))
-
-        return pf
+    def get_pf(self):
+        return self.model.pf.get_sympy()

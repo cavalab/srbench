@@ -209,6 +209,8 @@ class Trainer():
         programs = [from_tokens(a) for a in actions]
         self.nevals += self.batch_size
 
+        r_temp = np.array([p.r for p in programs])
+
         # Run GP seeded with the current batch, returning elite samples
         if self.gp_controller is not None:
             deap_programs, deap_actions, deap_obs, deap_priors = self.gp_controller(actions)

@@ -6,10 +6,12 @@ warnings.filterwarnings('ignore', category=FutureWarning)
 import os
 import zlib
 from collections import defaultdict
+import multiprocessing
 from multiprocessing import Pool, cpu_count
 import random
 from time import time
 from datetime import datetime
+from itertools import compress
 
 import numpy as np
 import tensorflow as tf
@@ -22,8 +24,47 @@ from dso.train_stats import StatsLogger
 from dso.prior import make_prior
 from dso.program import Program
 from dso.config import load_config
-from dso.utils import Timer
+from dso.utils import Timer, is_pareto_efficient
 from dso.tf_state_manager import make_state_manager as manager_make_state_manager
+
+
+class ParetoFront():
+    def __init__(self):
+        self.pf = []
+
+    def update(self):
+        """
+        Update the Pareto front with the current cache.
+        """
+
+        start = time()
+
+        cached_programs = list(Program.cache.values())
+        all_programs = cached_programs + self.pf
+        all_programs = set(all_programs)
+        costs = np.array([(p.complexity, -p.r) for p in all_programs])
+        pareto_efficient_mask = is_pareto_efficient(costs)  # List of bool
+        self.pf = list(compress(all_programs, pareto_efficient_mask))
+
+        # Purge the cache
+        len_before = len(Program.cache)
+        purge = []
+        for k, p in Program.cache.items():
+            if p.on_policy_count + p.off_policy_count == 1:
+                purge.append(k)
+        for k in purge:
+            del Program.cache[k]
+        print("Purged", len_before - len(Program.cache), "Programs from cache.")
+
+        print("Pareto front update and cache purging took", time() - start, "seconds.")
+
+    def get_sympy(self):
+
+        # Convert to sympy expressions
+        start = time()
+        sympy_pf = [p.sympy_expr[0] for p in self.pf]
+        print("DEBUG: Sympy-parsing Pareto front (length {}) took {} seconds.".format(len(self.pf), time() - start))
+        return sympy_pf
 
 
 class DeepSymbolicOptimizer():
@@ -51,6 +92,7 @@ class DeepSymbolicOptimizer():
         self.set_config(config)
         self.timer = Timer(self.config_experiment.get("max_time", None))
         self.sess = None
+        self.pf = ParetoFront()
 
     def setup(self):
 
@@ -92,6 +134,7 @@ class DeepSymbolicOptimizer():
         while not self.trainer.done:
             self.trainer.run_one_step()
             self.timer.lap()
+            self.pf.update()
             if self.timer.stop_early():
                 break
 
