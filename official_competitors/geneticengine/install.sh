@@ -1,1 +1,1 @@
-pip install geneticengine==0.0.15
+pip install geneticengine==0.0.14
