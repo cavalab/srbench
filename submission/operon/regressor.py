@@ -3,7 +3,7 @@ import optuna
 import pandas as pd
 
 import os
-num_threads = os.environ['OMP_NUM_THREADS'] if 'OMP_NUM_THREADS' in os.environ else 1
+num_threads = int(os.environ['OMP_NUM_THREADS']) if 'OMP_NUM_THREADS' in os.environ else 1
 
 default_params = {
         'offspring_generator': 'basic',
