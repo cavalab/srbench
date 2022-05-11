@@ -154,3 +154,4 @@ eval_kwargs = dict(
     test_params={'max_time': 100,
                  }
 )
+
