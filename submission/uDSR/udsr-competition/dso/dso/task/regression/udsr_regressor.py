@@ -1,4 +1,9 @@
 import os
+
+os.environ["LC_ALL"] = "en_US.utf-8"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+
 from math import factorial
 from time import time
 from copy import deepcopy
@@ -36,7 +41,7 @@ class ParallelizedUnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         self.base_config = load_config()
 
         try:
-            self.n_cpus = os.environ['OMP_NUM_THREADS']
+            self.n_cpus = int(os.environ['OMP_NUM_THREADS'])
         except KeyError:
             self.n_cpus = 8
 

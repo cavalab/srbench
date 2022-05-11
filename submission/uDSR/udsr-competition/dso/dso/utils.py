@@ -1,5 +1,6 @@
 """Utility functions used in deep symbolic optimization."""
 
+import multiprocessing
 import collections
 import copy
 import functools
@@ -35,7 +36,7 @@ class Timer():
         current_time = time()
         if self.lap_time is not None:
             self.records.append(current_time - self.lap_time)
-            # print("Lap:", self.records[-1])
+            print(multiprocessing.current_process(), "Lap:", self.records[-1])
 
         # Reset the lap time
         self.lap_time = current_time
@@ -57,7 +58,7 @@ class Timer():
         """
         stop = self.get_time_remaining() < buffer + max(self.records) * safety_factor
         if stop:
-            print("Timed out! Stopping at {}, leaving {} remaining.".format(
+            print(multiprocessing.current_process(), "\nTimed out! Stopping at {}, leaving {} remaining.".format(
                 self.get_elapsed_time(), self.get_time_remaining()
             ))
             print("Longest record:", max(self.records))
