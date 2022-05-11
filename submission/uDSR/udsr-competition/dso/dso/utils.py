@@ -24,10 +24,11 @@ class Timer():
     and suggests whether to stop early to avoid exceeding walltime.
     """
 
-    def __init__(self, max_time=np.inf):
+    def __init__(self, max_time=None):
         self.start_time = time()
         self.records = []
         self.lap_time = None
+        max_time = np.inf if max_time is None else max_time
         self.end_time = self.start_time + max_time
 
     def lap(self):
