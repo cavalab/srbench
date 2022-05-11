@@ -16,7 +16,7 @@ default_params = {
         'max_evaluations': int(1e6),
         'tournament_size': 3,
         'pool_size': None,
-        'time_limit': 2700 # 45 min
+        'time_limit': 900 # 15 min
         }
 
 
@@ -31,7 +31,7 @@ param_distributions = {
 
 # want to tune your estimator? wrap it in a sklearn CV class.
 reg = SymbolicRegressor(**default_params)
-est = optuna.integration.OptunaSearchCV(reg, param_distributions, cv=5, refit=True, n_trials=50, timeout=3000)
+est = optuna.integration.OptunaSearchCV(reg, param_distributions, cv=5, refit=True, n_trials=50, timeout=900)
 
 def model(est, X=None):
     names = X.columns.tolist() if isinstance(X, pd.DataFrame) else None
@@ -70,8 +70,8 @@ Options
 
 def pre_train_fn(est, X, y):
     #"""set max_time in seconds based on length of X."""
-    timeout = 3000 if len(X) <= 1000 else 30000
-    est.set_params(timeout=timeout, estimator__time_limit=timeout-300)
+    timeout = 2700 if len(X) <= 1000 else 32400
+    est.set_params(timeout=timeout, estimator__time_limit=900)
 
 
 # pass the function to eval_kwargs
