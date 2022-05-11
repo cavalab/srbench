@@ -11,7 +11,7 @@ def model(est, X=None):
 
     features = X.columns
 
-    for i in range(len(features)):
+    for i in reversed(range(len(features))):
         before = "x{}".format(i + 1)
         after = "INPUT_{}_TUPNI".format(i)
         expr = expr.replace(before, after)
