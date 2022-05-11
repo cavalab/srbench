@@ -142,8 +142,9 @@ def evaluate_model(dataset,
         results['true_model'] = true_model
 
     # get the final symbolic model as a string
+    X_df = pd.DataFrame(X_train_scaled, columns=feature_names)
     if 'X' in inspect.signature(model).parameters.keys():
-        results['symbolic_model'] = model(est, X_train_scaled)
+        results['symbolic_model'] = model(est, X_df)
     else:
         results['symbolic_model'] = model(est)
 

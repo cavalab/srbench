@@ -56,6 +56,7 @@ def model(est, X=None):
     https://github.com/cavalab/srbench/issues/new/choose
     """
 
+    print('X feature names:',X.columns)
     # Here we replace "|" with "" to handle
     # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
     model_str = est.get_eqn()
