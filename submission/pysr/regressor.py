@@ -39,7 +39,8 @@ standard_operators = [
 est = PySRRegressor(
     procs=num_cores,
     progress=False,
-    binary_operators=["+", "-", "*", "/"],
+    # binary_operators=["+", "-", "*", "/"],
+    binary_operators=[],
     unary_operators=custom_operators,
     maxsize=30,
     maxdepth=20,
@@ -53,8 +54,8 @@ est = PySRRegressor(
         # "sin": 8,
         # "cos": 8,
         # "/": (-1, 9),
-        "slog": 8,
-        "ssqrt": 8,
+        # "slog": 8,
+        # "ssqrt": 8,
     },
     nested_constraints={
         # "cos": {"cos": 0, "sin": 0},
@@ -64,8 +65,6 @@ est = PySRRegressor(
         # "square": {"square": 1, "cube": 1},
         # "cube": {"cube": 1, "square": 1},
         # "slog": {"slog": 0, "exp": 0},
-        "slog": {"slog": 0},  ##
-        "ssqrt": {"ssqrt": 0},
     },
     extra_sympy_mappings={
         "slog": sympy.log,
