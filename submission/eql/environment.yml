@@ -11,4 +11,4 @@ dependencies:
     - scipy
     - flax
     - optax
-    - yaml
+    - pyyaml
