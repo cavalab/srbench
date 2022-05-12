@@ -4,7 +4,7 @@ est = ParallelizedUnifiedDeepSymbolicRegressor()
 
 def model(est, X=None):
 
-    expr = est.expr
+    expr = str(est.expr)
 
     if X is None or not hasattr(X, 'columns'):
         return expr
