@@ -38,6 +38,8 @@ def work(args):
         print("Worker config:", config)
         pf = []
 
+    print(multiprocessing.current_process(), "Returning Pareto front of length {}.".format(len(pf)))
+
     return pf
 
 
@@ -190,8 +192,6 @@ class UnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         # Create the model
         self.model = DeepSymbolicOptimizer(self.config)
         self.model.train()
-
-        print("(pid={}) finished. Reward: {}. Model: {}".format(multiprocessing.current_process(), self.program_.r, self.program_.sympy_expr[0]))
 
         self.is_fitted_ = True
         return self

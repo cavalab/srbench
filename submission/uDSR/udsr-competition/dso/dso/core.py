@@ -54,9 +54,9 @@ class ParetoFront():
                 purge.append(k)
         for k in purge:
             del Program.cache[k]
-        print("Purged", len_before - len(Program.cache), "Programs from cache.")
 
-        print("Pareto front update and cache purging took", time() - start, "seconds.")
+        # print("Purged", len_before - len(Program.cache), "Programs from cache.")
+        # print("Pareto front update and cache purging took", time() - start, "seconds.")
 
     def get_sympy(self):
 
