@@ -113,7 +113,7 @@ rm -rf operon
 git clone  https://github.com/heal-research/pyoperon.git
 pushd pyoperon
 git switch cpp20
-git checkout 541dd6634721f68acfc3315533b84bb91cb36fef
+git checkout e4ef1047240b2df66555ddd54463ab707863aae6
 mkdir build
 cmake -S . -B build \
     -DCMAKE_BUILD_TYPE=Release \
