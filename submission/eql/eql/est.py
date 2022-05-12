@@ -148,7 +148,10 @@ class EQL(BaseEstimator, RegressorMixin):
         return self.get_score(X, y, self._params)
 
     def get_eqn(self):
+        # symb is list of len = dim(y_out)
+        # for now assume 1d output
         symb = get_symbolic_expr(self._params, self._fn_list, use_l0=True)
-        return [round_floats(s) for s in symb]
+        return round_floats(symb[0])
+        #return [round_floats(s) for s in symb]
 
 
