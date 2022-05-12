@@ -2,4 +2,20 @@ name: udsr
 channels:
   - conda-forge
 dependencies:
-  - python=3.6
+  - python=3.7.12
+  - tensorflow=1.14
+  - pip:
+    - click
+    - commentjson
+    - cython==0.29.28
+    - deap
+    - numba==0.53.1
+    - numpy==1.19.0
+    - pandas
+    - qpsolvers
+    - quadprog
+    - scikit-learn
+    - scipy
+    - sympy
+    - threadpoolctl
+
