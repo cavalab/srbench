@@ -20,12 +20,13 @@ est = GridSearchCV(estimator=base, param_grid=hp, cv=2, refit=True, n_jobs=4)
 
 def model(est, X=None):
     model_str = str(est.best_estimator_.get_eqn())
-    
+
     if isinstance(X, pd.DataFrame):
-	mapping = {"x" + str(i): k for i, k in enumerate(X.columns)}
+        mapping = {"x" + str(i): k for i, k in enumerate(X.columns)}
         for k, v in mapping.items():
             model_str = model_str.replace(k, v)
-    
+
     return model_str
+
 
 eval_kwargs = {}
