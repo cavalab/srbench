@@ -131,7 +131,7 @@ class ParallelizedUnifiedDeepSymbolicRegressor(BaseEstimator, RegressorMixin):
         configs = []
         for i in range(self.n_cpus):
             config = deepcopy(self.base_config)
-            config["experiment"]["seed"] = i # Always use a different seed
+            config["experiment"]["seed"] = np.random.randint(1e9) # Always use a different seed
 
             # Standard config
             if i < 3:

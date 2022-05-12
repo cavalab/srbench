@@ -1,6 +1,7 @@
 {
 	"experiment" : {
-		"logdir" : null
+	   "logdir" : null,
+	   "seed" : null
 	},
 
 	"task" : {
