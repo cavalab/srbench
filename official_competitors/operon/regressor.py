@@ -1,37 +1,40 @@
 from operon.sklearn import SymbolicRegressor
 import optuna
 import pandas as pd
+import numpy as np
 
 import os
 num_threads = int(os.environ['OMP_NUM_THREADS']) if 'OMP_NUM_THREADS' in os.environ else 1
+
+rng = np.random.default_rng(1234)
 
 default_params = {
         'offspring_generator': 'basic',
         'initialization_method': 'btc',
         'n_threads': num_threads,
         'objectives':  ['r2', 'length'],
-        'epsilon':  1e-4,
-        'random_state': None,
+        'epsilon': 1e-5,
+        'random_state': rng,
         'reinserter': 'keep-best',
         'max_evaluations': int(1e6),
         'tournament_size': 3,
         'pool_size': None,
-        'time_limit': 900 # 15 min
+        'time_limit': 900
         }
 
 
 # define parameter distributions
 param_distributions = {
         'local_iterations' : optuna.distributions.IntUniformDistribution(0, 10, 1),
-        'allowed_symbols' : optuna.distributions.CategoricalDistribution(['add,sub,mul,div,constant,variable', 'add,sub,mul,div,sin,cos,exp,logabs,sqrtabs,tanh,constant,variable']),
+        'allowed_symbols' : optuna.distributions.CategoricalDistribution(['add,sub,mul,aq,constant,variable', 'add,sub,mul,aq,sin,cos,exp,logabs,sqrtabs,tanh,constant,variable']),
         'population_size' : optuna.distributions.IntUniformDistribution(100, 1000, 100),
         'max_length' : optuna.distributions.IntUniformDistribution(10, 50, 10),
-        'symbolic_mode' : optuna.distributions.CategoricalDistribution([False, True]),
+        'symbolic_mode' : optuna.distributions.CategoricalDistribution([True, False]),
         }
 
 # want to tune your estimator? wrap it in a sklearn CV class.
 reg = SymbolicRegressor(**default_params)
-est = optuna.integration.OptunaSearchCV(reg, param_distributions, cv=5, refit=True, n_trials=50, timeout=900)
+est = optuna.integration.OptunaSearchCV(reg, param_distributions, cv=5, refit=True, n_trials=50, timeout=2640)
 
 def model(est, X=None):
     names = X.columns.tolist() if isinstance(X, pd.DataFrame) else None
