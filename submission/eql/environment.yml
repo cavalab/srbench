@@ -12,3 +12,4 @@ dependencies:
     - flax
     - optax
     - pyyaml
+    - pandas

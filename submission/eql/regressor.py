@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from eql.est import EQL
+import pandas as pd
 from sklearn.model_selection import GridSearchCV
 
 
@@ -18,10 +19,13 @@ est = GridSearchCV(estimator=base, param_grid=hp, cv=2, refit=True, n_jobs=4)
 
 
 def model(est, X=None):
-    mapping = {"x" + str(i): k for i, k in enumerate(X.columns)}
     model_str = str(est.best_estimator_.get_eqn())
-    for k, v in mapping.items():
-        model_str = model_str.replace(k, v)
+    
+    if isinstance(X, pd.DataFrame):
+	mapping = {"x" + str(i): k for i, k in enumerate(X.columns)}
+        for k, v in mapping.items():
+            model_str = model_str.replace(k, v)
+    
     return model_str
 
 eval_kwargs = {}
