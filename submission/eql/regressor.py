@@ -23,3 +23,5 @@ def model(est, X=None):
     for k, v in mapping.items():
         model_str = model_str.replace(k, v)
     return model_str
+
+eval_kwargs = {}
