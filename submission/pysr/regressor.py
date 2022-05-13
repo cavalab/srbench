@@ -179,8 +179,9 @@ def my_pre_train_fn(est, X, y):
     nfeatures = X.shape[1]
     nrows = X.shape[0]
     max_features = 8
+    max_rows = 2000
     do_feature_selection = nfeatures > max_features
-    do_resampling = nrows > 1000
+    do_resampling = nrows > max_rows
 
     if do_feature_selection:
         select_k_features = max_features
@@ -195,7 +196,7 @@ def my_pre_train_fn(est, X, y):
                 np.random.uniform(
                     xmin[i],
                     xmax[i],
-                    size=1000,
+                    size=max_rows,
                 )
                 for i in range(nfeatures)
             ],
