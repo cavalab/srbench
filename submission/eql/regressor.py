@@ -29,4 +29,6 @@ def model(est, X=None):
     return model_str
 
 
-eval_kwargs = {}
+eval_kwargs = {
+    'test_params': {'param_grid': {'n_iter': [10], **hp}}
+}
