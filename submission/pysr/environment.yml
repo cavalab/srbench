@@ -2,5 +2,17 @@ channels:
     - conda-forge
 dependencies:
     - python=3.*
-    - pysr=0.8.3
+    # PySR/
+    - julia <=1.7.1
+    - pyjulia >= 0.5.7
+    - pyjulia
+    - openlibm <0.8.0
+    - numpy >=1.14.0
+    - scikit-learn
+    - sympy
+    - pandas
+    # /PySR
     - pyyaml
+    - pip
+    - pip:
+        - git+https://github.com/MilesCranmer/PySR.git@bdb899789cde61e23b612697f3cb3c1700932919
