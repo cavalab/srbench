@@ -13,12 +13,11 @@ except KeyError:
     num_cores = cpu_count()
 
 
-def get_best_equation(est):
+def get_best_equation(equations):
     """Custom metric to get the best expression.
 
     First we filter based on loss, then we take the best score.
     """
-    equations = est.equations
     best_loss = equations.loss.min()
     filtered = equations.query(f"loss < {2 * best_loss}")
     return int(filtered.score.idxmax())
@@ -130,7 +129,8 @@ def model(est, X=None):
     -------
     A sympy-compatible string of the final model.
     """
-    model_str = est.equations.iloc[get_best_equation(est)].equation
+    equations = est.equations
+    model_str = equations.iloc[get_best_equation(equations)].equation
     # Replacements:
     # slog => log
     model_str = re.sub("slog", "log", model_str)
