@@ -5,7 +5,6 @@ dependencies:
     # PySR/
     - julia <=1.7.1
     - pyjulia >= 0.5.7
-    - pyjulia
     - openlibm <0.8.0
     - numpy >=1.14.0
     - scikit-learn
