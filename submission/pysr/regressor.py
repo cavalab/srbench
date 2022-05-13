@@ -3,6 +3,7 @@ from pysr import PySRRegressor
 import re
 import sympy
 import os
+import numpy as np
 
 try:
     num_cores = os.environ["OMP_NUM_THREADS"]
@@ -172,7 +173,44 @@ Options
 
 
 def my_pre_train_fn(est, X, y):
+    # Restart train state:
     est.reset()
+
+    nfeatures = X.shape[1]
+    nrows = X.shape[0]
+    max_features = 8
+    do_feature_selection = nfeatures > max_features
+    do_resampling = nrows > 1000
+
+    if do_feature_selection:
+        select_k_features = max_features
+    else:
+        select_k_features = None
+
+    if do_resampling:
+        xmin = np.min(X, axis=0)
+        xmax = np.max(X, axis=0)
+        Xresampled = np.stack(
+            [
+                np.random.uniform(
+                    xmin[i],
+                    xmax[i],
+                    size=1000,
+                )
+                for i in range(nfeatures)
+            ],
+            axis=1,
+        )
+        denoise = True
+    else:
+        Xresampled = None
+        denoise = False
+
+    est.set_params(
+        Xresampled=Xresampled,
+        denoise=denoise,
+        select_k_features=select_k_features,
+    )
 
 
 # define eval_kwargs.
