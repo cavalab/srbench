@@ -226,7 +226,6 @@ eval_kwargs = dict(
         maxsize=10,
         population_size=30,
         max_denoising_points=50,
-        denoising=True,
-
+        denoise=True,
     ),
 )
