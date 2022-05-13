@@ -12,6 +12,7 @@ dependencies:
     - sympy
     # pip
     - pip=20.3.3 
+    - pyyaml
     - pip:
         - pmlb==1.0.1.post3
         - pytest-order

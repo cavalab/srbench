@@ -9,6 +9,7 @@ on:
       - Competition2022
     paths:
       - 'submission/**'
+  workflow_dispatch:
 
 env: 
   CACHE_NUMBER: 0
