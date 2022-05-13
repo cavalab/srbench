@@ -32,19 +32,21 @@ dataset = 'test/192_vineyard_small.tsv.gz'
 results_path = 'tmp_results'
 random_state = 42
 
-from methods.pysr import regressor as algorithm
+def get_algorithm(ml):
+    if ml == 'pysr':
+        from methods.pysr import regressor
+        return regressor
 
-# def get_algorithm(ml):
-#     algorithm = importlib.__import__('methods.'+ml+'.regressor',globals(),
-#                                      locals(),
-#                                      ['*'])
-#     print('algorithm imported:',algorithm)
-#     return algorithm
+    algorithm = importlib.__import__('methods.'+ml+'.regressor',globals(),
+                                     locals(),
+                                     ['*'])
+    print('algorithm imported:',algorithm)
+    return algorithm
 
 def test_import(ml):
     """Check algorithm imports"""
 
-    # algorithm = get_algorithm(ml)
+    algorithm = get_algorithm(ml)
     assert 'est' in dir(algorithm)
     assert 'model' in dir(algorithm)
 
@@ -70,7 +72,7 @@ def test_import(ml):
 
 def test_evaluate(ml):
     """Dataset evaluation"""
-    # algorithm = get_algorithm(ml)
+    algorithm = get_algorithm(ml)
     if 'eval_kwargs' in dir(algorithm):
         eval_kwargs = algorithm.eval_kwargs
     
