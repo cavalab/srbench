@@ -21,7 +21,7 @@ def get_best_equation(est):
     equations = est.equations
     best_loss = equations.loss.min()
     filtered = equations.query(f"loss < {2 * best_loss}")
-    return equations.iloc[filtered.score.idxmax()]
+    return int(filtered.score.idxmax())
 
 
 warmup_time_in_minutes = 5
@@ -38,6 +38,7 @@ standard_operators = [
 ]
 
 est = PySRRegressor(
+    model_selection=get_best_equation,
     procs=num_cores,
     progress=False,
     binary_operators=["+", "-", "*", "/"],
@@ -129,7 +130,7 @@ def model(est, X=None):
     -------
     A sympy-compatible string of the final model.
     """
-    model_str = get_best_equation(est).equation
+    model_str = est.equations.iloc[get_best_equation(est)].equation
     # Replacements:
     # slog => log
     model_str = re.sub("slog", "log", model_str)

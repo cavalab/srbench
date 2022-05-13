@@ -14,4 +14,4 @@ dependencies:
     - pyyaml
     - pip
     - pip:
-        - git+https://github.com/MilesCranmer/PySR.git@bdb899789cde61e23b612697f3cb3c1700932919
+        - git+https://github.com/MilesCranmer/PySR.git@4af4af74127216bd93bf5547f00a03bcc2dbbd91
