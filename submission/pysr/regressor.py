@@ -48,16 +48,16 @@ est = PySRRegressor(
     niterations=1000000,
     timeout_in_seconds=60 * (60 - warmup_time_in_minutes),
     constraints={
-        "square": 8,
-        "cube": 8,
-        "exp": 8,
-        "sin": 8,
-        "cos": 8,
+        "square": 9,
+        "cube": 9,
+        "exp": 9,
+        "sin": 9,
+        "cos": 9,
         "/": (-1, 9),
-        "slog": 8,
-        "ssqrt": 8,
-        "square": 8,
-        "cube": 8,
+        "slog": 9,
+        "ssqrt": 5,
+        "square": 9,
+        "cube": 9,
     },
     nested_constraints={
         "cos": {"cos": 0, "sin": 0, "slog": 0, "exp": 0},
@@ -73,6 +73,7 @@ est = PySRRegressor(
         "slog": sympy.log,
         "ssqrt": sympy.sqrt,
     },
+    max_denoising_points=500,
 )
 # want to tune your estimator? wrap it in a sklearn CV class.
 
@@ -225,8 +226,8 @@ eval_kwargs = dict(
         niterations=5,
         maxsize=10,
         population_size=30,
-        nested_constraints={},
-        constraints={},
-        # unary_operators=[],
+        max_denoising_points=50,
+        denoising=True,
+
     ),
 )
