@@ -44,7 +44,6 @@ est = PySRRegressor(
     unary_operators=standard_operators + custom_operators,
     maxsize=30,
     maxdepth=20,
-    populations=50,
     niterations=1000000,
     timeout_in_seconds=60 * (60 - warmup_time_in_minutes),
     constraints={
