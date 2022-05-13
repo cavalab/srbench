@@ -35,7 +35,7 @@ jobs:
         id: get-folder
         run: |
           echo "git diff:"
-          folder=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep submission | sed 's|submission/\(.*\)/.*|\1|g' | head -n 1)
+          folder=$(ls submission | grep -v feat-example)
           folder_count=$(echo $folder | wc -w)
           if [ $folder_count -ne 1 ] ; then
             echo "::error ::found changes to $folder_count submissions instead of 1:\n$folder . PRs should only add/change a single submission."
