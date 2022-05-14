@@ -183,14 +183,17 @@ def my_pre_train_fn(est, X, y):
         idx = np.random.choice(nrows, max_rows, replace=False)
         Xresampled = X[idx]
         denoise = True
+        warmup_time_in_minutes = 10
     else:
         Xresampled = None
         denoise = False
+        warmup_time_in_minutes = 5
 
     est.set_params(
         Xresampled=Xresampled,
         denoise=denoise,
         select_k_features=select_k_features,
+        timeout_in_seconds=60 * (60 - warmup_time_in_minutes),
     )
 
 
