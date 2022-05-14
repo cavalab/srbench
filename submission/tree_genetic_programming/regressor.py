@@ -80,7 +80,7 @@ def launchCmd (inputPathSelected, inputDataFileSelected) :
     os.environ["QT_LOGGING_RULE"] = "*.warning=false"
     os.environ["QT_LOGGING_RULE"] = "*.info=false"
 
-    commandExe = "./" + exeName + parametersList + paramInputData + inputPathSelected + inputDataFileSelected
+    commandExe = "./" + exeName # + parametersList + paramInputData + inputPathSelected + inputDataFileSelected
  
 
     # Launch .exe + Stockage equation
