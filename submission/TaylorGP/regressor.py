@@ -19,7 +19,7 @@ est = SymbolicRegressor(population_size=1000, init_depth=(2, 5),
                         p_hoist_mutation=0., p_point_mutation=0.3,
                         max_samples=1.0, verbose=1,
                         parsimony_coefficient=0.1,
-                        n_jobs=1,  #
+                        n_jobs=1,  
                         const_range=(-1, 1),
                         random_state=random.randint(1, 100), low_memory=True,
                         max_time = 3600-10)
