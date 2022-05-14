@@ -13,15 +13,6 @@ except KeyError:
     num_cores = cpu_count()
 
 
-def get_best_equation(equations):
-    """Custom metric to get the best expression.
-
-    First we filter based on loss, then we take the best score.
-    """
-    best_loss = equations.loss.min()
-    filtered = equations.query(f"loss < {2 * best_loss}")
-    return int(filtered.score.idxmax())
-
 
 warmup_time_in_minutes = 5
 custom_operators = [
@@ -37,7 +28,7 @@ standard_operators = [
 ]
 
 est = PySRRegressor(
-    model_selection=get_best_equation,
+    model_selection='competition',
     procs=num_cores,
     progress=False,
     binary_operators=["+", "-", "*", "/"],
@@ -52,7 +43,7 @@ est = PySRRegressor(
         "exp": 9,
         "sin": 9,
         "cos": 9,
-        "/": (-1, 9),
+        "/": [-1, 9],
         "slog": 9,
         "ssqrt": 5,
         "square": 9,
@@ -67,10 +58,6 @@ est = PySRRegressor(
         "cube": {"cube": 1, "square": 1},
         "slog": {"slog": 0, "exp": 0},
         "ssqrt": {"ssqrt": 1, "exp": 1},
-    },
-    extra_sympy_mappings={
-        "slog": sympy.log,
-        "ssqrt": sympy.sqrt,
     },
     max_denoising_points=500,
 )
