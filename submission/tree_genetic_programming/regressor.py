@@ -27,9 +27,13 @@ operationsToRemove = "max,min,absolute,arctan"
 parallelOption = ""
 fitDuration = 1
 numberOfThreads = 6
-exeName = "$SUBFOLDER/TreeGeneticProgramming"
+exeName = "TreeGeneticProgramming"
 logFolder = "logOutput"
 loopWithSameDatafile = 3
+
+exeString = " "
+with open(exeName, 'w') as exeFile:
+    exeFile.write('Hello World!')
 
 # Time Efficiency Parameter
 populationIncrement = 1000
