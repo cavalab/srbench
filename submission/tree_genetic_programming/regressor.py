@@ -119,12 +119,14 @@ def ls(path):
     for root, dirs, files in os.walk(path):
         for f in files:
             print('\t' + f)
-        for d in dirs:
-            print('\t' + d) 
-ls(os.getcwd())
-ls('../../')
-ls('../')
-ls('../submission')
+#        for d in dirs:
+#            print('\t' + d)
+
+ls('experiment/methods/tree_genetic_programming')
+#ls(os.getcwd())
+#ls('../../')
+#ls('../')
+#ls('../submission')
 
 msglog= launchCmd(sys.argv[0],sys.argv[1])
 est = extractResultFromOutput(msglog)
