@@ -33,11 +33,6 @@ results_path = 'tmp_results'
 random_state = 42
 
 def get_algorithm(ml):
-    if ml == 'pysr':
-        # Uses `sympy.lambdify` internally, so must
-        # be imported normally:
-        from methods.pysr import regressor
-        return regressor
 
     algorithm = importlib.__import__('methods.'+ml+'.regressor',globals(),
                                      locals(),
