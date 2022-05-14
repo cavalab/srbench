@@ -1,1 +1,2 @@
 pwd
+chmod 766 TreeGeneticProgramming
