@@ -27,7 +27,7 @@ operationsToRemove = "max,min,absolute,arctan"
 parallelOption = ""
 fitDuration = 1
 numberOfThreads = 6
-exeName = "TreeGeneticProgramming"
+exeName = "$SUBFOLDER/TreeGeneticProgramming"
 logFolder = "logOutput"
 loopWithSameDatafile = 3
 
