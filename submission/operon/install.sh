@@ -94,7 +94,7 @@ rm -rf robin-hood-hashing
 git clone  https://github.com/heal-research/operon.git
 pushd operon
 git switch cpp20
-git checkout 930b4ad1e4c013ff88a14ec3441eb7662b9146f3
+git checkout 9d7d410e43d18020df25d6311822be8c3680ac56
 mkdir build
 cmake -S . -B build \
     -DCMAKE_BUILD_TYPE=Release \
