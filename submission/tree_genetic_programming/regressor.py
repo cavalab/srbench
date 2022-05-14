@@ -114,7 +114,7 @@ def extractResultFromOutput(data):
 
         return (equation, error, timeValue, generation)
 
-
+print(os.getcwd())
 msglog= launchCmd(sys.argv[0],sys.argv[1])
 est = extractResultFromOutput(msglog)
 
