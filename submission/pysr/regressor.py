@@ -193,19 +193,9 @@ def my_pre_train_fn(est, X, y):
         select_k_features = None
 
     if do_resampling:
-        xmin = np.min(X, axis=0)
-        xmax = np.max(X, axis=0)
-        Xresampled = np.stack(
-            [
-                np.random.uniform(
-                    xmin[i],
-                    xmax[i],
-                    size=max_rows,
-                )
-                for i in range(nfeatures)
-            ],
-            axis=1,
-        )
+        # Explicitly downsample input space after internal denoising:
+        idx = np.random.choice(nrows, max_rows, replace=False)
+        Xresampled = X[idx]
         denoise = True
     else:
         Xresampled = None
