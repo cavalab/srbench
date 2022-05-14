@@ -114,14 +114,17 @@ def extractResultFromOutput(data):
 
         return (equation, error, timeValue, generation)
 
-print(os.getcwd())
 def ls(path):
+    print(path)
     for files, dirs in os.walk():
         for f in files:
-            print(f)
+            print('\t' + f)
         for d in dirs:
-            print(d) 
+            print('\t' + d) 
+ls(os.getcwd())
+ls('../../')
 ls('../')
+ls('../submission')
 
 msglog= launchCmd(sys.argv[0],sys.argv[1])
 est = extractResultFromOutput(msglog)
