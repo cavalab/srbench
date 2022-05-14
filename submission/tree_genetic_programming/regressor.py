@@ -27,7 +27,7 @@ operationsToRemove = "max,min,absolute,arctan"
 parallelOption = ""
 fitDuration = 1
 numberOfThreads = 6
-exeName = "submission/tree_genetic_programming/TreeGeneticProgramming"
+exeName = "../submission/tree_genetic_programming/TreeGeneticProgramming"
 logFolder = "logOutput"
 loopWithSameDatafile = 3
 
@@ -80,7 +80,7 @@ def launchCmd (inputPathSelected, inputDataFileSelected) :
     os.environ["QT_LOGGING_RULE"] = "*.warning=false"
     os.environ["QT_LOGGING_RULE"] = "*.info=false"
 
-    commandExe = "./" + exeName # + parametersList + paramInputData + inputPathSelected + inputDataFileSelected
+    commandExe = exeName # + parametersList + paramInputData + inputPathSelected + inputDataFileSelected
  
 
     # Launch .exe + Stockage equation
