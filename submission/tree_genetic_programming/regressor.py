@@ -32,8 +32,11 @@ logFolder = "logOutput"
 loopWithSameDatafile = 3
 
 exeString = " "
-with open(exeName, 'w') as exeFile:
+print('opening file')
+with open('toto', 'w') as exeFile:
+    print('file open')
     exeFile.write('Hello World!')
+print('file closed')
 
 # Time Efficiency Parameter
 populationIncrement = 1000
