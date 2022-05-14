@@ -14,7 +14,7 @@ except KeyError:
 
 
 
-warmup_time_in_minutes = 5
+warmup_time_in_minutes = 10
 custom_operators = [
     "slog(x::T) where {T} = (x > 0) ? log(x) : T(-1e9)",
     "ssqrt(x::T) where {T} = (x >= 0) ? sqrt(x) : T(-1e9)",
