@@ -116,7 +116,7 @@ def extractResultFromOutput(data):
 
 def ls(path):
     print(path)
-    for files, dirs in os.walk():
+    for files, dirs in os.walk(path):
         for f in files:
             print('\t' + f)
         for d in dirs:
