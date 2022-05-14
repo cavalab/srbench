@@ -1,117 +1,125 @@
-# This example submission shows the submission of FEAT (cavalab.org/feat). 
-from feat import FeatRegressor
+from sklearn import ensemble
 
-"""
-est: a sklearn-compatible regressor. 
-    if you don't have one they are fairly easy to create. 
-    see https://scikit-learn.org/stable/developers/develop.html
-"""
-est = FeatRegressor(
-                    pop_size=100,
-                    gens=100,
-                    max_time=8*60*60,  # 8 hrs
-                    max_depth=6,
-                    verbosity=0,
-                    batch_size=100,
-                    functions ='+,-,*,/,^2,^3,sqrt,sin,cos,exp,log',
-                    otype='f'
-                   )
-# want to tune your estimator? wrap it in a sklearn CV class. 
+import sys, string, os, subprocess, time, logging
+import glob 
+import os.path
+import shutil
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-def model(est, X=None):
-    """
-    Return a sympy-compatible string of the final model. 
+from subprocess import Popen, PIPE
+from pathlib import Path
+from sympy import *
+from datetime import datetime
+import re
 
-    Parameters
-    ----------
-    est: sklearn regressor
-        The fitted model. 
-    X: pd.DataFrame, default=None
-        The training data. This argument can be dropped if desired.
+# Settings
+numberOfGen = 20# Default 100
+sizeOfPopulation = 500 # Default 100
+crossbreedingRate = 0.3 # Default 0.5
+mutationRate = 0.3 # Default 0.5
+depth = 5 # Default 5
+filterOrigin = 1 # Default 1
+tournamentSize = 3 #Default 5
+numOfEquations = sizeOfPopulation
+operationsToRemove = "max,min,absolute,arctan"
+parallelOption = ""
+fitDuration = 1
+numberOfThreads = 6
+exeName = "TreeGeneticProgramming"
+logFolder = "logOutput"
+loopWithSameDatafile = 3
 
-    Returns
-    -------
-    A sympy-compatible string of the final model. 
+# Time Efficiency Parameter
+populationIncrement = 1000
+timesToken = [#"Crossbreeding",
+              "ChildrenCreation",
+              "FitThread",
+              "ParetoThread",
+              "FilterThread",
+              #"updateDistanceToData",
+              #"updateEquations"
+              ]
 
-    Notes
-    -----
-
-    Ensure that the variable names appearing in the model are identical to 
-    those in the training data, `X`, which is a `pd.Dataframe`. 
-    If your method names variables some other way, e.g. `[x_0 ... x_m]`, 
-    you can specify a mapping in the `model` function such as:
-
-        ```
-        def model(est, X):
-            mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
-            new_model = est.model_
-            for k,v in mapping.items():
-                new_model = new_model.replace(k,v)
-        ```
-
-    If you have special operators such as protected division or protected log,
-    you will need to handle these to assure they conform to sympy format. 
-    One option is to replace them with the unprotected versions. Post an issue
-    if you have further questions: 
-    https://github.com/cavalab/srbench/issues/new/choose
-    """
-
-    # Here we replace "|" with "" to handle
-    # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
-    model_str = est.get_eqn()
-    model_str = model_str.replace('|','')
-
-    # use python syntax for exponents
-    model_str = model_str.replace('^','**')
-
-    return model_str
-
-################################################################################
-# Optional Settings
-################################################################################
+# Benchmark Output Option
+isDisplayingFitnessChart = False
+isCreatingCSV = False
+isComputingTimeEfficiency = True
+isThreadTesting = False
 
 
-"""
-eval_kwargs: a dictionary of variables passed to the evaluate_model()
-    function. 
-    Allows one to configure aspects of the training process.
 
-Options 
--------
-    test_params: dict, default = None
-        Used primarily to shorten run-times during testing. 
-        for running the tests. called as 
-            est = est.set_params(**test_params)
-    max_train_samples:int, default = 0
-        if training size is larger than this, sample it. 
-        if 0, use all training samples for fit. 
-    scale_x: bool, default = True 
-        Normalize the input data prior to fit. 
-    scale_y: bool, default = True 
-        Normalize the input label prior to fit. 
-    pre_train: function, default = None
-        Adjust settings based on training data. Called prior to est.fit. 
-        The function signature should be (est, X, y). 
-            est: sklearn regressor; the fitted model. 
-            X: pd.DataFrame; the training data. 
-            y: training labels.
-"""
+def launchCmd (inputPathSelected, inputDataFileSelected) :
+    # Parameters
+    ### Remove if you don't want numOfEquations = sizeOfPopulation ###
+    numOfEquations = sizeOfPopulation
+    ###
+    paramSilent = " -s"
+    paramNbGen = " -g " + str(numberOfGen)
+    paramSizePop = " -p " + str(sizeOfPopulation)
+    paramCbRate = " -c " + str(crossbreedingRate)
+    paramMutRate = " -m " + str(mutationRate)
+    paramDepth = " -e " + str(depth)
+    paramFilterOrigin = " -f " + str(filterOrigin)
+    paramNumOfEquations = " -n " + str(numOfEquations)
+    paramsOperations = " -o " + operationsToRemove
+    paramParallel = parallelOption
+    paramsFitDuration = " -fd " + str(fitDuration)
+    paramsNumOfThreads = " -nt " + str(numberOfThreads)
 
-def my_pre_train_fn(est, X, y):
-    """In this example we adjust FEAT generations based on the size of X 
-       versus relative to FEAT's batch size setting. 
-    """
-    if est.batch_size < len(X):
-        est.gens = int(est.gens*len(X)/est.batch_size)
-    print('FEAT gens adjusted to',est.gens)
-    # adjust max dim
-    est.max_dim=min(max(est.max_dim, X.shape[1]), 20)
-    print('FEAT max_dim set to',est.max_dim)
 
-# define eval_kwargs.
-eval_kwargs = dict(
-                   pre_train=my_pre_train_fn,
-                   test_params = {'gens': 5,
-                                  'pop_size': 10
-                                 }
-                  )
+    parametersList = paramSilent + paramNbGen + paramSizePop + paramCbRate
+    parametersList += paramMutRate + paramDepth + paramFilterOrigin + paramNumOfEquations
+    parametersList += paramsOperations + paramParallel + paramsFitDuration + paramsNumOfThreads
+                    
+    paramInputData = " -i "
+
+    # No debug logging outpout in the application
+    os.environ["QT_LOGGING_RULE"] = "*.debug=false"
+    os.environ["QT_LOGGING_RULE"] = "*.warning=false"
+    os.environ["QT_LOGGING_RULE"] = "*.info=false"
+
+    commandExe = "./" + exeName + parametersList + paramInputData + inputPathSelected + inputDataFileSelected
+ 
+
+    # Launch .exe + Stockage equation
+    cmdOutput = subprocess.check_output(commandExe, shell=False, text=True)
+    
+  
+    return cmdOutput
+
+
+def extractResultFromOutput(data):
+    # Extract best equation
+    equationToken = "=> First equation : "
+    errorToken = " Distance : "
+    computeTimeToken = " Compute Time : "
+    generationToken = " Last Generation : "
+
+    equationPos = data.rfind(equationToken)
+    if equationPos != -1:
+        errorPos = data.rfind(errorToken)
+        timePos = data.rfind(computeTimeToken)
+        generationPos = data.rfind(generationToken)
+
+        equation = data[(equationPos + len(equationToken)):errorPos]
+        error = data[(errorPos + len(errorToken)):timePos]
+
+        # Convert time value in second with 3 digits
+        timeValue = float(data[(timePos + len(computeTimeToken)):generationPos]) / 1000
+        timeValue = float("{:.3f}".format(timeValue))
+
+        generation = data[(generationPos + len(generationToken)):]
+
+        return (equation, error, timeValue, generation)
+
+
+msglog= launchCmd(sys.argv[0],sys.argv[1])
+est = extractResultFromOutput(msglog)
+
+def complexity(est):
+    return len(est.best_estimator_)
+
+def model(est): 
+    return est.stack_2_eqn(est.best_estimator_)
