@@ -116,8 +116,7 @@ def model(est, X=None):
     -------
     A sympy-compatible string of the final model.
     """
-    equations = est.equations
-    model_str = equations.iloc[get_best_equation(equations)].equation
+    model_str = est.get_best().equation
     # Replacements:
     # slog => log
     model_str = re.sub("slog", "log", model_str)
