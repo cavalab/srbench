@@ -9,7 +9,6 @@ import pandas as pd
 from time import  time
 import random
 from sklearn.model_selection import train_test_split
-
 # from pmlb import regression_dataset_names
 
 est = SymbolicRegressor(population_size=1000, init_depth=(2, 5),
