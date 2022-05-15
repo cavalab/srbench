@@ -67,10 +67,13 @@ def model(est, X=None):
     """
     model_str = str(est.get_best_individual())
 
-    # replace X_# with data variables names
-    mapping = {'X_' + str(i): k for i, k in enumerate(X.columns)}
-    for k,v in mapping.items():
-        model_str = model_str.replace(k,v)
+    try:
+        # replace X_# with data variables names
+        mapping = {'X_' + str(i): k for i, k in enumerate(X.columns)}
+        for k,v in mapping.items():
+            model_str = model_str.replace(k,v)
+    except AttributeError:  # if X is not a pd.Dataframe
+        pass
 
     model_str = model_str.replace(")(", ")*(").replace("^", "**")  # replace operators for sympy
     return model_str

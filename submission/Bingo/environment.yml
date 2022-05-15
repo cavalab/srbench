@@ -25,4 +25,4 @@ dependencies:
         - pytest-timeout>=1.4.2
         - scipy>=1.6.2
         - dill>=0.2.9
-        - sklearn
+        - scikit-learn
