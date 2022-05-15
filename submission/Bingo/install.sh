@@ -17,4 +17,4 @@ cd ..
 # install
 pip install .
 cd ../
-python -m pytest bingo/tests
+#python -m pytest bingo/tests
