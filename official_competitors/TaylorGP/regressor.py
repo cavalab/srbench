@@ -9,17 +9,16 @@ import pandas as pd
 from time import  time
 import random
 from sklearn.model_selection import train_test_split
-
-# from pmlb import regression_dataset_name
+# from pmlb import regression_dataset_names
 
 est = SymbolicRegressor(population_size=1000, init_depth=(2, 5),
                         generations=10000, stopping_criteria=1e-10,
                         function_set=['add', 'sub', 'mul', 'div', 'sin', 'cos', 'log', 'exp', 'sqrt'],
                         p_crossover=0.7, p_subtree_mutation=0.,
-                        p_hoist_mutation=0., p_point_mutation=0.2,
+                        p_hoist_mutation=0., p_point_mutation=0.3,
                         max_samples=1.0, verbose=1,
-                        parsimony_coefficient=0.3,
-                        n_jobs=1,  #
+                        parsimony_coefficient=0.1,
+                        n_jobs=1,  
                         const_range=(-1, 1),
                         random_state=random.randint(1, 100), low_memory=True,
                         max_time = 3600-10)
@@ -78,7 +77,7 @@ if __name__ == '__main__':
     '''
     print("="*100)
 
-    eqName = 'time_p2_'+ str(args.PMLBNum)+'.csv'
+    eqName = 'time_p1_'+ str(args.PMLBNum)+'.csv'
     eq_write = open(eqName, "w+")  # 重新写
     for fileNo,regression_dataset in enumerate(regression_dataset_names[args.PMLBNum*10:args.PMLBNum*10+10]):
         print(regression_dataset)
