@@ -1,0 +1,14 @@
+authors:
+  - Brenden Petersen
+  - Mikel Landajuela
+  - Chak Lee
+  - Jiachen Yang
+  - Ruben Glatt
+  - Ignacio Aravena Solis
+  - Claudio Santiago
+  - Nathan Mundhenk
+email: petersen33@llnl.gov
+name: Unified deep symbolic regression (uDSR)
+description: |
+  A unified framework for deep symbolic regression.
+url: https://github.com/brendenpetersen/deep-symbolic-optimization

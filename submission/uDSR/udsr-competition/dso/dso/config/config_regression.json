@@ -1,0 +1,145 @@
+{
+	"experiment" : {
+	   "logdir" : null,
+	   "seed" : null
+	},
+
+	"task" : {
+	   "task_type" : "regression",
+	   "dataset" : null,
+		 "function_set":["add", "sub", "mul", "div", "sqrt", "n2", "log", "exp", "sin", "cos", "1", "const", "poly"],
+	   "metric" : "inv_nrmse",
+	   "metric_params" : [1.0],
+	   "extra_metric_test" : null,
+	   "extra_metric_test_params" : [],
+	   "threshold" : 1e-12,
+	   "protected" : false,
+	   "reward_noise" : 0.0,
+	   "reward_noise_type" : "r",
+	   "normalize_variance" : false,
+	   "decision_tree_threshold_set" : [],
+	   "poly_optimizer_params" : {
+		  "degree": 3,
+		  "coef_tol": 1e-4,
+		  "regressor": "dso_least_squares",
+		  "regressor_params": {
+			 "cutoff_p_value": 1.0,
+			 "n_max_terms": 5,
+			 "coef_tol": 1e-4
+		  }
+	   }
+	},
+ 
+	"logging" : {
+                "save_invalid" : false,
+		"save_pareto_front" : false,
+		"hof" : null
+	 },
+
+	"training":{
+		 "n_samples": 1000000000,
+		 "batch_size": 500,
+		 "epsilon": 2.0e-2,
+		 "baseline": "R_e",
+		 "alpha": 0.5,
+		 "b_jumpstart": false,
+		 "n_cores_batch": 1,
+		 "complexity": "token",
+		 "const_optimizer": "scipy",
+		 "const_params": {
+			 "method": "L-BFGS-B",
+			 "options": {
+				 "gtol": 1.0e-3
+			 }
+		 },
+		 "verbose": false,
+		 "debug": 0,
+		 "early_stopping": true,
+		 "use_memory":false,
+		 "memory_capacity": 1.0e3,
+		 "warm_start": null,
+		 "memory_threshold": null
+	 },
+ 
+	 "controller": {
+		 "max_length": 64,
+		 "cell": "lstm",
+		 "num_layers": 1,
+		 "num_units": 32,
+		 "initializer": "zeros",
+		 "learning_rate": 2.5e-3,
+		 "optimizer": "adam",
+		 "entropy_weight": 3.0e-2,
+		 "entropy_gamma": 0.7,
+		 "ppo": false,
+		 "ppo_clip_ratio": 0.2,
+		 "ppo_n_iters": 10,
+		 "ppo_n_mb": 4,
+		 "pqt": true,
+		 "pqt_k": 10,
+		 "pqt_batch_size": 1,
+		 "pqt_weight": 2.0e2,
+		 "pqt_use_pg": false,
+		 "summary": false,
+		 "debug": 0
+	 },
+ 
+	 "gp_meld":{
+		 "run_gp_meld": true,
+		 "verbose": false,
+		 "generations": 20,
+		 "p_crossover": 0.5,
+		 "p_mutate": 0.5,
+		 "tournament_size": 5,
+		 "train_n": 50,
+		 "mutate_tree_max": 3
+	 },
+ 
+	"prior":{
+		 "count_constraints":false,
+		 "length":{
+			 "min_": 4,
+			 "max_": 64,
+			 "on": true
+		 },
+		 "repeat":{
+			 "tokens": "const",
+			 "min_": null,
+			 "max_": 3,
+			 "on": true
+		 },
+		 "inverse":{
+			 "on": true
+		 },
+		 "trig":{
+			 "on": true
+		 },
+		 "const":{
+			 "on": true
+		 },
+		 "no_inputs":{
+			 "on": true
+		 },
+		 "uniform_arity": {
+			 "on": true
+		 },
+		 "soft_length":{
+			 "loc": 10,
+			 "scale": 5,
+			 "on": true
+		 },
+		 "domain_range":{
+			 "on": false
+		 },
+		 "language_model": {
+			 "weight": null,
+			 "on": false
+		 }
+	 },
+ 
+	 "postprocess": {
+		 "show_count": 0,
+		 "save_plots": false
+	 }
+ }
+ 
