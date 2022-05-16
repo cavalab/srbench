@@ -162,8 +162,8 @@ jobs:
             rm -rf submission/$SUBNAME
             git config user.name "GitHub Actions Bot"
             git config user.email "<>"  
+            git pull origin Competition2022
             git add official_competitors/
-
             git diff-index --quiet HEAD ||  git commit -am "Store/update $SUBNAME"  
             git push origin Competition2022
           else

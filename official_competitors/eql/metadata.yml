@@ -1,0 +1,9 @@
+authors: # the participants
+  - Alessandro Simon
+email: alessandro.simon@tuebingen.mpg.de
+name: EQL # name of the submission /method
+description: | # anything you'd like here to describe the method.
+Implementation of the Equation Learner architecture as described in
+'Learning equations for extrapolation and control' (Sahoo et. al)
+
+url: https://al.is.mpg.de/research_projects/symbolic-regression-and-equation-learning # a link to the project
