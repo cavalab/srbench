@@ -69,9 +69,9 @@ def model(est, X=None):
 
     try:
         # replace X_# with data variables names
-        mapping = {'X_' + str(i): k for i, k in enumerate(X.columns)}
-        for k,v in mapping.items():
-            model_str = model_str.replace(k,v)
+        # have to iterate in reversed order to prevent X_1 in X_10 from being replaced first
+        for i, column in reversed(list(enumerate(X.columns))):
+            model_str = model_str.replace("X_" + str(i), column)
     except AttributeError:  # if X is not a pd.Dataframe
         pass
 
@@ -89,7 +89,7 @@ def get_cv_time(total_time):
 def pre_train_fn(est, X, y):
     """set max_time in seconds based on length of X."""
     if len(X) <= 1000:
-        max_time = get_cv_time(60 * 60 - 100)  # 1 hour with 100 seconds of slack
+        max_time = get_cv_time(60 * 60 - 200)  # 1 hour with 200 seconds of slack
     else:
         max_time = get_cv_time(10 * 60 * 60 - 1000)  # 10 hours with 1000 seconds of slack
     est.set_max_time(new_max_time=max_time)
