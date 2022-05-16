@@ -96,7 +96,8 @@ def pre_train_fn(est, X, y):
 
 
 eval_kwargs = {
-    "pre_train": pre_train_fn
+    "pre_train": pre_train_fn,
+    "test_params": {"test": True}
 }
 
 """
