@@ -1,5 +1,5 @@
 SUBNAME=$1
-SUBFOLDER=submission/$SUBNAME 
+SUBFOLDER=official_competitors/$SUBNAME 
 SUBENV=srcomp-$SUBNAME 
 # update base env
 mamba env update -n srcomp -f environment.yml 
@@ -42,6 +42,6 @@ conda activate $SUBENV
 python -m pytest -v test_submission.py --ml $SUBNAME
 
 # Store Competitor
-cd ..
-rsync -avz --exclude=".git" submission/$SUBNAME official_competitors/
+# cd ..
+# rsync -avz --exclude=".git" submission/$SUBNAME official_competitors/
 # rm -rf submission/$SUBNAME

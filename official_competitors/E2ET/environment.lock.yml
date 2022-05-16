@@ -14,6 +14,7 @@ dependencies:
   - backports=1.0=py_2
   - backports.functools_lru_cache=1.6.4=pyhd8ed1ab_0
   - beautifulsoup4=4.11.1=pyha770c72_0
+  - blas=1.1=openblas
   - bleach=5.0.0=pyhd8ed1ab_0
   - bottleneck=1.3.4=py37hda87dfa_1
   - brotli=1.0.9=h166bdaf_7
@@ -130,6 +131,8 @@ dependencies:
   - notebook=6.4.10=pyha770c72_0
   - nspr=4.32=h9c3ff4c_1
   - nss=3.77=h2350873_0
+  - numexpr=2.8.1=py37hecfb737_0
+  - openblas=0.3.20=pthreads_h320a7e8_0
   - openjpeg=2.4.0=hb52868f_1
   - openssl=3.0.2=h166bdaf_1
   - packaging=21.3=pyhd8ed1ab_0
@@ -211,7 +214,6 @@ dependencies:
     - functorch==0.1.0
     - idna==3.3
     - mamba==0.11.2
-    - numexpr==2.8.1
     - numpy==1.21.5
     - pyparsing==3.0.7
     - pyyaml==6.0
@@ -224,4 +226,4 @@ dependencies:
     - torchvision==0.12.0
     - tqdm==4.64.0
     - urllib3==1.26.9
-prefix: /usr/share/miniconda3/envs/srcomp-E2ET
+prefix: /home/bill/anaconda3/envs/srcomp-E2ET
