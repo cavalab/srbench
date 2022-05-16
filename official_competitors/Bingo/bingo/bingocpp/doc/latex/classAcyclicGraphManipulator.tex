@@ -1,0 +1,391 @@
+\hypertarget{classAcyclicGraphManipulator}{}\section{Acyclic\+Graph\+Manipulator Class Reference}
+\label{classAcyclicGraphManipulator}\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+
+
+{\ttfamily \#include $<$graph\+\_\+manip.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classAcyclicGraphManipulator_ae822e96783de629b1278bdacc936e984}{Acyclic\+Graph\+Manipulator} (int \hyperlink{classAcyclicGraphManipulator_a1daae08faa803d96d51c71911a543bde}{nvars}=3, int \hyperlink{classAcyclicGraphManipulator_a1b0e2746882dd6cffae75018c831d99d}{ag\+\_\+size}=15, int \hyperlink{classAcyclicGraphManipulator_abaabd6c4fb4cee6b7adfc3fc146fb395}{nloads}=1, float \hyperlink{classAcyclicGraphManipulator_a6591f90b81ad497237fc80e923dae793}{float\+\_\+lim}=10.\+0, float \hyperlink{classAcyclicGraphManipulator_a0b11805aca890b75517094e6afd98875}{terminal\+\_\+prob}=0.\+1, int \hyperlink{classAcyclicGraphManipulator_ac6d1c55c9a9012663f66b3c027abef82}{opt\+\_\+rate}=0)\hypertarget{classAcyclicGraphManipulator_ae822e96783de629b1278bdacc936e984}{}\label{classAcyclicGraphManipulator_ae822e96783de629b1278bdacc936e984}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+void \hyperlink{classAcyclicGraphManipulator_aea284c38a894e8bd6a7d19f0c94ce6c1}{add\+\_\+node\+\_\+type} (int node\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Add a type of node to the set of allowed types. \end{DoxyCompactList}\item 
+\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \hyperlink{classAcyclicGraphManipulator_ade84b4ad6030e5b78026d252af9b38fa}{generate} ()
+\begin{DoxyCompactList}\small\item\em Generates random individual. Fills stack based on random nodes/terminals and random parameters. \end{DoxyCompactList}\item 
+void \hyperlink{classAcyclicGraphManipulator_af53180fce6c3aa0deeaa9db2d1877990}{simplify\+\_\+stack} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv)
+\begin{DoxyCompactList}\small\item\em simplifies the individual\textquotesingle{}s stack. \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::pair$<$ Eigen\+::\+Array\+X3i, Eigen\+::\+Vector\+Xd $>$, int $>$ \hyperlink{classAcyclicGraphManipulator_a25e1e62f422475fd78c2a9f9046190e2}{dump} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv)
+\begin{DoxyCompactList}\small\item\em takes the stack and constants into one object \end{DoxyCompactList}\item 
+\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \hyperlink{classAcyclicGraphManipulator_af84d3a060598f93d6b0752e99d7df019}{load} (std\+::pair$<$ std\+::pair$<$ Eigen\+::\+Array\+X3i, Eigen\+::\+Vector\+Xd $>$, int $>$ indv\+\_\+list)
+\begin{DoxyCompactList}\small\item\em loads a new \hyperlink{classAcyclicGraph}{Acyclic\+Graph} with the stack and constants \end{DoxyCompactList}\item 
+std\+::vector$<$ \hyperlink{classAcyclicGraph}{Acyclic\+Graph} $>$ \hyperlink{classAcyclicGraphManipulator_a48cbf21ddadc69fd9122ad923532b105}{crossover} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&parent1, \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&parent2)
+\begin{DoxyCompactList}\small\item\em Single point crossover. \end{DoxyCompactList}\item 
+\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \hyperlink{classAcyclicGraphManipulator_aea8fbfeb0fbd0c8044aaa5ea50363cad}{mutation} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv)
+\begin{DoxyCompactList}\small\item\em performs 1pt mutation, does not create copy of individual \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_a4bee8f5802f96f250f71be70978aac92}{distance} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv1, \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv2)
+\begin{DoxyCompactList}\small\item\em Computes the distance (a measure of similarity) between two individuals. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classAcyclicGraphManipulator_affb7623093d462e3f03507c3b24f6fa4}{rand\+\_\+operator\+\_\+params} (int arity, int stack\+\_\+location)
+\begin{DoxyCompactList}\small\item\em Produces random ints for use as operator parameters. \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_a0989820d894340cd667e9b7a66203c7a}{rand\+\_\+operator\+\_\+type} ()
+\begin{DoxyCompactList}\small\item\em Picks a random operator from the operator list. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classAcyclicGraphManipulator_a7a2a7243ed3ee04a3ce424b1b9a9d594}{rand\+\_\+operator} (int stack\+\_\+location)
+\begin{DoxyCompactList}\small\item\em Produces random operator and parameters. Chooses operator from list of allowable node types. \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_ad664d50ba8dba3dce11d0d3136952806}{rand\+\_\+terminal\+\_\+param} (int terminal)
+\begin{DoxyCompactList}\small\item\em Produces random terminal value, either input variable or float. \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_a7be7015974574f92858d6d4dac3f1fee}{mutate\+\_\+terminal\+\_\+param} (int terminal)
+\begin{DoxyCompactList}\small\item\em Produces random terminal value, either input variable or float Mutates floats by getting random variation of old param. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classAcyclicGraphManipulator_adbf93d559581182e4d4b6335952f5357}{rand\+\_\+terminal} ()
+\begin{DoxyCompactList}\small\item\em Produces random terminal node and value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{classAcyclicGraphManipulator_a1daae08faa803d96d51c71911a543bde}{nvars}
+\begin{DoxyCompactList}\small\item\em int nvars \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_a1b0e2746882dd6cffae75018c831d99d}{ag\+\_\+size}
+\begin{DoxyCompactList}\small\item\em int ag\+\_\+size \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_abaabd6c4fb4cee6b7adfc3fc146fb395}{nloads}
+\begin{DoxyCompactList}\small\item\em int nloads \end{DoxyCompactList}\item 
+float \hyperlink{classAcyclicGraphManipulator_a6591f90b81ad497237fc80e923dae793}{float\+\_\+lim}
+\begin{DoxyCompactList}\small\item\em float float\+\_\+lim \end{DoxyCompactList}\item 
+float \hyperlink{classAcyclicGraphManipulator_a0b11805aca890b75517094e6afd98875}{terminal\+\_\+prob}
+\begin{DoxyCompactList}\small\item\em float terminal\+\_\+prob \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_ac6d1c55c9a9012663f66b3c027abef82}{opt\+\_\+rate}
+\begin{DoxyCompactList}\small\item\em int op\+\_\+rate \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classAcyclicGraphManipulator_aa0e85eda232a3dd36fe170b5b67e5e57}{node\+\_\+type\+\_\+vec}
+\begin{DoxyCompactList}\small\item\em std\+::vector$<$int$>$ node\+\_\+type\+\_\+vec \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classAcyclicGraphManipulator_a23c0c3e199c8d25e4ca4946410ceb96b}{op\+\_\+vec}
+\begin{DoxyCompactList}\small\item\em std\+::vector$<$int$>$ op\+\_\+vec \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classAcyclicGraphManipulator_a4eae07e6d85c11dd5c24e74beecb2682}{term\+\_\+vec}
+\begin{DoxyCompactList}\small\item\em std\+::vector$<$int$>$ term\+\_\+vec \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraphManipulator_a69ebad78a28b2ce356e82db1f883c19d}{num\+\_\+node\+\_\+types}
+\begin{DoxyCompactList}\small\item\em int num\+\_\+node\+\_\+types \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Manipulates A\+Graph objects for generation, crossover, mutation, and distance 
+
+\subsection{Member Function Documentation}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!add\+\_\+node\+\_\+type@{add\+\_\+node\+\_\+type}}
+\index{add\+\_\+node\+\_\+type@{add\+\_\+node\+\_\+type}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{add\+\_\+node\+\_\+type(int node\+\_\+type)}{add_node_type(int node_type)}}]{\setlength{\rightskip}{0pt plus 5cm}void Acyclic\+Graph\+Manipulator\+::add\+\_\+node\+\_\+type (
+\begin{DoxyParamCaption}
+\item[{int}]{node\+\_\+type}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_aea284c38a894e8bd6a7d19f0c94ce6c1}{}\label{classAcyclicGraphManipulator_aea284c38a894e8bd6a7d19f0c94ce6c1}
+
+
+Add a type of node to the set of allowed types. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em node\+\_\+type} & The type of node to add. int \\
+\hline
+\end{DoxyParams}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!crossover@{crossover}}
+\index{crossover@{crossover}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{crossover(\+Acyclic\+Graph \&parent1, Acyclic\+Graph \&parent2)}{crossover(AcyclicGraph &parent1, AcyclicGraph &parent2)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ {\bf Acyclic\+Graph} $>$ Acyclic\+Graph\+Manipulator\+::crossover (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{parent1, }
+\item[{{\bf Acyclic\+Graph} \&}]{parent2}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_a48cbf21ddadc69fd9122ad923532b105}{}\label{classAcyclicGraphManipulator_a48cbf21ddadc69fd9122ad923532b105}
+
+
+Single point crossover. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em parent1} & the first parent. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\mbox{\tt in}  & {\em parent2} & the second parent. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector with two \hyperlink{classAcyclicGraph}{Acyclic\+Graph} children (new copies) 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!distance@{distance}}
+\index{distance@{distance}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{distance(\+Acyclic\+Graph \&indv1, Acyclic\+Graph \&indv2)}{distance(AcyclicGraph &indv1, AcyclicGraph &indv2)}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::distance (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv1, }
+\item[{{\bf Acyclic\+Graph} \&}]{indv2}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_a4bee8f5802f96f250f71be70978aac92}{}\label{classAcyclicGraphManipulator_a4bee8f5802f96f250f71be70978aac92}
+
+
+Computes the distance (a measure of similarity) between two individuals. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv1} & first individual. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\mbox{\tt in}  & {\em indv2} & second individual. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the distance 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!dump@{dump}}
+\index{dump@{dump}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{dump(\+Acyclic\+Graph \&indv)}{dump(AcyclicGraph &indv)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::pair$<$ std\+::pair$<$ Eigen\+::\+Array\+X3i, Eigen\+::\+Vector\+Xd $>$, int $>$ Acyclic\+Graph\+Manipulator\+::dump (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_a25e1e62f422475fd78c2a9f9046190e2}{}\label{classAcyclicGraphManipulator_a25e1e62f422475fd78c2a9f9046190e2}
+
+
+takes the stack and constants into one object 
+
+\begin{DoxyReturn}{Returns}
+pair with the stack and constants 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!generate@{generate}}
+\index{generate@{generate}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{generate()}{generate()}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Acyclic\+Graph} Acyclic\+Graph\+Manipulator\+::generate (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_ade84b4ad6030e5b78026d252af9b38fa}{}\label{classAcyclicGraphManipulator_ade84b4ad6030e5b78026d252af9b38fa}
+
+
+Generates random individual. Fills stack based on random nodes/terminals and random parameters. 
+
+\begin{DoxyReturn}{Returns}
+new \hyperlink{classAcyclicGraph}{Acyclic\+Graph} individual 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!load@{load}}
+\index{load@{load}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{load(std\+::pair$<$ std\+::pair$<$ Eigen\+::\+Array\+X3i, Eigen\+::\+Vector\+Xd $>$, int $>$ indv\+\_\+list)}{load(std::pair< std::pair< Eigen::ArrayX3i, Eigen::VectorXd >, int > indv_list)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Acyclic\+Graph} Acyclic\+Graph\+Manipulator\+::load (
+\begin{DoxyParamCaption}
+\item[{std\+::pair$<$ std\+::pair$<$ Eigen\+::\+Array\+X3i, Eigen\+::\+Vector\+Xd $>$, int $>$}]{indv\+\_\+list}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_af84d3a060598f93d6b0752e99d7df019}{}\label{classAcyclicGraphManipulator_af84d3a060598f93d6b0752e99d7df019}
+
+
+loads a new \hyperlink{classAcyclicGraph}{Acyclic\+Graph} with the stack and constants 
+
+\begin{DoxyReturn}{Returns}
+\hyperlink{classAcyclicGraph}{Acyclic\+Graph} with the stack and constants 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!mutate\+\_\+terminal\+\_\+param@{mutate\+\_\+terminal\+\_\+param}}
+\index{mutate\+\_\+terminal\+\_\+param@{mutate\+\_\+terminal\+\_\+param}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{mutate\+\_\+terminal\+\_\+param(int terminal)}{mutate_terminal_param(int terminal)}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::mutate\+\_\+terminal\+\_\+param (
+\begin{DoxyParamCaption}
+\item[{int}]{terminal}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_a7be7015974574f92858d6d4dac3f1fee}{}\label{classAcyclicGraphManipulator_a7be7015974574f92858d6d4dac3f1fee}
+
+
+Produces random terminal value, either input variable or float Mutates floats by getting random variation of old param. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em terminal} & the terminal that needs parameters mutated. int \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the terminal parameters 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!mutation@{mutation}}
+\index{mutation@{mutation}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{mutation(\+Acyclic\+Graph \&indv)}{mutation(AcyclicGraph &indv)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Acyclic\+Graph} Acyclic\+Graph\+Manipulator\+::mutation (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_aea8fbfeb0fbd0c8044aaa5ea50363cad}{}\label{classAcyclicGraphManipulator_aea8fbfeb0fbd0c8044aaa5ea50363cad}
+
+
+performs 1pt mutation, does not create copy of individual 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv} & The individual to be mutated. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\end{DoxyParams}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!rand\+\_\+operator@{rand\+\_\+operator}}
+\index{rand\+\_\+operator@{rand\+\_\+operator}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{rand\+\_\+operator(int stack\+\_\+location)}{rand_operator(int stack_location)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ int $>$ Acyclic\+Graph\+Manipulator\+::rand\+\_\+operator (
+\begin{DoxyParamCaption}
+\item[{int}]{stack\+\_\+location}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_a7a2a7243ed3ee04a3ce424b1b9a9d594}{}\label{classAcyclicGraphManipulator_a7a2a7243ed3ee04a3ce424b1b9a9d594}
+
+
+Produces random operator and parameters. Chooses operator from list of allowable node types. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em stack\+\_\+location} & the location of command in stack. int \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$int$>$ with the random operator and parameters 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!rand\+\_\+operator\+\_\+params@{rand\+\_\+operator\+\_\+params}}
+\index{rand\+\_\+operator\+\_\+params@{rand\+\_\+operator\+\_\+params}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{rand\+\_\+operator\+\_\+params(int arity, int stack\+\_\+location)}{rand_operator_params(int arity, int stack_location)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ int $>$ Acyclic\+Graph\+Manipulator\+::rand\+\_\+operator\+\_\+params (
+\begin{DoxyParamCaption}
+\item[{int}]{arity, }
+\item[{int}]{stack\+\_\+location}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_affb7623093d462e3f03507c3b24f6fa4}{}\label{classAcyclicGraphManipulator_affb7623093d462e3f03507c3b24f6fa4}
+
+
+Produces random ints for use as operator parameters. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em arity} & the number of parameters needed. int \\
+\hline
+\mbox{\tt in}  & {\em stack\+\_\+location} & the location of command in stack. int \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector$<$int$>$ with the parameters 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!rand\+\_\+operator\+\_\+type@{rand\+\_\+operator\+\_\+type}}
+\index{rand\+\_\+operator\+\_\+type@{rand\+\_\+operator\+\_\+type}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{rand\+\_\+operator\+\_\+type()}{rand_operator_type()}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::rand\+\_\+operator\+\_\+type (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_a0989820d894340cd667e9b7a66203c7a}{}\label{classAcyclicGraphManipulator_a0989820d894340cd667e9b7a66203c7a}
+
+
+Picks a random operator from the operator list. 
+
+\begin{DoxyReturn}{Returns}
+int the operator (A\+Graph node type) 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!rand\+\_\+terminal@{rand\+\_\+terminal}}
+\index{rand\+\_\+terminal@{rand\+\_\+terminal}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{rand\+\_\+terminal()}{rand_terminal()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ int $>$ Acyclic\+Graph\+Manipulator\+::rand\+\_\+terminal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_adbf93d559581182e4d4b6335952f5357}{}\label{classAcyclicGraphManipulator_adbf93d559581182e4d4b6335952f5357}
+
+
+Produces random terminal node and value. 
+
+\begin{DoxyReturn}{Returns}
+vector$<$int$>$ with node and parameters 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!rand\+\_\+terminal\+\_\+param@{rand\+\_\+terminal\+\_\+param}}
+\index{rand\+\_\+terminal\+\_\+param@{rand\+\_\+terminal\+\_\+param}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{rand\+\_\+terminal\+\_\+param(int terminal)}{rand_terminal_param(int terminal)}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::rand\+\_\+terminal\+\_\+param (
+\begin{DoxyParamCaption}
+\item[{int}]{terminal}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_ad664d50ba8dba3dce11d0d3136952806}{}\label{classAcyclicGraphManipulator_ad664d50ba8dba3dce11d0d3136952806}
+
+
+Produces random terminal value, either input variable or float. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em terminal} & the terminal that needs parameters. int \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int the terminal parameters 
+\end{DoxyReturn}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!simplify\+\_\+stack@{simplify\+\_\+stack}}
+\index{simplify\+\_\+stack@{simplify\+\_\+stack}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{simplify\+\_\+stack(\+Acyclic\+Graph \&indv)}{simplify_stack(AcyclicGraph &indv)}}]{\setlength{\rightskip}{0pt plus 5cm}void Acyclic\+Graph\+Manipulator\+::simplify\+\_\+stack (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraphManipulator_af53180fce6c3aa0deeaa9db2d1877990}{}\label{classAcyclicGraphManipulator_af53180fce6c3aa0deeaa9db2d1877990}
+
+
+simplifies the individual\textquotesingle{}s stack. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv} & The individual with the stack to simplify. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!ag\+\_\+size@{ag\+\_\+size}}
+\index{ag\+\_\+size@{ag\+\_\+size}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{ag\+\_\+size}{ag_size}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::ag\+\_\+size}\hypertarget{classAcyclicGraphManipulator_a1b0e2746882dd6cffae75018c831d99d}{}\label{classAcyclicGraphManipulator_a1b0e2746882dd6cffae75018c831d99d}
+
+
+int ag\+\_\+size 
+
+the size of the A\+Graph \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!float\+\_\+lim@{float\+\_\+lim}}
+\index{float\+\_\+lim@{float\+\_\+lim}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{float\+\_\+lim}{float_lim}}]{\setlength{\rightskip}{0pt plus 5cm}float Acyclic\+Graph\+Manipulator\+::float\+\_\+lim}\hypertarget{classAcyclicGraphManipulator_a6591f90b81ad497237fc80e923dae793}{}\label{classAcyclicGraphManipulator_a6591f90b81ad497237fc80e923dae793}
+
+
+float float\+\_\+lim 
+
+float limit \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!nloads@{nloads}}
+\index{nloads@{nloads}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{nloads}{nloads}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::nloads}\hypertarget{classAcyclicGraphManipulator_abaabd6c4fb4cee6b7adfc3fc146fb395}{}\label{classAcyclicGraphManipulator_abaabd6c4fb4cee6b7adfc3fc146fb395}
+
+
+int nloads 
+
+number of loads \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!node\+\_\+type\+\_\+vec@{node\+\_\+type\+\_\+vec}}
+\index{node\+\_\+type\+\_\+vec@{node\+\_\+type\+\_\+vec}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{node\+\_\+type\+\_\+vec}{node_type_vec}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$int$>$ Acyclic\+Graph\+Manipulator\+::node\+\_\+type\+\_\+vec}\hypertarget{classAcyclicGraphManipulator_aa0e85eda232a3dd36fe170b5b67e5e57}{}\label{classAcyclicGraphManipulator_aa0e85eda232a3dd36fe170b5b67e5e57}
+
+
+std\+::vector$<$int$>$ node\+\_\+type\+\_\+vec 
+
+vector to hold the types of nodes in the manipulator \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!num\+\_\+node\+\_\+types@{num\+\_\+node\+\_\+types}}
+\index{num\+\_\+node\+\_\+types@{num\+\_\+node\+\_\+types}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{num\+\_\+node\+\_\+types}{num_node_types}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::num\+\_\+node\+\_\+types}\hypertarget{classAcyclicGraphManipulator_a69ebad78a28b2ce356e82db1f883c19d}{}\label{classAcyclicGraphManipulator_a69ebad78a28b2ce356e82db1f883c19d}
+
+
+int num\+\_\+node\+\_\+types 
+
+int to hold the number of node types (matches the python) \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!nvars@{nvars}}
+\index{nvars@{nvars}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{nvars}{nvars}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::nvars}\hypertarget{classAcyclicGraphManipulator_a1daae08faa803d96d51c71911a543bde}{}\label{classAcyclicGraphManipulator_a1daae08faa803d96d51c71911a543bde}
+
+
+int nvars 
+
+number of variables \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!op\+\_\+vec@{op\+\_\+vec}}
+\index{op\+\_\+vec@{op\+\_\+vec}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{op\+\_\+vec}{op_vec}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$int$>$ Acyclic\+Graph\+Manipulator\+::op\+\_\+vec}\hypertarget{classAcyclicGraphManipulator_a23c0c3e199c8d25e4ca4946410ceb96b}{}\label{classAcyclicGraphManipulator_a23c0c3e199c8d25e4ca4946410ceb96b}
+
+
+std\+::vector$<$int$>$ op\+\_\+vec 
+
+vector to hold the types of operators used in the manipulator \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!opt\+\_\+rate@{opt\+\_\+rate}}
+\index{opt\+\_\+rate@{opt\+\_\+rate}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{opt\+\_\+rate}{opt_rate}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+Manipulator\+::opt\+\_\+rate}\hypertarget{classAcyclicGraphManipulator_ac6d1c55c9a9012663f66b3c027abef82}{}\label{classAcyclicGraphManipulator_ac6d1c55c9a9012663f66b3c027abef82}
+
+
+int op\+\_\+rate 
+
+optimization rate to give to generated A\+Graphs
+
+0 -\/ Default -\/ no extra optimization 1 -\/ Simplify stack inputs constants and sets needs optimization 2 -\/ Same as 1, but during crossover, bring constants from parent to child 3 -\/ Same as 1, but optimize every crossover 4 -\/ Same as 1, but optimize every mutation 5 -\/ Same as 1, but optimize every mutation and crossover \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!term\+\_\+vec@{term\+\_\+vec}}
+\index{term\+\_\+vec@{term\+\_\+vec}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{term\+\_\+vec}{term_vec}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$int$>$ Acyclic\+Graph\+Manipulator\+::term\+\_\+vec}\hypertarget{classAcyclicGraphManipulator_a4eae07e6d85c11dd5c24e74beecb2682}{}\label{classAcyclicGraphManipulator_a4eae07e6d85c11dd5c24e74beecb2682}
+
+
+std\+::vector$<$int$>$ term\+\_\+vec 
+
+vector to hold the types of terminals used in the manipulator \index{Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}!terminal\+\_\+prob@{terminal\+\_\+prob}}
+\index{terminal\+\_\+prob@{terminal\+\_\+prob}!Acyclic\+Graph\+Manipulator@{Acyclic\+Graph\+Manipulator}}
+\subsubsection[{\texorpdfstring{terminal\+\_\+prob}{terminal_prob}}]{\setlength{\rightskip}{0pt plus 5cm}float Acyclic\+Graph\+Manipulator\+::terminal\+\_\+prob}\hypertarget{classAcyclicGraphManipulator_a0b11805aca890b75517094e6afd98875}{}\label{classAcyclicGraphManipulator_a0b11805aca890b75517094e6afd98875}
+
+
+float terminal\+\_\+prob 
+
+float to hold probability 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{graph__manip_8h}{graph\+\_\+manip.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/graph\+\_\+manip.\+cpp\end{DoxyCompactItemize}

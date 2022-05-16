@@ -1,0 +1,152 @@
+\hypertarget{structLMFunctor}{}\section{L\+M\+Functor Struct Reference}
+\label{structLMFunctor}\index{L\+M\+Functor@{L\+M\+Functor}}
+
+
+{\ttfamily \#include $<$fitness\+\_\+metric.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structLMFunctor_ab9272cf916bc55507969dff595743dfe}{operator()} (const Eigen\+::\+Vector\+Xd \&x, Eigen\+::\+Vector\+Xd \&fvec)
+\begin{DoxyCompactList}\small\item\em Compute \textquotesingle{}m\textquotesingle{} errors, one for each data point, for the given paramter values in \textquotesingle{}x\textquotesingle{}. \end{DoxyCompactList}\item 
+int \hyperlink{structLMFunctor_a0f2edfe1662d360c601caec4332ab60a}{df} (const Eigen\+::\+Vector\+Xd \&x, Eigen\+::\+Matrix\+Xd \&fjac)
+\begin{DoxyCompactList}\small\item\em Compute jacobian of the errors. \end{DoxyCompactList}\item 
+int \hyperlink{structLMFunctor_a928ebbc0ae61ab4fe5e9ffa0111f38e7}{values} () const 
+\begin{DoxyCompactList}\small\item\em gets the values \end{DoxyCompactList}\item 
+int \hyperlink{structLMFunctor_af3216685479be9d9c3d7fc5066927d02}{inputs} () const 
+\begin{DoxyCompactList}\small\item\em gets the inputs \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structLMFunctor_a090d075bceebea8c93aa70a99e7620d5}{m}
+\begin{DoxyCompactList}\small\item\em int m \end{DoxyCompactList}\item 
+int \hyperlink{structLMFunctor_a97d53b5fcdf96c8ffe5ea70b7adc0de4}{n}
+\begin{DoxyCompactList}\small\item\em int n \end{DoxyCompactList}\item 
+\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \hyperlink{structLMFunctor_aece2cab33ffd2f919fe9e6817e3a85ac}{agraph\+Indv}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classAcyclicGraph}{Acyclic\+Graph} indv. \end{DoxyCompactList}\item 
+\hyperlink{structTrainingData}{Training\+Data} $\ast$ \hyperlink{structLMFunctor_a025c08d9282710fb0766dcee6dd8ff07}{train}
+\begin{DoxyCompactList}\small\item\em Training\+Data$\ast$ train. \end{DoxyCompactList}\item 
+\hyperlink{structFitnessMetric}{Fitness\+Metric} $\ast$ \hyperlink{structLMFunctor_a39d6ef99670d28134bd7a903993f5e23}{fit}
+\begin{DoxyCompactList}\small\item\em Fitness\+Metric$\ast$ fit. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Used for Levenberg-\/\+Marquardt Optimization 
+
+\subsection{Member Function Documentation}
+\index{L\+M\+Functor@{L\+M\+Functor}!df@{df}}
+\index{df@{df}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{df(const Eigen\+::\+Vector\+Xd \&x, Eigen\+::\+Matrix\+Xd \&fjac)}{df(const Eigen::VectorXd &x, Eigen::MatrixXd &fjac)}}]{\setlength{\rightskip}{0pt plus 5cm}int L\+M\+Functor\+::df (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Vector\+Xd \&}]{x, }
+\item[{Eigen\+::\+Matrix\+Xd \&}]{fjac}
+\end{DoxyParamCaption}
+)}\hypertarget{structLMFunctor_a0f2edfe1662d360c601caec4332ab60a}{}\label{structLMFunctor_a0f2edfe1662d360c601caec4332ab60a}
+
+
+Compute jacobian of the errors. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em x} & contains current estimates for parameters. Eigen\+::\+Vector\+Xd (dimensions nx1) \\
+\hline
+\mbox{\tt in}  & {\em fjac} & contain jacobian of the errors, calculated numerically. Eigen\+::\+Matrix\+Xf (dimensions mxn) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 
+\end{DoxyReturn}
+\index{L\+M\+Functor@{L\+M\+Functor}!inputs@{inputs}}
+\index{inputs@{inputs}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{inputs() const }{inputs() const }}]{\setlength{\rightskip}{0pt plus 5cm}int L\+M\+Functor\+::inputs (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structLMFunctor_af3216685479be9d9c3d7fc5066927d02}{}\label{structLMFunctor_af3216685479be9d9c3d7fc5066927d02}
+
+
+gets the inputs 
+
+\begin{DoxyReturn}{Returns}
+n -\/ inputs 
+\end{DoxyReturn}
+\index{L\+M\+Functor@{L\+M\+Functor}!operator()@{operator()}}
+\index{operator()@{operator()}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{operator()(const Eigen\+::\+Vector\+Xd \&x, Eigen\+::\+Vector\+Xd \&fvec)}{operator()(const Eigen::VectorXd &x, Eigen::VectorXd &fvec)}}]{\setlength{\rightskip}{0pt plus 5cm}int L\+M\+Functor\+::operator() (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Vector\+Xd \&}]{x, }
+\item[{Eigen\+::\+Vector\+Xd \&}]{fvec}
+\end{DoxyParamCaption}
+)}\hypertarget{structLMFunctor_ab9272cf916bc55507969dff595743dfe}{}\label{structLMFunctor_ab9272cf916bc55507969dff595743dfe}
+
+
+Compute \textquotesingle{}m\textquotesingle{} errors, one for each data point, for the given paramter values in \textquotesingle{}x\textquotesingle{}. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em x} & contains current estimates for parameters. Eigen\+::\+Vector\+Xd (dimensions nx1) \\
+\hline
+\mbox{\tt in}  & {\em fvec} & contain error for each data point. Eigen\+::\+Vector\+Xd (dimensions mx1) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 
+\end{DoxyReturn}
+\index{L\+M\+Functor@{L\+M\+Functor}!values@{values}}
+\index{values@{values}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{values() const }{values() const }}]{\setlength{\rightskip}{0pt plus 5cm}int L\+M\+Functor\+::values (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structLMFunctor_a928ebbc0ae61ab4fe5e9ffa0111f38e7}{}\label{structLMFunctor_a928ebbc0ae61ab4fe5e9ffa0111f38e7}
+
+
+gets the values 
+
+\begin{DoxyReturn}{Returns}
+m -\/ values 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\index{L\+M\+Functor@{L\+M\+Functor}!agraph\+Indv@{agraph\+Indv}}
+\index{agraph\+Indv@{agraph\+Indv}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{agraph\+Indv}{agraphIndv}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Acyclic\+Graph} L\+M\+Functor\+::agraph\+Indv}\hypertarget{structLMFunctor_aece2cab33ffd2f919fe9e6817e3a85ac}{}\label{structLMFunctor_aece2cab33ffd2f919fe9e6817e3a85ac}
+
+
+\hyperlink{classAcyclicGraph}{Acyclic\+Graph} indv. 
+
+The Agraph individual \index{L\+M\+Functor@{L\+M\+Functor}!fit@{fit}}
+\index{fit@{fit}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{fit}{fit}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Fitness\+Metric}$\ast$ L\+M\+Functor\+::fit}\hypertarget{structLMFunctor_a39d6ef99670d28134bd7a903993f5e23}{}\label{structLMFunctor_a39d6ef99670d28134bd7a903993f5e23}
+
+
+Fitness\+Metric$\ast$ fit. 
+
+object that holds fitness metric \index{L\+M\+Functor@{L\+M\+Functor}!m@{m}}
+\index{m@{m}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{m}{m}}]{\setlength{\rightskip}{0pt plus 5cm}int L\+M\+Functor\+::m}\hypertarget{structLMFunctor_a090d075bceebea8c93aa70a99e7620d5}{}\label{structLMFunctor_a090d075bceebea8c93aa70a99e7620d5}
+
+
+int m 
+
+Number of data points, i.\+e. values \index{L\+M\+Functor@{L\+M\+Functor}!n@{n}}
+\index{n@{n}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{n}{n}}]{\setlength{\rightskip}{0pt plus 5cm}int L\+M\+Functor\+::n}\hypertarget{structLMFunctor_a97d53b5fcdf96c8ffe5ea70b7adc0de4}{}\label{structLMFunctor_a97d53b5fcdf96c8ffe5ea70b7adc0de4}
+
+
+int n 
+
+Number of parameters, i.\+e. inputs \index{L\+M\+Functor@{L\+M\+Functor}!train@{train}}
+\index{train@{train}!L\+M\+Functor@{L\+M\+Functor}}
+\subsubsection[{\texorpdfstring{train}{train}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Training\+Data}$\ast$ L\+M\+Functor\+::train}\hypertarget{structLMFunctor_a025c08d9282710fb0766dcee6dd8ff07}{}\label{structLMFunctor_a025c08d9282710fb0766dcee6dd8ff07}
+
+
+Training\+Data$\ast$ train. 
+
+object that holds data needed 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{fitness__metric_8h}{fitness\+\_\+metric.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/fitness\+\_\+metric.\+cpp\end{DoxyCompactItemize}

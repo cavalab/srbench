@@ -1,0 +1,731 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>bingo.Base package &#8212; bingo 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="bingo-base-package">
+<h1>bingo.Base package<a class="headerlink" href="#bingo-base-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-bingo.Base.Chromosome">
+<span id="bingo-base-chromosome-module"></span><h2>bingo.Base.Chromosome module<a class="headerlink" href="#module-bingo.Base.Chromosome" title="Permalink to this headline">¶</a></h2>
+<p>Chromosome: the base class for all genetic individuals in bingo</p>
+<p>This module defines a Chromosome, the base class for all genetic individuals in
+bingo evolutionary analyses.  Extension of bingo can be performed by developing
+subclasses of Chromosome.</p>
+<dl class="class">
+<dt id="bingo.Base.Chromosome.Chromosome">
+<em class="property">class </em><code class="descclassname">bingo.Base.Chromosome.</code><code class="descname">Chromosome</code><a class="headerlink" href="#bingo.Base.Chromosome.Chromosome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A genetic individual</p>
+<p>This class is the base of a genetic individual in bingo evolutionary
+analyses.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><a class="reference internal" href="#bingo.Base.Chromosome.Chromosome.fitness" title="bingo.Base.Chromosome.Chromosome.fitness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fitness</span></code></a></dt>
+<dd><p class="first last">numeric or tuple of numeric: The fitness of the individual</p>
+</dd>
+<dt><strong>genetic_age</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">age of the oldest component of the genetic material in the
+individual</p>
+</dd>
+<dt><strong>fit_set</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">Whether the fitness has been calculated for the individual</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.Base.Chromosome.Chromosome.copy" title="bingo.Base.Chromosome.Chromosome.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.Base.Chromosome.Chromosome.distance" title="bingo.Base.Chromosome.Chromosome.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a>(chromosome)</td>
+<td>Distance from self to chromosome</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="bingo.Base.Chromosome.Chromosome.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Chromosome.Chromosome.copy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>A deep copy of self</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.Chromosome.Chromosome.distance">
+<code class="descname">distance</code><span class="sig-paren">(</span><em>chromosome</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Chromosome.Chromosome.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distance from self to chromosome</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>float</strong></dt>
+<dd><p class="first last">distance from self to chromosome</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bingo.Base.Chromosome.Chromosome.fitness">
+<code class="descname">fitness</code><a class="headerlink" href="#bingo.Base.Chromosome.Chromosome.fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>numeric or tuple of numeric: The fitness of the individual</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.Base.ContinuousLocalOptimization">
+<span id="bingo-base-continuouslocaloptimization-module"></span><h2>bingo.Base.ContinuousLocalOptimization module<a class="headerlink" href="#module-bingo.Base.ContinuousLocalOptimization" title="Permalink to this headline">¶</a></h2>
+<p>Local optimization of continuous, real-valued parameters</p>
+<p>This module contains the implementation of local optimization or continuous,
+real-valued parameters in a chromosome.  The local optimization algorithm is
+defined as well as the interface that must implemented by chromosomes wishing
+to use the functionality.</p>
+<dl class="class">
+<dt id="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface">
+<em class="property">class </em><code class="descclassname">bingo.Base.ContinuousLocalOptimization.</code><code class="descname">ChromosomeInterface</code><a class="headerlink" href="#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>For chromosomes with continuous local optimization</p>
+<p>An interface to be used on Chromosomes that will be using continuous local
+optimization.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.get_number_local_optimization_params" title="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.get_number_local_optimization_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_number_local_optimization_params</span></code></a>()</td>
+<td>Get number of parameters in local optimization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.needs_local_optimization" title="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.needs_local_optimization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">needs_local_optimization</span></code></a>()</td>
+<td>Does the individual need local optimization</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.set_local_optimization_params" title="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.set_local_optimization_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_local_optimization_params</span></code></a>(params)</td>
+<td>Set local optimization parameters</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.get_number_local_optimization_params">
+<code class="descname">get_number_local_optimization_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.get_number_local_optimization_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get number of parameters in local optimization</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int</strong></dt>
+<dd><p class="first last">number of paramneters to be optimized</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.needs_local_optimization">
+<code class="descname">needs_local_optimization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.needs_local_optimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the individual need local optimization</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>bool</strong></dt>
+<dd><p class="first last">Individual needs optimization</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.set_local_optimization_params">
+<code class="descname">set_local_optimization_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface.set_local_optimization_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set local optimization parameters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>params</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list-like of numeric</span></dt>
+<dd><p class="first last">Values to set the parameters</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization">
+<em class="property">class </em><code class="descclassname">bingo.Base.ContinuousLocalOptimization.</code><code class="descname">ContinuousLocalOptimization</code><span class="sig-paren">(</span><em>fitness_function</em>, <em>algorithm='Nelder-Mead'</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">bingo.Base.FitnessFunction.FitnessFunction</span></code></p>
+<p>Fitness evaluation metric for individuals.</p>
+<p>A class for the fitness evaluation metric of genetic individuals that may or
+may not need local optimization before evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>fitness_function</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><cite>FitnessFunction</cite></span></dt>
+<dd><p class="first last">A FitnessFunction that evaluates the fitness of a <cite>Chromosome</cite> in bingo.
+For certain algorithms, <cite>VectorBasedFunction</cite> is required. Please see
+algorithm listing for details.</p>
+</dd>
+<dt><strong>algorithm</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
+<dd><p class="first">An algorithm that is used in the local optimization of a
+<cite>Chromosome</cite>. The default algorithm is <em>Nelder-Mead</em>. The
+other options are:</p>
+<blockquote class="last">
+<div><ol class="arabic simple">
+<li><dl class="first docutils">
+<dt>FitnessFunction</dt>
+<dd><ul class="first last">
+<li>Nelder-Mead</li>
+<li>Powell</li>
+<li>CG</li>
+<li>BFGS</li>
+<li>Newton-CG (not available yet)</li>
+<li>L-BFGS-B</li>
+<li>TNC (not available yet)</li>
+<li>COBYLA (not available yet)</li>
+<li>SLSQP</li>
+<li>trust-constr (not available yet)</li>
+<li>dogleg (not available yet)</li>
+<li>trust-ncg (not available yet)</li>
+<li>trust-exact (not available yet)</li>
+<li>trust-krylov (not available yet)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>VectorBasedFunction</dt>
+<dd><ul class="first last">
+<li>hybr (not available yet)</li>
+<li>lm</li>
+<li>broyden1 (not available yet)</li>
+<li>broyden2 (not available yet)</li>
+<li>anderson (not available yet)</li>
+<li>linearmixing (not available yet)</li>
+<li>diagbroyden (not available yet)</li>
+<li>excitingmixing (not available yet)</li>
+<li>krylov (not available yet)</li>
+<li>df-sane (not available yet)</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
+</div></blockquote>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>KeyError:</strong></dt>
+<dd><p class="first last"><cite>algorithm</cite> must be an algorithm provided by the interface</p>
+</dd>
+<dt><strong>TypeError :</strong></dt>
+<dd><p class="first last"><cite>fitness_function</cite> must Be a valid <cite>FitnessFunction</cite> for the specified
+algorithm</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><a class="reference internal" href="#bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization.eval_count" title="bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization.eval_count"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eval_count</span></code></a> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">int : the number of evaluations that have been performed</p>
+</dd>
+<dt><strong>training_data :</strong></dt>
+<dd><p class="first last">(Optional) data that can be used in the wrapped fitness
+function</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(individual)</td>
+<td>Evaluates the fitness of the individual.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization.eval_count">
+<code class="descname">eval_count</code><a class="headerlink" href="#bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization.eval_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>int : the number of evaluations that have been performed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization.training_data">
+<code class="descname">training_data</code><a class="headerlink" href="#bingo.Base.ContinuousLocalOptimization.ContinuousLocalOptimization.training_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>TrainingData : data that can be used in fitness evaluations</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.Base.Crossover">
+<span id="bingo-base-crossover-module"></span><h2>bingo.Base.Crossover module<a class="headerlink" href="#module-bingo.Base.Crossover" title="Permalink to this headline">¶</a></h2>
+<p>The genetic operation of crossover.</p>
+<p>This module defines the basis of crossover in bingo evolutionary analyses.</p>
+<dl class="class">
+<dt id="bingo.Base.Crossover.Crossover">
+<em class="property">class </em><code class="descclassname">bingo.Base.Crossover.</code><code class="descname">Crossover</code><a class="headerlink" href="#bingo.Base.Crossover.Crossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Crossover for Chromosomes.</p>
+<p>An abstract base class for the crossovor between two genetic individuals
+in bingo.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(parent_1,&nbsp;parent_2)</td>
+<td>Crossover between two individuals</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.Base.Equation">
+<span id="bingo-base-equation-module"></span><h2>bingo.Base.Equation module<a class="headerlink" href="#module-bingo.Base.Equation" title="Permalink to this headline">¶</a></h2>
+<p>The base of equation chromosomes in bingo.</p>
+<p>This module defines the basis of equations in bingo evolutionary analyses.
+Equations are commonly used in symbolic regression, a specific application of
+genetic programming.</p>
+<dl class="class">
+<dt id="bingo.Base.Equation.Equation">
+<em class="property">class </em><code class="descclassname">bingo.Base.Equation.</code><code class="descname">Equation</code><a class="headerlink" href="#bingo.Base.Equation.Equation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bingo.Base.Chromosome.Chromosome" title="bingo.Base.Chromosome.Chromosome"><code class="xref py py-class docutils literal notranslate"><span class="pre">bingo.Base.Chromosome.Chromosome</span></code></a></p>
+<p>Base representation of an equation</p>
+<p>This class is the base of a equations used in symbolic regression analyses
+in bingo.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">fitness</span></code></dt>
+<dd><p class="first last">numeric or tuple of numeric: The fitness of the individual</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code>(chromosome)</td>
+<td>Distance from self to chromosome</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.Base.Equation.Equation.evaluate_equation_at" title="bingo.Base.Equation.Equation.evaluate_equation_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_equation_at</span></code></a>(x)</td>
+<td>Evaluate the equation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.Base.Equation.Equation.evaluate_equation_with_local_opt_gradient_at" title="bingo.Base.Equation.Equation.evaluate_equation_with_local_opt_gradient_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_equation_with_local_opt_gradient_at</span></code></a>(x)</td>
+<td>Evaluate equation and get its derivatives.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.Base.Equation.Equation.evaluate_equation_with_x_gradient_at" title="bingo.Base.Equation.Equation.evaluate_equation_with_x_gradient_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_equation_with_x_gradient_at</span></code></a>(x)</td>
+<td>Evaluate equation and get its derivatives.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.Base.Equation.Equation.get_complexity" title="bingo.Base.Equation.Equation.get_complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_complexity</span></code></a>()</td>
+<td>Calculate complexity of equation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.Base.Equation.Equation.get_console_string" title="bingo.Base.Equation.Equation.get_console_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_console_string</span></code></a>()</td>
+<td>Simplified string conversion of equation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.Base.Equation.Equation.get_latex_string" title="bingo.Base.Equation.Equation.get_latex_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_latex_string</span></code></a>()</td>
+<td>Latex conversion of individual</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="bingo.Base.Equation.Equation.evaluate_equation_at">
+<code class="descname">evaluate_equation_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Equation.Equation.evaluate_equation_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the equation.</p>
+<p>Get value of the equation at points x.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>Mx1 array of numeric</strong></dt>
+<dd><p class="first last"><span class="math notranslate nohighlight">\(f(x)\)</span></p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.Equation.Equation.evaluate_equation_with_local_opt_gradient_at">
+<code class="descname">evaluate_equation_with_local_opt_gradient_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Equation.Equation.evaluate_equation_with_local_opt_gradient_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate equation and get its derivatives.</p>
+<p>Get value the equation at x and its gradient with respect to
+optimization parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>tuple(Mx1 array of numeric, MxL array of numeric)</strong></dt>
+<dd><p class="first last"><span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(df(x)/dc_i\)</span>. L is the number of
+optimization paremeters.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.Equation.Equation.evaluate_equation_with_x_gradient_at">
+<code class="descname">evaluate_equation_with_x_gradient_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Equation.Equation.evaluate_equation_with_x_gradient_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate equation and get its derivatives.</p>
+<p>Get value the equation at x and its gradient with respect to x.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>tuple(Mx1 array of numeric, MxD array of numeric)</strong></dt>
+<dd><p class="first last"><span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(df(x)/dx_i\)</span></p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.Equation.Equation.get_complexity">
+<code class="descname">get_complexity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Equation.Equation.get_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate complexity of equation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>numeric</strong></dt>
+<dd><p class="first last">complexity measure of equation</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.Equation.Equation.get_console_string">
+<code class="descname">get_console_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Equation.Equation.get_console_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simplified string conversion of equation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd><p class="first last">compact form of equation</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.Base.Equation.Equation.get_latex_string">
+<code class="descname">get_latex_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.Base.Equation.Equation.get_latex_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Latex conversion of individual</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd><p class="first last">equation in latex interpretable form</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.Base.Generator">
+<span id="bingo-base-generator-module"></span><h2>bingo.Base.Generator module<a class="headerlink" href="#module-bingo.Base.Generator" title="Permalink to this headline">¶</a></h2>
+<p>Generation of genetic individuals</p>
+<p>This module defines the basis of the generation of individuals in bingo
+evolutionary analyses.</p>
+<dl class="class">
+<dt id="bingo.Base.Generator.Generator">
+<em class="property">class </em><code class="descclassname">bingo.Base.Generator.</code><code class="descname">Generator</code><a class="headerlink" href="#bingo.Base.Generator.Generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A generator of individuals.</p>
+<p>An abstract base class for the generation of genetic individuals in
+bingo.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>()</td>
+<td>Generates individuals</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.Base.Mutation">
+<span id="bingo-base-mutation-module"></span><h2>bingo.Base.Mutation module<a class="headerlink" href="#module-bingo.Base.Mutation" title="Permalink to this headline">¶</a></h2>
+<p>The genetic operation of Mutation.</p>
+<p>This module defines the basis of mutation in bingo evolutionary analyses.</p>
+<dl class="class">
+<dt id="bingo.Base.Mutation.Mutation">
+<em class="property">class </em><code class="descclassname">bingo.Base.Mutation.</code><code class="descname">Mutation</code><a class="headerlink" href="#bingo.Base.Mutation.Mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A mutator of individuals.</p>
+<p>An abstract base class for the mutation of chromosomes in
+bingo.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(parent)</td>
+<td>Mutates individuals</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.Base">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-bingo.Base" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">bingo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="bingo.html">bingo package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="bingo.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-coevolutionisland-module">bingo.CoevolutionIsland module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-fitnessmetric-module">bingo.FitnessMetric module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.FitnessPredictor">bingo.FitnessPredictor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.Island">bingo.Island module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-islandmanager-module">bingo.IslandManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.Plotting">bingo.Plotting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-simplegp-module">bingo.SimpleGp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-trainingdata-module">bingo.TrainingData module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.Utils">bingo.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="bingo.html">bingo package</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoffrey F. Bomarito.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/bingo.Base.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

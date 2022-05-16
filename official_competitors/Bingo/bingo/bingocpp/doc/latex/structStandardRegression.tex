@@ -1,0 +1,63 @@
+\hypertarget{structStandardRegression}{}\section{Standard\+Regression Struct Reference}
+\label{structStandardRegression}\index{Standard\+Regression@{Standard\+Regression}}
+
+
+Traditional fitness evaluation.  
+
+
+
+
+{\ttfamily \#include $<$fitness\+\_\+metric.\+h$>$}
+
+Inheritance diagram for Standard\+Regression\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structStandardRegression}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{structStandardRegression_a0c35e5b8ce369988c8e1d6c3249b9581}{evaluate\+\_\+fitness\+\_\+vector} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv, \hyperlink{structTrainingData}{Training\+Data} \&train)
+\begin{DoxyCompactList}\small\item\em f(x) -\/ y where f is defined by indv and x, y are in train \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Traditional fitness evaluation. 
+
+\subsection{Member Function Documentation}
+\index{Standard\+Regression@{Standard\+Regression}!evaluate\+\_\+fitness\+\_\+vector@{evaluate\+\_\+fitness\+\_\+vector}}
+\index{evaluate\+\_\+fitness\+\_\+vector@{evaluate\+\_\+fitness\+\_\+vector}!Standard\+Regression@{Standard\+Regression}}
+\subsubsection[{\texorpdfstring{evaluate\+\_\+fitness\+\_\+vector(\+Acyclic\+Graph \&indv, Training\+Data \&train)}{evaluate_fitness_vector(AcyclicGraph &indv, TrainingData &train)}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd Standard\+Regression\+::evaluate\+\_\+fitness\+\_\+vector (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv, }
+\item[{{\bf Training\+Data} \&}]{train}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{structStandardRegression_a0c35e5b8ce369988c8e1d6c3249b9581}{}\label{structStandardRegression_a0c35e5b8ce369988c8e1d6c3249b9581}
+
+
+f(x) -\/ y where f is defined by indv and x, y are in train 
+
+\begin{DoxyNote}{Note}
+Each implementation will need to hard code casting \hyperlink{structTrainingData}{Training\+Data} to a specific type in this function.
+\end{DoxyNote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv} & agcpp indv to be evaluated. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\mbox{\tt in}  & {\em train} & The \hyperlink{structTrainingData}{Training\+Data} to evaluate the fitness. \hyperlink{structTrainingData}{Training\+Data} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Array\+X\+Xd the fitness vector 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{structFitnessMetric_a17bf921d3200dc93493e2af5c38552ad}{Fitness\+Metric}.
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{fitness__metric_8h}{fitness\+\_\+metric.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/fitness\+\_\+metric.\+cpp\end{DoxyCompactItemize}

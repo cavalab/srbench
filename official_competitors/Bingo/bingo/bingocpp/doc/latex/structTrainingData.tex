@@ -1,0 +1,76 @@
+\hypertarget{structTrainingData}{}\section{Training\+Data Struct Reference}
+\label{structTrainingData}\index{Training\+Data@{Training\+Data}}
+
+
+{\ttfamily \#include $<$training\+\_\+data.\+h$>$}
+
+Inheritance diagram for Training\+Data\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structTrainingData}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \hyperlink{structTrainingData}{Training\+Data} $\ast$ \hyperlink{structTrainingData_a96ef790e9e78909f84ce83692c7faced}{get\+\_\+item} (std\+::list$<$ int $>$ items)=0
+\begin{DoxyCompactList}\small\item\em gets a new training data with certain rows \end{DoxyCompactList}\item 
+virtual int \hyperlink{structTrainingData_a9be21e878961cc347e6820eb34db0a1b}{size} ()=0
+\begin{DoxyCompactList}\small\item\em gets the size of x \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+An abstract struct to hold the data for fitness calculations
+
+\begin{DoxyNote}{Note}
+\hyperlink{structTrainingData}{Training\+Data} includes \+: Implicit and Explicit data 
+\end{DoxyNote}
+
+
+\subsection{Member Function Documentation}
+\index{Training\+Data@{Training\+Data}!get\+\_\+item@{get\+\_\+item}}
+\index{get\+\_\+item@{get\+\_\+item}!Training\+Data@{Training\+Data}}
+\subsubsection[{\texorpdfstring{get\+\_\+item(std\+::list$<$ int $>$ items)=0}{get_item(std::list< int > items)=0}}]{\setlength{\rightskip}{0pt plus 5cm}virtual {\bf Training\+Data}$\ast$ Training\+Data\+::get\+\_\+item (
+\begin{DoxyParamCaption}
+\item[{std\+::list$<$ int $>$}]{items}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{structTrainingData_a96ef790e9e78909f84ce83692c7faced}{}\label{structTrainingData_a96ef790e9e78909f84ce83692c7faced}
+
+
+gets a new training data with certain rows 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em items} & The rows to retrieve. std\+::list$<$int$>$ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Training\+Data$\ast$ with the selected data 
+\end{DoxyReturn}
+
+
+Implemented in \hyperlink{structImplicitTrainingData_a91e92604cc19a693ac89eb7dbd9fab80}{Implicit\+Training\+Data}, and \hyperlink{structExplicitTrainingData_a7c60c1b5ea185580a5842c5cca18c7d0}{Explicit\+Training\+Data}.
+
+\index{Training\+Data@{Training\+Data}!size@{size}}
+\index{size@{size}!Training\+Data@{Training\+Data}}
+\subsubsection[{\texorpdfstring{size()=0}{size()=0}}]{\setlength{\rightskip}{0pt plus 5cm}virtual int Training\+Data\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{structTrainingData_a9be21e878961cc347e6820eb34db0a1b}{}\label{structTrainingData_a9be21e878961cc347e6820eb34db0a1b}
+
+
+gets the size of x 
+
+\begin{DoxyReturn}{Returns}
+int the amount of rows in x 
+\end{DoxyReturn}
+
+
+Implemented in \hyperlink{structImplicitTrainingData_aa3be8b04a160fb496668bba52507d3e4}{Implicit\+Training\+Data}, and \hyperlink{structExplicitTrainingData_aa5a3da99babf2436bdb9b4652a217584}{Explicit\+Training\+Data}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{training__data_8h}{training\+\_\+data.\+h}\end{DoxyCompactItemize}

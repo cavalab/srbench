@@ -1,0 +1,9 @@
+include README.md LICENSE.txt
+global-include CMakeLists.txt *.cmake
+recursive-include bingocpp/app *
+recursive-include bingocpp/include *
+recursive-include bingocpp/src *
+recursive-include bingocpp/tests *
+recursive-include bingocpp/external/pybind/include *
+recursive-include bingocpp/external/eigen/Eigen *
+recursive-include bingocpp/external/eigen/unsupported/Eigen *

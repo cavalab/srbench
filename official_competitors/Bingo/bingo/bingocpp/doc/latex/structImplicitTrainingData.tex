@@ -1,0 +1,107 @@
+\hypertarget{structImplicitTrainingData}{}\section{Implicit\+Training\+Data Struct Reference}
+\label{structImplicitTrainingData}\index{Implicit\+Training\+Data@{Implicit\+Training\+Data}}
+
+
+This struct holds data for Implicit regression.  
+
+
+
+
+{\ttfamily \#include $<$training\+\_\+data.\+h$>$}
+
+Inheritance diagram for Implicit\+Training\+Data\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structImplicitTrainingData}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structImplicitTrainingData_a517aa36137750f3d4299491b030b7431}{Implicit\+Training\+Data} (Eigen\+::\+Array\+X\+Xd vx)\hypertarget{structImplicitTrainingData_a517aa36137750f3d4299491b030b7431}{}\label{structImplicitTrainingData_a517aa36137750f3d4299491b030b7431}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{structImplicitTrainingData_a5bea19d7ebed073cab7dbad3a0aeaeb2}{Implicit\+Training\+Data} (Eigen\+::\+Array\+X\+Xd vx, Eigen\+::\+Array\+X\+Xd vdx\+\_\+dt)\hypertarget{structImplicitTrainingData_a5bea19d7ebed073cab7dbad3a0aeaeb2}{}\label{structImplicitTrainingData_a5bea19d7ebed073cab7dbad3a0aeaeb2}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{structImplicitTrainingData}{Implicit\+Training\+Data} $\ast$ \hyperlink{structImplicitTrainingData_a91e92604cc19a693ac89eb7dbd9fab80}{get\+\_\+item} (std\+::list$<$ int $>$ items)
+\begin{DoxyCompactList}\small\item\em gets a new training data with certain rows \end{DoxyCompactList}\item 
+int \hyperlink{structImplicitTrainingData_aa3be8b04a160fb496668bba52507d3e4}{size} ()
+\begin{DoxyCompactList}\small\item\em gets the size of x \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{structImplicitTrainingData_a7d797c666ce6c25d2f816e01ed4f3aed}{x}
+\begin{DoxyCompactList}\small\item\em Eigen\+::\+Array\+X\+Xd x. \end{DoxyCompactList}\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{structImplicitTrainingData_a46e7205b1b43da1e0b6b582b3d127a2e}{dx\+\_\+dt}
+\begin{DoxyCompactList}\small\item\em Eigen\+::\+Array\+X\+Xd dx\+\_\+dt. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This struct holds data for Implicit regression. 
+
+\subsection{Member Function Documentation}
+\index{Implicit\+Training\+Data@{Implicit\+Training\+Data}!get\+\_\+item@{get\+\_\+item}}
+\index{get\+\_\+item@{get\+\_\+item}!Implicit\+Training\+Data@{Implicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{get\+\_\+item(std\+::list$<$ int $>$ items)}{get_item(std::list< int > items)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Implicit\+Training\+Data} $\ast$ Implicit\+Training\+Data\+::get\+\_\+item (
+\begin{DoxyParamCaption}
+\item[{std\+::list$<$ int $>$}]{items}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{structImplicitTrainingData_a91e92604cc19a693ac89eb7dbd9fab80}{}\label{structImplicitTrainingData_a91e92604cc19a693ac89eb7dbd9fab80}
+
+
+gets a new training data with certain rows 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em items} & The rows to retrieve. std\+::list$<$int$>$ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Training\+Data$\ast$ with the selected data 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{structTrainingData_a96ef790e9e78909f84ce83692c7faced}{Training\+Data}.
+
+\index{Implicit\+Training\+Data@{Implicit\+Training\+Data}!size@{size}}
+\index{size@{size}!Implicit\+Training\+Data@{Implicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{size()}{size()}}]{\setlength{\rightskip}{0pt plus 5cm}int Implicit\+Training\+Data\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{structImplicitTrainingData_aa3be8b04a160fb496668bba52507d3e4}{}\label{structImplicitTrainingData_aa3be8b04a160fb496668bba52507d3e4}
+
+
+gets the size of x 
+
+\begin{DoxyReturn}{Returns}
+int the amount of rows in x 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{structTrainingData_a9be21e878961cc347e6820eb34db0a1b}{Training\+Data}.
+
+
+
+\subsection{Member Data Documentation}
+\index{Implicit\+Training\+Data@{Implicit\+Training\+Data}!dx\+\_\+dt@{dx\+\_\+dt}}
+\index{dx\+\_\+dt@{dx\+\_\+dt}!Implicit\+Training\+Data@{Implicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{dx\+\_\+dt}{dx_dt}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd Implicit\+Training\+Data\+::dx\+\_\+dt}\hypertarget{structImplicitTrainingData_a46e7205b1b43da1e0b6b582b3d127a2e}{}\label{structImplicitTrainingData_a46e7205b1b43da1e0b6b582b3d127a2e}
+
+
+Eigen\+::\+Array\+X\+Xd dx\+\_\+dt. 
+
+dx\+\_\+dt variabes for Implicit\+Training \index{Implicit\+Training\+Data@{Implicit\+Training\+Data}!x@{x}}
+\index{x@{x}!Implicit\+Training\+Data@{Implicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{x}{x}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd Implicit\+Training\+Data\+::x}\hypertarget{structImplicitTrainingData_a7d797c666ce6c25d2f816e01ed4f3aed}{}\label{structImplicitTrainingData_a7d797c666ce6c25d2f816e01ed4f3aed}
+
+
+Eigen\+::\+Array\+X\+Xd x. 
+
+x variabes for Implicit\+Training 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{training__data_8h}{training\+\_\+data.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/training\+\_\+data.\+cpp\end{DoxyCompactItemize}

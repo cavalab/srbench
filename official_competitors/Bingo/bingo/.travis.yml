@@ -1,0 +1,48 @@
+language: python
+
+python: "3.6"
+
+jobs:
+  include:
+    - stage: "test"
+      name: "unit tests"
+      before_install:
+        - sudo apt-get install -y -q mpich libmpich-dev
+      install:
+        - pip install pytest pytest-cov pytest-mock
+        - pip install coveralls
+        - pip install -r requirements.txt
+        - ./.build_bingocpp.sh
+      before_script:
+        - export PYTHONPATH=$PYTHONPATH:$PWD
+      script:
+        - python -c "import bingo"
+        - tests/.run_tests.sh
+      after_script:
+        - coveralls
+
+    - name: "performance benchmarks"
+      before_install:
+        - sudo apt-get install -y -q mpich libmpich-dev
+      install:
+        - pip install -r requirements.txt
+        - ./.build_bingocpp.sh
+      before_script:
+        - export PYTHONPATH=$PYTHONPATH:$PWD
+      script:
+        - python tests/performance_benchmarking/performance_benchmarks.py
+        - python tests/performance_benchmarking/island_benchmarks.py
+
+    - name: "examples"
+      before_install:
+        - sudo apt-get install -y -q mpich libmpich-dev
+      install:
+        - pip install -r requirements.txt
+        - pip install jupyter
+        - pip install nbconvert
+        - pip install matplotlib
+        - ./.build_bingocpp.sh
+      before_script:
+        - export PYTHONPATH=$PYTHONPATH:$PWD
+      script:
+        - examples/.test_examples.sh

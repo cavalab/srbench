@@ -1,0 +1,13 @@
+--suffix=none 
+--delete-empty-lines 
+--style=google 
+--indent=spaces=2 
+--attach-namespaces 
+--indent-switches 
+--indent-classes 
+--break-blocks=all 
+--pad-oper 
+--pad-header 
+--add-braces 
+--convert-tabs 
+--max-code-length=80

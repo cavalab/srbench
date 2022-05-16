@@ -1,0 +1,1141 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>bingo.AGraph package &#8212; bingo 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="bingo package" href="bingo.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="bingo-agraph-package">
+<h1>bingo.AGraph package<a class="headerlink" href="#bingo-agraph-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-bingo.AGraph.AGraph">
+<span id="bingo-agraph-agraph-module"></span><h2>bingo.AGraph.AGraph module<a class="headerlink" href="#module-bingo.AGraph.AGraph" title="Permalink to this headline">¶</a></h2>
+<p>Acyclic graph representation of an equation.</p>
+<p>This module contains most of the code necessary for the representation of an
+acyclic graph (linear stack) in symbolic regression.</p>
+<div class="section" id="stack">
+<h3>Stack<a class="headerlink" href="#stack" title="Permalink to this headline">¶</a></h3>
+<p>The stack is represented as Nx3 integer array. Where each row of the array
+corresponds to a single command with form:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="37%" />
+<col width="37%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Node</td>
+<td>Parameter 1</td>
+<td>Parameter 2</td>
+</tr>
+</tbody>
+</table>
+<p>Where the parameters are a reference to the result of previously executed
+commands (referenced by row number in the stack). The result of the last (N’th)
+command in the stack is the evaluation of the equation.</p>
+<p>Note: Parameter values have special meaning for two of the nodes (0 and 1).</p>
+</div>
+<div class="section" id="nodes">
+<h3>Nodes<a class="headerlink" href="#nodes" title="Permalink to this headline">¶</a></h3>
+<p>An integer to node mapping is how the command stack is parsed.
+The current map is outlined below.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="60%" />
+<col width="28%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Node</th>
+<th class="head">Name</th>
+<th class="head">Math</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>load p1’th column of x</td>
+<td><span class="math notranslate nohighlight">\(x_{p1}\)</span></td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>load p1’th constant</td>
+<td><span class="math notranslate nohighlight">\(c_{p1}\)</span></td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>addition</td>
+<td><span class="math notranslate nohighlight">\(p1 + p2\)</span></td>
+</tr>
+<tr class="row-odd"><td>3</td>
+<td>subtraction</td>
+<td><span class="math notranslate nohighlight">\(p1 - p2\)</span></td>
+</tr>
+<tr class="row-even"><td>4</td>
+<td>multiplication</td>
+<td><span class="math notranslate nohighlight">\(p1 - p2\)</span></td>
+</tr>
+<tr class="row-odd"><td>5</td>
+<td>division (not divide-by-zero protected)</td>
+<td><span class="math notranslate nohighlight">\(p1 / p2\)</span></td>
+</tr>
+<tr class="row-even"><td>6</td>
+<td>sine</td>
+<td><span class="math notranslate nohighlight">\(sin(p1)\)</span></td>
+</tr>
+<tr class="row-odd"><td>7</td>
+<td>cosine</td>
+<td><span class="math notranslate nohighlight">\(cos(p1)\)</span></td>
+</tr>
+<tr class="row-even"><td>8</td>
+<td>exponential</td>
+<td><span class="math notranslate nohighlight">\(exp(p1)\)</span></td>
+</tr>
+<tr class="row-odd"><td>9</td>
+<td>logarithm</td>
+<td><span class="math notranslate nohighlight">\(log(|p1|)\)</span></td>
+</tr>
+<tr class="row-even"><td>10</td>
+<td>power</td>
+<td><span class="math notranslate nohighlight">\(|p1|^{p2}\)</span></td>
+</tr>
+<tr class="row-odd"><td>11</td>
+<td>absolute value</td>
+<td><span class="math notranslate nohighlight">\(|p1|\)</span></td>
+</tr>
+<tr class="row-even"><td>12</td>
+<td>square root</td>
+<td><span class="math notranslate nohighlight">\(sqrt(|p1|)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>IS_ARITY_2_MAP <span class="classifier-delimiter">:</span> <span class="classifier">dict {int: bool}</span></dt>
+<dd>A map of node number to boolean that states whether the
+node has arity 2 (as opposed to 1)</dd>
+<dt>IS_TERMINAL_MAP <span class="classifier-delimiter">:</span> <span class="classifier">dict {int: bool}</span></dt>
+<dd>A map of node number to boolean that states whether the
+node is a terminal</dd>
+<dt>STACK_PRINT_MAP <span class="classifier-delimiter">:</span> <span class="classifier">dict {int: str}</span></dt>
+<dd>A map of node number to a format string for stack output</dd>
+<dt>LATEX_PRINT_MAP <span class="classifier-delimiter">:</span> <span class="classifier">dict {int: str}</span></dt>
+<dd>A map of node number to a format string for latex output</dd>
+<dt>CONSOLE_PRINT_MAP <span class="classifier-delimiter">:</span> <span class="classifier">dict {int: str}</span></dt>
+<dd>A map of node number to a format string for console output</dd>
+</dl>
+<dl class="class">
+<dt id="bingo.AGraph.AGraph.AGraph">
+<em class="property">class </em><code class="descclassname">bingo.AGraph.AGraph.</code><code class="descname">AGraph</code><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bingo.Base.html#bingo.Base.Equation.Equation" title="bingo.Base.Equation.Equation"><code class="xref py py-class docutils literal notranslate"><span class="pre">bingo.Base.Equation.Equation</span></code></a>, <a class="reference internal" href="bingo.Base.html#bingo.Base.ContinuousLocalOptimization.ChromosomeInterface" title="bingo.Base.ContinuousLocalOptimization.ChromosomeInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">bingo.Base.ContinuousLocalOptimization.ChromosomeInterface</span></code></a></p>
+<p>Acyclic graph representation of an equation.</p>
+<p>Agraph is initialized with with empty command array and no constants.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.command_array" title="bingo.AGraph.AGraph.AGraph.command_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">command_array</span></code></a></dt>
+<dd><p class="first last">Nx3 array of int: acyclic graph stack.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.distance" title="bingo.AGraph.AGraph.AGraph.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a>(chromosome)</td>
+<td>Computes the distance to another Agraph</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.evaluate_equation_at" title="bingo.AGraph.AGraph.AGraph.evaluate_equation_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_equation_at</span></code></a>(x)</td>
+<td>Evaluate the AGraph equation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.evaluate_equation_with_local_opt_gradient_at" title="bingo.AGraph.AGraph.AGraph.evaluate_equation_with_local_opt_gradient_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_equation_with_local_opt_gradient_at</span></code></a>(x)</td>
+<td>Evaluate Agraph and get its derivatives.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.evaluate_equation_with_x_gradient_at" title="bingo.AGraph.AGraph.AGraph.evaluate_equation_with_x_gradient_at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">evaluate_equation_with_x_gradient_at</span></code></a>(x)</td>
+<td>Evaluate Agraph and get its derivatives.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.get_complexity" title="bingo.AGraph.AGraph.AGraph.get_complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_complexity</span></code></a>()</td>
+<td>Calculate complexity of AGraph equation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.get_console_string" title="bingo.AGraph.AGraph.AGraph.get_console_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_console_string</span></code></a>()</td>
+<td>Console version of Agraph equation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.get_latex_string" title="bingo.AGraph.AGraph.AGraph.get_latex_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_latex_string</span></code></a>()</td>
+<td>Latex interpretable version of Agraph equation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.get_number_local_optimization_params" title="bingo.AGraph.AGraph.AGraph.get_number_local_optimization_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_number_local_optimization_params</span></code></a>()</td>
+<td>number of parameters for local optimization</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.get_utilized_commands" title="bingo.AGraph.AGraph.AGraph.get_utilized_commands"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_utilized_commands</span></code></a>()</td>
+<td>“Find which commands are utilized.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.needs_local_optimization" title="bingo.AGraph.AGraph.AGraph.needs_local_optimization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">needs_local_optimization</span></code></a>()</td>
+<td>The Agraph needs local optimization.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.notify_command_array_modification" title="bingo.AGraph.AGraph.AGraph.notify_command_array_modification"><code class="xref py py-obj docutils literal notranslate"><span class="pre">notify_command_array_modification</span></code></a>()</td>
+<td>Notify individual of inplace modification of its command array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.AGraph.AGraph.set_local_optimization_params" title="bingo.AGraph.AGraph.AGraph.set_local_optimization_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_local_optimization_params</span></code></a>(params)</td>
+<td>Set the local optimization parameters.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="bingo.AGraph.AGraph.AGraph.command_array">
+<code class="descname">command_array</code><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.command_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nx3 array of int: acyclic graph stack.</p>
+<p class="rubric">Notes</p>
+<p>Setting the command stack automatically resets fitness</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.distance">
+<code class="descname">distance</code><span class="sig-paren">(</span><em>chromosome</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the distance to another Agraph</p>
+<p>Distance is a measure of similarity of the two command_arrays</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>chromosome</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Agraph</span></dt>
+<dd><p class="first last">The individual to which distance will be calculated</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>: int</strong></dt>
+<dd><p class="first last">distance from self to individual</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.evaluate_equation_at">
+<code class="descname">evaluate_equation_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.evaluate_equation_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the AGraph equation.</p>
+<p>Evaluation of the Agraph equation at points x.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>Mx1 array of numeric</strong></dt>
+<dd><p class="first last"><span class="math notranslate nohighlight">\(f(x)\)</span></p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.evaluate_equation_with_local_opt_gradient_at">
+<code class="descname">evaluate_equation_with_local_opt_gradient_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.evaluate_equation_with_local_opt_gradient_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate Agraph and get its derivatives.</p>
+<p>Evaluate the AGraph equation at x and get the gradient of constants.
+Constants are of length L.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>tuple(Mx1 array of numeric, MxL array of numeric)</strong></dt>
+<dd><p class="first last"><span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(df(x)/dc_i\)</span></p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.evaluate_equation_with_x_gradient_at">
+<code class="descname">evaluate_equation_with_x_gradient_at</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.evaluate_equation_with_x_gradient_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate Agraph and get its derivatives.</p>
+<p>Evaluate the AGraph equation at x and the gradient of x.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>tuple(Mx1 array of numeric, MxD array of numeric)</strong></dt>
+<dd><p class="first last"><span class="math notranslate nohighlight">\(f(x)\)</span> and <span class="math notranslate nohighlight">\(df(x)/dx_i\)</span></p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.get_complexity">
+<code class="descname">get_complexity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.get_complexity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate complexity of AGraph equation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int</strong></dt>
+<dd><p class="first last">number of utilized commands in stack</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.get_console_string">
+<code class="descname">get_console_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.get_console_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Console version of Agraph equation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd><p class="first last">Equation in simple form</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.get_latex_string">
+<code class="descname">get_latex_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.get_latex_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Latex interpretable version of Agraph equation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>str</strong></dt>
+<dd><p class="first last">Equation in latex form</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.get_number_local_optimization_params">
+<code class="descname">get_number_local_optimization_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.get_number_local_optimization_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of parameters for local optimization</p>
+<p>Count constants and set up for optimization</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int</strong></dt>
+<dd><p class="first last">Number of constants that need to be optimized</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.get_utilized_commands">
+<code class="descname">get_utilized_commands</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.get_utilized_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Find which commands are utilized.</p>
+<p>Find the commands in the command array of the agraph upon which the
+last command relies. This is inclusive of the last command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>list of bool of length N</strong></dt>
+<dd><p class="first last">Boolean values for whether each command is utilized.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.needs_local_optimization">
+<code class="descname">needs_local_optimization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.needs_local_optimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Agraph needs local optimization.</p>
+<p>Find out whether constants need optimization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>bool</strong></dt>
+<dd><p class="first last">Constants need optimization</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.notify_command_array_modification">
+<code class="descname">notify_command_array_modification</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.notify_command_array_modification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Notify individual of inplace modification of its command array</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.AGraph.AGraph.set_local_optimization_params">
+<code class="descname">set_local_optimization_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraph.AGraph.set_local_optimization_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the local optimization parameters.</p>
+<p>Manually set optimized constants.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>params</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of numeric</span></dt>
+<dd><p class="first last">Values to set constants</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-bingo.AGraph.AGraphCrossover">
+<span id="bingo-agraph-agraphcrossover-module"></span><h2>bingo.AGraph.AGraphCrossover module<a class="headerlink" href="#module-bingo.AGraph.AGraphCrossover" title="Permalink to this headline">¶</a></h2>
+<p>Definition of crossover between two acyclic graph individuals</p>
+<p>This module contains the implementation of single point crossover between
+acyclic graph individuals.</p>
+<dl class="class">
+<dt id="bingo.AGraph.AGraphCrossover.AGraphCrossover">
+<em class="property">class </em><code class="descclassname">bingo.AGraph.AGraphCrossover.</code><code class="descname">AGraphCrossover</code><a class="headerlink" href="#bingo.AGraph.AGraphCrossover.AGraphCrossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bingo.Base.html#bingo.Base.Crossover.Crossover" title="bingo.Base.Crossover.Crossover"><code class="xref py py-class docutils literal notranslate"><span class="pre">bingo.Base.Crossover.Crossover</span></code></a></p>
+<p>Crossover between acyclic graph individuals</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(parent_1,&nbsp;parent_2)</td>
+<td>Single point crossover.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.AGraph.AGraphGenerator">
+<span id="bingo-agraph-agraphgenerator-module"></span><h2>bingo.AGraph.AGraphGenerator module<a class="headerlink" href="#module-bingo.AGraph.AGraphGenerator" title="Permalink to this headline">¶</a></h2>
+<p>Generator of acyclic graph individuals.</p>
+<p>This module contains the implementation of the generation of random acyclic
+graph individuals.</p>
+<dl class="class">
+<dt id="bingo.AGraph.AGraphGenerator.AGraphGenerator">
+<em class="property">class </em><code class="descclassname">bingo.AGraph.AGraphGenerator.</code><code class="descname">AGraphGenerator</code><span class="sig-paren">(</span><em>agraph_size</em>, <em>component_generator</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AGraphGenerator.AGraphGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bingo.Base.html#bingo.Base.Generator.Generator" title="bingo.Base.Generator.Generator"><code class="xref py py-class docutils literal notranslate"><span class="pre">bingo.Base.Generator.Generator</span></code></a></p>
+<p>Generates acyclic graph individuals</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>agraph_size</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">command array size of the generated acyclic graphs</p>
+</dd>
+<dt><strong>component_generator</strong> <span class="classifier-delimiter">:</span> <span class="classifier">AGraph.ComponentGenerator</span></dt>
+<dd><p class="first last">Generator of stack components of agraphs</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>()</td>
+<td>Generates random agraph individual.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.AGraph.AgraphMutation">
+<span id="bingo-agraph-agraphmutation-module"></span><h2>bingo.AGraph.AgraphMutation module<a class="headerlink" href="#module-bingo.AGraph.AgraphMutation" title="Permalink to this headline">¶</a></h2>
+<p>Mutation of acyclic graph individuals.</p>
+<p>This module contains the implementation of mutation for acyclic graph
+individuals, which is composed of 4 possible mutation strategies: command
+mutation, node mutation, parameter mutation and pruning.</p>
+<dl class="class">
+<dt id="bingo.AGraph.AgraphMutation.AGraphMutation">
+<em class="property">class </em><code class="descclassname">bingo.AGraph.AgraphMutation.</code><code class="descname">AGraphMutation</code><span class="sig-paren">(</span><em>component_generator</em>, <em>command_probability=0.2</em>, <em>node_probability=0.3</em>, <em>parameter_probability=0.3</em>, <em>prune_probability=0.2</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.AgraphMutation.AGraphMutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="bingo.Base.html#bingo.Base.Mutation.Mutation" title="bingo.Base.Mutation.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">bingo.Base.Mutation.Mutation</span></code></a></p>
+<p>Mutation of acyclic graph individual</p>
+<p>Mutation of an agraph individual my modification of its command array.
+Mutation randomly takes one of the following 4 forms</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="first docutils">
+<dt>command mutation: An entire command (row) of the command array is</dt>
+<dd>replaced by a new random one</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>node mutation: The node of a command is replaced by a random</dt>
+<dd>new one.  Terminals will automatically have updated
+parameters to maintain consistency.</dd>
+</dl>
+</li>
+<li>parameter mutation: The parameters of a command are randomly changed.</li>
+<li><dl class="first docutils">
+<dt>pruning: The command array is adjusted to remove an operator from</dt>
+<dd>the evaluation of the agraph. Pruning a terminal does nothing.</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>command_probability</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">probability of command mutation</p>
+</dd>
+<dt><strong>node_probability</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">probability of node mutation</p>
+</dd>
+<dt><strong>parameter_probability</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">probability of parameter mutation</p>
+</dd>
+<dt><strong>prune_probability</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd><p class="first last">probability of pruning</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The input probabilities are normalized if their sum is not equal to 1.</p>
+<p>Mutation can result in no change if, for instance, a prune mutation is
+executed on a Agraph utilizing only a single terminal.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code>(parent)</td>
+<td>Single point mutation.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.AGraph.Backend">
+<span id="bingo-agraph-backend-module"></span><h2>bingo.AGraph.Backend module<a class="headerlink" href="#module-bingo.AGraph.Backend" title="Permalink to this headline">¶</a></h2>
+<p>This module represents the python backend associated with the Agraph equation
+representation.  The backend is used to perform the most computationally
+demanding functions required by the Agraph.</p>
+<dl class="function">
+<dt id="bingo.AGraph.Backend.get_utilized_commands">
+<code class="descclassname">bingo.AGraph.Backend.</code><code class="descname">get_utilized_commands</code><span class="sig-paren">(</span><em>stack</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.Backend.get_utilized_commands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find which commands are utilized.</p>
+<p>Find the commands (rows) of the stack upon which the last command of the
+stack depends. This is inclusive of the last command.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>stack</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Nx3 numpy array of int.</span></dt>
+<dd><p class="first last">The command stack associated with an equation. N is the number of
+commands in the stack.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>list of bool of length N</strong></dt>
+<dd><p class="first last">Boolean values for whether each command is utilized.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bingo.AGraph.Backend.is_cpp">
+<code class="descclassname">bingo.AGraph.Backend.</code><code class="descname">is_cpp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.Backend.is_cpp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify whether the backend is C++</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>bool :</strong></dt>
+<dd><p class="first last">false, the backend is not c++</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bingo.AGraph.Backend.simplify_and_evaluate">
+<code class="descclassname">bingo.AGraph.Backend.</code><code class="descname">simplify_and_evaluate</code><span class="sig-paren">(</span><em>stack</em>, <em>x</em>, <em>constants</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.Backend.simplify_and_evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate an equation after simplification.</p>
+<p>Evauluate the equation associated with an Agraph, at the values x.
+Simplification ensures that only the commands utilized in the result are
+considered.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>stack</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Nx3 numpy array of int.</span></dt>
+<dd><p class="first last">The command stack associated with an equation. N is the number of
+commands in the stack.</p>
+</dd>
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+<dt><strong>constants</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list-like of numeric.</span></dt>
+<dd><p class="first last">numeric constants that are used in the equation</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>Mx1 array of numeric</strong></dt>
+<dd><p class="first last">:math`f(x)`</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bingo.AGraph.Backend.simplify_and_evaluate_with_derivative">
+<code class="descclassname">bingo.AGraph.Backend.</code><code class="descname">simplify_and_evaluate_with_derivative</code><span class="sig-paren">(</span><em>stack</em>, <em>x</em>, <em>constants</em>, <em>wrt_param_x_or_c</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.Backend.simplify_and_evaluate_with_derivative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate equation and take derivative</p>
+<p>Evauluate the derivatives of the equation associated with an Agraph, at the
+values x.  Simplification ensures that only the commands utilized in the
+result are considered.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>stack</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Nx3 numpy array of int.</span></dt>
+<dd><p class="first last">The command stack associated with an equation. N is the number of
+commands in the stack.</p>
+</dd>
+<dt><strong>x</strong> <span class="classifier-delimiter">:</span> <span class="classifier">MxD array of numeric.</span></dt>
+<dd><p class="first last">Values at which to evaluate the equations. D is the number of
+dimensions in x and M is the number of data points in x.</p>
+</dd>
+<dt><strong>constants</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list-like of numeric.</span></dt>
+<dd><p class="first last">numeric constants that are used in the equation</p>
+</dd>
+<dt><strong>wrt_param_x_or_c</strong> <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd><p class="first last">Take derivative with respect to x or constants. True
+signifies derivatives are wrt x. False signifies
+derivatives are wrt constants.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>MxD array of numeric or MxL array of numeric.</strong></dt>
+<dd><p class="first last">Derivatives of all dimensions of x/constants at location x.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.AGraph.BackendNodes">
+<span id="bingo-agraph-backendnodes-module"></span><h2>bingo.AGraph.BackendNodes module<a class="headerlink" href="#module-bingo.AGraph.BackendNodes" title="Permalink to this headline">¶</a></h2>
+<p>This module provides the python implementation of the functions for each
+mathematical nodes used in Agraph</p>
+<div class="section" id="id1">
+<h3>Attributes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>FORWARD_EVAL_MAP <span class="classifier-delimiter">:</span> <span class="classifier">dictionary {int: function}</span></dt>
+<dd>A map of node number to evaluation function</dd>
+<dt>REVERSE_EVAL_MAP <span class="classifier-delimiter">:</span> <span class="classifier">dictionary {int: function}</span></dt>
+<dd>A map of node number to derivative evaluation function</dd>
+</dl>
+<dl class="function">
+<dt id="bingo.AGraph.BackendNodes.forward_eval_function">
+<code class="descclassname">bingo.AGraph.BackendNodes.</code><code class="descname">forward_eval_function</code><span class="sig-paren">(</span><em>node</em>, <em>param1</em>, <em>param2</em>, <em>x</em>, <em>constants</em>, <em>forward_eval</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.BackendNodes.forward_eval_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="bingo.AGraph.BackendNodes.reverse_eval_function">
+<code class="descclassname">bingo.AGraph.BackendNodes.</code><code class="descname">reverse_eval_function</code><span class="sig-paren">(</span><em>node</em>, <em>reverse_index</em>, <em>param1</em>, <em>param2</em>, <em>forward_eval</em>, <em>reverse_eval</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.BackendNodes.reverse_eval_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-bingo.AGraph.ComponentGenerator">
+<span id="bingo-agraph-componentgenerator-module"></span><h2>bingo.AGraph.ComponentGenerator module<a class="headerlink" href="#module-bingo.AGraph.ComponentGenerator" title="Permalink to this headline">¶</a></h2>
+<p>Component Generator for Agraph equations.</p>
+<p>This module covers the random generation of components of an Acyclic graph
+command stack. It can generate full commands or sub-components such as
+operators, terminals, and their associated parameters.</p>
+<dl class="class">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator">
+<em class="property">class </em><code class="descclassname">bingo.AGraph.ComponentGenerator.</code><code class="descname">ComponentGenerator</code><span class="sig-paren">(</span><em>input_x_dimension</em>, <em>num_initial_load_statements=1</em>, <em>terminal_probability=0.1</em>, <em>constant_probability=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generates commands or components of a command for an AGraph stack</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>input_x_dimension</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">number of independent variables</p>
+</dd>
+<dt><strong>num_initial_load_statements</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">number of commands at the beginning of stack
+which are required to be “load” commands</p>
+</dd>
+<dt><strong>terminal_probability</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float [0.0-1.0]</span></dt>
+<dd><p class="first last">probability that a new node will be a terminal</p>
+</dd>
+<dt><strong>constant_probability</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float [0.0-1.0]</span></dt>
+<dd><p class="first last">probability that a new terminal will be a constant</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.add_operator" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.add_operator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_operator</span></code></a>(operator_number[,&nbsp;operator_weight])</td>
+<td>Add an operator number to the set of possible operators</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_operators" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_operators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_number_of_operators</span></code></a>()</td>
+<td>Gets number of possible operators</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_terminals" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_terminals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_number_of_terminals</span></code></a>()</td>
+<td>Gets number of possible terminals</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_command" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_command"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_command</span></code></a>(stack_location)</td>
+<td>Get a random command</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_operator</span></code></a>()</td>
+<td>Get a random operator</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator_parameter" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator_parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_operator_parameter</span></code></a>(stack_location)</td>
+<td>Get random operator parameter</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_terminal</span></code></a>()</td>
+<td>Get a random terminal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal_parameter" title="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal_parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_terminal_parameter</span></code></a>(terminal_number)</td>
+<td>Get random terminal parameter</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.add_operator">
+<code class="descname">add_operator</code><span class="sig-paren">(</span><em>operator_number</em>, <em>operator_weight=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.add_operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an operator number to the set of possible operators</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>operator_number</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">operator code defined in Agraph operator maps</p>
+</dd>
+<dt><strong>operator_weight</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number</span></dt>
+<dd><p class="first last">relative weight of operator probability</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_operators">
+<code class="descname">get_number_of_operators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_operators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets number of possible operators</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int :</strong></dt>
+<dd><p class="first last">number of operators</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_terminals">
+<code class="descname">get_number_of_terminals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.get_number_of_terminals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets number of possible terminals</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int :</strong></dt>
+<dd><p class="first last">number of terminals</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_command">
+<code class="descname">random_command</code><span class="sig-paren">(</span><em>stack_location</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a random command</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>stack_location</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">location in the stack for the command</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>array of int</strong></dt>
+<dd><p class="first last">a random command in the form [node, parameter 1, parameter 2]</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator">
+<code class="descname">random_operator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a random operator</p>
+<blockquote>
+<div>Get a random operator from the list of possible operators.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int</strong></dt>
+<dd><p class="first last">an operator number</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator_parameter">
+<em class="property">static </em><code class="descname">random_operator_parameter</code><span class="sig-paren">(</span><em>stack_location</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_operator_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get random operator parameter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>stack_location</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">location of command in stack</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int</strong></dt>
+<dd><p class="first last">parameter to be used in an operator command</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The returned random operator parameter is guranteed to be less than
+stack_location.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal">
+<code class="descname">random_terminal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a random terminal</p>
+<blockquote>
+<div>Get a random load-X or load-C terminal.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int</strong></dt>
+<dd><p class="first last">terminal number (0 or 1)</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal_parameter">
+<code class="descname">random_terminal_parameter</code><span class="sig-paren">(</span><em>terminal_number</em><span class="sig-paren">)</span><a class="headerlink" href="#bingo.AGraph.ComponentGenerator.ComponentGenerator.random_terminal_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get random terminal parameter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>terminal_number</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">terminal number for which random parameter should be
+generated</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>int</strong></dt>
+<dd><p class="first last">parameter to be used in a terminal command</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bingo.AGraph">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-bingo.AGraph" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">bingo</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="bingo.html">bingo package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="bingo.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-coevolutionisland-module">bingo.CoevolutionIsland module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-fitnessmetric-module">bingo.FitnessMetric module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.FitnessPredictor">bingo.FitnessPredictor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.Island">bingo.Island module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-islandmanager-module">bingo.IslandManager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.Plotting">bingo.Plotting module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-simplegp-module">bingo.SimpleGp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#bingo-trainingdata-module">bingo.TrainingData module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo.Utils">bingo.Utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bingo.html#module-bingo">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="bingo.html">bingo package</a><ul>
+      <li>Previous: <a href="bingo.html" title="previous chapter">bingo package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoffrey F. Bomarito.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/bingo.AGraph.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,108 @@
+\hypertarget{structFitnessMetric}{}\section{Fitness\+Metric Struct Reference}
+\label{structFitnessMetric}\index{Fitness\+Metric@{Fitness\+Metric}}
+
+
+{\ttfamily \#include $<$fitness\+\_\+metric.\+h$>$}
+
+Inheritance diagram for Fitness\+Metric\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structFitnessMetric}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Eigen\+::\+Array\+X\+Xd \hyperlink{structFitnessMetric_a17bf921d3200dc93493e2af5c38552ad}{evaluate\+\_\+fitness\+\_\+vector} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv, \hyperlink{structTrainingData}{Training\+Data} \&train)=0
+\begin{DoxyCompactList}\small\item\em f(x) -\/ y where f is defined by indv and x, y are in train \end{DoxyCompactList}\item 
+double \hyperlink{structFitnessMetric_a8af896d7e25e1bf34412ce92b4851958}{evaluate\+\_\+fitness} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv, \hyperlink{structTrainingData}{Training\+Data} \&train)
+\begin{DoxyCompactList}\small\item\em Finds the fitness metric. \end{DoxyCompactList}\item 
+void \hyperlink{structFitnessMetric_ae4e27aefef6b54dddd6052bd80d37665}{optimize\+\_\+constants} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv, \hyperlink{structTrainingData}{Training\+Data} \&train)
+\begin{DoxyCompactList}\small\item\em perform levenberg-\/marquardt optimization on embedded constants \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+An abstract struct to evaluate metric based on type of regression
+
+\begin{DoxyNote}{Note}
+\hyperlink{structFitnessMetric}{Fitness\+Metric} includes \+: \hyperlink{structStandardRegression}{Standard\+Regression} 
+\end{DoxyNote}
+
+
+\subsection{Member Function Documentation}
+\index{Fitness\+Metric@{Fitness\+Metric}!evaluate\+\_\+fitness@{evaluate\+\_\+fitness}}
+\index{evaluate\+\_\+fitness@{evaluate\+\_\+fitness}!Fitness\+Metric@{Fitness\+Metric}}
+\subsubsection[{\texorpdfstring{evaluate\+\_\+fitness(\+Acyclic\+Graph \&indv, Training\+Data \&train)}{evaluate_fitness(AcyclicGraph &indv, TrainingData &train)}}]{\setlength{\rightskip}{0pt plus 5cm}double Fitness\+Metric\+::evaluate\+\_\+fitness (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv, }
+\item[{{\bf Training\+Data} \&}]{train}
+\end{DoxyParamCaption}
+)}\hypertarget{structFitnessMetric_a8af896d7e25e1bf34412ce92b4851958}{}\label{structFitnessMetric_a8af896d7e25e1bf34412ce92b4851958}
+
+
+Finds the fitness metric. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv} & agcpp indv to be evaluated. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\mbox{\tt in}  & {\em train} & The \hyperlink{structTrainingData}{Training\+Data} to evaluate the fitness. \hyperlink{structTrainingData}{Training\+Data} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+float the fitness metric 
+\end{DoxyReturn}
+\index{Fitness\+Metric@{Fitness\+Metric}!evaluate\+\_\+fitness\+\_\+vector@{evaluate\+\_\+fitness\+\_\+vector}}
+\index{evaluate\+\_\+fitness\+\_\+vector@{evaluate\+\_\+fitness\+\_\+vector}!Fitness\+Metric@{Fitness\+Metric}}
+\subsubsection[{\texorpdfstring{evaluate\+\_\+fitness\+\_\+vector(\+Acyclic\+Graph \&indv, Training\+Data \&train)=0}{evaluate_fitness_vector(AcyclicGraph &indv, TrainingData &train)=0}}]{\setlength{\rightskip}{0pt plus 5cm}virtual Eigen\+::\+Array\+X\+Xd Fitness\+Metric\+::evaluate\+\_\+fitness\+\_\+vector (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv, }
+\item[{{\bf Training\+Data} \&}]{train}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{structFitnessMetric_a17bf921d3200dc93493e2af5c38552ad}{}\label{structFitnessMetric_a17bf921d3200dc93493e2af5c38552ad}
+
+
+f(x) -\/ y where f is defined by indv and x, y are in train 
+
+\begin{DoxyNote}{Note}
+Each implementation will need to hard code casting \hyperlink{structTrainingData}{Training\+Data} to a specific type in this function.
+\end{DoxyNote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv} & agcpp indv to be evaluated. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\mbox{\tt in}  & {\em train} & The \hyperlink{structTrainingData}{Training\+Data} to evaluate the fitness. \hyperlink{structTrainingData}{Training\+Data} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Array\+X\+Xd the fitness vector 
+\end{DoxyReturn}
+
+
+Implemented in \hyperlink{structImplicitRegression_a8737c12d204ab5035347259f47018e5a}{Implicit\+Regression}, and \hyperlink{structStandardRegression_a0c35e5b8ce369988c8e1d6c3249b9581}{Standard\+Regression}.
+
+\index{Fitness\+Metric@{Fitness\+Metric}!optimize\+\_\+constants@{optimize\+\_\+constants}}
+\index{optimize\+\_\+constants@{optimize\+\_\+constants}!Fitness\+Metric@{Fitness\+Metric}}
+\subsubsection[{\texorpdfstring{optimize\+\_\+constants(\+Acyclic\+Graph \&indv, Training\+Data \&train)}{optimize_constants(AcyclicGraph &indv, TrainingData &train)}}]{\setlength{\rightskip}{0pt plus 5cm}void Fitness\+Metric\+::optimize\+\_\+constants (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv, }
+\item[{{\bf Training\+Data} \&}]{train}
+\end{DoxyParamCaption}
+)}\hypertarget{structFitnessMetric_ae4e27aefef6b54dddd6052bd80d37665}{}\label{structFitnessMetric_ae4e27aefef6b54dddd6052bd80d37665}
+
+
+perform levenberg-\/marquardt optimization on embedded constants 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv} & agcpp indv to be evaluated. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\mbox{\tt in}  & {\em train} & The \hyperlink{structTrainingData}{Training\+Data} used by fitness metric. \hyperlink{structTrainingData}{Training\+Data} \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{fitness__metric_8h}{fitness\+\_\+metric.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/fitness\+\_\+metric.\+cpp\end{DoxyCompactItemize}

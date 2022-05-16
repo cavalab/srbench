@@ -1,0 +1,3 @@
+[submodule "bingocpp"]
+	path = bingocpp
+	url = https://github.com/nasa/bingocpp.git

@@ -1,0 +1,108 @@
+\hypertarget{classOperation}{}\section{Operation Class Reference}
+\label{classOperation}\index{Operation@{Operation}}
+
+
+Abstract class for an operation.  
+
+
+
+
+{\ttfamily \#include $<$acyclic\+\_\+graph\+\_\+nodes.\+h$>$}
+
+Inheritance diagram for Operation\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=12.000000cm]{classOperation}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual int \hyperlink{classOperation_ae6af21e893ca28e13471e2f7879afd3e}{get\+\_\+arity} ()=0\hypertarget{classOperation_ae6af21e893ca28e13471e2f7879afd3e}{}\label{classOperation_ae6af21e893ca28e13471e2f7879afd3e}
+
+\begin{DoxyCompactList}\small\item\em Returns how many parameters the operation requires. \end{DoxyCompactList}\item 
+virtual std\+::string \hyperlink{classOperation_aa905714b34d5cc518fa9b248682f4ee7}{get\+\_\+print} ()=0\hypertarget{classOperation_aa905714b34d5cc518fa9b248682f4ee7}{}\label{classOperation_aa905714b34d5cc518fa9b248682f4ee7}
+
+\begin{DoxyCompactList}\small\item\em Returns the string representation of the operator. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classOperation_a89093eb53f975dd98b6a36d85fa17276}{evaluate} (const Eigen\+::\+Array\+X3i \&stack, const Eigen\+::\+Array\+X\+Xd \&x, const Eigen\+::\+Vector\+Xd \&constants, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&buffer, std\+::size\+\_\+t result\+\_\+location)=0
+\begin{DoxyCompactList}\small\item\em evaluates a single command at the location passed in \end{DoxyCompactList}\item 
+virtual void \hyperlink{classOperation_a42b611d08c6b00568c5d1b08688ebcce}{deriv\+\_\+evaluate} (const Eigen\+::\+Array\+X3i \&stack, const int command\+\_\+index, const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&forward\+\_\+buffer, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&reverse\+\_\+buffer, int dependency)=0
+\begin{DoxyCompactList}\small\item\em Computes reverse autodiff partial of a command stack. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Abstract class for an operation. 
+
+This is the abstract class for the \hyperlink{classOperation}{Operation} being performed.
+
+\begin{DoxyNote}{Note}
+Operators include \+: \hyperlink{classX__Load}{X\+\_\+\+Load}, \hyperlink{classC__Load}{C\+\_\+\+Load}, \hyperlink{classAddition}{Addition}, \hyperlink{classSubtraction}{Subtraction}, \hyperlink{classMultiplication}{Multiplication}, \hyperlink{classDivision}{Division}, sin, cos, exp, log, pow, abs, sqrt 
+\end{DoxyNote}
+
+
+\subsection{Member Function Documentation}
+\index{Operation@{Operation}!deriv\+\_\+evaluate@{deriv\+\_\+evaluate}}
+\index{deriv\+\_\+evaluate@{deriv\+\_\+evaluate}!Operation@{Operation}}
+\subsubsection[{\texorpdfstring{deriv\+\_\+evaluate(const Eigen\+::\+Array\+X3i \&stack, const int command\+\_\+index, const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&forward\+\_\+buffer, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&reverse\+\_\+buffer, int dependency)=0}{deriv_evaluate(const Eigen::ArrayX3i &stack, const int command_index, const std::vector< Eigen::ArrayXXd > &forward_buffer, std::vector< Eigen::ArrayXXd > &reverse_buffer, int dependency)=0}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void Operation\+::deriv\+\_\+evaluate (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Array\+X3i \&}]{stack, }
+\item[{const int}]{command\+\_\+index, }
+\item[{const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{forward\+\_\+buffer, }
+\item[{std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{reverse\+\_\+buffer, }
+\item[{int}]{dependency}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{classOperation_a42b611d08c6b00568c5d1b08688ebcce}{}\label{classOperation_a42b611d08c6b00568c5d1b08688ebcce}
+
+
+Computes reverse autodiff partial of a command stack. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em stack} & The stack that contains each command. Eigen\+::\+Array\+X3i \\
+\hline
+\mbox{\tt in}  & {\em command\+\_\+index} & Index of command in the command; also the location of the result to be placed in the reverse buffer. \\
+\hline
+\mbox{\tt in}  & {\em forward\+\_\+buffer} & Vector of Eigen arrays for the forward buffer. \\
+\hline
+ & {\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classSqrt_aa85791e8fd1f7239b34aed9f21a9f3a6}{Sqrt}, \hyperlink{classAbsolute_a8c75e9e1efcfd1fc50ee2af13ed9d6d1}{Absolute}, \hyperlink{classPower_aacb7fa5a44485f39df757f5a8b134d28}{Power}, \hyperlink{classLog_a6f52d16f62171275092117364faa9b04}{Log}, \hyperlink{classExp_aaf9e4870dcd8eda83174f003d9bd4a8a}{Exp}, \hyperlink{classCos_a4ca2ae643db43a16772f9fdbb86c06a6}{Cos}, \hyperlink{classSin_a7ee9713a0e86b56b7cb4f23f81b1a502}{Sin}, \hyperlink{classDivision_af0f88f306718e3a490315e4be78885f3}{Division}, \hyperlink{classMultiplication_add5b53fbcd0f2e16c3be398c53d0fbe6}{Multiplication}, \hyperlink{classSubtraction_aabe4bc428dcc778adb63940a3e91327d}{Subtraction}, \hyperlink{classAddition_a30c3e7495cbe3bdc010f2d3f8570bcc8}{Addition}, \hyperlink{classC__Load_abfe90cef11f940a216284970f6db7b0d}{C\+\_\+\+Load}, and \hyperlink{classX__Load_a5ee414b0a344871b8e52d5c9c6c2f51b}{X\+\_\+\+Load}.
+
+\index{Operation@{Operation}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!Operation@{Operation}}
+\subsubsection[{\texorpdfstring{evaluate(const Eigen\+::\+Array\+X3i \&stack, const Eigen\+::\+Array\+X\+Xd \&x, const Eigen\+::\+Vector\+Xd \&constants, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&buffer, std\+::size\+\_\+t result\+\_\+location)=0}{evaluate(const Eigen::ArrayX3i &stack, const Eigen::ArrayXXd &x, const Eigen::VectorXd &constants, std::vector< Eigen::ArrayXXd > &buffer, std::size_t result_location)=0}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void Operation\+::evaluate (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Array\+X3i \&}]{stack, }
+\item[{const Eigen\+::\+Array\+X\+Xd \&}]{x, }
+\item[{const Eigen\+::\+Vector\+Xd \&}]{constants, }
+\item[{std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{buffer, }
+\item[{std\+::size\+\_\+t}]{result\+\_\+location}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{classOperation_a89093eb53f975dd98b6a36d85fa17276}{}\label{classOperation_a89093eb53f975dd98b6a36d85fa17276}
+
+
+evaluates a single command at the location passed in 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em stack} & The stack that contains each command. Eigen\+::\+Array\+X3i \\
+\hline
+\mbox{\tt in}  & {\em x} & Input variables to the acyclic graph. Eigen\+::\+Array\+X\+Xd \\
+\hline
+\mbox{\tt in}  & {\em constants} & Constants used in the command. Eigen\+::\+Vector\+Xd \\
+\hline
+ & {\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classSqrt_aa0f673292c8980fe03061c5f0f85339d}{Sqrt}, \hyperlink{classAbsolute_a841ddbf6d5c0e8ad3950208946f9ad75}{Absolute}, \hyperlink{classPower_a3e672a4654976e92496e05c5c1d78ccd}{Power}, \hyperlink{classLog_af5402c400512ee9dfe17698929683bbc}{Log}, \hyperlink{classExp_a12142e937f2fa11002ebe3d574626aa5}{Exp}, \hyperlink{classCos_a580742a5758d0e31ecfc98c9e49fa597}{Cos}, \hyperlink{classSin_a1eee9fe523f2facfb47360eff481277b}{Sin}, \hyperlink{classDivision_a09bcc06557768b3a3abc31667ab03103}{Division}, \hyperlink{classMultiplication_a19044777a8cc6ba3bc662d1fbadb7b28}{Multiplication}, \hyperlink{classSubtraction_af0628604da8b47a69ab666a507b7b58d}{Subtraction}, \hyperlink{classAddition_a2fe0b74f5aaf992389f39db8e47c671f}{Addition}, \hyperlink{classC__Load_a82be394b7e177cc378def30ff9972941}{C\+\_\+\+Load}, and \hyperlink{classX__Load_ab2725c1a3843f12e4f0730aefbcaedd9}{X\+\_\+\+Load}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/acyclic\+\_\+graph\+\_\+nodes.\+h\end{DoxyCompactItemize}

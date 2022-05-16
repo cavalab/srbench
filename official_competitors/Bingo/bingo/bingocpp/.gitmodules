@@ -1,0 +1,9 @@
+[submodule "external/googletest"]
+	path = external/googletest
+	url = https://github.com/google/googletest
+[submodule "external/pybind"]
+	path = external/pybind
+	url = https://github.com/pybind/pybind11.git
+[submodule "external/eigen"]
+	path = external/eigen
+	url = https://github.com/eigenteam/eigen-git-mirror.git

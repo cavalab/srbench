@@ -1,0 +1,104 @@
+\hypertarget{structExplicitTrainingData}{}\section{Explicit\+Training\+Data Struct Reference}
+\label{structExplicitTrainingData}\index{Explicit\+Training\+Data@{Explicit\+Training\+Data}}
+
+
+This struct holds data for Explicit regression.  
+
+
+
+
+{\ttfamily \#include $<$training\+\_\+data.\+h$>$}
+
+Inheritance diagram for Explicit\+Training\+Data\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structExplicitTrainingData}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structExplicitTrainingData_a96eb847c22542ecc3f60201d36935e39}{Explicit\+Training\+Data} (Eigen\+::\+Array\+X\+Xd vx, Eigen\+::\+Array\+X\+Xd vy)\hypertarget{structExplicitTrainingData_a96eb847c22542ecc3f60201d36935e39}{}\label{structExplicitTrainingData_a96eb847c22542ecc3f60201d36935e39}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{structExplicitTrainingData}{Explicit\+Training\+Data} $\ast$ \hyperlink{structExplicitTrainingData_a7c60c1b5ea185580a5842c5cca18c7d0}{get\+\_\+item} (std\+::list$<$ int $>$ items)
+\begin{DoxyCompactList}\small\item\em gets a new training data with certain rows \end{DoxyCompactList}\item 
+int \hyperlink{structExplicitTrainingData_aa5a3da99babf2436bdb9b4652a217584}{size} ()
+\begin{DoxyCompactList}\small\item\em gets the size of x \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{structExplicitTrainingData_aff442821da57c0cf21ab4f2a7396c7e8}{x}
+\begin{DoxyCompactList}\small\item\em Eigen\+::\+Array\+X\+Xd x. \end{DoxyCompactList}\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{structExplicitTrainingData_a0a1ca87e118aa4261a910b54cf29d0ee}{y}
+\begin{DoxyCompactList}\small\item\em Eigen\+::\+Array\+X\+Xd y. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This struct holds data for Explicit regression. 
+
+\subsection{Member Function Documentation}
+\index{Explicit\+Training\+Data@{Explicit\+Training\+Data}!get\+\_\+item@{get\+\_\+item}}
+\index{get\+\_\+item@{get\+\_\+item}!Explicit\+Training\+Data@{Explicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{get\+\_\+item(std\+::list$<$ int $>$ items)}{get_item(std::list< int > items)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Explicit\+Training\+Data} $\ast$ Explicit\+Training\+Data\+::get\+\_\+item (
+\begin{DoxyParamCaption}
+\item[{std\+::list$<$ int $>$}]{items}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{structExplicitTrainingData_a7c60c1b5ea185580a5842c5cca18c7d0}{}\label{structExplicitTrainingData_a7c60c1b5ea185580a5842c5cca18c7d0}
+
+
+gets a new training data with certain rows 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em items} & The rows to retrieve. std\+::list$<$int$>$ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Training\+Data$\ast$ with the selected data 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{structTrainingData_a96ef790e9e78909f84ce83692c7faced}{Training\+Data}.
+
+\index{Explicit\+Training\+Data@{Explicit\+Training\+Data}!size@{size}}
+\index{size@{size}!Explicit\+Training\+Data@{Explicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{size()}{size()}}]{\setlength{\rightskip}{0pt plus 5cm}int Explicit\+Training\+Data\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{structExplicitTrainingData_aa5a3da99babf2436bdb9b4652a217584}{}\label{structExplicitTrainingData_aa5a3da99babf2436bdb9b4652a217584}
+
+
+gets the size of x 
+
+\begin{DoxyReturn}{Returns}
+int the amount of rows in x 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{structTrainingData_a9be21e878961cc347e6820eb34db0a1b}{Training\+Data}.
+
+
+
+\subsection{Member Data Documentation}
+\index{Explicit\+Training\+Data@{Explicit\+Training\+Data}!x@{x}}
+\index{x@{x}!Explicit\+Training\+Data@{Explicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{x}{x}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd Explicit\+Training\+Data\+::x}\hypertarget{structExplicitTrainingData_aff442821da57c0cf21ab4f2a7396c7e8}{}\label{structExplicitTrainingData_aff442821da57c0cf21ab4f2a7396c7e8}
+
+
+Eigen\+::\+Array\+X\+Xd x. 
+
+x variabes for Explicit\+Training \index{Explicit\+Training\+Data@{Explicit\+Training\+Data}!y@{y}}
+\index{y@{y}!Explicit\+Training\+Data@{Explicit\+Training\+Data}}
+\subsubsection[{\texorpdfstring{y}{y}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd Explicit\+Training\+Data\+::y}\hypertarget{structExplicitTrainingData_a0a1ca87e118aa4261a910b54cf29d0ee}{}\label{structExplicitTrainingData_a0a1ca87e118aa4261a910b54cf29d0ee}
+
+
+Eigen\+::\+Array\+X\+Xd y. 
+
+y variabes for Explicit\+Training 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{training__data_8h}{training\+\_\+data.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/training\+\_\+data.\+cpp\end{DoxyCompactItemize}

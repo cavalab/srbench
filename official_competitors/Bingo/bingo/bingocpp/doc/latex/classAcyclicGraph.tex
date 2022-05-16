@@ -1,0 +1,288 @@
+\hypertarget{classAcyclicGraph}{}\section{Acyclic\+Graph Class Reference}
+\label{classAcyclicGraph}\index{Acyclic\+Graph@{Acyclic\+Graph}}
+
+
+{\ttfamily \#include $<$graph\+\_\+manip.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classAcyclicGraph_a939b4fffe09d7157d334509bdf8ce2be}{Acyclic\+Graph} ()\hypertarget{classAcyclicGraph_a939b4fffe09d7157d334509bdf8ce2be}{}\label{classAcyclicGraph_a939b4fffe09d7157d334509bdf8ce2be}
+
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\hyperlink{classAcyclicGraph_ab76060134cbc2754f3200f57da385ad2}{Acyclic\+Graph} (const \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&ag)\hypertarget{classAcyclicGraph_ab76060134cbc2754f3200f57da385ad2}{}\label{classAcyclicGraph_ab76060134cbc2754f3200f57da385ad2}
+
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \hyperlink{classAcyclicGraph_a0e3956f4b7ea48b386e32032ac139e04}{copy} ()\hypertarget{classAcyclicGraph_a0e3956f4b7ea48b386e32032ac139e04}{}\label{classAcyclicGraph_a0e3956f4b7ea48b386e32032ac139e04}
+
+\begin{DoxyCompactList}\small\item\em Copies self (for pybind) \end{DoxyCompactList}\item 
+bool \hyperlink{classAcyclicGraph_a4ca2be7ca5d026f3535634c94535e342}{needs\+\_\+optimization} ()
+\begin{DoxyCompactList}\small\item\em find out whether constants need optimization \end{DoxyCompactList}\item 
+void \hyperlink{classAcyclicGraph_a11aacda6eb5659d132cf03ab05eef8bd}{set\+\_\+constants} (Eigen\+::\+Vector\+Xd con)
+\begin{DoxyCompactList}\small\item\em set the constants \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraph_a0f430cfe917cb859478a595560acd590}{count\+\_\+constants} ()
+\begin{DoxyCompactList}\small\item\em returns constants.\+size() \end{DoxyCompactList}\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{classAcyclicGraph_a03140f2d30f36a447bc920364bcaf902}{evaluate} (Eigen\+::\+Array\+X\+Xd \&eval\+\_\+x)
+\begin{DoxyCompactList}\small\item\em replaces -\/1 in stack with location in constants vector \end{DoxyCompactList}\item 
+std\+::pair$<$ Eigen\+::\+Array\+X\+Xd, Eigen\+::\+Array\+X\+Xd $>$ \hyperlink{classAcyclicGraph_ae0165998884415c340ef42f5519ee378}{evaluate\+\_\+with\+\_\+const\+\_\+deriv} (Eigen\+::\+Array\+X\+Xd \&eval\+\_\+x)
+\begin{DoxyCompactList}\small\item\em evaluate the compiled stack \end{DoxyCompactList}\item 
+std\+::pair$<$ Eigen\+::\+Array\+X\+Xd, Eigen\+::\+Array\+X\+Xd $>$ {\bfseries evaluate\+\_\+deriv} (Eigen\+::\+Array\+X\+Xd \&eval\+\_\+x)\hypertarget{classAcyclicGraph_a54149fd647d6d2cbac480cbc9bafe2bb}{}\label{classAcyclicGraph_a54149fd647d6d2cbac480cbc9bafe2bb}
+
+\item 
+std\+::string \hyperlink{classAcyclicGraph_a9534cfd26946835e4190bfa722856f56}{latexstring} ()
+\begin{DoxyCompactList}\small\item\em conversion to simplified latex string \end{DoxyCompactList}\item 
+std\+::set$<$ int $>$ \hyperlink{classAcyclicGraph_a9be943e53aa4257ca1ba960868e2a3da}{utilized\+\_\+commands} ()
+\begin{DoxyCompactList}\small\item\em find which commands are utilized \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraph_a66f52b6e177fdef6f9578e400d8efe93}{complexity} ()
+\begin{DoxyCompactList}\small\item\em find number of commands that are utilized \end{DoxyCompactList}\item 
+std\+::string \hyperlink{classAcyclicGraph_abea4470f8df7e67cca412973a2b7bb17}{print\+\_\+stack} ()
+\begin{DoxyCompactList}\small\item\em string output \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Array\+X3i \hyperlink{classAcyclicGraph_a0289993135a2d37ae5eaf5701801500f}{stack}
+\begin{DoxyCompactList}\small\item\em Eigen\+::\+Array\+X3i stack. \end{DoxyCompactList}\item 
+Eigen\+::\+Array\+X3i \hyperlink{classAcyclicGraph_acea3997a10f2fe2acc6226f629413feb}{simple\+\_\+stack}
+\begin{DoxyCompactList}\small\item\em Eigen\+::\+Array\+X3i simple\+\_\+stack. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector\+Xd \hyperlink{classAcyclicGraph_a06e93c34292ca14a3e963b2c2cc4b57a}{constants}
+\begin{DoxyCompactList}\small\item\em Eigen\+::\+Vector\+Xd constants. \end{DoxyCompactList}\item 
+\hyperlink{classOperatorInterface}{Operator\+Interface} \hyperlink{classAcyclicGraph_a82c104a4c80268bd7705be59c99b73c7}{oper\+\_\+interface}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classOperatorInterface}{Operator\+Interface} oper\+\_\+interface. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classAcyclicGraph_a01d92c1b852c41e7a6fdf1085861b5bd}{fitness}
+\begin{DoxyCompactList}\small\item\em double fitness \end{DoxyCompactList}\item 
+bool \hyperlink{classAcyclicGraph_aa1003d4eb327ef21a1084efcdaeb953a}{fit\+\_\+set}
+\begin{DoxyCompactList}\small\item\em bool fit\+\_\+set \end{DoxyCompactList}\item 
+bool \hyperlink{classAcyclicGraph_adad7dd87ced7e2cae5a1ec20a6936ef6}{needs\+\_\+opt}
+\begin{DoxyCompactList}\small\item\em bool needs\+\_\+opt \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraph_a8d3ba0273e9b1084dc9b165e5f9231fb}{opt\+\_\+rate}
+\begin{DoxyCompactList}\small\item\em int op\+\_\+rate \end{DoxyCompactList}\item 
+int \hyperlink{classAcyclicGraph_a01d384f2d87fbfe3948ecd58a2b34e31}{genetic\+\_\+age}
+\begin{DoxyCompactList}\small\item\em int genetic\+\_\+age \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Acyclic Graph representation of an equation.
+
+\begin{DoxyNote}{Note}
+Operators include \+: \hyperlink{classX__Load}{X\+\_\+\+Load}, \hyperlink{classC__Load}{C\+\_\+\+Load}, \hyperlink{classAddition}{Addition}, \hyperlink{classSubtraction}{Subtraction}, \hyperlink{classMultiplication}{Multiplication}, \hyperlink{classDivision}{Division}, sin, cos, exp, log, pow, abs, sqrt 
+\end{DoxyNote}
+
+
+\subsection{Member Function Documentation}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!complexity@{complexity}}
+\index{complexity@{complexity}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{complexity()}{complexity()}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+::complexity (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_a66f52b6e177fdef6f9578e400d8efe93}{}\label{classAcyclicGraph_a66f52b6e177fdef6f9578e400d8efe93}
+
+
+find number of commands that are utilized 
+
+\begin{DoxyReturn}{Returns}
+int the complexity 
+\end{DoxyReturn}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!count\+\_\+constants@{count\+\_\+constants}}
+\index{count\+\_\+constants@{count\+\_\+constants}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{count\+\_\+constants()}{count_constants()}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+::count\+\_\+constants (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_a0f430cfe917cb859478a595560acd590}{}\label{classAcyclicGraph_a0f430cfe917cb859478a595560acd590}
+
+
+returns constants.\+size() 
+
+\begin{DoxyReturn}{Returns}
+int the size of the constants vector 
+\end{DoxyReturn}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{evaluate(\+Eigen\+::\+Array\+X\+Xd \&eval\+\_\+x)}{evaluate(Eigen::ArrayXXd &eval_x)}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd Acyclic\+Graph\+::evaluate (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Array\+X\+Xd \&}]{eval\+\_\+x}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_a03140f2d30f36a447bc920364bcaf902}{}\label{classAcyclicGraph_a03140f2d30f36a447bc920364bcaf902}
+
+
+replaces -\/1 in stack with location in constants vector 
+
+\begin{DoxyReturn}{Returns}
+void
+\end{DoxyReturn}
+evaluate the compiled stack
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em eval\+\_\+x} & The x parameters. Eigen\+::\+Array\+X\+Xd \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Array\+X\+Xd of evaluated stack 
+\end{DoxyReturn}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!evaluate\+\_\+with\+\_\+const\+\_\+deriv@{evaluate\+\_\+with\+\_\+const\+\_\+deriv}}
+\index{evaluate\+\_\+with\+\_\+const\+\_\+deriv@{evaluate\+\_\+with\+\_\+const\+\_\+deriv}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{evaluate\+\_\+with\+\_\+const\+\_\+deriv(\+Eigen\+::\+Array\+X\+Xd \&eval\+\_\+x)}{evaluate_with_const_deriv(Eigen::ArrayXXd &eval_x)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::pair$<$ Eigen\+::\+Array\+X\+Xd, Eigen\+::\+Array\+X\+Xd $>$ Acyclic\+Graph\+::evaluate\+\_\+with\+\_\+const\+\_\+deriv (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Array\+X\+Xd \&}]{eval\+\_\+x}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_ae0165998884415c340ef42f5519ee378}{}\label{classAcyclicGraph_ae0165998884415c340ef42f5519ee378}
+
+
+evaluate the compiled stack 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em eval\+\_\+x} & The x parameters. Eigen\+::\+Array\+X\+Xd \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::pair$<$\+Eigen\+::\+Array\+X\+Xd, Eigen\+::\+Array\+X\+Xd$>$ of evaluated deriv stack 
+\end{DoxyReturn}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!latexstring@{latexstring}}
+\index{latexstring@{latexstring}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{latexstring()}{latexstring()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Acyclic\+Graph\+::latexstring (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_a9534cfd26946835e4190bfa722856f56}{}\label{classAcyclicGraph_a9534cfd26946835e4190bfa722856f56}
+
+
+conversion to simplified latex string 
+
+\begin{DoxyReturn}{Returns}
+the latexstring representation of the stack 
+\end{DoxyReturn}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!needs\+\_\+optimization@{needs\+\_\+optimization}}
+\index{needs\+\_\+optimization@{needs\+\_\+optimization}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{needs\+\_\+optimization()}{needs_optimization()}}]{\setlength{\rightskip}{0pt plus 5cm}bool Acyclic\+Graph\+::needs\+\_\+optimization (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_a4ca2be7ca5d026f3535634c94535e342}{}\label{classAcyclicGraph_a4ca2be7ca5d026f3535634c94535e342}
+
+
+find out whether constants need optimization 
+
+\begin{DoxyReturn}{Returns}
+true if stack needs optimization 
+\end{DoxyReturn}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!print\+\_\+stack@{print\+\_\+stack}}
+\index{print\+\_\+stack@{print\+\_\+stack}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{print\+\_\+stack()}{print_stack()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Acyclic\+Graph\+::print\+\_\+stack (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_abea4470f8df7e67cca412973a2b7bb17}{}\label{classAcyclicGraph_abea4470f8df7e67cca412973a2b7bb17}
+
+
+string output 
+
+\begin{DoxyReturn}{Returns}
+the string to display the stack 
+\end{DoxyReturn}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!set\+\_\+constants@{set\+\_\+constants}}
+\index{set\+\_\+constants@{set\+\_\+constants}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{set\+\_\+constants(\+Eigen\+::\+Vector\+Xd con)}{set_constants(Eigen::VectorXd con)}}]{\setlength{\rightskip}{0pt plus 5cm}void Acyclic\+Graph\+::set\+\_\+constants (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Vector\+Xd}]{con}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_a11aacda6eb5659d132cf03ab05eef8bd}{}\label{classAcyclicGraph_a11aacda6eb5659d132cf03ab05eef8bd}
+
+
+set the constants 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em con} & The constants to set. Eigen\+::\+Vector\+Xd \\
+\hline
+\end{DoxyParams}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!utilized\+\_\+commands@{utilized\+\_\+commands}}
+\index{utilized\+\_\+commands@{utilized\+\_\+commands}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{utilized\+\_\+commands()}{utilized_commands()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::set$<$ int $>$ Acyclic\+Graph\+::utilized\+\_\+commands (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classAcyclicGraph_a9be943e53aa4257ca1ba960868e2a3da}{}\label{classAcyclicGraph_a9be943e53aa4257ca1ba960868e2a3da}
+
+
+find which commands are utilized 
+
+\begin{DoxyReturn}{Returns}
+std\+::set$<$int$>$ with the numbers that are utilized 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\index{Acyclic\+Graph@{Acyclic\+Graph}!constants@{constants}}
+\index{constants@{constants}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{constants}{constants}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Vector\+Xd Acyclic\+Graph\+::constants}\hypertarget{classAcyclicGraph_a06e93c34292ca14a3e963b2c2cc4b57a}{}\label{classAcyclicGraph_a06e93c34292ca14a3e963b2c2cc4b57a}
+
+
+Eigen\+::\+Vector\+Xd constants. 
+
+vector to hold constants \index{Acyclic\+Graph@{Acyclic\+Graph}!fit\+\_\+set@{fit\+\_\+set}}
+\index{fit\+\_\+set@{fit\+\_\+set}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{fit\+\_\+set}{fit_set}}]{\setlength{\rightskip}{0pt plus 5cm}bool Acyclic\+Graph\+::fit\+\_\+set}\hypertarget{classAcyclicGraph_aa1003d4eb327ef21a1084efcdaeb953a}{}\label{classAcyclicGraph_aa1003d4eb327ef21a1084efcdaeb953a}
+
+
+bool fit\+\_\+set 
+
+if the fitness is set \index{Acyclic\+Graph@{Acyclic\+Graph}!fitness@{fitness}}
+\index{fitness@{fitness}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{fitness}{fitness}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$double$>$ Acyclic\+Graph\+::fitness}\hypertarget{classAcyclicGraph_a01d92c1b852c41e7a6fdf1085861b5bd}{}\label{classAcyclicGraph_a01d92c1b852c41e7a6fdf1085861b5bd}
+
+
+double fitness 
+
+holds fitness for individual \index{Acyclic\+Graph@{Acyclic\+Graph}!genetic\+\_\+age@{genetic\+\_\+age}}
+\index{genetic\+\_\+age@{genetic\+\_\+age}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{genetic\+\_\+age}{genetic_age}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+::genetic\+\_\+age}\hypertarget{classAcyclicGraph_a01d384f2d87fbfe3948ecd58a2b34e31}{}\label{classAcyclicGraph_a01d384f2d87fbfe3948ecd58a2b34e31}
+
+
+int genetic\+\_\+age 
+
+holds genetic age of individual \index{Acyclic\+Graph@{Acyclic\+Graph}!needs\+\_\+opt@{needs\+\_\+opt}}
+\index{needs\+\_\+opt@{needs\+\_\+opt}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{needs\+\_\+opt}{needs_opt}}]{\setlength{\rightskip}{0pt plus 5cm}bool Acyclic\+Graph\+::needs\+\_\+opt}\hypertarget{classAcyclicGraph_adad7dd87ced7e2cae5a1ec20a6936ef6}{}\label{classAcyclicGraph_adad7dd87ced7e2cae5a1ec20a6936ef6}
+
+
+bool needs\+\_\+opt 
+
+if the constants need optimization \index{Acyclic\+Graph@{Acyclic\+Graph}!oper\+\_\+interface@{oper\+\_\+interface}}
+\index{oper\+\_\+interface@{oper\+\_\+interface}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{oper\+\_\+interface}{oper_interface}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Operator\+Interface} Acyclic\+Graph\+::oper\+\_\+interface}\hypertarget{classAcyclicGraph_a82c104a4c80268bd7705be59c99b73c7}{}\label{classAcyclicGraph_a82c104a4c80268bd7705be59c99b73c7}
+
+
+\hyperlink{classOperatorInterface}{Operator\+Interface} oper\+\_\+interface. 
+
+map that holds operators with arity / strings \index{Acyclic\+Graph@{Acyclic\+Graph}!opt\+\_\+rate@{opt\+\_\+rate}}
+\index{opt\+\_\+rate@{opt\+\_\+rate}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{opt\+\_\+rate}{opt_rate}}]{\setlength{\rightskip}{0pt plus 5cm}int Acyclic\+Graph\+::opt\+\_\+rate}\hypertarget{classAcyclicGraph_a8d3ba0273e9b1084dc9b165e5f9231fb}{}\label{classAcyclicGraph_a8d3ba0273e9b1084dc9b165e5f9231fb}
+
+
+int op\+\_\+rate 
+
+rate to determine when to optimize
+
+0 -\/ Default -\/ no extra optimization 1 -\/ Simplify stack inputs constants and sets needs optimization 2 -\/ Same as 1, but during crossover, bring constants from parent to child 3 -\/ Same as 1, but optimize every crossover 4 -\/ Same as 1, but optimize every mutation 5 -\/ Same as 1, but optimize every mutation and crossover \index{Acyclic\+Graph@{Acyclic\+Graph}!simple\+\_\+stack@{simple\+\_\+stack}}
+\index{simple\+\_\+stack@{simple\+\_\+stack}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{simple\+\_\+stack}{simple_stack}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X3i Acyclic\+Graph\+::simple\+\_\+stack}\hypertarget{classAcyclicGraph_acea3997a10f2fe2acc6226f629413feb}{}\label{classAcyclicGraph_acea3997a10f2fe2acc6226f629413feb}
+
+
+Eigen\+::\+Array\+X3i simple\+\_\+stack. 
+
+stack simplified stack \index{Acyclic\+Graph@{Acyclic\+Graph}!stack@{stack}}
+\index{stack@{stack}!Acyclic\+Graph@{Acyclic\+Graph}}
+\subsubsection[{\texorpdfstring{stack}{stack}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X3i Acyclic\+Graph\+::stack}\hypertarget{classAcyclicGraph_a0289993135a2d37ae5eaf5701801500f}{}\label{classAcyclicGraph_a0289993135a2d37ae5eaf5701801500f}
+
+
+Eigen\+::\+Array\+X3i stack. 
+
+stack representation of equation 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{graph__manip_8h}{graph\+\_\+manip.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/graph\+\_\+manip.\+cpp\end{DoxyCompactItemize}

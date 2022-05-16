@@ -1,0 +1,99 @@
+\hypertarget{structImplicitRegression}{}\section{Implicit\+Regression Struct Reference}
+\label{structImplicitRegression}\index{Implicit\+Regression@{Implicit\+Regression}}
+
+
+Implicit Regression.  
+
+
+
+
+{\ttfamily \#include $<$fitness\+\_\+metric.\+h$>$}
+
+Inheritance diagram for Implicit\+Regression\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structImplicitRegression}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries Implicit\+Regression} (int \hyperlink{structImplicitRegression_a5f25461dae2b71ad79eaf7fb91c86696}{required\+\_\+params}=0, bool \hyperlink{structImplicitRegression_a8d31df5b4020c1d26dc130e694b69ee4}{normalize\+\_\+dot}=false, double acceptable\+\_\+nans=0.\+1)\hypertarget{structImplicitRegression_a5b70d19ebaa9e298a01a6eaf05b915f9}{}\label{structImplicitRegression_a5b70d19ebaa9e298a01a6eaf05b915f9}
+
+\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{structImplicitRegression_a8737c12d204ab5035347259f47018e5a}{evaluate\+\_\+fitness\+\_\+vector} (\hyperlink{classAcyclicGraph}{Acyclic\+Graph} \&indv, \hyperlink{structTrainingData}{Training\+Data} \&train)
+\begin{DoxyCompactList}\small\item\em f(x) -\/ y where f is defined by indv and x, y are in train \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structImplicitRegression_a5f25461dae2b71ad79eaf7fb91c86696}{required\+\_\+params}
+\begin{DoxyCompactList}\small\item\em int required\+\_\+params \end{DoxyCompactList}\item 
+bool \hyperlink{structImplicitRegression_a8d31df5b4020c1d26dc130e694b69ee4}{normalize\+\_\+dot}
+\begin{DoxyCompactList}\small\item\em bool normalize\+\_\+dot \end{DoxyCompactList}\item 
+double \hyperlink{structImplicitRegression_ae74f24de0d7a6a9fb3cab6e6a8b9e560}{acceptable\+\_\+finite\+\_\+fracion}
+\begin{DoxyCompactList}\small\item\em double acceptable\+\_\+finite\+\_\+fracion \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implicit Regression. 
+
+\subsection{Member Function Documentation}
+\index{Implicit\+Regression@{Implicit\+Regression}!evaluate\+\_\+fitness\+\_\+vector@{evaluate\+\_\+fitness\+\_\+vector}}
+\index{evaluate\+\_\+fitness\+\_\+vector@{evaluate\+\_\+fitness\+\_\+vector}!Implicit\+Regression@{Implicit\+Regression}}
+\subsubsection[{\texorpdfstring{evaluate\+\_\+fitness\+\_\+vector(\+Acyclic\+Graph \&indv, Training\+Data \&train)}{evaluate_fitness_vector(AcyclicGraph &indv, TrainingData &train)}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd Implicit\+Regression\+::evaluate\+\_\+fitness\+\_\+vector (
+\begin{DoxyParamCaption}
+\item[{{\bf Acyclic\+Graph} \&}]{indv, }
+\item[{{\bf Training\+Data} \&}]{train}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{structImplicitRegression_a8737c12d204ab5035347259f47018e5a}{}\label{structImplicitRegression_a8737c12d204ab5035347259f47018e5a}
+
+
+f(x) -\/ y where f is defined by indv and x, y are in train 
+
+\begin{DoxyNote}{Note}
+Each implementation will need to hard code casting \hyperlink{structTrainingData}{Training\+Data} to a specific type in this function.
+\end{DoxyNote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em indv} & agcpp indv to be evaluated. \hyperlink{classAcyclicGraph}{Acyclic\+Graph} \\
+\hline
+\mbox{\tt in}  & {\em train} & The \hyperlink{structTrainingData}{Training\+Data} to evaluate the fitness. \hyperlink{structTrainingData}{Training\+Data} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Array\+X\+Xd the fitness vector 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{structFitnessMetric_a17bf921d3200dc93493e2af5c38552ad}{Fitness\+Metric}.
+
+
+
+\subsection{Member Data Documentation}
+\index{Implicit\+Regression@{Implicit\+Regression}!acceptable\+\_\+finite\+\_\+fracion@{acceptable\+\_\+finite\+\_\+fracion}}
+\index{acceptable\+\_\+finite\+\_\+fracion@{acceptable\+\_\+finite\+\_\+fracion}!Implicit\+Regression@{Implicit\+Regression}}
+\subsubsection[{\texorpdfstring{acceptable\+\_\+finite\+\_\+fracion}{acceptable_finite_fracion}}]{\setlength{\rightskip}{0pt plus 5cm}double Implicit\+Regression\+::acceptable\+\_\+finite\+\_\+fracion}\hypertarget{structImplicitRegression_ae74f24de0d7a6a9fb3cab6e6a8b9e560}{}\label{structImplicitRegression_ae74f24de0d7a6a9fb3cab6e6a8b9e560}
+
+
+double acceptable\+\_\+finite\+\_\+fracion 
+
+yea \index{Implicit\+Regression@{Implicit\+Regression}!normalize\+\_\+dot@{normalize\+\_\+dot}}
+\index{normalize\+\_\+dot@{normalize\+\_\+dot}!Implicit\+Regression@{Implicit\+Regression}}
+\subsubsection[{\texorpdfstring{normalize\+\_\+dot}{normalize_dot}}]{\setlength{\rightskip}{0pt plus 5cm}bool Implicit\+Regression\+::normalize\+\_\+dot}\hypertarget{structImplicitRegression_a8d31df5b4020c1d26dc130e694b69ee4}{}\label{structImplicitRegression_a8d31df5b4020c1d26dc130e694b69ee4}
+
+
+bool normalize\+\_\+dot 
+
+normalize the terms in the dot product \index{Implicit\+Regression@{Implicit\+Regression}!required\+\_\+params@{required\+\_\+params}}
+\index{required\+\_\+params@{required\+\_\+params}!Implicit\+Regression@{Implicit\+Regression}}
+\subsubsection[{\texorpdfstring{required\+\_\+params}{required_params}}]{\setlength{\rightskip}{0pt plus 5cm}int Implicit\+Regression\+::required\+\_\+params}\hypertarget{structImplicitRegression_a5f25461dae2b71ad79eaf7fb91c86696}{}\label{structImplicitRegression_a5f25461dae2b71ad79eaf7fb91c86696}
+
+
+int required\+\_\+params 
+
+minimum number of non zero components of dot 
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/\hyperlink{fitness__metric_8h}{fitness\+\_\+metric.\+h}\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/fitness\+\_\+metric.\+cpp\end{DoxyCompactItemize}

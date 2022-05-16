@@ -1,0 +1,37 @@
+master\+: \href{https://travis-ci.com/nasa/bingocpp}{\tt } \href{https://coveralls.io/github/nasa/bingocpp?branch=master}{\tt }
+
+develop\+: \href{https://travis-ci.com/nasa/bingocpp}{\tt } \href{https://coveralls.io/github/nasa/bingocpp?branch=develop}{\tt } \href{https://www.codacy.com/app/bingo_developers/bingocpp?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nasa/bingocpp&amp;utm_campaign=Badge_Grade}{\tt }
+
+\subsection*{General}
+
+Bingocpp is part of the open source package Bingo for performing symbolic regression. Bingocpp contains the c++ implementation of a portion of the code within bingo.
+
+\subsection*{Dependencies}
+
+The build process requires\+:
+\begin{DoxyItemize}
+\item A recent version of cmake
+\item git
+\item mercurial (hg)
+\end{DoxyItemize}
+
+The other follwoing dependencies will automatically be downloaded and installed as part of the cmake build\+:
+\begin{DoxyItemize}
+\item google test (gtest), as part of the testing suite
+\item pybind, for the python bindings
+\item eigen, for much of the linear algebra and vectorized math
+\end{DoxyItemize}
+
+\subsection*{Tests}
+
+Several unit and integration tests will be made upon building. You can run the testing suite by running the \char`\"{}run\+\_\+tests\char`\"{} executable in the build folder.
+
+\subsection*{Notices}
+
+Copyright 2018 United States Government as represented by the Administrator of the National Aeronautics and Space Administration. No copyright is claimed in the United States under Title 17, U.\+S. Code. All Other Rights Reserved.
+
+\subsection*{Disclaimers}
+
+No Warranty\+: T\+HE S\+U\+B\+J\+E\+CT S\+O\+F\+T\+W\+A\+RE IS P\+R\+O\+V\+I\+D\+ED \char`\"{}\+A\+S I\+S\char`\"{} W\+I\+T\+H\+O\+UT A\+NY W\+A\+R\+R\+A\+N\+TY OF A\+NY K\+I\+ND, E\+I\+T\+H\+ER E\+X\+P\+R\+E\+S\+S\+ED, I\+M\+P\+L\+I\+ED, OR S\+T\+A\+T\+U\+T\+O\+RY, I\+N\+C\+L\+U\+D\+I\+NG, B\+UT N\+OT L\+I\+M\+I\+T\+ED TO, A\+NY W\+A\+R\+R\+A\+N\+TY T\+H\+AT T\+HE S\+U\+B\+J\+E\+CT S\+O\+F\+T\+W\+A\+RE W\+I\+LL C\+O\+N\+F\+O\+RM TO S\+P\+E\+C\+I\+F\+I\+C\+A\+T\+I\+O\+NS, A\+NY I\+M\+P\+L\+I\+ED W\+A\+R\+R\+A\+N\+T\+I\+ES OF M\+E\+R\+C\+H\+A\+N\+T\+A\+B\+I\+L\+I\+TY, F\+I\+T\+N\+E\+SS F\+OR A P\+A\+R\+T\+I\+C\+U\+L\+AR P\+U\+R\+P\+O\+SE, OR F\+R\+E\+E\+D\+OM F\+R\+OM I\+N\+F\+R\+I\+N\+G\+E\+M\+E\+NT, A\+NY W\+A\+R\+R\+A\+N\+TY T\+H\+AT T\+HE S\+U\+B\+J\+E\+CT S\+O\+F\+T\+W\+A\+RE W\+I\+LL BE E\+R\+R\+OR F\+R\+EE, OR A\+NY W\+A\+R\+R\+A\+N\+TY T\+H\+AT D\+O\+C\+U\+M\+E\+N\+T\+A\+T\+I\+ON, IF P\+R\+O\+V\+I\+D\+ED, W\+I\+LL C\+O\+N\+F\+O\+RM TO T\+HE S\+U\+B\+J\+E\+CT S\+O\+F\+T\+W\+A\+RE. T\+H\+IS A\+G\+R\+E\+E\+M\+E\+NT D\+O\+ES N\+OT, IN A\+NY M\+A\+N\+N\+ER, C\+O\+N\+S\+T\+I\+T\+U\+TE AN E\+N\+D\+O\+R\+S\+E\+M\+E\+NT BY G\+O\+V\+E\+R\+N\+M\+E\+NT A\+G\+E\+N\+CY OR A\+NY P\+R\+I\+OR R\+E\+C\+I\+P\+I\+E\+NT OF A\+NY R\+E\+S\+U\+L\+TS, R\+E\+S\+U\+L\+T\+I\+NG D\+E\+S\+I\+G\+NS, H\+A\+R\+D\+W\+A\+RE, S\+O\+F\+T\+W\+A\+RE P\+R\+O\+D\+U\+C\+TS OR A\+NY O\+T\+H\+ER A\+P\+P\+L\+I\+C\+A\+T\+I\+O\+NS R\+E\+S\+U\+L\+T\+I\+NG F\+R\+OM U\+SE OF T\+HE S\+U\+B\+J\+E\+CT S\+O\+F\+T\+W\+A\+RE. F\+U\+R\+T\+H\+ER, G\+O\+V\+E\+R\+N\+M\+E\+NT A\+G\+E\+N\+CY D\+I\+S\+C\+L\+A\+I\+MS A\+LL W\+A\+R\+R\+A\+N\+T\+I\+ES A\+ND L\+I\+A\+B\+I\+L\+I\+T\+I\+ES R\+E\+G\+A\+R\+D\+I\+NG T\+H\+I\+R\+D-\/\+P\+A\+R\+TY S\+O\+F\+T\+W\+A\+RE, IF P\+R\+E\+S\+E\+NT IN T\+HE O\+R\+I\+G\+I\+N\+AL S\+O\+F\+T\+W\+A\+RE, A\+ND D\+I\+S\+T\+R\+I\+B\+U\+T\+ES IT \char`\"{}\+A\+S I\+S.\char`\"{} 
+
+Waiver and Indemnity\+: R\+E\+C\+I\+P\+I\+E\+NT A\+G\+R\+E\+ES TO W\+A\+I\+VE A\+NY A\+ND A\+LL C\+L\+A\+I\+MS A\+G\+A\+I\+N\+ST T\+HE U\+N\+I\+T\+ED S\+T\+A\+T\+ES G\+O\+V\+E\+R\+N\+M\+E\+NT, I\+TS C\+O\+N\+T\+R\+A\+C\+T\+O\+RS A\+ND S\+U\+B\+C\+O\+N\+T\+R\+A\+C\+T\+O\+RS, AS W\+E\+LL AS A\+NY P\+R\+I\+OR R\+E\+C\+I\+P\+I\+E\+NT. IF R\+E\+C\+I\+P\+I\+E\+NT\textquotesingle{}S U\+SE OF T\+HE S\+U\+B\+J\+E\+CT S\+O\+F\+T\+W\+A\+RE R\+E\+S\+U\+L\+TS IN A\+NY L\+I\+A\+B\+I\+L\+I\+T\+I\+ES, D\+E\+M\+A\+N\+DS, D\+A\+M\+A\+G\+ES, E\+X\+P\+E\+N\+S\+ES OR L\+O\+S\+S\+ES A\+R\+I\+S\+I\+NG F\+R\+OM S\+U\+CH U\+SE, I\+N\+C\+L\+U\+D\+I\+NG A\+NY D\+A\+M\+A\+G\+ES F\+R\+OM P\+R\+O\+D\+U\+C\+TS B\+A\+S\+ED ON, OR R\+E\+S\+U\+L\+T\+I\+NG F\+R\+OM, R\+E\+C\+I\+P\+I\+E\+NT\textquotesingle{}S U\+SE OF T\+HE S\+U\+B\+J\+E\+CT S\+O\+F\+T\+W\+A\+RE, R\+E\+C\+I\+P\+I\+E\+NT S\+H\+A\+LL I\+N\+D\+E\+M\+N\+I\+FY A\+ND H\+O\+LD H\+A\+R\+M\+L\+E\+SS T\+HE U\+N\+I\+T\+ED S\+T\+A\+T\+ES G\+O\+V\+E\+R\+N\+M\+E\+NT, I\+TS C\+O\+N\+T\+R\+A\+C\+T\+O\+RS A\+ND S\+U\+B\+C\+O\+N\+T\+R\+A\+C\+T\+O\+RS, AS W\+E\+LL AS A\+NY P\+R\+I\+OR R\+E\+C\+I\+P\+I\+E\+NT, TO T\+HE E\+X\+T\+E\+NT P\+E\+R\+M\+I\+T\+T\+ED BY L\+AW. R\+E\+C\+I\+P\+I\+E\+NT\textquotesingle{}S S\+O\+LE R\+E\+M\+E\+DY F\+OR A\+NY S\+U\+CH M\+A\+T\+T\+ER S\+H\+A\+LL BE T\+HE I\+M\+M\+E\+D\+I\+A\+TE, U\+N\+I\+L\+A\+T\+E\+R\+AL T\+E\+R\+M\+I\+N\+A\+T\+I\+ON OF T\+H\+IS A\+G\+R\+E\+E\+M\+E\+NT. 

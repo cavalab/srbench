@@ -1,0 +1,102 @@
+\hypertarget{classSin}{}\section{Sin Class Reference}
+\label{classSin}\index{Sin@{Sin}}
+
+
+This class performs sine.  
+
+
+
+
+{\ttfamily \#include $<$acyclic\+\_\+graph\+\_\+nodes.\+h$>$}
+
+Inheritance diagram for Sin\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classSin}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{classSin_af9defcb92f8a2ddd5785b631f3b7296d}{get\+\_\+arity} ()\hypertarget{classSin_af9defcb92f8a2ddd5785b631f3b7296d}{}\label{classSin_af9defcb92f8a2ddd5785b631f3b7296d}
+
+\begin{DoxyCompactList}\small\item\em Returns how many parameters the operation requires. \end{DoxyCompactList}\item 
+std\+::string \hyperlink{classSin_a126a29e052db561151e42cf9d778bd8b}{get\+\_\+print} ()\hypertarget{classSin_a126a29e052db561151e42cf9d778bd8b}{}\label{classSin_a126a29e052db561151e42cf9d778bd8b}
+
+\begin{DoxyCompactList}\small\item\em Returns the string representation of the operator. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classSin_a1eee9fe523f2facfb47360eff481277b}{evaluate} (const Eigen\+::\+Array\+X3i \&stack, const Eigen\+::\+Array\+X\+Xd \&x, const Eigen\+::\+Vector\+Xd \&constants, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&buffer, std\+::size\+\_\+t result\+\_\+location)
+\begin{DoxyCompactList}\small\item\em evaluates a single command at the location passed in \end{DoxyCompactList}\item 
+virtual void \hyperlink{classSin_a7ee9713a0e86b56b7cb4f23f81b1a502}{deriv\+\_\+evaluate} (const Eigen\+::\+Array\+X3i \&stack, const int command\+\_\+index, const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&forward\+\_\+buffer, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&reverse\+\_\+buffer, int dependency)
+\begin{DoxyCompactList}\small\item\em Computes reverse autodiff partial of a command stack. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class performs sine. 
+
+\subsection{Member Function Documentation}
+\index{Sin@{Sin}!deriv\+\_\+evaluate@{deriv\+\_\+evaluate}}
+\index{deriv\+\_\+evaluate@{deriv\+\_\+evaluate}!Sin@{Sin}}
+\subsubsection[{\texorpdfstring{deriv\+\_\+evaluate(const Eigen\+::\+Array\+X3i \&stack, const int command\+\_\+index, const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&forward\+\_\+buffer, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&reverse\+\_\+buffer, int dependency)}{deriv_evaluate(const Eigen::ArrayX3i &stack, const int command_index, const std::vector< Eigen::ArrayXXd > &forward_buffer, std::vector< Eigen::ArrayXXd > &reverse_buffer, int dependency)}}]{\setlength{\rightskip}{0pt plus 5cm}void Sin\+::deriv\+\_\+evaluate (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Array\+X3i \&}]{stack, }
+\item[{const int}]{command\+\_\+index, }
+\item[{const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{forward\+\_\+buffer, }
+\item[{std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{reverse\+\_\+buffer, }
+\item[{int}]{dependency}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{classSin_a7ee9713a0e86b56b7cb4f23f81b1a502}{}\label{classSin_a7ee9713a0e86b56b7cb4f23f81b1a502}
+
+
+Computes reverse autodiff partial of a command stack. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em stack} & The stack that contains each command. Eigen\+::\+Array\+X3i \\
+\hline
+\mbox{\tt in}  & {\em command\+\_\+index} & Index of command in the command; also the location of the result to be placed in the reverse buffer. \\
+\hline
+\mbox{\tt in}  & {\em forward\+\_\+buffer} & Vector of Eigen arrays for the forward buffer. \\
+\hline
+ & {\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classOperation_a42b611d08c6b00568c5d1b08688ebcce}{Operation}.
+
+\index{Sin@{Sin}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!Sin@{Sin}}
+\subsubsection[{\texorpdfstring{evaluate(const Eigen\+::\+Array\+X3i \&stack, const Eigen\+::\+Array\+X\+Xd \&x, const Eigen\+::\+Vector\+Xd \&constants, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&buffer, std\+::size\+\_\+t result\+\_\+location)}{evaluate(const Eigen::ArrayX3i &stack, const Eigen::ArrayXXd &x, const Eigen::VectorXd &constants, std::vector< Eigen::ArrayXXd > &buffer, std::size_t result_location)}}]{\setlength{\rightskip}{0pt plus 5cm}void Sin\+::evaluate (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Array\+X3i \&}]{stack, }
+\item[{const Eigen\+::\+Array\+X\+Xd \&}]{x, }
+\item[{const Eigen\+::\+Vector\+Xd \&}]{constants, }
+\item[{std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{buffer, }
+\item[{std\+::size\+\_\+t}]{result\+\_\+location}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{classSin_a1eee9fe523f2facfb47360eff481277b}{}\label{classSin_a1eee9fe523f2facfb47360eff481277b}
+
+
+evaluates a single command at the location passed in 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em stack} & The stack that contains each command. Eigen\+::\+Array\+X3i \\
+\hline
+\mbox{\tt in}  & {\em x} & Input variables to the acyclic graph. Eigen\+::\+Array\+X\+Xd \\
+\hline
+\mbox{\tt in}  & {\em constants} & Constants used in the command. Eigen\+::\+Vector\+Xd \\
+\hline
+ & {\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classOperation_a89093eb53f975dd98b6a36d85fa17276}{Operation}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/acyclic\+\_\+graph\+\_\+nodes.\+h\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/acyclic\+\_\+graph\+\_\+nodes.\+cpp\end{DoxyCompactItemize}

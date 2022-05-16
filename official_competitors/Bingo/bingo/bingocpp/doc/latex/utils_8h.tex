@@ -1,0 +1,163 @@
+\hypertarget{utils_8h}{}\section{/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/utils.h File Reference}
+\label{utils_8h}\index{/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/utils.\+h@{/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/utils.\+h}}
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\\*
+{\ttfamily \#include $<$Eigen/\+Core$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \hyperlink{utils_8h_a5836ec6058e585f69258a177ae67a000}{calculate\+\_\+partials} (Eigen\+::\+Array\+X\+Xd x)
+\begin{DoxyCompactList}\small\item\em Calculate derivatves with respect to time (first dimension) \end{DoxyCompactList}\item 
+double \hyperlink{utils_8h_a8883803c41dd3a1f8d4ff8d654d92979}{Gen\+Fact} (double a, double b)
+\begin{DoxyCompactList}\small\item\em Generalized factorial. \end{DoxyCompactList}\item 
+double \hyperlink{utils_8h_ac78013378e297fd448de0283399913c5}{Gram\+Poly} (double gp\+\_\+i, double gp\+\_\+m, double gp\+\_\+k, double gp\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Calculates the Gram Polynomial (gp\+\_\+s=0) or its gp\+\_\+s\textquotesingle{}th derivative evaluated at gp\+\_\+i, order gp\+\_\+k, over 2gp\+\_\+m+1 points. \end{DoxyCompactList}\item 
+double \hyperlink{utils_8h_ad6be665a715d2863859c7571484e7cbd}{Gram\+Weight} (double gw\+\_\+i, double gw\+\_\+t, double gw\+\_\+m, double gw\+\_\+n, double gw\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Calculates the weight of the gw\+\_\+i\textquotesingle{}th data point for the gw\+\_\+t\textquotesingle{}th Least-\/\+Square point of the gw\+\_\+s\textquotesingle{}th derivative over 2gw\+\_\+m+1 points, order gw\+\_\+n. \end{DoxyCompactList}\item 
+Eigen\+::\+Array\+X\+Xd \hyperlink{utils_8h_a477f6a4d628d505fd6b0551cf2832850}{savitzky\+\_\+golay} (Eigen\+::\+Array\+X\+Xd y, int window\+\_\+size, int order, int deriv=0)
+\begin{DoxyCompactList}\small\item\em Smooth (and optionally differentiate) data with a Savitzky-\/\+Golay filter The Savitzky-\/\+Golay filter removes high frequency noise from data. It has the advantage of preserving the original shape and features of the signal better than other types of filtering approaches, such as moving averages techniques. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Ethan Adams 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+
+\end{DoxyDate}
+This file contains utility functions for doing and testing sybolic regression problems in the bingo package 
+
+\subsection{Function Documentation}
+\index{utils.\+h@{utils.\+h}!calculate\+\_\+partials@{calculate\+\_\+partials}}
+\index{calculate\+\_\+partials@{calculate\+\_\+partials}!utils.\+h@{utils.\+h}}
+\subsubsection[{\texorpdfstring{calculate\+\_\+partials(\+Eigen\+::\+Array\+X\+Xd x)}{calculate_partials(Eigen::ArrayXXd x)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$Eigen\+::\+Array\+X\+Xd$>$ calculate\+\_\+partials (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Array\+X\+Xd}]{x}
+\end{DoxyParamCaption}
+)}\hypertarget{utils_8h_a5836ec6058e585f69258a177ae67a000}{}\label{utils_8h_a5836ec6058e585f69258a177ae67a000}
+
+
+Calculate derivatves with respect to time (first dimension) 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em x} & array in which derivatives will be calculated in the first dimension. Distinct trajectories can be specified by separating the datasets within x by rows of nan Eigen\+::\+Array\+X\+Xd \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+Eigen\+::\+Array\+X\+Xd$>$ with x array and corresponding time derivatives 
+\end{DoxyReturn}
+\index{utils.\+h@{utils.\+h}!Gen\+Fact@{Gen\+Fact}}
+\index{Gen\+Fact@{Gen\+Fact}!utils.\+h@{utils.\+h}}
+\subsubsection[{\texorpdfstring{Gen\+Fact(double a, double b)}{GenFact(double a, double b)}}]{\setlength{\rightskip}{0pt plus 5cm}double Gen\+Fact (
+\begin{DoxyParamCaption}
+\item[{double}]{a, }
+\item[{double}]{b}
+\end{DoxyParamCaption}
+)}\hypertarget{utils_8h_a8883803c41dd3a1f8d4ff8d654d92979}{}\label{utils_8h_a8883803c41dd3a1f8d4ff8d654d92979}
+
+
+Generalized factorial. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em a} & double \\
+\hline
+\mbox{\tt in}  & {\em b} & double \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double factorial 
+\end{DoxyReturn}
+\index{utils.\+h@{utils.\+h}!Gram\+Poly@{Gram\+Poly}}
+\index{Gram\+Poly@{Gram\+Poly}!utils.\+h@{utils.\+h}}
+\subsubsection[{\texorpdfstring{Gram\+Poly(double gp\+\_\+i, double gp\+\_\+m, double gp\+\_\+k, double gp\+\_\+s)}{GramPoly(double gp_i, double gp_m, double gp_k, double gp_s)}}]{\setlength{\rightskip}{0pt plus 5cm}double Gram\+Poly (
+\begin{DoxyParamCaption}
+\item[{double}]{gp\+\_\+i, }
+\item[{double}]{gp\+\_\+m, }
+\item[{double}]{gp\+\_\+k, }
+\item[{double}]{gp\+\_\+s}
+\end{DoxyParamCaption}
+)}\hypertarget{utils_8h_ac78013378e297fd448de0283399913c5}{}\label{utils_8h_ac78013378e297fd448de0283399913c5}
+
+
+Calculates the Gram Polynomial (gp\+\_\+s=0) or its gp\+\_\+s\textquotesingle{}th derivative evaluated at gp\+\_\+i, order gp\+\_\+k, over 2gp\+\_\+m+1 points. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em gp\+\_\+i} & double \\
+\hline
+\mbox{\tt in}  & {\em gp\+\_\+m} & double \\
+\hline
+\mbox{\tt in}  & {\em gp\+\_\+k} & double \\
+\hline
+\mbox{\tt in}  & {\em gp\+\_\+s} & double \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double polynomial 
+\end{DoxyReturn}
+\index{utils.\+h@{utils.\+h}!Gram\+Weight@{Gram\+Weight}}
+\index{Gram\+Weight@{Gram\+Weight}!utils.\+h@{utils.\+h}}
+\subsubsection[{\texorpdfstring{Gram\+Weight(double gw\+\_\+i, double gw\+\_\+t, double gw\+\_\+m, double gw\+\_\+n, double gw\+\_\+s)}{GramWeight(double gw_i, double gw_t, double gw_m, double gw_n, double gw_s)}}]{\setlength{\rightskip}{0pt plus 5cm}double Gram\+Weight (
+\begin{DoxyParamCaption}
+\item[{double}]{gw\+\_\+i, }
+\item[{double}]{gw\+\_\+t, }
+\item[{double}]{gw\+\_\+m, }
+\item[{double}]{gw\+\_\+n, }
+\item[{double}]{gw\+\_\+s}
+\end{DoxyParamCaption}
+)}\hypertarget{utils_8h_ad6be665a715d2863859c7571484e7cbd}{}\label{utils_8h_ad6be665a715d2863859c7571484e7cbd}
+
+
+Calculates the weight of the gw\+\_\+i\textquotesingle{}th data point for the gw\+\_\+t\textquotesingle{}th Least-\/\+Square point of the gw\+\_\+s\textquotesingle{}th derivative over 2gw\+\_\+m+1 points, order gw\+\_\+n. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em gw\+\_\+i} & double \\
+\hline
+\mbox{\tt in}  & {\em gw\+\_\+t} & double \\
+\hline
+\mbox{\tt in}  & {\em gw\+\_\+m} & double \\
+\hline
+\mbox{\tt in}  & {\em gw\+\_\+n} & double \\
+\hline
+\mbox{\tt in}  & {\em gw\+\_\+s} & double \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double weight 
+\end{DoxyReturn}
+\index{utils.\+h@{utils.\+h}!savitzky\+\_\+golay@{savitzky\+\_\+golay}}
+\index{savitzky\+\_\+golay@{savitzky\+\_\+golay}!utils.\+h@{utils.\+h}}
+\subsubsection[{\texorpdfstring{savitzky\+\_\+golay(\+Eigen\+::\+Array\+X\+Xd y, int window\+\_\+size, int order, int deriv=0)}{savitzky_golay(Eigen::ArrayXXd y, int window_size, int order, int deriv=0)}}]{\setlength{\rightskip}{0pt plus 5cm}Eigen\+::\+Array\+X\+Xd savitzky\+\_\+golay (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Array\+X\+Xd}]{y, }
+\item[{int}]{window\+\_\+size, }
+\item[{int}]{order, }
+\item[{int}]{deriv = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\hypertarget{utils_8h_a477f6a4d628d505fd6b0551cf2832850}{}\label{utils_8h_a477f6a4d628d505fd6b0551cf2832850}
+
+
+Smooth (and optionally differentiate) data with a Savitzky-\/\+Golay filter The Savitzky-\/\+Golay filter removes high frequency noise from data. It has the advantage of preserving the original shape and features of the signal better than other types of filtering approaches, such as moving averages techniques. 
+
+The Savitzky-\/\+Golay is a type of low-\/pass filter, particularly suited for smoothing noisy data. The main idea behind this approach is to make for each point a least-\/square fit with a polynomial of high order over a odd-\/sized window centered at the point.
+
+.. \mbox{[}1\mbox{]} A. Savitzky, M. J. E. Golay, Smoothing and Differentiation of Data by Simplified Least Squares Procedures. Analytical Chemistry, 1964, 36 (8), pp 1627-\/1639. .. \mbox{[}2\mbox{]} Numerical Recipes 3rd Edition\+: The Art of Scientific Computing W.\+H. Press, S.\+A. Teukolsky, W.\+T. Vetterling, B.\+P. Flannery Cambridge University Press I\+S\+B\+N-\/13\+: 9780521880688
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em y} & array\+\_\+like, shape (N,) the values of the time history of the signal. Eigen\+::\+Array\+X\+Xd \\
+\hline
+\mbox{\tt in}  & {\em window\+\_\+size} & the length of the window. Must be an odd integer number. int \\
+\hline
+\mbox{\tt in}  & {\em order} & the order of the polynomial used in the filtering. Must be less than window\+\_\+size -\/ 1. int \\
+\hline
+\mbox{\tt in}  & {\em deriv} & the order of the derivative to compute (default = 0 means only smoothing). int \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eiggen\+::\+Array\+X\+Xd the smoothed signal (or it\textquotesingle{}s n-\/th derivative). 
+\end{DoxyReturn}

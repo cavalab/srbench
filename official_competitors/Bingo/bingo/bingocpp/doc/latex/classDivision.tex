@@ -1,0 +1,102 @@
+\hypertarget{classDivision}{}\section{Division Class Reference}
+\label{classDivision}\index{Division@{Division}}
+
+
+This class performs division.  
+
+
+
+
+{\ttfamily \#include $<$acyclic\+\_\+graph\+\_\+nodes.\+h$>$}
+
+Inheritance diagram for Division\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classDivision}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{classDivision_a269601e11e98c4fc5f885363b9c8a2c5}{get\+\_\+arity} ()\hypertarget{classDivision_a269601e11e98c4fc5f885363b9c8a2c5}{}\label{classDivision_a269601e11e98c4fc5f885363b9c8a2c5}
+
+\begin{DoxyCompactList}\small\item\em Returns how many parameters the operation requires. \end{DoxyCompactList}\item 
+std\+::string \hyperlink{classDivision_a05bf2f19700b47d772be822f85aeb884}{get\+\_\+print} ()\hypertarget{classDivision_a05bf2f19700b47d772be822f85aeb884}{}\label{classDivision_a05bf2f19700b47d772be822f85aeb884}
+
+\begin{DoxyCompactList}\small\item\em Returns the string representation of the operator. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classDivision_a09bcc06557768b3a3abc31667ab03103}{evaluate} (const Eigen\+::\+Array\+X3i \&stack, const Eigen\+::\+Array\+X\+Xd \&x, const Eigen\+::\+Vector\+Xd \&constants, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&buffer, std\+::size\+\_\+t result\+\_\+location)
+\begin{DoxyCompactList}\small\item\em evaluates a single command at the location passed in \end{DoxyCompactList}\item 
+virtual void \hyperlink{classDivision_af0f88f306718e3a490315e4be78885f3}{deriv\+\_\+evaluate} (const Eigen\+::\+Array\+X3i \&stack, const int command\+\_\+index, const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&forward\+\_\+buffer, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&reverse\+\_\+buffer, int dependency)
+\begin{DoxyCompactList}\small\item\em Computes reverse autodiff partial of a command stack. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class performs division. 
+
+\subsection{Member Function Documentation}
+\index{Division@{Division}!deriv\+\_\+evaluate@{deriv\+\_\+evaluate}}
+\index{deriv\+\_\+evaluate@{deriv\+\_\+evaluate}!Division@{Division}}
+\subsubsection[{\texorpdfstring{deriv\+\_\+evaluate(const Eigen\+::\+Array\+X3i \&stack, const int command\+\_\+index, const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&forward\+\_\+buffer, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&reverse\+\_\+buffer, int dependency)}{deriv_evaluate(const Eigen::ArrayX3i &stack, const int command_index, const std::vector< Eigen::ArrayXXd > &forward_buffer, std::vector< Eigen::ArrayXXd > &reverse_buffer, int dependency)}}]{\setlength{\rightskip}{0pt plus 5cm}void Division\+::deriv\+\_\+evaluate (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Array\+X3i \&}]{stack, }
+\item[{const int}]{command\+\_\+index, }
+\item[{const std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{forward\+\_\+buffer, }
+\item[{std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{reverse\+\_\+buffer, }
+\item[{int}]{dependency}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{classDivision_af0f88f306718e3a490315e4be78885f3}{}\label{classDivision_af0f88f306718e3a490315e4be78885f3}
+
+
+Computes reverse autodiff partial of a command stack. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em stack} & The stack that contains each command. Eigen\+::\+Array\+X3i \\
+\hline
+\mbox{\tt in}  & {\em command\+\_\+index} & Index of command in the command; also the location of the result to be placed in the reverse buffer. \\
+\hline
+\mbox{\tt in}  & {\em forward\+\_\+buffer} & Vector of Eigen arrays for the forward buffer. \\
+\hline
+ & {\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classOperation_a42b611d08c6b00568c5d1b08688ebcce}{Operation}.
+
+\index{Division@{Division}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!Division@{Division}}
+\subsubsection[{\texorpdfstring{evaluate(const Eigen\+::\+Array\+X3i \&stack, const Eigen\+::\+Array\+X\+Xd \&x, const Eigen\+::\+Vector\+Xd \&constants, std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&buffer, std\+::size\+\_\+t result\+\_\+location)}{evaluate(const Eigen::ArrayX3i &stack, const Eigen::ArrayXXd &x, const Eigen::VectorXd &constants, std::vector< Eigen::ArrayXXd > &buffer, std::size_t result_location)}}]{\setlength{\rightskip}{0pt plus 5cm}void Division\+::evaluate (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Array\+X3i \&}]{stack, }
+\item[{const Eigen\+::\+Array\+X\+Xd \&}]{x, }
+\item[{const Eigen\+::\+Vector\+Xd \&}]{constants, }
+\item[{std\+::vector$<$ Eigen\+::\+Array\+X\+Xd $>$ \&}]{buffer, }
+\item[{std\+::size\+\_\+t}]{result\+\_\+location}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{classDivision_a09bcc06557768b3a3abc31667ab03103}{}\label{classDivision_a09bcc06557768b3a3abc31667ab03103}
+
+
+evaluates a single command at the location passed in 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em stack} & The stack that contains each command. Eigen\+::\+Array\+X3i \\
+\hline
+\mbox{\tt in}  & {\em x} & Input variables to the acyclic graph. Eigen\+::\+Array\+X\+Xd \\
+\hline
+\mbox{\tt in}  & {\em constants} & Constants used in the command. Eigen\+::\+Vector\+Xd \\
+\hline
+ & {\em } & \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classOperation_a89093eb53f975dd98b6a36d85fa17276}{Operation}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/include/\+Bingo\+Cpp/acyclic\+\_\+graph\+\_\+nodes.\+h\item 
+/users0/gbomarit/\+Projects/\+Genetic\+\_\+\+Programming/bingo/bingocpp/src/acyclic\+\_\+graph\+\_\+nodes.\+cpp\end{DoxyCompactItemize}
