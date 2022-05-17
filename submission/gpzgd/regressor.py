@@ -113,9 +113,9 @@ class GPZGD(BaseEstimator, RegressorMixin):
             # 5. call your cli binary with the parameters
             cwd = os.path.dirname(os.path.realpath(__file__))
             if self.random_state >= 0:
-                ans = subprocess.check_output([ "bin/regressor", f"{fname}", f"{cname}", "-p", f"rng_seed={self.random_state}" ], cwd=cwd, universal_newlines=True)
+                ans = subprocess.check_output([ "regressor", f"{fname}", f"{cname}", "-p", f"rng_seed={self.random_state}" ], cwd=cwd, universal_newlines=True)
             else:
-                ans = subprocess.check_output([ "bin/regressor", f"{fname}", f"{cname}" ], cwd=cwd, universal_newlines=True)
+                ans = subprocess.check_output([ "regressor", f"{fname}", f"{cname}" ], cwd=cwd, universal_newlines=True)
 
         xbar, s, mdl, l, e = ans.split(";")
 
