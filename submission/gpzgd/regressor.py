@@ -209,7 +209,7 @@ def model(est, X=None):
     # use python syntax for exponents
     model_str = model_str.replace('^','**')
 
-    if X is not None:
+    if X is not None and hasattr(X, 'columns')::
         mapping = { 'X'+str(i):k for i, k in enumerate(X.columns) }
         for k, v in reversed(mapping.items()):
             model_str = model_str.replace(k,v)
