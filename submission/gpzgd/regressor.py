@@ -50,7 +50,7 @@ class GPZGD(BaseEstimator, RegressorMixin):
         self.crossover_rate = crossover_rate
         self.sub_mutation_rate = sub_mutation_rate
         self.point_mutation_rate = point_mutation_rate
-        self.mutation_sigma = mutation_sigme
+        self.mutation_sigma = mutation_sigma
         self.min_tree_init = min_tree_init
         self.max_tree_init = max_tree_init
         self.max_tree_nodes = max_tree_nodes
