@@ -1,0 +1,52 @@
+authors: # the participants
+  - Grant Dick
+email: grant.dick@otago.ac.nz
+name: gpzgd (Standardised Genetic Programming with Gradient Descent)
+description: | # anything you'd like here to describe the method.
+
+  Let's keep things simple - this is essentially a canonical
+  "Koza"-style variant of GP, with a couple of simple extensions:
+  
+    1. We scale the input features using Z-score standardisation
+
+    2. We use stochastic gradient descent to optimise model parameters    
+
+    3. We include a single-point mutation operator in addition to
+       crossover and subtree mutation (but I am 99.9% sure it doesn't add
+       anything)
+
+  Basically, this codebase thinks it's still 1999 and nothing really
+  noteworthy has taken place in GP research in 23 years! :)
+
+  The code is in plain (and ugly!) C, with OpenMP bolted on at the
+  last minute to take advantage of multiple threads. It should compile
+  anywhere without too much difficulty (I think!). The version
+  included here is trimmed back a little bit relative to the project
+  on GitHub - the version on GitHub uses different file format for
+  reading training and testing data, that's not needed here. However,
+  the "GP" stuff is essentially unchanged.
+
+  There's no ambitions for victory with this entry - we're aiming for
+  a nice simple baseline of performance to contextualise other
+  methods. For a long time, work performing symbolic regression via GP
+  has compared results against a range of "state of the art" methods,
+  and there doesn't seem to be a good reference for what we should
+  expect as "minimal" performance for GP. The method used here doesn't
+  try to preserve or exploit useful model structure and modularity, or
+  introduce domain bias. It doesn't use elaborate feature selection,
+  coevolution, multiple objectives, regularisation (save for a limit
+  on tree size), or population structure. Aside from a very simple
+  gradient descent optimiser, it doesn't try to integrate hybrid
+  machine learning approaches, ensemble methods, or anything. It's
+  pretty simple, really!
+
+  References:
+  
+  Grant Dick, Caitlin A. Owen, and Peter A. Whigham. 2020. Feature
+  standardisation and coefficient optimisation for effective symbolic
+  regression. In Proceedings of the 2020 Genetic and Evolutionary
+  Computation Conference (GECCO '20). Association for Computing
+  Machinery, New York, NY, USA, 306–314.
+  https://doi.org/10.1145/3377930.3390237
+
+url: http://github.com/grantdick/gpzgd # a link to the project
