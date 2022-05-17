@@ -57,8 +57,7 @@ class GPZGD(BaseEstimator, RegressorMixin):
         self.learning_rate = learning_rate
         self.learning_epochs =learning_epochs
         self.timeout = timeout
-        if random_state >= 0:
-            self.random_state = random_state
+        self.random_state = random_state
 
     def fit(self, X_train, y_train):
         """A reference implementation of a fitting function.
@@ -113,7 +112,7 @@ class GPZGD(BaseEstimator, RegressorMixin):
 
             # 5. call your cli binary with the parameters
             cwd = os.path.dirname(os.path.realpath(__file__))
-            if hasattr(self, "random_state"):
+            if self.random_state >= 0:
                 ans = subprocess.check_output([ "dist/regressor", f"{fname}", f"{cname}", "-p", f"rng_seed={self.random_state}" ], cwd=cwd, universal_newlines=True)
             else:
                 ans = subprocess.check_output([ "dist/regressor", f"{fname}", f"{cname}" ], cwd=cwd, universal_newlines=True)
