@@ -1,4 +1,4 @@
-from .gpzgd import GPZGD
+from . import GPZGD
 
 est = GPZGD()
 
