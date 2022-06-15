@@ -135,7 +135,12 @@ class EQL(BaseEstimator, RegressorMixin):
     def get_score(self, X, y, param):
         yhat = jnp.nan_to_num(self._eql.apply(param, X, deterministic=True))
         exprs = self.get_eqn()
-        simps = np.array([simplicity(e) for e in exprs])
+        
+        # exprs might be invalid
+        try:
+            simps = np.array([simplicity(e) for e in exprs])
+        except TypeError:
+            simps = -999.0
 
         r2 = r2_score(yhat, y)
         return r2 + np.clip(np.mean(simps), a_min=0.0, a_max=10.0)
