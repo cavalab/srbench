@@ -30,7 +30,7 @@ est = symbolicregression.model.SymbolicTransformerRegressor(
 
 def model(est, X=None):
     replace_ops = {"add": "+", "mul": "*", "sub": "-", "pow": "**", "inv": "1/"}
-    model_str = est.retrieve_tree(tree_idx=0).infix()
+    model_str = est.retrieve_tree(tree_idx=0, with_infos=True)["relabed_predicted_tree"].infix()
     for op,replace_op in replace_ops.items():
         model_str = model_str.replace(op,replace_op)
     return model_str
