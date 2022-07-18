@@ -37,7 +37,7 @@ In the synthetic track, methods were compared according to five properties: 1) r
 |---:|:--------------|--------------:|
 |  **1** | **QLattice**      |          6.23 |
 |  2 | pysr          |          5.26 |
-|  3 | uDSR          |          5.67 |
+|  3 | uDSR          |          4.67 |
 |  4 | operon        |          4.38 |
 |  5 | Bingo         |          4.32 |
 |  6 | E2ET          |          2.74 |
