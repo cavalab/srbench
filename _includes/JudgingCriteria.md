@@ -1,3 +1,9 @@
+<div class="notice">
+  <h1>2022 SRBench Competition</h1>
+  <p>This competition is now closed.</p>
+</div>
+
+---
 # Judging Criteria
 
 The judging criteria differ between the two tracks of the competition, *Synthetic* and *Real-World*. 
@@ -58,6 +64,7 @@ The expert is free to interpret these measurements as they please.
 The expert may, e.g., consider a subjective and not well-defined notion of "`soundess`" to be most important.
 For example, for two models `m_1` and `m_2`, the expert may deem them to be equivalently accurate even though `accuracy_1 > accuracy_2`; moreover, even if `m_1` may have a smaller number of components than `m_2`, the expert may decide that `m_2` is a better model because of the nature of the components in use as well as the way they are combined (e.g., `m_2` contains a realization of the Body Mass Index for a medical problem where the patient's `weight` and `height` are deemed to be important while `m_1` contains unintuive operations, e.g., `atan(log(sqrt(age))/height)`).
 
-3. The winning SR method is the one whose model is ranked 1st in terms of trust.
+3. The winning SR method is the one whose model is ranked 1st by the expert. In this case, the expert's overall score followed that of the synthetic track: the harmonic mean of `r2_score`, `simplicity`, and `trust_score` was used to determine the winner. 
+
 
 Ranks across different data sets are averaged to obtain a final winner.
