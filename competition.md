@@ -8,5 +8,5 @@ sidebar:
     nav: "competition"
 ---
 
-{% capture my_include %}{% include competition_summary.md %}{% endcapture %}
+{% capture my_include %}{% include cfp_competition.md %}{% endcapture %}
 {{ my_include | markdownify }}

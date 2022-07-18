@@ -25,13 +25,13 @@ main:
   - title: "Competition 2022"
     url: /competition-2022/
     children:
+    - title: "Results"
+      url: /competition-2022/
     - title: "Competition Guide"
       url: /competition-guide/
-    - title: "Results"
-      url: /competition-results/
 
 competition:
-  - title: "Call for Participation"
+  - title: "Results"
     url: /competition-2022/
   - title: "Competition Guide"
     url: /competition-guide/
