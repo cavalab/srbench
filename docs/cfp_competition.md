@@ -1,3 +1,9 @@
+<style>
+img {
+    height: 100px;
+    margin: 5px;
+}
+</style>
 
 {% include toc %}
 
@@ -62,7 +68,7 @@ Please stay tuned for additional updates, as we aim to make these results reprod
 The current raw results files can be found at the link below. 
 
 
-<a href="https://doi.org/10.5281/zenodo.6842176"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6842176.svg" alt="DOI" width="200"></a>
+<a href="https://doi.org/10.5281/zenodo.6842176"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6842176.svg" alt="DOI" style="height:20px;" ></a>
 
 ## Organizers
 
@@ -80,12 +86,6 @@ Please address questions to william dot lacava at childrens dot harvard dot edu.
     - Centrum Wiskunde & Informatica
 
 # Sponsors
-<style>
-img {
-    height: 100px;
-    margin: 5px;
-}
-</style>
 
 <a href="http://www.chip.org" ><img style="float:center;" src="../assets/images/chip-logo_0.png"></a>
 <a href="http://www.chip.org" ><img style="float:center; height:60px;" src="../assets/images/bch-hvd.png"></a>
