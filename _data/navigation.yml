@@ -1,10 +1,5 @@
 # main links
 main:
-  - title: "Competition 2022"
-    url: /competition-2022/
-    children:
-    - title: "Competition Guide"
-      url: /competition-guide/
   - title: "SRBench"
     url: / 
     children:
@@ -27,6 +22,13 @@ main:
     url: /results/
   - title: "Datasets"
     url: /datasets/
+  - title: "Competition 2022"
+    url: /competition-2022/
+    children:
+    - title: "Competition Guide"
+      url: /competition-guide/
+    - title: "Results"
+      url: /competition-results/
 
 competition:
   - title: "Call for Participation"
