@@ -1,15 +1,3 @@
-<style>
-img {
-    height: 100px;
-    margin: 5px;
-}
-</style>
-
-<a href="http://www.chip.org" ><img style="float:center;" src="../assets/images/chip-logo_0.png"></a>
-<a href="http://www.chip.org" ><img style="float:center; height:60px;" src="../assets/images/bch-hvd.png"></a>
-<br>
-<a href="https://heal.heuristiclab.com" ><img style="float:center;" src="../assets/images/20211004_HEAL-Logo_v7.png"></a>
-<a href="https://heal.heuristiclab.com" ><img style="float:center;height:60px;" src="../assets/images/uasau.png"></a>
 
 {% include toc %}
 
@@ -89,3 +77,17 @@ Please address questions to william dot lacava at childrens dot harvard dot edu.
     - Federal University of ABC
 - Marco Virgolin
     - Centrum Wiskunde & Informatica
+
+# Sponsors
+<style>
+img {
+    height: 100px;
+    margin: 5px;
+}
+</style>
+
+<a href="http://www.chip.org" ><img style="float:center;" src="../assets/images/chip-logo_0.png"></a>
+<a href="http://www.chip.org" ><img style="float:center; height:60px;" src="../assets/images/bch-hvd.png"></a>
+<br>
+<a href="https://heal.heuristiclab.com" ><img style="float:center;" src="../assets/images/20211004_HEAL-Logo_v7.png"></a>
+<a href="https://heal.heuristiclab.com" ><img style="float:center;height:60px;" src="../assets/images/uasau.png"></a>
