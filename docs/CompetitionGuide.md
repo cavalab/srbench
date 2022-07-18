@@ -1,3 +1,9 @@
+<div class="notice">
+  <h1>2022 SRBench Competition</h1>
+  <p>This competition is now closed.</p>
+</div>
+
+---
 [PR]: https://github.com/cavalab/srbench/compare/Competition2022...change-to-my-fork
 [judging]: https://cavalab.org/srbench/judging-criteria/
 [example]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/
