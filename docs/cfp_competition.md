@@ -26,8 +26,13 @@ Winners of the *synthetic* and *real-world* track are each entitled to a $1,250 
 
 # Results
 
+- **1st Place, Synthetic Track: [QLattice](https://github.com/brendenpetersen/deep-symbolic-optimization)**
+    - submitted by Meera Vieira Machado & Miquel Triana Iglesias
 
-## Synthetic Track
+- **1st Place, Real-world Track: [uDSR](https://github.com/brendenpetersen/deep-symbolic-optimization)**
+    - submitted by Brenden Petersen,  Mikel Landajuela, Chak Lee, Jiachen Yang, Ruben Glatt, Ignacio Aravena Solis, Claudio Santiago, Nathan Mundhenk
+
+## Synthetic Track Rankings
 
 In the synthetic track, methods were compared according to five properties: 1) re-discovery of exact expressions; 2) feature selection; 3) resistance to local optima; 4) extrapolation; and 5) sensitivity to noise. 
 
@@ -43,7 +48,7 @@ In the synthetic track, methods were compared according to five properties: 1) r
 |  8 | eql           |          1.33 |
 |  9 | PS-Tree       |          0.85 |
 
-## Real-world Track
+## Real-world Track Rankings
 
 In the real-world track, competitor methods were trained to build interpretable predictive models for 14-day forecast counts of COVID-19 cases, hospitalizations, and deaths in New York State. 
 These models were reviewed by a subject expert and assigned ``trust ratings", in addition to being evaluted for accuracy and simplicity. 
