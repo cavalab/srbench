@@ -61,7 +61,8 @@ Congratulations to the winners.
 Please stay tuned for additional updates, as we aim to make these results reproducible by providing all source code. 
 The current raw results files can be found at the link below. 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6842176.svg)](https://doi.org/10.5281/zenodo.6842176)
+
+<a href="https://doi.org/10.5281/zenodo.6842176"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6842176.svg" alt="DOI" width="200"></a>
 
 ## Organizers
 
