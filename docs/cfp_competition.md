@@ -23,7 +23,7 @@ Winners of the *synthetic* and *real-world* track are each entitled to a $1,250 
 In total, there were 13 official competitors. 
 After the filtering stage, 9 went on to compete in the synthetic and real-world tracks. 
 
-- **1st Place, Synthetic Track: [QLattice](https://github.com/brendenpetersen/deep-symbolic-optimization)**
+- **1st Place, Synthetic Track: [QLattice](https://docs.abzu.ai/)**
     - submitted by Meera Vieira Machado & Miquel Triana Iglesias
 
 - **1st Place, Real-world Track: [uDSR](https://github.com/brendenpetersen/deep-symbolic-optimization)**
