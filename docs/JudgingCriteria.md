@@ -29,7 +29,7 @@ Given the aspects above, the participating methods will be evaluated as follows:
 1. Each method is run 10 times, producing 10 models, for each data set.
 
 1. For each data set, the `accuracy`, `simplicity`, and `property` of each SR method are measured. The first two are the same across each data set, while the latter is data set-specific.
-For each aspect, the mean of the 10 repetitions is considered.
+For each aspect, the median of the 10 repetitions is considered.
 
 2. Independently for each data set, the participating methods are ranked in terms of the four aspects. Higher rank = better performance.
 
@@ -48,7 +48,7 @@ This assessment carried out by the expert is subjective and based on their exper
 In more detail, for any given real-world data set:
 
 1. Each method is run 10 times, producing 10 models. 
-Each one of these 10 models is tested on the test set, and the model with best `accuracy` will be considered the representative model for the expert to consider.
+Each one of these 10 models is tested on the test set, and the model with median `accuracy` will be considered the representative model for the expert to consider.
 For this model, `accuracy` and `simplicity`, as per the definitions above, will be reported to the expert for reference.
 
 2. The expert will rank the so-obtained competing models in terms of their *trust* in them. 
