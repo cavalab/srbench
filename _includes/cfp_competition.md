@@ -24,7 +24,7 @@ In total, there were 13 official competitors.
 After the filtering stage, 9 went on to compete in the synthetic and real-world tracks. 
 
 - **1st Place, Synthetic Track: [QLattice](https://docs.abzu.ai/)**
-    - submitted by Meera Vieira Machado & Miquel Triana Iglesias
+    - submitted by Meera Vieira Machado & Miquel Triana Iglesias on behalf of Abzu AI
 
 - **1st Place, Real-world Track: [uDSR](https://github.com/brendenpetersen/deep-symbolic-optimization)**
     - submitted by Brenden Petersen,  Mikel Landajuela, Chak Lee, Jiachen Yang, Ruben Glatt, Ignacio Aravena Solis, Claudio Santiago, Nathan Mundhenk
