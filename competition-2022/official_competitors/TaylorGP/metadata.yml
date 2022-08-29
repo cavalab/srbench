@@ -1,0 +1,9 @@
+authors: # the participants
+  Baihe He, Yuxiang Gao, Qiang Lu. 
+email: hebaihe@hotmail.com
+name: TaylorGP # name of the submission /method
+description: | # anything you'd like here to describe the method.
+  Taylor Genetic Programming for Symbolic Regression.
+  The Taylor features mined by Taylor polynomial that fits given dataset are used to guide genetic programming.
+  "Taylor Genetic Programming for Symbolic Regression" GECCO 2022. preprint: https://kgae-cup.github.io/TaylorGP/
+url: https://github.com/KGAE-CUP/TaylorGP # a link to the project
