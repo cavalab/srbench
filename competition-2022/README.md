@@ -32,7 +32,7 @@ For example, Stage 1 of the competition can be run with the command
 python analyze.py data/stage1/data/*data.csv -results ../results_stage1 -n_jobs 8 -m 16384 -n_trials 1 -stage 1 -time_limit "01:05" 
 ```
 
-If you don't want to run the code, you can [download the results files.](https://doi.org/10.5281/zenodo.6842176): 
+If you don't want to run the code, you can download the results files from zenodo: 
 
 <a href="https://doi.org/10.5281/zenodo.6842176"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6842176.svg" alt="DOI" style="height:20px;" ></a>
 
