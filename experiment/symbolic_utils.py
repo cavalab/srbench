@@ -157,7 +157,7 @@ def clean_pred_model(model_str, dataset, est_name):
     # rename features
     for i,f in enumerate(features): 
         print('replacing feature',i,'with',f)
-        if any([n in est_name.lower() for n in ['mrgp','operon','dsr']]):
+        if any([n in est_name.lower() for n in ['mrgp','operon','dsr','phc']]):
             i = i + 1
         new_model_str = new_model_str.replace('x'+str(i),f)
         new_model_str = new_model_str.replace('x_'+str(i),f)
