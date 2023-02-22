@@ -5,7 +5,7 @@ The participants will have the freedom to apply their own pipeline with the obje
 In the first track, the models will be evaluated according to accuracy and simplicity. 
 In the second track, participants are further asked to provide a post-analysis focused on the interpretation of their symbolic model.
 
-The competition will start 01-April-2023 and last 2 months. The participants will gain access to $3$ synthetic data sets for the first track, and $1$ real-world data set for the second track. The tracks run indepedently and participants can enroll in one or both of them.
+The competition will start 01-April-2023 and last 2 months. The participants will gain access to 3 synthetic data sets for the first track, and 1 real-world data set for the second track. The tracks run indepedently and participants can enroll in one or both of them.
 During the two months, the participants can apply an SR approach or pipeline of their choice, e.g., their own novel algorithm or an existing SR package, as well as pre- and post-processing methods (e.g., feature construction and model simplification, respectively) to find suitable symbolic models for the corresponding data sets. 
 
 Enrollment will be done via GitHub Classroom, at a link to be announced soon. 
@@ -20,7 +20,7 @@ Analysis on each dataset should include the production of a single best model fo
 At the competition submission deadline the repository of a participating team should contain:
 
 - [required] A file containing a single model as a **sympy-compatible expression**, selected as the best expression for that data set, named `dataset_X_best_model`.
-- [required] A maximum $4$ page extended abstract in PDF format describing the algorithm and pipeline. This PDF must contain the name and contact information of the participants.
+- [required] A maximum 4 page extended abstract in PDF format describing the algorithm and pipeline. This PDF must contain the name and contact information of the participants.
 - [to be elligible for prize] Reproducibility documentation in the `src` folder.
     - Installation and execution instructions 
     - Scripts (Jupyter Notebook is accepted) with detailed instructions of all steps used to produce models (including hyperparameters search, if any) 
@@ -32,9 +32,11 @@ The final score of each competitor will be composed of:
 - *acc*: Rank based on the accuracy (R^2) on a separate validation set for each data set.
 - *simpl*: Rank based on the a simplicity (number of nodes calculating by traversing the sympy expression) of the model for each data set.
 
-The rank will be calculated for each data set independently such that, with N participants, the $k$-th ranked competitor ($k=1$ being the best) will be assigned a value of $N - k + 1$. The final score will be the harmonic mean of all of the scores and each participant will be ranked accordingly:
+The rank will be calculated for each data set independently such that, with N participants, the k-th ranked competitor (k=1 being the best) will be assigned a value of *N - k + 1*. The final score will be the harmonic mean of all of the scores and each participant will be ranked accordingly:
 
-$$2n / \sum_{i=1}^{n}{ \frac{1}{acc_i} + \frac{1}{simpl_i} }$$
+```python
+score = 2*n / sum([ (1/acc[i]) + (1/simpl[i]) for i in (1..n)])
+```
 
 # Track 2 - Interpretability
 
@@ -48,7 +50,7 @@ Extra points will be awarded for analysis that is unique to Symbolic Regression 
 At the competition submission deadline the repository of a participating team should contain:
 
 - [required] The result files in the `result` folder. A file called `dataset_X_best_model` containing a single model as a **sympy-compatible expression**, selected as the best expression for that data set.
-- [required] A $4$ page extended abstract in PDF format describing the algorithm, pipeline, and the intepretability analysis of the real-world data set (`paper` folder). This PDF must contain the name and contact information of the participants.
+- [required] A 4 page extended abstract in PDF format describing the algorithm, pipeline, and the intepretability analysis of the real-world data set (`paper` folder). This PDF must contain the name and contact information of the participants.
 - [to be elligible for prize] Reproducibility documentation in the `src` folder.
     - Installation and execution instructions 
     - Scripts (Jupyter Notebook is accepted) with detailed instructions of all steps used to produce models (including hyperparameters search, if any) 
