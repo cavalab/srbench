@@ -20,6 +20,7 @@ jobs:
           - CONTRIBUTING.md
           - README.md
           - docs/CompetitionGuide.md
+          - docs/CompetitionGuide2023
           - docs/cfp_competition.md
           - docs/user_guide.md
           - docs/JudgingCriteria.md
