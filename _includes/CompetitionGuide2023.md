@@ -78,7 +78,7 @@ For both tracks, we will try to organize a special issue for the participants wh
 
 # Come chat with us!!
 
-If you want to ask any question, provide some feedback or simply chit-chat, join us at the Discord server: https://discord.gg/Dahqh3Chwy
+If you want to ask any question, provide some feedback or simply chit-chat, join us at the Discord server: [https://discord.gg/Dahqh3Chwy](https://discord.gg/Dahqh3Chwy)
 
 # Organizers
 
@@ -97,3 +97,11 @@ Pierre-Alexandre is a third-year PhD student at Meta AI Paris and Sorbonne Unive
 Geoffrey Bomarito - NASA Langley Research Center - geoffrey.f.bomarito (at) nasa.gov
 
 Geoffrey is a research engineer at NASA Langley Research Center in the USA. His research centers on uncertainty quantification in machine learning with a goal of building trust in data-driven models. Specifically, his recent work focuses on genetic programming based symbolic regression, physics-informed generative adversarial networks, and multifidelity uncertainty quantification.
+
+# Sponsors
+
+<a href="http://www.chip.org" ><img style="float:center;" src="../assets/images/chip-logo_0.png"></a>
+<a href="http://www.chip.org" ><img style="float:center; height:60px;" src="../assets/images/bch-hvd.png"></a>
+<br>
+<a href="https://heal.heuristiclab.com" ><img style="float:center;" src="../assets/images/20211004_HEAL-Logo_v7.png"></a>
+<a href="https://heal.heuristiclab.com" ><img style="float:center;height:60px;" src="../assets/images/uasau.png"></a>
