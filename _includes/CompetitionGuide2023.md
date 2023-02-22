@@ -1,4 +1,8 @@
-# SRBench 2023 Competition Guidelines
+# Symbolic Regression GECCO Competition - 2023
+
+tl;dr the second edition of the symbolic regression competition will allow the participants to experiment with their own pipeline to submit the best symbolic regression model. We will have two tracks: best accuracy-simplicity trade-off and best pre and post-analysis. Read below for more details and don’t forget to join our Discord server at https://discord.gg/Dahqh3Chwy
+
+# Call for participation
 
 The 2023 edition of the Symbolic Regression (SR) competition will be composed of two tracks: performance track and interpretability track. 
 The participants will have the freedom to apply their own pipeline with the objective of returning symbolic models that best describe the data. 
@@ -21,7 +25,7 @@ At the competition submission deadline the repository of a participating team sh
 
 - [required] A file containing a single model as a **sympy-compatible expression**, selected as the best expression for that data set, named `dataset_X_best_model`.
 - [required] A maximum 4 page extended abstract in PDF format describing the algorithm and pipeline. This PDF must contain the name and contact information of the participants.
-- [to be elligible for prize] Reproducibility documentation in the `src` folder.
+- [to be eligible for prize] Reproducibility documentation in the `src` folder.
     - Installation and execution instructions 
     - Scripts (Jupyter Notebook is accepted) with detailed instructions of all steps used to produce models (including hyperparameters search, if any) 
 
@@ -51,7 +55,7 @@ At the competition submission deadline the repository of a participating team sh
 
 - [required] The result files in the `result` folder. A file called `dataset_X_best_model` containing a single model as a **sympy-compatible expression**, selected as the best expression for that data set.
 - [required] A 4 page extended abstract in PDF format describing the algorithm, pipeline, and the intepretability analysis of the real-world data set (`paper` folder). This PDF must contain the name and contact information of the participants.
-- [to be elligible for prize] Reproducibility documentation in the `src` folder.
+- [to be eligible for prize] Reproducibility documentation in the `src` folder.
     - Installation and execution instructions 
     - Scripts (Jupyter Notebook is accepted) with detailed instructions of all steps used to produce models (including hyperparameters search, if any) 
     - Code or instruction to compute any additonal analysis, if applicable.
@@ -69,7 +73,7 @@ Notice that the scores are subjective and these criteria are only a guideline to
 
 # Prize money
 
-As to stimulate reproducibility, a prize money of US$ 750.00 will be granted to the best ranked open-sourced participant (those with a complete `src` folder) for each track.
+As to stimulate reproducibility, a prize money of US$ 750.00 will be granted to the best ranked open-sourced participant (those with a complete `src` folder) **for each track**.
 For both tracks, we will try to organize a special issue for the participants who are interested in publishing their methods and results. 
 
 **Important:** the participants must ensure that the evaluation (prediction) of the models obtained from their pipeline is the same as those of the respective sympy-compatible expressions.
