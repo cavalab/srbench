@@ -74,7 +74,7 @@ For both tracks, we will try to organize a special issue for the participants wh
 
 **Important (2):** all of the repositories will be made public after the competition ends.
 
-# Come chat with us!
+# Come chat with us!!
 
 If you want to ask any question, provide some feedback or simply chit-chat, join us at the Discord server: https://discord.gg/Dahqh3Chwy
 
