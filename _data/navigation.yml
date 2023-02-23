@@ -29,7 +29,9 @@ main:
       url: /competition-2022/
     - title: "Competition Guide"
       url: /competition-guide/
-
+  - title: "Competition 2023"
+    url: /competition-2023/
+      
 competition:
   - title: "Results"
     url: /competition-2022/
