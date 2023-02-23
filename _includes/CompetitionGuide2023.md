@@ -9,7 +9,7 @@ The participants will have the freedom to apply their own pipeline with the obje
 In the first track, the models will be evaluated according to accuracy and simplicity. 
 In the second track, participants are further asked to provide a post-analysis focused on the interpretation of their symbolic model.
 
-The competition will start 01-April-2023 and last 2 months. The participants will gain access to 3 synthetic data sets for the first track, and 1 real-world data set for the second track. The tracks run indepedently and participants can enroll in one or both of them.
+The competition will start 01-April-2023 and last 2 months. The participants will gain access to 3 synthetic data sets for the first track, and 1 real-world data set for the second track. The tracks run independently and participants can enroll in one or both of them.
 During the two months, the participants can apply an SR approach or pipeline of their choice, e.g., their own novel algorithm or an existing SR package, as well as pre- and post-processing methods (e.g., feature construction and model simplification, respectively) to find suitable symbolic models for the corresponding data sets. 
 
 Enrollment will be done via GitHub Classroom, at a link to be announced soon. 
