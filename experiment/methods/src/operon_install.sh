@@ -117,6 +117,7 @@ pushd pyoperon
 git checkout 1c6eccd3e3fa212ebf611170ca2dfc45714c81de
 mkdir build
 cmake -S . -B build \
+    -DPython3_EXECUTABLE=$(which python) \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=${PYTHON_SITE}
 cmake --build build -j -t pyoperon_pyoperon
