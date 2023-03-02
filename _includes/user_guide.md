@@ -121,3 +121,10 @@ python collate_groundtruth_results.py
 - [statistical_comparisons.ipynb](postprocessing/statistical_comparisons.ipynb): post-hoc statistical comparisons
 - [pmlb_plots](postprocessing/pmlb_plots.ipynb): the [PMLB](https://github.com/EpistasisLab/pmlb) datasets visualization 
 
+
+## Using your own datasets
+
+To use your own datasets, you want to check out / modify read_file in read_file.py: https://github.com/cavalab/srbench/blob/4cc90adc9c450dad3cb3f82c93136bc2cb3b1a0a/experiment/read_file.py
+
+If your datasets follow the convention of https://github.com/EpistasisLab/pmlb/tree/master/datasets, i.e. they are in a pandas DataFrame with the target column labelled "targert", you can call `read_file` directly just passing the filename like you would with any of the PMLB datasets. 
+The file should be stored and compressed as a `.tsv.gz` file. 
