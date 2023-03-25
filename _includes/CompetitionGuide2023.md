@@ -53,7 +53,7 @@ Extra points will be awarded for analysis that is unique to Symbolic Regression 
 
 At the competition submission deadline the repository of a participating team should contain:
 
-- [required] The result files in the `result` folder. A file called `dataset_X_best_model` containing a single model as a **sympy-compatible expression**, selected as the best expression for that data set.
+- [required] The result files in the `result` folder. A file called `dataset_best_models` containing relevant models as a **sympy-compatible expression**, selected as the best expression for that data set.
 - [required] A 4 page extended abstract in PDF format describing the algorithm, pipeline, and the intepretability analysis of the real-world data set (`paper` folder). This PDF must contain the name and contact information of the participants.
 - [to be eligible for prize] Reproducibility documentation in the `src` folder.
     - Installation and execution instructions 
