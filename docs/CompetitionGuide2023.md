@@ -45,7 +45,7 @@ score = 2*n / sum([ (1/acc[i]) + (1/simpl[i]) for i in (1..n)])
 # Track 2 - Interpretability
 
 The participants will be free to experiment with this data set until the deadline. 
-Analysis on each dataset should include the production of a single best model and a detailed pre and post-analysis regarding the interpretation of that model.
+Analysis on each dataset should include the production of of one or more models and a detailed pre and post-analysis regarding the interpretation of that model.
 Together with the data set we will also provide the context (what the data is about, how it was extracted, etc.) and a description of each feature.
 The interpretability analysis in the extended abstract can contain any information that can be extracted from the symbolic expressions. 
 For example, you can try to analyze the behavior of the target value w.r.t. certain features, make a study of how some features interact, measure the uncertainty of the predictions or confidence intervals, and explain whether these results are reasonable given the nature of the data. 
