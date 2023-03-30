@@ -1,3 +1,9 @@
+<div class="notice">
+  <h1>2022 SRBench Competition</h1>
+  <p>This competition is now closed.</p>
+</div>
+
+---
 [PR]: https://github.com/cavalab/srbench/compare/Competition2022...change-to-my-fork
 [judging]: https://cavalab.org/srbench/judging-criteria/
 [example]: https://github.com/cavalab/srbench/blob/Competition2022/submission/feat-example/
@@ -76,7 +82,7 @@ specify a mapping in the `model` function such as:
 def model(est, X):
     mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
     new_model = est.model_
-    for k,v in mapping.items():
+    for k,v in reversed(mapping.items()):
         new_model = new_model.replace(k,v)
 ```
 

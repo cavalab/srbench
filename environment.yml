@@ -51,8 +51,8 @@ dependencies:
     - shogun-cpp=6.1.4
     - wheel=0.35.*
     # PySR:
-    - julia>=1.6 # Note that this is julia itself.
-    - openlibm<0.8.0
+    - julia # Note that this is julia itself.
+    - openlibm
     # pip
     - pip=20.3.3 
     - pip:

@@ -155,7 +155,7 @@ def clean_pred_model(model_str, dataset, est_name):
     local_dict = {k:Symbol(k) for k in features}
     new_model_str = model_str
     # rename features
-    for i,f in enumerate(features): 
+    for i,f in reversed(list(enumerate(features))):
         print('replacing feature',i,'with',f)
         if any([n in est_name.lower() for n in ['mrgp','operon','dsr']]):
             i = i + 1
