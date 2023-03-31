@@ -1,8 +1,8 @@
 # Symbolic Regression GECCO Competition - 2023
 
-tl;dr the second edition of the symbolic regression competition will allow the participants to experiment with their own pipeline to submit the best symbolic regression model. We will have two tracks: best accuracy-simplicity trade-off and best pre and post-analysis. Read below for more details and don’t forget to join our Discord server at https://discord.gg/Dahqh3Chwy
+tl;dr the second edition of the symbolic regression competition will allow the participants to experiment with their own pipeline to submit the best symbolic regression model. We will have two tracks: best accuracy-simplicity trade-off and best pre and post-analysis. Read below for more details and don’t forget to join our Discord server at [https://discord.gg/Dahqh3Chwy](https://discord.gg/Dahqh3Chwy).
 
-The participation link is now online! See [Entries].
+The participation link is now online! See [Entries](Entries).
 
 # Call for participation
 
@@ -90,9 +90,9 @@ If you want to ask any question, provide some feedback or simply chit-chat, join
 
 To participate of the competition, each member of the team must click on the links corresponding to the desired track. The first member to enroll will create a team name and the other members will choose their team from the list of choices. After enrolling, Github Classroom will set up a private github repository to be used by each team. Read the instructions inside the repository carefully and that's it, you are good to go!
 
-Track 1: https://classroom.github.com/a/2QvkhUcx
+Track 1: [https://classroom.github.com/a/2QvkhUcx](https://classroom.github.com/a/2QvkhUcx)
 
-Track 2: https://classroom.github.com/a/B9mQ5SlP
+Track 2: [https://classroom.github.com/a/B9mQ5SlP](https://classroom.github.com/a/B9mQ5SlP)
 
 
 # Organizers
