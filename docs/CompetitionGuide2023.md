@@ -2,6 +2,8 @@
 
 tl;dr the second edition of the symbolic regression competition will allow the participants to experiment with their own pipeline to submit the best symbolic regression model. We will have two tracks: best accuracy-simplicity trade-off and best pre and post-analysis. Read below for more details and don’t forget to join our Discord server at https://discord.gg/Dahqh3Chwy
 
+The participation link is now online! See [Entries].
+
 # Call for participation
 
 The 2023 edition of the Symbolic Regression (SR) competition will be composed of two tracks: performance track and interpretability track. 
@@ -83,6 +85,15 @@ For both tracks, we will try to organize a special issue for the participants wh
 # Come chat with us!!
 
 If you want to ask any question, provide some feedback or simply chit-chat, join us at the Discord server: [https://discord.gg/Dahqh3Chwy](https://discord.gg/Dahqh3Chwy)
+
+# Entries
+
+To participate of the competition, each member of the team must click on the links corresponding to the desired track. The first member to enroll will create a team name and the other members will choose their team from the list of choices. After enrolling, Github Classroom will set up a private github repository to be used by each team. Read the instructions inside the repository carefully and that's it, you are good to go!
+
+Track 1: https://classroom.github.com/a/2QvkhUcx
+
+Track 2: https://classroom.github.com/a/B9mQ5SlP
+
 
 # Organizers
 
