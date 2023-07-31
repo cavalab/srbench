@@ -45,12 +45,13 @@ dependencies:
     - setuptools=45.*
     - shogun-cpp=6.1.4
     - wheel=0.35.*
-    # PySR:
-    - julia # Note that this is julia itself.
-    - openlibm
     # pip
     - pip=20.3.3 
     - pip:
+        # Note that PySR has a conda-forge package,
+        # but it is not compatible with Apple Silicon or Windows,
+        # whereas this one is.
+        - pysr==0.15
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
         - ffx==2.0.2 # ffx
@@ -59,6 +60,3 @@ dependencies:
         - git+https://github.com/lacava/MCMC-SymReg
         # AI-feynman
         - git+https://github.com/lacava/AI-Feynman
-        # PySR:
-        - julia==0.5.7 # Note that this is PyJulia (pip name julia)
-        - pysr==0.7.0a3
