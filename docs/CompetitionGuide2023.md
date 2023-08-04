@@ -4,6 +4,34 @@ tl;dr the second edition of the symbolic regression competition will allow the p
 
 The participation link is now online! See [Entries](#entries).
 
+# Results
+
+In total there were 10 official participants for Track 1 and 4 for Track 2. We will contact the participants soon regarding the prize and a power session to get some feedback of the competition. Also, we will write a technical report about the results to be published by next year. 
+
+**Track 1 final ranks:**
+
+| Team                     | Participants                                              | method                           | score    | rank | src |
+|--------------------------|-----------------------------------------------------------|----------------------------------|----------|------|-----|
+| pksm                     | Parshin Shojaee Kazem Meidan                              | TPSR                             | 6.307885 | 1    | N   |
+| newton-sr                | Nicolas Lassabe Paul Gersberg                             | NewTonSR++                       | 6.224784 | 2    | Y   |
+| sarma                    | Aleksandar Kartelj Marko Djukanovic                       | RILS                             | 6.136364 | 3    | Y   |
+| player                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski | PFGP                             | 5.448649 | 4    | Y   |
+| stackgp                  | Nathan Haut                                               | stackgp                          | 5.130641 | 5    | Y   |
+| university-of-wellington | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang           | SR-Forest                        | 4.251969 | 6    | Y   |
+| wonderful-time           | Hai Minh Nguyen                                           | SymMFEA                          | 3.440273 | 7    | Y   |
+| his_jsr                  | Gurushant Gurushant  Jatinkumar Nakrani Rajni Maandi      | LR + gplearn                     | 3.43949  | 8    | Y   |
+| tontakt                  | Andrzej Odrzywołek                                        | enumeration, PySR, rational poly | 2.855524 | 9    | Y   |
+| amir                     | Mohammad Amirul Islam                                     | PySR                             | 1.788926 | 10   | Y   |
+
+**Track 2 final ranks:**
+
+| Team                     | Participants                                                | method    | score | rank | src |
+|--------------------------|-------------------------------------------------------------|-----------|-------|------|-----|
+| university-of-wellington | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang             | SR-Forest | 3.25  | 1    | Y   |
+| player                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski   | PFGP      | 2.83  | 2    | Y   |
+| his_jsr                  | Gurushant Gurushant Jatinkumar Nakrani Rajni Maandi         | gplearn   | 2.25  | 3    | Y   |
+| c-bio-ufpr               | Adriel Macena Falcão Martins  Aurora Trinidad Ramirez Pozo  | PySR      | 1.75  | 4    | Y   |
+
 # Call for participation
 
 The 2023 edition of the Symbolic Regression (SR) competition will be composed of two tracks: performance track and interpretability track. 
