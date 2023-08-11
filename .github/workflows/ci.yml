@@ -48,9 +48,6 @@ jobs:
           - nsga-dcgp      
           - uDSR
       fail-fast: false
-    defaults:
-      run:
-        shell: bash -l {0}
     steps:
       - 
         name: Checkout code
