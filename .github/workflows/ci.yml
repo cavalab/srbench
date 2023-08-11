@@ -72,9 +72,6 @@ jobs:
           - nsga-dcgp      
           - uDSR
       fail-fast: false
-    env:
-      subenv: srbench-${{ matrix.alg }} 
-      subfolder: algorithms/${{ matrix.alg }} 
     steps:
       - 
         name: Checkout code
@@ -112,45 +109,36 @@ jobs:
 ################################################################################
       - 
         name: Make alg environment
-        env:
-          subenv: srbench-${{ matrix.alg }} 
-          subfolder: algorithms/${{ matrix.alg }} 
         run: |
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
           conda create --name srbench-${{ matrix.alg }} --clone srbench
       - 
         name: Install SR dependencies from environment.yml
-        if: hashFiles('${{ env.subfolder }}/environment.yml') != ''
-        run: mamba env update -n ${{ env.subenv }} -f ${{ env.subfolder }}/environment.yml
+        if: hashFiles('algorithms/${{ matrix.alg }}/environment.yml') != ''
+        run: mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
       - 
         name: Install SR dependencies from requirements.txt
-        if: hashFiles('${{ env.subfolder }}/requirements.txt') != ''
-        run: mamba run -n ${{ env.subenv }} pip install -r ${{ env.subfolder }}/requirements.txt
+        if: hashFiles('algorithms/${{ matrix.alg }}/requirements.txt') != ''
+        run: mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
       - 
         name: Install SR method
-        if: hashFiles('${{ env.subfolder }}/install.sh') != ''
-        env:
-          subenv: srbench-${{ matrix.alg }} 
-          subfolder: algorithms/${{ matrix.alg }} 
+        if: hashFiles('algorithms/${{ matrix.alg }}/install.sh') != ''
         run: |
-          cd $subfolder 
+          cd algorithms/${{ matrix.alg }}
           if test -f "install.sh" ; then
             echo "running install.sh..."
-            mamba run -n ${{ env.subenv }} bash install.sh
+            mamba run -n srbench-${{ matrix.alg }} bash install.sh
           else
-            echo "::warning::No install.sh file found in ${{ env.subfolder }}. Assuming the method is a conda package specified in environment.yml."
+            echo "::warning::No install.sh file found in ${{ matrix.alg }}. Assuming the method is a conda package specified in environment.yml."
           fi
 
       - 
         name: Copy files and environment
-        env:
-          subenv: srbench-${{ matrix.alg }} 
-          subfolder: algorithms/${{ matrix.alg }} 
         run: |
           mkdir -p experiment/methods/${{ matrix.alg }}
-          cp ${{ env.subfolder }}/regressor.py experiment/methods/${{ matrix.alg }}/
-          cp ${{ env.subfolder }}/metadata.yml experiment/methods/${{ matrix.alg }}/
+          cp algorithms/${{ matrix.alg }}/regressor.py experiment/methods/${{ matrix.alg }}/
+          cp algorithms/${{ matrix.alg }}/metadata.yml experiment/methods/${{ matrix.alg }}/
           touch experiment/methods/${{ matrix.alg }}/__init__.py
 
           # export env
@@ -158,19 +146,16 @@ jobs:
           conda init bash
           conda activate $subenv 
           echo "/////// Conda Environment (conda env export)/////"
-          conda env export  #> ${{ env.subfolder }}/environment.lock.yml
+          conda env export  #> algorithms/${{ matrix.alg }}/environment.lock.yml
           echo "/////////////////////////////////////////////////"
   ################################################################################
   # tests
   ################################################################################
       -
         name: Test Method
-        env:
-          subenv: srbench-${{ matrix.alg }} 
-          subfolder: algorithms/${{ matrix.alg }} 
         run: |
           cd experiment
           pwd
           ls
-          mamba run -n ${{ env.subenv }} python -m pytest -v test_evaluate_model.py --ml ${{ matrix.alg }}
+          mamba run -n srbench-${{ matrix.alg }} python -m pytest -v test_evaluate_model.py --ml ${{ matrix.alg }}
 ################################################################################          
