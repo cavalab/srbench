@@ -31,6 +31,10 @@ jobs:
   #     - name: Detect Directory Changes
   #       id: detect
   #       uses: tchupp/actions-detect-directory-changes@v1
+  #       with:
+  #         included-paths: "algorithms/"
+  #         included-extentions: ""
+  #         if-these-paths-change-return-all-included-paths: ""
 
   # build:
   #   name: "Build sub-projects"
