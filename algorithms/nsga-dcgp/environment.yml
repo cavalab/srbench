@@ -1,0 +1,18 @@
+name: nsga-dcgp
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch
+  - pytorch-lts
+  - nvidia
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
+  - defaults
+dependencies:
+  - python=3.9.5=h49503c6_0_cpython
+  - pytorch=1.8.1=py3.9_cuda11.1_cudnn8.0.5_0
+  - pip
+  - pip:
+    - scikit-image==0.18.2
+    - scikit-learn==0.24.2

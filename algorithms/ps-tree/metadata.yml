@@ -1,0 +1,7 @@
+authors: # the participants
+  - Hengzhe Zhang
+email: zhenlingcn@foxmail.com
+name: PS-Tree  # name of the submission /method
+description: | # anything you'd like here to describe the method.
+  An open source python library for non-linear piecewise symbolic regression based on Genetic Programming
+url: https://github.com/zhenlingcn/PS-Tree # a link to the project
