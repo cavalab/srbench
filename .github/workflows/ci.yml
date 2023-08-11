@@ -49,8 +49,8 @@ jobs:
       run:
         shell: bash -l {0}
     strategy:
-      project: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
-
+      matrix:
+        alg: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
       # matrix:
       #   alg:
       #     - afp    
