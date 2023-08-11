@@ -161,5 +161,5 @@ jobs:
           cd experiment
           pwd
           ls
-          mamba run -n srbench-${{ matrix.alg }} python -m pytest -v test_evaluate_model.py --ml ${{ matrix.alg }}
+          mamba run -n srbench-${{ matrix.alg }} python -m pytest -v test_algorithm.py --ml ${{ matrix.alg }}
 ################################################################################          
