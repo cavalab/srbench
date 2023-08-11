@@ -48,9 +48,6 @@ jobs:
           - nsga-dcgp      
           - uDSR
       fail-fast: false
-    env:
-      subenv: srbench-${{ matrix.alg }} 
-      subfolder: algorithms/${{ matrix.alg }} 
     defaults:
       run:
         shell: bash -l {0}
@@ -91,6 +88,9 @@ jobs:
 ################################################################################
       - 
         name: Install SR dependencies
+        env:
+          subenv: srbench-${{ matrix.alg }} 
+          subfolder: algorithms/${{ matrix.alg }} 
         if: hashFiles('${{ env.subfolder }}/environment.yml') != ''
         run: |
           cd ${{ env.subfolder }}
@@ -103,6 +103,9 @@ jobs:
       - 
         name: Install SR method
         if: hashFiles('${{ env.subfolder }}/install.sh') != ''
+        env:
+          subenv: srbench-${{ matrix.alg }} 
+          subfolder: algorithms/${{ matrix.alg }} 
         run: |
           cd ${{ env.subfolder }} 
           if test -f "install.sh" ; then
@@ -114,6 +117,9 @@ jobs:
 
       - 
         name: Copy files and environment
+        env:
+          subenv: srbench-${{ matrix.alg }} 
+          subfolder: algorithms/${{ matrix.alg }} 
         run: |
           mkdir -p experiment/methods/${{ matrix.alg }}
           cp ${{ env.subfolder }}/regressor.py experiment/methods/${{ matrix.alg }}/
@@ -132,6 +138,9 @@ jobs:
   ################################################################################
       -
         name: Test Method
+        env:
+          subenv: srbench-${{ matrix.alg }} 
+          subfolder: algorithms/${{ matrix.alg }} 
         run: |
           cd experiment
           pwd
