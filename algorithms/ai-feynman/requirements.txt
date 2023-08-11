@@ -1,0 +1,1 @@
+aifeynman @ git+https://github.com/lacava/AI-Feynman

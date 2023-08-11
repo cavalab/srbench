@@ -19,6 +19,26 @@ jobs:
   ################################################################################
   # matrix build and test
   ################################################################################
+  detect-directory-changes:
+    name: "Detect Directory Changes"
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.detect.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Detect Directory Changes
+        id: detect
+        uses: tchupp/actions-detect-directory-changes@v1
+
+  build:
+    name: "Build sub-projects"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
+
   build-and-test:
     runs-on: ubuntu-latest
     defaults:
@@ -52,6 +72,9 @@ jobs:
           - nsga-dcgp      
           - uDSR
       fail-fast: false
+    env:
+      subenv: srbench-${{ matrix.alg }} 
+      subfolder: algorithms/${{ matrix.alg }} 
     steps:
       - 
         name: Checkout code
@@ -88,19 +111,22 @@ jobs:
 # install the submission
 ################################################################################
       - 
-        name: Install SR dependencies
+        name: Make alg environment
         env:
           subenv: srbench-${{ matrix.alg }} 
           subfolder: algorithms/${{ matrix.alg }} 
-        if: hashFiles('${{ env.subfolder }}/environment.yml') != ''
         run: |
-          cd ${{ env.subfolder }}
-          pwd
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
           conda create --name srbench-${{ matrix.alg }} --clone srbench
-          echo "Installing conda dependencies"
-          mamba env update -n ${{ env.subenv }} -f environment.yml
+      - 
+        name: Install SR dependencies from environment.yml
+        if: hashFiles('${{ env.subfolder }}/environment.yml') != ''
+        run: mamba env update -n ${{ env.subenv }} -f ${{ env.subfolder }}/environment.yml
+      - 
+        name: Install SR dependencies from requirements.txt
+        if: hashFiles('${{ env.subfolder }}/requirements.txt') != ''
+        run: mamba run -n ${{ env.subenv }} pip install -r ${{ env.subfolder }}/requirements.txt
       - 
         name: Install SR method
         if: hashFiles('${{ env.subfolder }}/install.sh') != ''
