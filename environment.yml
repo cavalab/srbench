@@ -53,7 +53,7 @@ dependencies:
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
-        - ffx==2.0.2 # ffx
+        - git+https://github.com/lacava/ffx
         - eigency==1.77
         # BSR
         - git+https://github.com/lacava/MCMC-SymReg
