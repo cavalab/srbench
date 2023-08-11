@@ -51,7 +51,7 @@ dependencies:
         # Note that PySR has a conda-forge package,
         # but it is not compatible with Apple Silicon or Windows,
         # whereas this one is.
-        - pysr==0.15
+        - pysr==0.16
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
         - ffx==2.0.2 # ffx
