@@ -108,12 +108,12 @@ jobs:
           subenv: srbench-${{ matrix.alg }} 
           subfolder: algorithms/${{ matrix.alg }} 
         run: |
-          cd ${{ env.subfolder }} 
+          cd $subfolder 
           if test -f "install.sh" ; then
             echo "running install.sh..."
             mamba run -n ${{ env.subenv }} bash install.sh
           else
-            echo "::warning::No install.sh file found in ${{{ env.subfolder }}}. Assuming the method is a conda package specified in environment.yml."
+            echo "::warning::No install.sh file found in ${{ env.subfolder }}. Assuming the method is a conda package specified in environment.yml."
           fi
 
       - 
