@@ -32,7 +32,7 @@ jobs:
         id: detect
         uses: tchupp/actions-detect-directory-changes@v1
         with:
-          included-paths: "algorithms/"
+          included-paths: "./algorithms/"
 
   # build:
   #   name: "Build sub-projects"
@@ -40,7 +40,6 @@ jobs:
   #   strategy:
   #     matrix:
   #       project: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
-
   build-and-test:
     runs-on: ubuntu-latest
     defaults:
@@ -48,33 +47,33 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
-        alg: ${${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}##*/}
+        # folder: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
       # matrix:
-      #   alg:
-      #     - afp    
-      #     - geneticengine
-      #     - operon
-      #     - bingo
-      #     - gpgomea        
-      #     - ps-tree
-      #     - dsr    
-      #     - gplearn        
-      #     - pstree
-      #     - e2et   
-      #     - gpzgd          
-      #     - pysr
-      #     - eplex  
-      #     - gsgp           
-      #     - qlattice
-      #     - eql    
-      #     - itea           
-      #     - sbp-gp
-      #     - feat   
-      #     - mrgp           
-      #     - taylorgp
-      #     - ffx    
-      #     - nsga-dcgp      
-      #     - uDSR
+        alg:
+          - afp    
+          - geneticengine
+          - operon
+          - bingo
+          - gpgomea        
+          - ps-tree
+          - dsr    
+          - gplearn        
+          - pstree
+          - e2et   
+          - gpzgd          
+          - pysr
+          - eplex  
+          - gsgp           
+          - qlattice
+          - eql    
+          - itea           
+          - sbp-gp
+          - feat   
+          - mrgp           
+          - taylorgp
+          - ffx    
+          - nsga-dcgp      
+          - uDSR
       fail-fast: false
     steps:
       - 
