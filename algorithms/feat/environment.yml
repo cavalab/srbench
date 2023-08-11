@@ -1,18 +1,20 @@
 channels:
     - conda-forge
 dependencies:
-    - python=3.*
-    - cmake>=3.18
+    - python=3.10
+    - cmake>3.3
+    - gcc
+    - gxx
     - ninja
-    - eigen>=3.3
-    - cython=0.29.*
-    - pandas=1.1.*
-    # - setuptools=45.*
+    - eigen
+    - pandas
+    - scikit-learn
     - setuptools
-    - shogun-cpp=6.1.4
-    - wheel=0.35.*
-    # - pip=20.*
+    - shogun-cpp
+    - wheel
+    - pybind11
+    - nlohmann_json
+    - pybind11_json
     - pip
     - pip:
-        - eigency==1.77
-        - pmlb==1.*
+        - pmlb

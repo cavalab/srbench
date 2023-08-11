@@ -19,22 +19,22 @@ jobs:
   ################################################################################
   # matrix build and test
   ################################################################################
-  # detect-directory-changes:
-  #   name: "Detect Directory Changes"
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     changed: ${{ steps.detect.outputs.changed }}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+  detect-directory-changes:
+    name: "Detect Directory Changes"
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.detect.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-  #     - name: Detect Directory Changes
-  #       id: detect
-  #       uses: tchupp/actions-detect-directory-changes@v1
-  #       with:
-  #         included-paths: "algorithms/"
-  #         included-extentions: ""
-  #         if-these-paths-change-return-all-included-paths: ""
+      - name: Detect Directory Changes
+        id: detect
+        uses: tchupp/actions-detect-directory-changes@v1
+        with:
+          included-paths: "algorithms/"
+          included-extentions: ""
+          if-these-paths-change-return-all-included-paths: ""
 
   # build:
   #   name: "Build sub-projects"
@@ -49,32 +49,34 @@ jobs:
       run:
         shell: bash -l {0}
     strategy:
-      matrix:
-        alg:
-          - afp    
-          - geneticengine
-          - operon
-          - bingo
-          - gpgomea        
-          - ps-tree
-          - dsr    
-          - gplearn        
-          - pstree
-          - e2et   
-          - gpzgd          
-          - pysr
-          - eplex  
-          - gsgp           
-          - qlattice
-          - eql    
-          - itea           
-          - sbp-gp
-          - feat   
-          - mrgp           
-          - taylorgp
-          - ffx    
-          - nsga-dcgp      
-          - uDSR
+      project: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
+
+      # matrix:
+      #   alg:
+      #     - afp    
+      #     - geneticengine
+      #     - operon
+      #     - bingo
+      #     - gpgomea        
+      #     - ps-tree
+      #     - dsr    
+      #     - gplearn        
+      #     - pstree
+      #     - e2et   
+      #     - gpzgd          
+      #     - pysr
+      #     - eplex  
+      #     - gsgp           
+      #     - qlattice
+      #     - eql    
+      #     - itea           
+      #     - sbp-gp
+      #     - feat   
+      #     - mrgp           
+      #     - taylorgp
+      #     - ffx    
+      #     - nsga-dcgp      
+      #     - uDSR
       fail-fast: false
     steps:
       - 
