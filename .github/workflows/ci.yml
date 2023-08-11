@@ -33,8 +33,6 @@ jobs:
         uses: tchupp/actions-detect-directory-changes@v1
         with:
           included-paths: "algorithms/"
-          included-extentions: ""
-          if-these-paths-change-return-all-included-paths: ""
 
   # build:
   #   name: "Build sub-projects"
@@ -50,7 +48,7 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
-        alg: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
+        alg: ${${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}##*/}
       # matrix:
       #   alg:
       #     - afp    
