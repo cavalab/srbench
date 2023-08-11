@@ -7,6 +7,10 @@ name: CI
 #       - master
 #     paths:
 #       - 'algorithms/**'
+on:
+  push:
+    branches:
+      - separate-envs
 
 env: 
   CACHE_NUMBER: 0
