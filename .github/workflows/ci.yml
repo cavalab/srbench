@@ -116,13 +116,14 @@ jobs:
       - 
         name: Filter to changed paths
         uses: dorny/paths-filter@v2
-        id: filter
+        id: changes
         with:
           filters: |
             alg:
               - format('algorithms/{0}/**', matrix.alg)
       - 
         name: Setup Mambaforge
+        if: steps.changes.outputs.alg == 'true'
         uses: conda-incubator/setup-miniconda@v2
         with:
           miniforge-variant: Mambaforge
@@ -132,6 +133,7 @@ jobs:
       - 
         name: Cache srbench environment
         id: cache-srbench
+        if: steps.changes.outputs.alg == 'true'
         uses: actions/cache@v3
         with:
           path: /usr/share/miniconda3/envs/srbench
@@ -140,7 +142,9 @@ jobs:
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
       - 
         name: Update srbench environment
-        if: steps.cache-srbench.outputs.cache-hit != 'true'
+        if: | 
+          steps.cache-srbench.outputs.cache-hit != 'true'
+          && steps.changes.outputs.alg == 'true' 
         run: | 
           echo "Didn't find the cache for the srbench environment :("
           conda info --envs
@@ -151,13 +155,16 @@ jobs:
       - 
         name: Cache alg environment
         id: cache-alg
+        if: steps.changes.outputs.alg == 'true' 
         uses: actions/cache@v3
         with:
           path: /usr/share/miniconda3/envs/srbench-${{ matrix.alg }}
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles(format('./algorithms/{0}/**', matrix.alg)) }}
       - 
         name: Create alg environment 
-        if: steps.cache-alg.outputs.cache-hit != 'true'
+        if: |
+          steps.cache-alg.outputs.cache-hit != 'true'
+          && steps.changes.outputs.alg == 'true' 
         run: | 
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
@@ -165,28 +172,32 @@ jobs:
       - 
         name: Update alg env from environment.yml
         if: |
-          steps.cache-alg.outputs.cache-hit != 'true' &&
-          hashFiles(format('./algorithms/{0}/environment.yml', matrix.alg)) != ''
+          steps.cache-alg.outputs.cache-hit != 'true'
+          && hashFiles(format('./algorithms/{0}/environment.yml', matrix.alg)) != ''
+          && steps.changes.outputs.alg == 'true' 
         run: | 
           mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
       - 
         name: Update alg env from requirements.txt
         if: |
-          steps.cache-alg.outputs.cache-hit != 'true' &&
-          hashFiles(format('./algorithms/{0}/requirements.txt', matrix.alg)) != ''
+          steps.cache-alg.outputs.cache-hit != 'true'
+          && hashFiles(format('./algorithms/{0}/requirements.txt', matrix.alg)) != ''
+          && steps.changes.outputs.alg == 'true'
         run: | 
           mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
       - 
         name: Run install.sh 
         if: |
-          steps.cache-alg.outputs.cache-hit != 'true' &&
-          hashFiles(format('./algorithms/{0}/install.sh', matrix.alg)) != ''
+          steps.cache-alg.outputs.cache-hit != 'true'
+          && hashFiles(format('./algorithms/{0}/install.sh', matrix.alg)) != ''
+          && steps.changes.outputs.alg == 'true' 
         run: |
           cd algorithms/${{ matrix.alg }}
           echo "running install.sh..."
           mamba run -n srbench-${{ matrix.alg }} bash install.sh
       - 
         name: Copy files and environment
+        if: steps.changes.outputs.alg == 'true' 
         run: |
           mkdir -p experiment/methods/${{ matrix.alg }}
           cp algorithms/${{ matrix.alg }}/regressor.py experiment/methods/${{ matrix.alg }}/
@@ -205,6 +216,7 @@ jobs:
   ################################################################################
       -
         name: Test Method
+        if: steps.cache-alg.outputs.cache-hit != 'true'
         run: |
           cd experiment
           pwd
