@@ -9,7 +9,7 @@ root_dir = d(d(abspath(__file__)))
 sys.path.append(root_dir)
 print('appended',root_dir,'to sys.path')
 
-from evaluate_model import evaluate_model
+from new_evaluate_model import evaluate_model
 import importlib
 # symbolic model stuff
 from sympy.parsing.sympy_parser import parse_expr
@@ -55,37 +55,39 @@ def test_import(ml):
             'max_train_samples':int,
             'scale_x':bool,
             'scale_y':bool,
-            'pre_train':types.FunctionType
+            'pre_train':types.FunctionType,
+            'use_dataframe':bool
         }
         for k,v in eval_kwargs.items():
             assert k in ['test_params', 
                          'max_train_samples', 
                          'scale_x', 
                          'scale_y',
-                         'pre_train'
+                         'pre_train',
+                         'use_dataframe'
                         ]
             assert isinstance(v, eval_kwarg_types[k])
 
 # TODO: need to update evaluate model to handle this format
-# def test_evaluate(ml):
-#     """Dataset evaluation"""
-#     algorithm = get_algorithm(ml)
-#     if 'eval_kwargs' in dir(algorithm):
-#         eval_kwargs = algorithm.eval_kwargs
-#     else:
-#         eval_kwargs = {}
+def test_evaluate(ml):
+    """Dataset evaluation"""
+    algorithm = get_algorithm(ml)
+    if 'eval_kwargs' in dir(algorithm):
+        eval_kwargs = algorithm.eval_kwargs
+    else:
+        eval_kwargs = {}
     
-#     json_file = evaluate_model(dataset, 
-#                    results_path, 
-#                    random_state, 
-#                    ml,
-#                    algorithm.est, 
-#                    algorithm.model,
-#                    test=True, # testing
-#                    **eval_kwargs
-#                   )
-#     print(json_file)
-#     print("hello")
+    json_file = evaluate_model(dataset, 
+                   results_path, 
+                   random_state, 
+                   ml,
+                   algorithm.est, 
+                   algorithm.model,
+                   test=True, # testing
+                   **eval_kwargs
+                  )
+    print(json_file)
+    print("hello")
 
 
 @pytest.mark.order(after="test_evaluate")
