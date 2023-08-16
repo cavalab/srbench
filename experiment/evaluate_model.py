@@ -158,7 +158,7 @@ def evaluate_model(
     ################################################## 
     # Fit models
     ################################################## 
-    print('X_train:',X_train_scaled.shape)
+    print('X_train:',type(X_train_scaled),X_train_scaled.shape)
     print('y_train:',y_train_scaled.shape)
     print('training',est)
     t0t = time.time()

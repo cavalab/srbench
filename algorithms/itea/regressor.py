@@ -44,5 +44,8 @@ est = itea.ITEARegressor(npop=1000, ngens=500, exponents=(-1, 1), termlimit=(2,
 def complexity(e):
     return e.len
 
-def model(e):
+def model(e, X):
+    new_model = est.expr
+    for i,f in reversed(list(enumerate(X.columns))):
+        new_model = new_model.replace(f'x[:,{i}]',f)
     return e.expr

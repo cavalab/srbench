@@ -51,7 +51,7 @@ echo "........................................"
 conda activate $SUBENV 
 conda env list 
 conda info 
-python -m pytest -v test_evaluate_model.py --ml $SUBNAME
+python -m pytest -v test_algorithm.py --ml $SUBNAME
 
 # Store Competitor
 # cd ..

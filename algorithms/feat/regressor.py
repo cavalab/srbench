@@ -13,7 +13,7 @@ est = FeatRegressor(
                     max_depth=6,
                     verbosity=2,
                     batch_size=100,
-                    functions ='+,-,*,/,^2,^3,sqrt,sin,cos,exp,log',
+                    functions=['+','-','*','/','^2','^3','sqrt','sin','cos','exp','log'],
                     otype='f'
                    )
 # want to tune your estimator? wrap it in a sklearn CV class. 
@@ -58,7 +58,7 @@ def model(est, X=None):
 
     # Here we replace "|" with "" to handle
     # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
-    model_str = est.get_eqn()
+    model_str = est.cfeat_.get_eqn()
     model_str = model_str.replace('|','')
 
     # use python syntax for exponents
