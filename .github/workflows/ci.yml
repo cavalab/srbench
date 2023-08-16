@@ -114,6 +114,14 @@ jobs:
         name: Checkout code
         uses: actions/checkout@v3
       - 
+        name: Filter to changed paths
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            alg:
+              - format('algorithms/{0}/**', matrix.alg)
+      - 
         name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -158,21 +166,21 @@ jobs:
         name: Update alg env from environment.yml
         if: |
           steps.cache-alg.outputs.cache-hit != 'true' &&
-          ${{ hashFiles(format('./algorithms/{0}/environment.yml', matrix.alg)) != '' }}
+          hashFiles(format('./algorithms/{0}/environment.yml', matrix.alg)) != ''
         run: | 
           mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
       - 
         name: Update alg env from requirements.txt
         if: |
           steps.cache-alg.outputs.cache-hit != 'true' &&
-          ${{ hashFiles(format('./algorithms/{0}/requirements.txt', matrix.alg)) != '' }}
+          hashFiles(format('./algorithms/{0}/requirements.txt', matrix.alg)) != ''
         run: | 
           mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
       - 
         name: Run install.sh 
         if: |
           steps.cache-alg.outputs.cache-hit != 'true' &&
-          ${{ hashFiles(format('./algorithms/{0}/install.sh', matrix.alg)) != '' }}
+          hashFiles(format('./algorithms/{0}/install.sh', matrix.alg)) != ''
         run: |
           cd algorithms/${{ matrix.alg }}
           echo "running install.sh..."
