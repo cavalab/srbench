@@ -100,42 +100,45 @@ jobs:
         name: Update environment
         if: steps.cache.outputs.cache-hit != 'true'
         run: | 
-          mamba env update -n srbench -f environment.yml 
-      -
-        name: Check Cache Hit
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
           echo "Didn't find the cache for the srbench environment :("
           conda info --envs
+          mamba env update -n srbench -f environment.yml 
 ################################################################################
 # install the submission
 ################################################################################
       - 
-        name: Make alg environment
+        name: Install ${{ matrix.alg }} 
         run: |
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
           conda create --name srbench-${{ matrix.alg }} --clone srbench
-      - 
-        name: Install SR dependencies from environment.yml
-        if: hashFiles('algorithms/${{ matrix.alg }}/environment.yml') != ''
-        run: mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
-      - 
-        name: Install SR dependencies from requirements.txt
-        if: hashFiles('algorithms/${{ matrix.alg }}/requirements.txt') != ''
-        run: mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
-      - 
-        name: Install SR method
-        if: hashFiles('algorithms/${{ matrix.alg }}/install.sh') != ''
-        run: |
-          cd algorithms/${{ matrix.alg }}
-          if test -f "install.sh" ; then
+
+          if [ -e "algorithms/${{ matrix.alg }}/environment.yml" ]
+          then
+              mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
+          elif [ -e "algorithms/${{ matrix.alg }}/requirements.txt" ]
+          then
+              mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
+          fi
+      # - 
+      #   name: Install SR dependencies from environment.yml
+      #   if: hashFiles('algorithms/${{ matrix.alg }}/environment.yml') != ''
+      #   run: mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
+      # - 
+      #   name: Install SR dependencies from requirements.txt
+      #   if: hashFiles('algorithms/${{ matrix.alg }}/requirements.txt') != ''
+      #   run: mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
+      # - 
+      #   name: Install SR method
+      #   if: hashFiles('algorithms/${{ matrix.alg }}/install.sh') != ''
+      #   run: |
+          if test -f "algorithms/${{ matrix.alg }}/install.sh" ; then
+            cd algorithms/${{ matrix.alg }}
             echo "running install.sh..."
             mamba run -n srbench-${{ matrix.alg }} bash install.sh
           else
-            echo "::warning::No install.sh file found in ${{ matrix.alg }}. Assuming the method is a conda package specified in environment.yml."
+            echo "::warning::No install.sh file found in ${{ matrix.alg }}. Assuming the method is a conda package specified in environment.yml or pypi package in requirements.txt."
           fi
-
       - 
         name: Copy files and environment
         run: |
