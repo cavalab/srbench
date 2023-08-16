@@ -9,7 +9,7 @@ root_dir = d(d(abspath(__file__)))
 sys.path.append(root_dir)
 print('appended',root_dir,'to sys.path')
 
-from new_evaluate_model import evaluate_model
+from evaluate_model import evaluate_model
 import importlib
 # symbolic model stuff
 from sympy.parsing.sympy_parser import parse_expr
