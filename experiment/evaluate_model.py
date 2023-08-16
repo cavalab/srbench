@@ -74,6 +74,7 @@ def evaluate_model(
         dataset, 
         use_dataframe=use_dataframe
     )
+    print('feature_names:',feature_names)
     if sym_data:
         true_model = get_sym_model(dataset)
     # generate train/test split
@@ -197,7 +198,7 @@ def evaluate_model(
         results['symbolic_model'] = model(est, X_df)
     else:
         results['symbolic_model'] = model(est)
-
+    print('symbolic model:',results['symbolic_model'])
     ##################################################
     # scores
     ##################################################

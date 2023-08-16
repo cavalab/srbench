@@ -43,3 +43,5 @@ def complexity(est):
 
 def model(est):
     return est.stack_2_eqn(est.best_estimator_)
+
+eval_kwargs = dict(use_dataframe=False)

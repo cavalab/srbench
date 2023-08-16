@@ -1,4 +1,4 @@
-from .src.mrgp import MRGPRegressor
+from .mrgp import MRGPRegressor
 
 
 # 500,000 evaluations = 250,000 with 1 linear regression iteration
