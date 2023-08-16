@@ -142,9 +142,7 @@ jobs:
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml') }}
       - 
         name: Update srbench environment
-        if: | 
-          steps.cache-srbench.outputs.cache-hit != 'true'
-          # && steps.changes.outputs.alg == 'true' 
+        if: steps.cache-srbench.outputs.cache-hit != 'true'
         run: | 
           echo "Didn't find the cache for the srbench environment :("
           conda info --envs
@@ -162,9 +160,7 @@ jobs:
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles(format('./algorithms/{0}/**', matrix.alg)) }}
       - 
         name: Create alg environment 
-        if: |
-          steps.cache-alg.outputs.cache-hit != 'true'
-          # && steps.changes.outputs.alg == 'true' 
+        if: steps.cache-alg.outputs.cache-hit != 'true'
         run: | 
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
@@ -174,7 +170,6 @@ jobs:
         if: |
           steps.cache-alg.outputs.cache-hit != 'true'
           && hashFiles(format('./algorithms/{0}/environment.yml', matrix.alg)) != ''
-          # && steps.changes.outputs.alg == 'true' 
         run: | 
           mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
       - 
@@ -182,7 +177,6 @@ jobs:
         if: |
           steps.cache-alg.outputs.cache-hit != 'true'
           && hashFiles(format('./algorithms/{0}/requirements.txt', matrix.alg)) != ''
-          # && steps.changes.outputs.alg == 'true'
         run: | 
           mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
       - 
@@ -190,7 +184,6 @@ jobs:
         if: |
           steps.cache-alg.outputs.cache-hit != 'true'
           && hashFiles(format('./algorithms/{0}/install.sh', matrix.alg)) != ''
-          # && steps.changes.outputs.alg == 'true' 
         run: |
           cd algorithms/${{ matrix.alg }}
           echo "running install.sh..."
