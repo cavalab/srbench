@@ -74,8 +74,6 @@ def evaluate_model(
         dataset, 
         use_dataframe=use_dataframe
     )
-    import ipdb
-    ipdb.set_trace()
     if sym_data:
         true_model = get_sym_model(dataset)
     # generate train/test split
