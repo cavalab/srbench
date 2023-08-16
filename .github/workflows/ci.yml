@@ -120,18 +120,7 @@ jobs:
           then
               mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
           fi
-      # - 
-      #   name: Install SR dependencies from environment.yml
-      #   if: hashFiles('algorithms/${{ matrix.alg }}/environment.yml') != ''
-      #   run: mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
-      # - 
-      #   name: Install SR dependencies from requirements.txt
-      #   if: hashFiles('algorithms/${{ matrix.alg }}/requirements.txt') != ''
-      #   run: mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
-      # - 
-      #   name: Install SR method
-      #   if: hashFiles('algorithms/${{ matrix.alg }}/install.sh') != ''
-      #   run: |
+
           if test -f "algorithms/${{ matrix.alg }}/install.sh" ; then
             cd algorithms/${{ matrix.alg }}
             echo "running install.sh..."
