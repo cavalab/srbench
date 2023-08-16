@@ -1,5 +1,5 @@
 SUBNAME=$1
-SUBFOLDER="$2/$1"
+SUBFOLDER="algorithms/$1"
 echo "testing $SUBFOLDER"
 # SUBFOLDER=official_competitors/$SUBNAME 
 SUBENV=srbench-$SUBNAME 
