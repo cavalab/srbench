@@ -19,7 +19,7 @@ dependencies:
   - python=3.7.12=hf930737_100_cpython
   - python_abi=3.7=2_cp37m
   - readline=8.1=h46c0cb4_0
-  - setuptools=62.0.0=py37h89c1867_0
+  - setuptools
   - sqlite=3.37.1=h4ff8645_0
   - tk=8.6.12=h27826a3_0
   - wheel=0.37.1=pyhd8ed1ab_0
