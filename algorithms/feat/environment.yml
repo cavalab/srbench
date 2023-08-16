@@ -1,7 +1,7 @@
 channels:
     - conda-forge
+    - defaults
 dependencies:
-    - python
     - cmake
     - gcc
     - gxx
@@ -9,7 +9,6 @@ dependencies:
     - eigen
     - pandas
     - scikit-learn
-    - setuptools
     - shogun-cpp
     - wheel
     - pybind11
@@ -18,4 +17,3 @@ dependencies:
     - pip
     - pip:
         - pmlb
-        - git+https://github.com/cavalab/feat.git 

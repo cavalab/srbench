@@ -1,6 +1,7 @@
 name: Bingo
 channels:
     - conda-forge
+    - defaults
 dependencies:
     - python=3.*
     - cmake>=3.18
