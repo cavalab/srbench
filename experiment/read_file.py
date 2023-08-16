@@ -12,12 +12,8 @@ def read_file(filename, label='target', use_dataframe=True, sep=None):
     print('compression:',compression)
     print('filename:',filename)
 
-    if sep:
-        input_data = pd.read_csv(filename, sep=sep, compression=compression)
-    else:
-        input_data = pd.read_csv(filename, sep=sep, compression=compression,
-                engine='python')
-    
+    input_data = pd.read_csv(filename, sep=sep, compression=compression)
+     
     # clean up column names
     clean_names = {k:k.strip().replace('.','_') for k in input_data.columns}
     input_data = input_data.rename(columns=clean_names)
