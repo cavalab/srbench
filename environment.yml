@@ -42,7 +42,7 @@ dependencies:
     # feat
     - cython=0.29.*
     - ninja
-    - setuptools=45.*
+    - setuptools
     - shogun-cpp=6.1.4
     - wheel=0.35.*
     # pip
