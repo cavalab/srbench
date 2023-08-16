@@ -107,7 +107,7 @@ jobs:
 # install the submission
 ################################################################################
       - 
-        name: Install ${{ matrix.alg }} 
+        name: Install algorithm 
         run: |
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
