@@ -146,7 +146,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /usr/share/miniconda3/envs/srbench-${{ matrix.alg }}
-          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('algorithm/${{ matrix.alg }}/**/*') }}
+          key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles(format('algorithm/{0}/**', matrix.alg)) }}
       - 
         name: Create alg environment 
         if: steps.cache-alg.outputs.cache-hit != 'true'
@@ -158,31 +158,21 @@ jobs:
         name: Update alg env from environment.yml
         if: |
           steps.cache-alg.outputs.cache-hit != 'true' &&
-          ${{ hashFiles('algorithm/${{ matrix.alg }}/environment.yml') != '' }}
+          ${{ hashFiles(format('algorithm/{0}/environment.yml', matrix.alg)) != '' }}
         run: | 
-          echo "Installing dependencies for ${{ matrix.alg }}"
-          echo "Copying base environment"
-          conda create --name srbench-${{ matrix.alg }} --clone srbench
-
-          if [ -e "algorithms/${{ matrix.alg }}/environment.yml" ]
-          then
-              mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
-          elif [ -e "algorithms/${{ matrix.alg }}/requirements.txt" ]
-          then
-              mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
-          fi
+          mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
       - 
         name: Update alg env from requirements.txt
         if: |
           steps.cache-alg.outputs.cache-hit != 'true' &&
-          ${{ hashFiles('algorithm/${{ matrix.alg }}/requirements.txt') != '' }}
+          ${{ hashFiles(format('algorithm/{0}/requirements.txt', matrix.alg)) != '' }}
         run: | 
           mamba run -n srbench-${{ matrix.alg }} pip install -r algorithms/${{ matrix.alg }}/requirements.txt
       - 
         name: Run install.sh 
         if: |
           steps.cache-alg.outputs.cache-hit != 'true' &&
-          ${{ hashFiles('algorithm/${{ matrix.alg }}/install.sh') != '' }}
+          ${{ hashFiles(format('algorithm/{0}/install.sh', matrix.alg)) != '' }}
         run: |
           cd algorithms/${{ matrix.alg }}
           echo "running install.sh..."
