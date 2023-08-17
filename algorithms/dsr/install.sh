@@ -8,7 +8,5 @@ git clone https://github.com/lacava/deep-symbolic-regression
 
 cd deep-symbolic-regression
 
-pip install -r requirements.txt
-# export CFLAGS="-I $(python -c "import numpy; print(numpy.get_include())") $CFLAGS" # Needed on Mac to prevent fatal error: 'numpy/arrayobject.h' file not found
 pip install ./dsr # Install DSR package
 
