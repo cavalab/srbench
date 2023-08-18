@@ -4,7 +4,7 @@ echo "testing $SUBFOLDER"
 # SUBFOLDER=official_competitors/$SUBNAME 
 SUBENV=srbench-$SUBNAME 
 # update base env
-mamba env update -n srbench -f environment.yml 
+# mamba env update -n srbench -f environment.yml 
 
 # install method
 cd $SUBFOLDER
@@ -14,9 +14,11 @@ echo "........................................"
 echo "Copying base environment"
 echo "........................................"
 conda create --name $SUBENV --clone srbench
-echo "Installing conda dependencies"
-echo "........................................"
-mamba env update -n $SUBENV -f environment.yml
+if [ -e environment.yml ] ; then 
+    echo "Installing conda dependencies"
+    echo "........................................"
+    mamba env update -n $SUBENV -f environment.yml
+fi
 
 eval "$(conda shell.bash hook)"
 conda init bash
