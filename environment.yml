@@ -45,7 +45,7 @@ dependencies:
     - setuptools
     - shogun-cpp=6.1.4
     - wheel=0.35.*
-    - pysr
+    - pysr=0.16.*
     # pip
     - pip=20.3.3 
     - pip:
