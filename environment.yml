@@ -45,13 +45,10 @@ dependencies:
     - setuptools
     - shogun-cpp=6.1.4
     - wheel=0.35.*
+    - pysr
     # pip
     - pip=20.3.3 
     - pip:
-        # Note that PySR has a conda-forge package,
-        # but it is not compatible with Apple Silicon or Windows,
-        # whereas this one is.
-        - pysr==0.16
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
         - git+https://github.com/lacava/ffx
