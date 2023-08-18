@@ -18,7 +18,7 @@ est = PySRRegressor(
     # budget 10 minutes for compile time,
     # ensuring we can finish within 2 hours:
     timeout_in_seconds=2*60*60 - 10*60,
-    maxsize=30,
+    maxsize=40,
     maxdepth=20,
     binary_operators=["+", "-", "*", "/"],
     unary_operators=["sin", "exp", "log", "sqrt"],
