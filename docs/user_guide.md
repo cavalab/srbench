@@ -6,6 +6,13 @@ We have provided a [conda environment](environment.yml), [configuration script](
 We've currently tested this on Ubuntu and CentOS. 
 Steps:
 
+0. (Optional) Using libmamba as the solver to speedup the installation process:
+
+```bash
+conda install -n base conda-libmamba-solver
+conda config --set solver libmamba
+```
+
 1. Install the conda environment:
 
 ```bash
