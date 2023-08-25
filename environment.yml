@@ -9,7 +9,7 @@ dependencies:
     - eigen=3.3.9 # operon, feat, ellyn
     - boost=1.74.0 # gpgomea, ellyn
     - pkg-config # gpgomea
-    - scikit-learn=0.24.1 
+    - scikit-learn #=0.24.1 
     - pyarrow
     - pandas 
     - numpy
@@ -42,7 +42,7 @@ dependencies:
     # feat
     - cython=0.29.*
     - ninja
-    - setuptools=45.*
+    - setuptools
     - shogun-cpp=6.1.4
     - wheel=0.35.*
     # PySR:
@@ -53,7 +53,7 @@ dependencies:
     - pip:
         - DistanceClassifier==0.0.8 # ellyn
         - pmlb==1.0.1.post3
-        - ffx==2.0.2 # ffx
+        - git+https://github.com/lacava/ffx
         - eigency==1.77
         # BSR
         - git+https://github.com/lacava/MCMC-SymReg

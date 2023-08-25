@@ -4,6 +4,37 @@ tl;dr the second edition of the symbolic regression competition will allow the p
 
 The participation link is now online! See [Entries](#entries).
 
+# Results
+
+In total there were 10 official participants for Track 1 and 4 for Track 2. We will contact the participants soon regarding the prize and a power session to get some feedback of the competition. Also, we will write a technical report about the results to be published by next year. 
+
+**Track 1 final ranks:**
+
+| Team                     | Participants                                              | method                           | score    | rank | src |
+|--------------------------|-----------------------------------------------------------|----------------------------------|----------|------|-----|
+| [pksm ](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-pksm)                    | Parshin Shojaee Kazem Meidan                              | TPSR                             | 6.307885 | 1    | N   |
+| [newton-sr](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-newton-sr)                | Nicolas Lassabe Paul Gersberg                             | NewTonSR++                       | 6.224784 | 2    | Y   |
+| [sarma](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-sarma)                    | Aleksandar Kartelj Marko Djukanovic                       | RILS                             | 6.136364 | 3    | Y   |
+| [player](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-player)                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski | PFGP                             | 5.448649 | 4    | Y   |
+| [stackgp](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-stackgp)                  | Nathan Haut                                               | stackgp                          | 5.130641 | 5    | Y   |
+| [university-of-wellington](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-victoria-university-of-wellington ) | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang           | SR-Forest                        | 4.251969 | 6    | Y   |
+| [wonderful-time](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-wonderful-time)           | Hai Minh Nguyen                                           | SymMFEA                          | 3.440273 | 7    | Y   | 
+| [his_jsr](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-his_jsr_2023)                  | Gurushant Gurushant  Jatinkumar Nakrani Rajni Maandi      | LR + gplearn                     | 3.43949  | 8    | Y   | 
+| [tontakt](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-tontakt)                  | Andrzej Odrzywołek                                        | enumeration, PySR, rational poly | 2.855524 | 9    | Y   | 
+| [amir](https://github.com/ufabc-bcc/srbench-competition-2023-track-1-amir)                     | Mohammad Amirul Islam                                     | PySR                             | 1.788926 | 10   | Y   | 
+
+**Track 2 final ranks:**
+
+| Team                     | Participants                                                | method    | score | rank | src | 
+|--------------------------|-------------------------------------------------------------|-----------|-------|------|-----|
+| [university-of-wellington](https://github.com/ufabc-bcc/srbench-competition-2023-track-2-victoria-university-of-wellington) | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang             | SR-Forest | 3.25  | 1    | Y   |  
+| [player](https://github.com/ufabc-bcc/srbench-competition-2023-track-2-player)                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski   | PFGP      | 2.83  | 2    | Y   |  
+| [his_jsr](https://github.com/ufabc-bcc/srbench-competition-2023-track-2-his_jsr_2023)                  | Gurushant Gurushant Jatinkumar Nakrani Rajni Maandi         | gplearn   | 2.25  | 3    | Y   |  
+| [c-bio-ufpr](https://github.com/ufabc-bcc/srbench-competition-2023-track-2-c-bio-ufpr)               | Adriel Macena Falcão Martins  Aurora Trinidad Ramirez Pozo  | PySR      | 1.75  | 4    | Y   |  
+
+All of the competition source-codes, datasets, and results are also available as a single zip file at [Zenodo](https://doi.org/10.5281/zenodo.8283005)
+
+
 # Call for participation
 
 The 2023 edition of the Symbolic Regression (SR) competition will be composed of two tracks: performance track and interpretability track. 

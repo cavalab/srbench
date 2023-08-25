@@ -27,7 +27,7 @@ on:
       - '**.md'
 
 env: 
-  CACHE_NUMBER: 0
+  CACHE_NUMBER: 3
 
 jobs:
   ################################################################################
@@ -41,7 +41,7 @@ jobs:
     steps:
       - 
         name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - 
         name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
@@ -52,7 +52,7 @@ jobs:
           use-mamba: true
       - 
         name: Cache conda
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /usr/share/miniconda3/envs/srbench
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{hashFiles('environment.yml','experiment/methods/src/*.sh')}}-${{ github.sha }}
@@ -85,7 +85,7 @@ jobs:
     steps:
       - 
         name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - 
         name: generate alg list
         run: bash ci/get_algorithm_list.sh
@@ -111,7 +111,7 @@ jobs:
     steps:
       - 
         name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - 
         name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
@@ -122,7 +122,7 @@ jobs:
           use-mamba: true
       - 
         name: Cache conda
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /usr/share/miniconda3/envs/srbench
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml','experiment/methods/src/*.sh') }}-${{ github.sha }}
@@ -156,7 +156,7 @@ jobs:
     steps:
       - 
         name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - 
         name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
@@ -167,7 +167,7 @@ jobs:
           use-mamba: true
       - 
         name: Cache conda
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /usr/share/miniconda3/envs/srbench
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yml','experiment/methods/src/*.sh') }}-${{ github.sha }}
