@@ -10,27 +10,30 @@ In total there were 10 official participants for Track 1 and 4 for Track 2. We w
 
 **Track 1 final ranks:**
 
-| Team                     | Participants                                              | method                           | score    | rank | src |
-|--------------------------|-----------------------------------------------------------|----------------------------------|----------|------|-----|
-| pksm                     | Parshin Shojaee Kazem Meidan                              | TPSR                             | 6.307885 | 1    | N   |
-| newton-sr                | Nicolas Lassabe Paul Gersberg                             | NewTonSR++                       | 6.224784 | 2    | Y   |
-| sarma                    | Aleksandar Kartelj Marko Djukanovic                       | RILS                             | 6.136364 | 3    | Y   |
-| player                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski | PFGP                             | 5.448649 | 4    | Y   |
-| stackgp                  | Nathan Haut                                               | stackgp                          | 5.130641 | 5    | Y   |
-| university-of-wellington | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang           | SR-Forest                        | 4.251969 | 6    | Y   |
-| wonderful-time           | Hai Minh Nguyen                                           | SymMFEA                          | 3.440273 | 7    | Y   |
-| his_jsr                  | Gurushant Gurushant  Jatinkumar Nakrani Rajni Maandi      | LR + gplearn                     | 3.43949  | 8    | Y   |
-| tontakt                  | Andrzej Odrzywołek                                        | enumeration, PySR, rational poly | 2.855524 | 9    | Y   |
-| amir                     | Mohammad Amirul Islam                                     | PySR                             | 1.788926 | 10   | Y   |
+| Team                     | Participants                                              | method                           | score    | rank | src | link |
+|--------------------------|-----------------------------------------------------------|----------------------------------|----------|------|-----|-----|
+| pksm                     | Parshin Shojaee Kazem Meidan                              | TPSR                             | 6.307885 | 1    | N   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-pksm |
+| newton-sr                | Nicolas Lassabe Paul Gersberg                             | NewTonSR++                       | 6.224784 | 2    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-newton-sr |
+| sarma                    | Aleksandar Kartelj Marko Djukanovic                       | RILS                             | 6.136364 | 3    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-sarma |
+| player                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski | PFGP                             | 5.448649 | 4    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-player |
+| stackgp                  | Nathan Haut                                               | stackgp                          | 5.130641 | 5    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-stackgp |
+| university-of-wellington | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang           | SR-Forest                        | 4.251969 | 6    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-victoria-university-of-wellington |
+| wonderful-time           | Hai Minh Nguyen                                           | SymMFEA                          | 3.440273 | 7    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-wonderful-time |
+| his_jsr                  | Gurushant Gurushant  Jatinkumar Nakrani Rajni Maandi      | LR + gplearn                     | 3.43949  | 8    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-his_jsr_2023 |
+| tontakt                  | Andrzej Odrzywołek                                        | enumeration, PySR, rational poly | 2.855524 | 9    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-tontakt |
+| amir                     | Mohammad Amirul Islam                                     | PySR                             | 1.788926 | 10   | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-1-amir |
 
 **Track 2 final ranks:**
 
-| Team                     | Participants                                                | method    | score | rank | src |
-|--------------------------|-------------------------------------------------------------|-----------|-------|------|-----|
-| university-of-wellington | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang             | SR-Forest | 3.25  | 1    | Y   |
-| player                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski   | PFGP      | 2.83  | 2    | Y   |
-| his_jsr                  | Gurushant Gurushant Jatinkumar Nakrani Rajni Maandi         | gplearn   | 2.25  | 3    | Y   |
-| c-bio-ufpr               | Adriel Macena Falcão Martins  Aurora Trinidad Ramirez Pozo  | PySR      | 1.75  | 4    | Y   |
+| Team                     | Participants                                                | method    | score | rank | src | link |
+|--------------------------|-------------------------------------------------------------|-----------|-------|------|-----|-----|
+| university-of-wellington | Hengzhe Zhang  Qi Chen  Bing Xue  Mengjie Zhang             | SR-Forest | 3.25  | 1    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-2-victoria-university-of-wellington |
+| player                   | Lianjie Zhong Jinghui Zhong Dongjunlan Nikola Gligorovski   | PFGP      | 2.83  | 2    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-2-player |
+| his_jsr                  | Gurushant Gurushant Jatinkumar Nakrani Rajni Maandi         | gplearn   | 2.25  | 3    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-2-his_jsr_2023 |
+| c-bio-ufpr               | Adriel Macena Falcão Martins  Aurora Trinidad Ramirez Pozo  | PySR      | 1.75  | 4    | Y   | https://github.com/ufabc-bcc/srbench-competition-2023-track-2-c-bio-ufpr |
+
+All of the competition source-codes, datasets, and results are also available as a single zip file at https://doi.org/10.5281/zenodo.8283005
+
 
 # Call for participation
 
