@@ -80,6 +80,7 @@ jobs:
           - qlattice
           - eql    
           - itea           
+          - tir
           - sbp-gp
           - feat   
           - mrgp           
