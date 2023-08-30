@@ -76,7 +76,7 @@ def test_evaluate(ml):
         eval_kwargs = algorithm.eval_kwargs
     else:
         eval_kwargs = {}
-    
+    print(eval_kwargs) 
     json_file = evaluate_model(dataset, 
                    results_path, 
                    random_state, 

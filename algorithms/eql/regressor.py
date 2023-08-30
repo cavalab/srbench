@@ -29,5 +29,6 @@ def model(est, X=None):
 
 
 eval_kwargs = {
-    'test_params': {'param_grid': {'n_iter': [100], **hp}}
+    'test_params': {'param_grid': {'n_iter': [10], **hp}},
+    'use_dataframe':False
 }

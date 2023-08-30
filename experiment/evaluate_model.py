@@ -117,9 +117,6 @@ def evaluate_model(
         X_train_scaled = X_train
         X_test_scaled = X_test
 
-    if not use_dataframe: 
-        assert isinstance(X_train_scaled, np.ndarray)
-        assert isinstance(X_test_scaled, np.ndarray)
 
     if scale_y:
         print('scaling y')
@@ -158,6 +155,9 @@ def evaluate_model(
     ################################################## 
     # Fit models
     ################################################## 
+    if not use_dataframe: 
+        assert isinstance(X_train_scaled, np.ndarray)
+        assert isinstance(X_test_scaled, np.ndarray)
     print('X_train:',type(X_train_scaled),X_train_scaled.shape)
     print('y_train:',y_train_scaled.shape)
     print('training',est)
