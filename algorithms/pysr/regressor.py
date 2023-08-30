@@ -63,3 +63,12 @@ est = PySRRegressor(
 
 # See https://astroautomata.com/PySR/tuning/ for tuning advice
 hyper_params = [{}]
+
+eval_kwargs = {
+    "test_params": dict(
+        niterations=3,
+        ncyclesperiteration=500,
+        population_size=3,
+        tournament_selection_n=2
+    )
+}

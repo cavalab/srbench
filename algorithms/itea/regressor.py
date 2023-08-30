@@ -45,7 +45,7 @@ def complexity(e):
     return e.len
 
 def model(e, X):
-    new_model = est.sympy.replace("^","**")
+    new_model = e.sympy.replace("^","**")
     for i,f in reversed(list(enumerate(X.columns))):
         new_model = new_model.replace(f'x{i}',f)
     return new_model
