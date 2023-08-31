@@ -1,7 +1,7 @@
 from DAG_search.dag_search import DAGRegressor
 
 
-est = DAGRegressor()
+est = DAGRegressor(max_orders = int(1e5))
 
 def model(est, X = None):
     # est.model() is a sympy expression
