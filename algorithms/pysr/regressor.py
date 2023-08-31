@@ -68,7 +68,6 @@ eval_kwargs = {
     "test_params": dict(
         niterations=3,
         ncyclesperiteration=500,
-        population_size=3,
-        tournament_selection_n=2
+        populations=3,
     )
 }
