@@ -4,4 +4,4 @@ cd feat
 # fix version
 # git checkout tags/0.5.1
 # install
-pip install .
+pip install -e .
