@@ -22,13 +22,13 @@ def model(est, X=None):
     model_str = str(est.best_estimator_.get_eqn())
 
     if isinstance(X, pd.DataFrame):
-        mapping = {"x" + str(i): k for i, k in enumerate(X.columns)}
-        for k, v in mapping.items():
-            model_str = model_str.replace(k, v)
+        for i,f in reversed(list(enumerate(X.columns))):
+            model_str = model_str.replace(f'x{i}',f)
 
     return model_str
 
 
 eval_kwargs = {
-    'test_params': {'param_grid': {'n_iter': [10], **hp}}
+    'test_params': {'param_grid': {'n_iter': [10], **hp}},
+    'use_dataframe':False
 }

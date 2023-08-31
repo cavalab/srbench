@@ -17,3 +17,4 @@ dependencies:
     - pip
     - pip:
         - pmlb
+        - git+https://github.com/cavalab/feat.git

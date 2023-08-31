@@ -69,5 +69,6 @@ eval_kwargs = {
         niterations=3,
         ncyclesperiteration=500,
         population_size=3,
+        tournament_selection_n=2
     )
 }

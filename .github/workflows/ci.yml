@@ -13,7 +13,7 @@ on:
       - separate-envs
 
 env: 
-  CACHE_NUMBER: 3
+  CACHE_NUMBER: 0
 
 jobs:
   ################################################################################
@@ -64,29 +64,29 @@ jobs:
       # matrix:
         alg:
           - afp    
-          - geneticengine
-          - operon
           - bingo
-          - gpgomea        
-          - ps-tree
+          - dagsearch
           - dsr    
-          - gplearn        
-          - pstree
           - e2et   
-          - gpzgd          
-          - pysr
           - eplex  
-          - gsgp           
-          - qlattice
           - eql    
-          - itea           
-          - tir
-          - sbp-gp
           - feat   
-          - mrgp           
-          - taylorgp
           - ffx    
+          - geneticengine
+          - gpgomea        
+          - gplearn        
+          - gpzgd          
+          - gsgp           
+          - itea           
+          - mrgp           
           - nsga-dcgp      
+          - operon
+          - ps-tree
+          - pysr
+          - qlattice
+          - sbp-gp
+          - taylorgp
+          - tir
           - uDSR
       fail-fast: false
     steps:
