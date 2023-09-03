@@ -1,8 +1,7 @@
 from DAG_search.dag_search import DAGRegressor
 import multiprocessing
 
-n_processes = max(min(10, multiprocessing.cpu_count()), 1)
-est = DAGRegressor(max_orders = int(1e5), processes = n_processes)
+est = DAGRegressor()
 
 def model(est, X = None):
     # est.model() is a sympy expression
@@ -17,4 +16,12 @@ def model(est, X = None):
         return new_model
 
 
-eval_kwargs = dict(use_dataframe=False)
+eval_kwargs = {
+    "use_dataframe": False,
+    "test_params": {
+        'n_calc_nodes' : 2,
+        'max_orders' : 1000,
+        'processes' : 1,
+        'max_samples' : 100
+    }
+}
