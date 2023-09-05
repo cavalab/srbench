@@ -1,5 +1,5 @@
 from DAG_search.dag_search import DAGRegressor
-
+import multiprocessing
 
 est = DAGRegressor()
 
@@ -16,4 +16,12 @@ def model(est, X = None):
         return new_model
 
 
-eval_kwargs = dict(use_dataframe=False)
+eval_kwargs = {
+    "use_dataframe": False,
+    "test_params": {
+        'n_calc_nodes' : 2,
+        'max_orders' : 1000,
+        'processes' : 1,
+        'max_samples' : 100
+    }
+}
