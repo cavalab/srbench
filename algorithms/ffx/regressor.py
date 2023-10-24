@@ -15,4 +15,4 @@ def complexity(est):
     return est.model_.complexity()
 
 def model(est):
-    return est.model_.str2()
+    return est.model_.str2().replace('^', '**')
