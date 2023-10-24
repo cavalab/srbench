@@ -1,4 +1,4 @@
-name: srcomp-operon
+name: srbench-operon
 channels:
     - conda-forge
     - anaconda

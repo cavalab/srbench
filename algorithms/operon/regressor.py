@@ -25,10 +25,10 @@ default_params = {
 
 # define parameter distributions
 param_distributions = {
-        'local_iterations' : optuna.distributions.IntUniformDistribution(0, 10, 1),
+        'local_iterations' : optuna.distributions.IntDistribution(low=0, high=10, step=1),
         'allowed_symbols' : optuna.distributions.CategoricalDistribution(['add,sub,mul,aq,constant,variable', 'add,sub,mul,aq,sin,cos,exp,logabs,sqrtabs,tanh,constant,variable']),
-        'population_size' : optuna.distributions.IntUniformDistribution(100, 1000, 100),
-        'max_length' : optuna.distributions.IntUniformDistribution(10, 50, 10),
+        'population_size' : optuna.distributions.IntDistribution(low=100, high=1000, step=100),
+        'max_length' : optuna.distributions.IntDistribution(low=10, high=50, step=10),
         'symbolic_mode' : optuna.distributions.CategoricalDistribution([True, False]),
         }
 
