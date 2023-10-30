@@ -9,7 +9,7 @@ dependencies:
     - eigen
     - pandas
     - scikit-learn
-    - shogun-cpp
+    - shogun-cpp=6.1.4
     - wheel
     - pybind11
     - nlohmann_json
