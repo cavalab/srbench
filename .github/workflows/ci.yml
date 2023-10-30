@@ -61,7 +61,6 @@ jobs:
     strategy:
       matrix:
         # folder: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
-      # matrix:
         alg:
           - afp    
           - bingo

@@ -16,7 +16,7 @@ dependencies:
   - ncurses=6.3=h27087fc_1
   - openssl=3.0.2=h166bdaf_1
   - pip=22.0.4=pyhd8ed1ab_0
-  - python=3.7.12=hf930737_100_cpython
+  - python=3.7.12
   - python_abi=3.7=2_cp37m
   - readline=8.1=h46c0cb4_0
   - setuptools
