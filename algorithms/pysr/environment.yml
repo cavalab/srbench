@@ -2,3 +2,4 @@ channels:
     - conda-forge
 dependencies:
     - pysr==0.16
+    - python==3.11
