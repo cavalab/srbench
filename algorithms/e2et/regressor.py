@@ -2,8 +2,12 @@ import torch
 import os, sys
 import symbolicregression
 import requests
+import numexpr
 
-model_path = "model.pt" 
+model_path = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "model.pt" 
+)
 try:
     if not os.path.isfile(model_path): 
         url = "https://dl.fbaipublicfiles.com/symbolicregression/model1.pt"
