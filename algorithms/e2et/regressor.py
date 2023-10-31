@@ -30,7 +30,7 @@ est = symbolicregression.model.SymbolicTransformerRegressor(
 
 def model(est, X=None):
     replace_ops = {"add": "+", "mul": "*", "sub": "-", "pow": "**", "inv": "1/"}
-    model_str = est.retrieve_tree(tree_idx=0).infix()
+    model_str = est.retrieve_tree(dataset_idx=0).infix()
     for op,replace_op in replace_ops.items():
         model_str = model_str.replace(op,replace_op)
     return model_str
@@ -43,7 +43,9 @@ def my_pre_train_fn(est, X, y):
 
 # define eval_kwargs.
 eval_kwargs = dict(
-                   pre_train=my_pre_train_fn,
                    test_params = {
-                                 }
+                    'max_input_points':100,
+                    'n_trees_to_refine':10
+                    },
+                   use_dataframe=False
                   )
