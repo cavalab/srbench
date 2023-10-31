@@ -302,8 +302,10 @@ dependencies:
     - nvidia-nvjitlink-cu12==12.3.52
     - nvidia-nvtx-cu12==12.1.105
     - pathspec==0.11.2
+    - pmlb==1.0.1.post3
     - pycodestyle==2.11.0
     - pytest-order==1.1.0
     - sympytorch==0.1.1
     - torch==2.1.0
     - triton==2.1.0
+    - numexpr
