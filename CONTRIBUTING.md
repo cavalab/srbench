@@ -24,12 +24,11 @@ You can leverage this code base and previous experimental results to do so.
 
 ## Requirements
 
-1. An open-source method with a [scikit-learn compatible API](https://scikit-learn.org/stable/developers/develop.html)
-2. Your method should be compatible with **Python 3.7 or higher** to ensure compatibility with conda-forge.
-3. If your method uses a random seed, it should have a `random_state` attribute that can be set.
-4. Methods must have their own folders in the `algorithms` directory (e.g., `algorithms/feat`). 
+- An open-source method with a [scikit-learn compatible API](https://scikit-learn.org/stable/developers/develop.html)
+- Your method should be compatible with **Python 3.7 or higher** to ensure compatibility with conda-forge.
+- If your method uses a random seed, it should have a `random_state` attribute that can be set.
+- Methods must have their own folders in the `algorithms` directory (e.g., `algorithms/feat`). 
 This folder should contain:
-
   1. `metadata.yml` (**required**): A file describing your submission, following the descriptions in [submission/feat-example/metadata.yml][metadata]. 
   2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. See [submission/feat-example/regressor.py][regressor] for complete documentation. 
       It should contain:
@@ -44,7 +43,9 @@ This folder should contain:
   5. `requirements.txt` *(optional)*: a pypi requirements file. The script will run `pip install -r requirements.txt` if this file is found, before proceeding.
   5. `install.sh` *(optional)*: a bash script that installs your method. 
   **Note: scripts should not require sudo permissions. The library and include paths should be directed to conda environment; the environmental variable `$CONDA_PREFIX` specifies the path to the environment.
-  6. additional files *(optional)*: you may include a folder containing the code for your method in the submission. However it is much preferred to pull your code from a repo within `install.sh`. 
+  6. **do not include your source code**. use `install.sh` to pull it from a stable source repository. 
+
+### model compatibility with sympy
 
 In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](https://www.sympy.org). 
 Assure the returned model meets these requirements:
