@@ -1,7 +1,7 @@
 from DAG_search.dag_search import DAGRegressor
 import multiprocessing
 
-est = DAGRegressor()
+est = DAGRegressor(processes = 10) # increase number of processes here for speed up
 
 def model(est, X = None):
     # est.model() is a sympy expression
