@@ -1,7 +1,6 @@
 name: srbench
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - python
   - scikit-learn 

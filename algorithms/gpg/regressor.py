@@ -29,13 +29,6 @@ est = GPGR(
     random_state=0, # seed
     )
 
-def complexity(estimator):
-    m = estimator.model
-    c = 0
-    for _ in sp.preorder_traversal(m):
-        c += 1
-    return c
-
 def model(estimator):
     return str(estimator.model)
 

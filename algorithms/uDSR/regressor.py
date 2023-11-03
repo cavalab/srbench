@@ -23,4 +23,6 @@ def model(est, X=None):
 
     return expr
 
-eval_kwargs = {}
+eval_kwargs = dict(
+    use_dataframe=False
+)

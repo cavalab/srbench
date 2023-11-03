@@ -1,22 +1,87 @@
-name: udsr
+# https://conda-forge.org/docs/user/announcements.html#dropping-python-3-7
+name: srbench-uDSR
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python=3.7
+  - openssl
+# dependencies:
+#   - pip
+#   # - pip:
+#     # - pytest
+#   - cython
+#   - numpy<=1.19
+#   - tensorflow=1.14
+#   - numba=0.53.1
+#   - sympy
+#   - pandas
+#   - scikit-learn
+#   - click
+#   - deap
+#   - pathos
+#   - seaborn
+#   - progress
+#   - tqdm
+#   - commentjson
+#   - PyYAML
+#   - prettytable
+  # - python
+  # - setuptools=58.2.0
+  # - numpy<=1.19
+  # - tensorflow=1.14
+  # - tensorflow=1.14
+  # - pip:
+  #   - click
+  #   - commentjson
+  #   - cython==0.29.28
+  #   - deap
+  #   - numba==0.53.1
+  #   - numpy==1.19.0
+  #   - pandas
+  #   - qpsolvers
+  #   - quadprog
+  #   - scikit-learn
+  #   - scipy
+  #   - sympy
+  #   - threadpoolctl
+# 2022 competition environment:
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python<3.8
   - tensorflow=1.14
+  - cython=0.29
+  - numpy=1.19.0
+  - numba=0.53
+  - pip
   - pip:
     - click
     - commentjson
-    - cython==0.29.28
+    # - cython==0.29.28
     - deap
-    - numba==0.53.1
-    - numpy==1.19.0
-    - pandas
+    # - numba==0.53.1
+    # - numpy==1.19.0
+    # - pandas
     - qpsolvers
     - quadprog
-    - scikit-learn
-    - scipy
-    - sympy
+    # - scikit-learn
+    # - scipy
+    # - sympy
     - threadpoolctl
-
+# srbench base
+  - scikit-learn 
+  - pandas 
+  - numpy
+  - jupyter
+  - pytest
+  - matplotlib
+  - sympy
+  - ipdb
+  - seaborn
+  - pyyaml
+  - pip 
+  - pip:
+    - pmlb==1.0.1.post3
+    - pytest-order

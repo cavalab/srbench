@@ -19,6 +19,11 @@ if [ -e environment.yml ] ; then
     echo "........................................"
     mamba env update -n $SUBENV -f environment.yml
 fi
+if [ -e requirements.txt ] ; then 
+    echo "Installing pip dependencies"
+    echo "........................................"
+    mamba run -n $SUBENV pip install -r requirements.txt
+fi
 
 eval "$(conda shell.bash hook)"
 conda init bash
