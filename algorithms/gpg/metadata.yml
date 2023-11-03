@@ -1,0 +1,7 @@
+authors: # the participants
+  - Marco Virgolin
+email: marco.virgolin@gmail.com
+name: gpg  # name of the submission /method
+description: | # anything you'd like here to describe the method.
+  New version of GP-GOMEA which runs faster, fits better, and is easier to install & maintain
+url: https://github.com/marcovirgolin/gpg # a link to the project
