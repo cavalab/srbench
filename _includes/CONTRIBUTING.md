@@ -9,7 +9,7 @@ Ground Rules
 
 1. In general you should submit [pull requests](https://github.com/cavalab/srbench/compare) to the [dev branch](https://github.com/cavalab/srbench/tree/dev). 
 2. Make the PR detailed and reference [specific issues](https://github.com/cavalab/srbench/issues) if the PR is meant to address any. 
-3. Please be kind and please be patient. We will be, too.  
+3. **Please be kind and please be patient**. We will be, too.  
 
 How to contribute an SR method
 ==============================
@@ -18,29 +18,47 @@ To contribute a symbolic regression method for benchmarking, fork the repo, make
 Once your method passes the basic tests and we've reviewed it, congrats! 
 We will plan to benchmark your method on hundreds of regression problems. 
 
+Please note that the schedule for updating benchmarks is dependent on a lot of factors including availability of computing resources and availability of all our contributors. 
+If you are on a tight schedule, it is better to plan to benchmark your method yourself. 
+You can leverage this code base and previous experimental results to do so.
+
 ## Requirements
 
 1. An open-source method with a [scikit-learn compatible API](https://scikit-learn.org/stable/developers/develop.html)
-2. If your method uses a random seed, it should have a `random_state` attribute that can be set.
-3. If your method is installable via pip or conda, add it to the [environment file](https://github.com/cavalab/srbench/blob/master/environment.yml). 
-  Otherwise, a bash install script in `experiment/methods/src/` named `your-method_install.sh` that installs your method. 
-  See [ellyn_install.sh](https://github.com/cavalab/srbench/blob/master/experiment/methods/src/ellyn_install.sh) as an example. 
-  Our [Github actions workflow](https://github.com/cavalab/srbench/blob/master/.github/workflows/test.yml) will automatically recognize it. 
-4. A minimal script in `experiment/methods/` that defines these items:
-    -   `est`: a sklearn-compatible `Regressor` object 
-    -   `hyper_params` : a dictionary or list of dictionaries specifying the hyperparameter search space
-    -   `model(est)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model.
-    -   (optional): a dictionary named `eval_kwargs` that can specify method-specific arguments to [evaluate_model()](https://github.com/cavalab/srbench/blob/e3ba2c71dd08b1aaa76414a0af10411b98db59ee/experiment/evaluate_model.py#L24).
-  See the [experiment/methods/AFPRegressor.py](https://github.com/cavalab/srbench/blob/master/experiment/methods/AFPRegressor.py) and/or other methods in that folder for examples.
+2. Your method should be compatible with **Python 3.7 or higher** to ensure compatibility with conda-forge.
+3. If your method uses a random seed, it should have a `random_state` attribute that can be set.
+4. Methods must have their own folders in the `algorithms` directory (e.g., `algorithms/feat`). 
+This folder should contain:
 
-### Returning a sympy compatible model string
+  1. `metadata.yml` (**required**): A file describing your submission, following the descriptions in [submission/feat-example/metadata.yml][metadata]. 
+  2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. See [submission/feat-example/regressor.py][regressor] for complete documentation. 
+      It should contain:
+      -   `est`: a sklearn-compatible `Regressor` object. 
+      -   `model(est, X=None)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model. It can optionally take the training data as an input argument. See [guidance below](###-returning-a-sympy-compatible-model-string). 
+      -   `eval_kwargs` (optional): a dictionary that can specify method-specific arguments to `evaluate_model.py`.
+  3. `LICENSE` *(optional)* A license file
+  4. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
+  It will be used to update the baseline environment (`environment.yml` in the root directory). 
+  To the extent possible, conda should be used to specify the dependencies you need. 
+  If your method is part of conda, great! You can just put that in here and leave `install.sh` blank. 
+  5. `requirements.txt` *(optional)*: a pypi requirements file. The script will run `pip install -r requirements.txt` if this file is found, before proceeding.
+  5. `install.sh` *(optional)*: a bash script that installs your method. 
+  **Note: scripts should not require sudo permissions. The library and include paths should be directed to conda environment; the environmental variable `$CONDA_PREFIX` specifies the path to the environment.
+  6. additional files *(optional)*: you may include a folder containing the code for your method in the submission. However it is much preferred to pull your code from a repo within `install.sh`. 
+
 In order to check for exact solutions to problems with known, ground-truth models, each SR method returns a model string that can be manipulated in [sympy](https://www.sympy.org). 
 Assure the returned model meets these requirements:
 
-1. The variable names appearing in the model are identical to those in the training data.
-2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
-If they are not, they need to be defined in the model's script and referenced appropriately in the `model()` function, so that sympy can find them. 
+1. The variable names appearing in the model are identical to those in the training data, `X`, which is a `pd.Dataframe`. 
+If your method names variables some other way, e.g. `[x_0 ... x_m]`, you can
+specify a mapping in the `model` function such as:
 
-We are still working out how to handle operators uniformly and appropriately, and currently rely on [experiment/symbolic_utils.py](https://github.com/EpistasisLab/srbench/blob/master/experiment/symbolic_utils.py) to post-process models.  
-However, new additions to the repo should not require post-processing for compatibility.
-See issue #58 for more details.
+```python
+def model(est, X):
+    mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
+    new_model = est.model_
+    for k,v in reversed(mapping.items()):
+        new_model = new_model.replace(k,v)
+```
+
+2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
