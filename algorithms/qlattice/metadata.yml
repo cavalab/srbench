@@ -1,0 +1,19 @@
+authors: # the participants
+  - Meera Vieira Machado & Miquel Triana Iglesias
+email: meera.machado@abzu.ai & miquel.iglesias@abzu.ai
+name: QLattice # name of the submission /method
+description: | # anything you'd like here to describe the method.
+  The QLattice is a supervised machine learning tool for symbolic regression, and is a technology developed by Abzu.
+  It composes functions together to build mathematical models betweeen the inputs and output.
+  The functions vary from elementary ones such as addition, multiplication and squaring, to more complex ones such as
+  natural logarithm, exponential and tanh.
+
+  The library that contains the QLattice and the means to interact with it is called Feyn.
+
+  Pre-print:
+  Wilstrup, Casper and Kasak, Jaan
+  Symbolic regression outperforms other models for small data sets
+  arXiv:2103.15147
+
+url: https://docs.abzu.ai/ # a link to the project
+

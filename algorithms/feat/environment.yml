@@ -1,0 +1,18 @@
+channels:
+    - conda-forge
+    - defaults
+dependencies:
+    - python=3.10
+    - cmake
+    - gcc
+    - gxx
+    - ninja
+    - eigen
+    - shogun-cpp=6.1.4
+    - wheel
+    - pybind11
+    - nlohmann_json
+    - pybind11_json
+    - pip
+    - pip:
+        - git+https://github.com/cavalab/feat.git

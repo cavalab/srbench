@@ -1,0 +1,16 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7
+  - pytest
+  - cython
+  - numpy
+  - tensorflow==1.14
+  - numba
+  - sympy
+  - pandas
+  - scikit-learn
+  - click
+  - mpi4py
+  - dataclasses

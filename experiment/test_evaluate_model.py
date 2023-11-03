@@ -14,7 +14,7 @@ def test_evaluate_model(ml):
     results_path = 'tmp_results'
     random_state = 42
 
-    algorithm = importlib.__import__('methods.'+ml,globals(),
+    algorithm = importlib.__import__(f'methods.{ml}.regressor',globals(),
                                      locals(),
                                    ['est','hyper_params','complexity'])
 
