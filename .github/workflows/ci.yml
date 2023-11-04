@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - 'algorithms/**'
+  workflow_dispatch:
 
 env: 
   CACHE_NUMBER: 0
