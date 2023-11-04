@@ -5,8 +5,8 @@ on:
   pull_request:
     branches: 
       - master
-    paths:
-      - 'algorithms/**'
+    # paths:
+    #   - 'algorithms/**'
 # on:
 #   push:
 #     branches:
@@ -64,7 +64,6 @@ jobs:
         alg:
           - afp    
           - bingo
-          # - dagsearch
           - dsr    
           - e2et   
           - eplex  
@@ -75,17 +74,19 @@ jobs:
           - gpgomea        
           - gplearn        
           - gpzgd          
-          # - gsgp           
           - itea           
-          # - mrgp           
-          # - nsga-dcgp      
           - operon
           - ps-tree
           - pysr
           - qlattice
+          - tir
+          # deprecated or broken:
+          # - gsgp           
+          # - mrgp           
+          # - nsga-dcgp      
           # - sbp-gp
           # - taylorgp
-          - tir
+          # - dagsearch
           # - uDSR
       fail-fast: false
     steps:
