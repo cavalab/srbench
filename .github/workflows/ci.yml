@@ -5,9 +5,13 @@ on:
   push:
     paths:
       - 'algorithms/**'
+      - 'experiment/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'algorithms/**'
+      - 'experiment/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 env: 
@@ -50,34 +54,51 @@ jobs:
           echo "Didn't find the cache for the srbench environment :("
           conda info --envs
           mamba env update -n srbench -f environment.yml 
+  list-algs:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        run: echo "::set-output name=matrix::$(ls algorithms/ | jq -R -s -c 'split("\n")[:-1]')"
+  check:
+    needs: list-manifests
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+            manifest: ${{ fromJson(needs.list-algs.outputs.matrix) }}
   build-and-test:
     runs-on: ubuntu-latest
-    needs: base-env-build
+    needs: 
+      - base-env-build
+      - list-algs
     defaults:
       run:
         shell: bash -l {0}
     strategy:
       matrix:
         # folder: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
-        alg:
-          - afp    
-          - bingo
-          - dsr    
-          - e2et   
-          - eplex  
-          - eql    
-          - feat   
-          - ffx    
-          - geneticengine
-          - gpgomea        
-          - gplearn        
-          - gpzgd          
-          - itea           
-          - operon
-          - ps-tree
-          - pysr
-          - qlattice
-          - tir
+        alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
+        # alg:
+        #   - afp    
+        #   - bingo
+        #   - dsr    
+        #   - e2et   
+        #   - eplex  
+        #   - eql    
+        #   - feat   
+        #   - ffx    
+        #   - geneticengine
+        #   - gpgomea        
+        #   - gplearn        
+        #   - gpzgd          
+        #   - itea           
+        #   - operon
+        #   - ps-tree
+        #   - pysr
+        #   - qlattice
+        #   - tir
           # deprecated or broken:
           # - gsgp           
           # - mrgp           
