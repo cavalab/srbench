@@ -2,15 +2,12 @@ name: CI
 
 # Controls when the action will run. 
 on:
+  push:
+    paths:
+      - 'algorithms/**'
   pull_request:
-    branches: 
-      - master
-    # paths:
-    #   - 'algorithms/**'
-# on:
-#   push:
-#     branches:
-#       - separate-envs
+    paths:
+      - 'algorithms/**'
 
 env: 
   CACHE_NUMBER: 0
