@@ -1,3 +1,4 @@
+*.lock.yml
 .idea
 results_*/
 *.swp

@@ -1,5 +1,3 @@
-#install PS Tree
-
 # remove directory if it exists
 if [ -d "gpg" ]; then
     rm -rf gpg

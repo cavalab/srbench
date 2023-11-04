@@ -1,16 +1,16 @@
 name: CI
 
 # Controls when the action will run. 
-# on:
-#   pull_request:
-#     branches: 
-#       - master
-#     paths:
-#       - 'algorithms/**'
 on:
-  push:
-    branches:
-      - separate-envs
+  pull_request:
+    branches: 
+      - master
+    paths:
+      - 'algorithms/**'
+# on:
+#   push:
+#     branches:
+#       - separate-envs
 
 env: 
   CACHE_NUMBER: 0
@@ -64,7 +64,7 @@ jobs:
         alg:
           - afp    
           - bingo
-          - dagsearch
+          # - dagsearch
           - dsr    
           - e2et   
           - eplex  
@@ -75,18 +75,18 @@ jobs:
           - gpgomea        
           - gplearn        
           - gpzgd          
-          - gsgp           
+          # - gsgp           
           - itea           
-          - mrgp           
-          - nsga-dcgp      
+          # - mrgp           
+          # - nsga-dcgp      
           - operon
           - ps-tree
           - pysr
           - qlattice
-          - sbp-gp
-          - taylorgp
+          # - sbp-gp
+          # - taylorgp
           - tir
-          - uDSR
+          # - uDSR
       fail-fast: false
     steps:
       - 
