@@ -1,0 +1,12 @@
+authors: # the participants
+  - Aleksandar Kartelj
+  - Marko Djukanovic
+email: aleksandar.kartelj@gmail.com
+name: RILS-ROLS # name of the submission /method
+description: | # anything you'd like here to describe the method.
+  Symbolic regression via iterated local search and ordinary least squares. 
+
+  Kartelj, Aleksandar, and Marko Djukanović. "RILS-ROLS: robust symbolic regression via iterated local search and ordinary least squares." Journal of Big Data 10.1 (2023): 71.
+
+url: https://github.com/kartelj/rils-rols # a link to the project
+
