@@ -74,33 +74,6 @@ jobs:
       matrix:
         # folder: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
-        # alg:
-        #   - afp    
-        #   - bingo
-        #   - e2et   
-        #   - eplex  
-        #   - eql    
-        #   - feat   
-        #   - ffx    
-        #   - geneticengine
-        #   - gpgomea        
-        #   - gplearn        
-        #   - gpzgd          
-        #   - itea           
-        #   - operon
-        #   - ps-tree
-        #   - pysr
-        #   - qlattice
-        #   - tir
-          # deprecated or broken:
-          #   - dsr    
-          # - gsgp           
-          # - mrgp           
-          # - nsga-dcgp      
-          # - sbp-gp
-          # - taylorgp
-          # - dagsearch
-          # - uDSR
       fail-fast: false
     steps:
       - 
