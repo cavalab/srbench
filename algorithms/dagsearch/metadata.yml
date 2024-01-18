@@ -1,8 +1,0 @@
-authors:
-  - Paul Kahlmeyer
-email:
-  - paul.kahlmeyer@uni-jena.de
-name: DAG_search
-description: |
-  "An open source python library for symbolic regression based on searching the space of DAGs."
-url: https://github.com/kahlmeyer94/DAG_search
