@@ -1,6 +1,11 @@
 # User Guide
 
+**NOTE**: if you are trying to reproduce the results from the 2022 Neurips Benchmark paper, you 
+should check out the [v2.0 release](https://github.com/cavalab/srbench/releases/tag/v2.0) version of this repo.  
+
 ## Installation
+
+### Local install
 
 We have provided a [conda environment](environment.yml), [configuration script](configure.sh) and [installation script](install.sh) that should make installation straightforward.
 We've currently tested this on Ubuntu and CentOS. 
@@ -20,7 +25,7 @@ conda env create -f environment.yml
 conda activate srbench
 ```
 
-2. Install the benchmark methods:
+2. Install the benchmark algorithms:
 
 ```bash
 bash install.sh
@@ -34,12 +39,16 @@ cd /path/to/pmlb
 git lfs pull
 ```
 
+### Docker install
+
 For Docker users,
 ```bash
 docker build --pull --rm -f "Dockerfile" -t srbench:latest "."
 ```
 
 ## Reproducing the benchmark results
+
+**NOTE**: these instructions are for the the [v2.0 release](https://github.com/cavalab/srbench/releases/tag/v2.0) version of this repo.  
 
 Experiments are launched from the `experiments/` folder via the script `analyze.py`.
 The script can be configured to run the experiment in parallel locally, on an LSF job scheduler, or on a SLURM job scheduler. 
