@@ -126,12 +126,16 @@ jobs:
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles(format('./algorithms/{0}/**', matrix.alg)) }}
       - 
         name: Create alg environment 
-        if: steps.cache-alg.outputs.cache-hit != 'true'
+        if: |
+          steps.cache-alg.outputs.cache-hit != 'true'
         run: | 
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
-          # conda create --name srbench-${{ matrix.alg }} --clone srbench
-          mamba env create -n srbench-${{ matrix.alg }} -f base_environment.yml -f algorithms/${{ matrix.alg }}/environment.yml
+          if test -f "algorithms/${{ matrix.alg }}/environment.yml" ; then
+            mamba env create -n srbench-${{ matrix.alg }} -f base_environment.yml -f algorithms/${{ matrix.alg }}/environment.yml
+          else
+            mamba env create -n srbench-${{ matrix.alg }} -f base_environment.yml 
+          fi
       # - 
       #   name: Update alg env from environment.yml
       #   if: |
