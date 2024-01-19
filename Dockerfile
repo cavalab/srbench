@@ -45,4 +45,4 @@ COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 RUN --mount=type=cache,target=/opt/conda/pkgs mamba env create -f /tmp/environment.yml 
 SHELL ["mamba", "run", "-n", "srbench", "/bin/bash", "-c"]
 COPY . .
-RUN bash install_algorithms.sh 
+RUN bash install.sh 
