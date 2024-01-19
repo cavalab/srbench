@@ -30,14 +30,15 @@ for SUBNAME in ${subnames[@]} ; do
     pwd
     echo "Installing dependencies for ${SUBNAME}"
     echo "........................................"
-    echo "Copying base environment"
+    echo "Making environment"
     echo "........................................"
-    conda create --name $SUBENV --clone srbench
-    if test -f "environment.yml" ; then
-        echo "Update alg env from environment.yml"
-        echo "........................................"
-        mamba env update -n $SUBENV -f ${SUBFOLDER}/environment.yml
-    fi
+    # conda create --name $SUBENV --clone srbench
+    mamba env create --name $SUBENV -f base_environment.yml -f ${SUBFOLDER}/environment.yml
+    # if test -f "environment.yml" ; then
+    #     echo "Update alg env from environment.yml"
+    #     echo "........................................"
+    #     mamba env update -n $SUBENV -f ${SUBFOLDER}/environment.yml
+    # fi
 
     if test -f "requirements.txt" ; then
         echo "Update alg env from requirements.txt"
@@ -48,16 +49,16 @@ for SUBNAME in ${subnames[@]} ; do
     eval "$(conda shell.bash hook)"
     conda init bash
     conda activate $SUBENV
+    cd $SUBFOLDER
     if test -f "install.sh" ; then
         echo "running install.sh..."
         echo "........................................"
-        cd $SUBFOLDER
         bash install.sh
-        cd ../../
     else
         echo "::warning::No install.sh file found in ${SUBFOLDER}."
         echo " Assuming the method is a conda package specified in environment.yml."
     fi
+    cd ../../
 
     # Copy files and environment
     # echo "Copying files and environment to experiment/methods ..."
