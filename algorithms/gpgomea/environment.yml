@@ -6,7 +6,7 @@ dependencies:
   - boost=1.74.0
   - armadillo=9.900.4
   - make
-  - cmake
+  - cmake=3.28.1
   - python=3.9
   - eigen=3.4.0
   - python-devtools=0.9.0
