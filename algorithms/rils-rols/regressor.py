@@ -10,6 +10,3 @@ est = RILSROLSRegressor(max_seconds=2*60*60, max_fit_calls=1000*1000, max_comple
 def model(est):
     return str(est.model_string())
 
-
-def complexity(est):
-    return cplx(sp.parse_expr(str(est.model_string())))
