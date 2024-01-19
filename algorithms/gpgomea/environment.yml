@@ -7,7 +7,7 @@ dependencies:
   - armadillo=9.900.4
   - make
   - cmake=3.28.1
-  - python=3.9
+  - python=3.10
   - eigen=3.4.0
   - python-devtools=0.9.0
   - pybind11
