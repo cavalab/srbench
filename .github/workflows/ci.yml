@@ -15,7 +15,7 @@ on:
   workflow_dispatch:
 
 env: 
-  CACHE_NUMBER: 0
+  CACHE_NUMBER: 1
 
 jobs:
   ################################################################################
