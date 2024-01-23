@@ -1,0 +1,9 @@
+channels:
+    - conda-forge
+dependencies:
+    - gmp
+    - gsl 
+    - libffi 
+    - libgfortran-ng
+    - blas * openblas 
+    - liblapack

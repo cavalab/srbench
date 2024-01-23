@@ -17,7 +17,4 @@ curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | bash
 export PATH=$PATH:~/.ghcup/bin:~/.cabal/bin 
 
 #conda activate srbench
-cabal install --overwrite-policy=always
-cp ~/.cabal/bin/tir ./python/
-cd python 
-pip install .
+cabal install --overwrite-policy=always --installdir=./python && cd python && pip install .

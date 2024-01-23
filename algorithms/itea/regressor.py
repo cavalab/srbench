@@ -1,3 +1,6 @@
+import sys
+import os
+os.environ["LD_LIBRARY_PATH"] = os.environ["CONDA_PREFIX"] + "/lib"
 import pyITEA as itea
 from itertools import product
 

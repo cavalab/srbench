@@ -2,9 +2,12 @@ name: gpg
 channels:
   - conda-forge
 dependencies:
+  - pkgconfig
+  - boost=1.74.0
+  - armadillo=9.900.4
   - make
-  - cmake
-  - python=3.9
+  - cmake=3.28.1
+  - python=3.10
   - eigen=3.4.0
   - python-devtools=0.9.0
   - pybind11
