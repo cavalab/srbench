@@ -58,8 +58,8 @@ for SUBNAME in ${subnames[@]} ; do
     echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
     echo ".................... Installing $SUBNAME ..."
 
-    SUBFOLDER=algorithms/$SUBNAME
-    SUBENV=srbench-$SUBNAME
+    SUBFOLDER="./algorithms/$SUBNAME"
+    SUBENV="srbench-$SUBNAME"
 
     ########################################
     # read yaml
@@ -96,7 +96,7 @@ for SUBNAME in ${subnames[@]} ; do
     if test -f "${SUBFOLDER}/requirements.txt" ; then
         echo "Update alg env from requirements.txt"
         echo "........................................"
-        mamba run -n srbench-${SUBENV} pip install -r ${SUBFOLDER}/requirements.txt
+        mamba run -n ${SUBENV} pip install -r ${SUBFOLDER}/requirements.txt
     fi
 
     # eval "$(conda shell.bash hook)"
@@ -124,7 +124,9 @@ for SUBNAME in ${subnames[@]} ; do
 
     # export env
     echo "Exporting environment"
+    echo "........................................"
     # conda env export -n $SUBENV > $SUBFOLDER/environment.lock.yml
     conda env export -n $SUBENV > $SUBFOLDER/environment.lock.yml
+    conda env export -n $SUBENV 
     echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
 done
