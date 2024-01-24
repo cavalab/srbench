@@ -1,5 +1,5 @@
-# install conda environment
-conda env create -f environment.yml
+# install base srbench environment
+conda env create -f base_environment.yml
 
 eval "$(conda shell.bash hook)"
 

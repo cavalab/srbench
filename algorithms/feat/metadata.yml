@@ -11,4 +11,9 @@ description: | # anything you'd like here to describe the method.
   ICLR 2019. arxiv:1807.0091
 
 url: http://cavalab.org/feat # a link to the project
+########################################
+# Option arguments for the build process. 
+# Unless you know what you are doing, do not change these.
+build:
+  clone_base_env: yes # 
 
