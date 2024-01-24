@@ -54,9 +54,6 @@ jobs:
   #         echo "Didn't find the cache for the srbench environment :("
   #         conda info --envs
   #         mamba env update -n srbench -f environment.yml 
-  test-yaml-reader:
-    runs-on: ubuntu-latest
-    name: Test read-yaml
   list-algs:
     runs-on: ubuntu-latest
     outputs:
@@ -128,7 +125,8 @@ jobs:
         with:
           file: './algorithms/${{ matrix.alg }}/metadata.yml'
           key-path: '["build", "clone_base_env"]' # Access the runs key then the using key and retuns the value.
-      - name: Display read-yaml output
+      - 
+        name: Display read-yaml output
         run: echo "${{ steps.yaml-data.outputs.data }}"
       - 
         name: Cache alg environment
