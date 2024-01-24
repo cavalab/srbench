@@ -66,8 +66,8 @@ for SUBNAME in ${subnames[@]} ; do
     eval $(parse_yaml $SUBFOLDER/metadata.yml)
     ########################################
 
+    echo "build_clone_base_env: ${build_clone_base_env}"
     if [ "${build_clone_base_env}" == "yes" ] ; then
-        echo "$build_clone_base_env" is set to yes
 
         echo "........................................"
         echo "Cloning base environment"
