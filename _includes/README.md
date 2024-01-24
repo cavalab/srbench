@@ -82,7 +82,9 @@ Methods Staged for Benchmarking:
     [code](https://github.com/MilesCranmer/PySR)
 - PSTree (Zhang 2021)
     [code](https://github.com/hengzhe-zhang/PS-Tree)
-    
+- RILS-ROLS (Kartelj 2023)
+    [code](https://github.com/kartelj/rils-rols)
+  
 # Contribute
 
 We are actively updating and expanding this benchmark. 
