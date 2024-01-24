@@ -116,10 +116,9 @@ jobs:
 ################################################################################
 # install the submission
 ################################################################################
-        - 
-          name: Install method
-          run: bash install.sh ${{ matrix.alg }}
-
+      - 
+        name: Install method
+        run: bash install.sh ${{ matrix.alg }}
 #       - 
 #         name: Run read-yaml action
 #         id: yaml-data
