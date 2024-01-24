@@ -54,6 +54,9 @@ jobs:
   #         echo "Didn't find the cache for the srbench environment :("
   #         conda info --envs
   #         mamba env update -n srbench -f environment.yml 
+  test-yaml-reader:
+    runs-on: ubuntu-latest
+    name: Test read-yaml
   list-algs:
     runs-on: ubuntu-latest
     outputs:
@@ -116,6 +119,17 @@ jobs:
 ################################################################################
 # install the submission
 ################################################################################
+
+      - 
+        name: Run read-yaml action
+        uses: actions/checkout@v3
+        id: yaml-data
+        uses: jbutcher5/read-yaml@main      # You may wish to replace main with a version tag such as '1.6' etc.
+        with:
+          file: './algorithms/${{ matrix.alg }}/metadata.yml'
+          key-path: '["build", "clone_base_env"]' # Access the runs key then the using key and retuns the value.
+      - name: Display read-yaml output
+        run: echo "${{ steps.yaml-data.outputs.data }}"
       - 
         name: Cache alg environment
         id: cache-alg
@@ -124,25 +138,22 @@ jobs:
         with:
           path: /usr/share/miniconda3/envs/srbench-${{ matrix.alg }}
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles(format('./algorithms/{0}/**', matrix.alg)) }}
+# TODO: read metadata for build process instructions https://github.com/marketplace/actions/read-yaml
       - 
-        name: Create alg environment 
+        name: Create alg environment from srbench clone
         if: |
           steps.cache-alg.outputs.cache-hit != 'true'
         run: | 
           echo "Installing dependencies for ${{ matrix.alg }}"
           echo "Copying base environment"
-          if test -f "algorithms/${{ matrix.alg }}/environment.yml" ; then
-            mamba env create -n srbench-${{ matrix.alg }} -f base_environment.yml -f algorithms/${{ matrix.alg }}/environment.yml
-          else
-            mamba env create -n srbench-${{ matrix.alg }} -f base_environment.yml 
-          fi
-      # - 
-      #   name: Update alg env from environment.yml
-      #   if: |
-      #     steps.cache-alg.outputs.cache-hit != 'true'
-      #     && hashFiles(format('./algorithms/{0}/environment.yml', matrix.alg)) != ''
-      #   run: | 
-      #     mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
+          mamba env create -n srbench-${{ matrix.alg }} --clone srbench
+      - 
+        name: Update alg env from environment.yml
+        if: |
+          steps.cache-alg.outputs.cache-hit != 'true'
+          && hashFiles(format('./algorithms/{0}/environment.yml', matrix.alg)) != ''
+        run: | 
+          mamba env update -n srbench-${{ matrix.alg }} -f algorithms/${{ matrix.alg }}/environment.yml
       - 
         name: Update alg env from requirements.txt
         if: |
