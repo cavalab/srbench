@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - pkgconfig
-  - boost=1.74.0
+  - boost
   - armadillo=9.900.4
   - make
   - cmake=3.28.1
