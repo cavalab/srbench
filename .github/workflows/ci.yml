@@ -119,7 +119,6 @@ jobs:
 
       - 
         name: Run read-yaml action
-        uses: actions/checkout@v3
         id: yaml-data
         uses: jbutcher5/read-yaml@main      # You may wish to replace main with a version tag such as '1.6' etc.
         with:
