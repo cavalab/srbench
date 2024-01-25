@@ -92,12 +92,6 @@ jobs:
         with:
           config: algorithms/${{ matrix.alg }}/metadata.yml
       - 
-        name: cache flag
-        uses: pietrobolcato/action-read-yaml@1.0.0
-        id: metadata
-        with:
-          config: algorithms/${{ matrix.alg }}/metadata.yml
-      - 
         name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
         with:
