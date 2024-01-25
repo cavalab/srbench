@@ -125,12 +125,19 @@ jobs:
         if: |
           steps.cache-alg-env.outputs.cache-hit != 'true'
         run: bash install.sh ${{ matrix.alg }}
+      # If cache is restored, we still have to copy alg files in the experiment folder
+      - 
+        name: Copy method files
+        if: |
+          steps.cache-alg-env.outputs.cache-hit == 'true'
+        run: bash scripts/copy_algorithm_files.sh ${{ matrix.alg }}
       # Print the conda env for debugging purposes
       - 
         name: Print conda environment
         run: |
           echo "/////// Conda Environment (conda env export)/////"
-          conda env export  
+          conda env export -n srbench-${{ matrix.alg }}
+          
           echo "/////////////////////////////////////////////////"
       ################################################################################
       # tests
