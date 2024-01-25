@@ -25,7 +25,7 @@ if conda info --envs | grep srbench | grep -v "srbench-"; then
 else 
     echo "installing base srbench environment"
 
-    mamba env create -y -f base_environment.yml
+    mamba env create -f base_environment.yml
 
     eval "$(conda shell.bash hook)"
 
