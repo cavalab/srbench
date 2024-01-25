@@ -136,7 +136,7 @@ jobs:
       - 
         name: Install method
         if: |
-          ${{ (steps.cache-alg-env.outputs.cache-hit != 'true') ||  (${{ matrix.alg }} != 'gpgomea') }}
+          ${{ (steps.cache-alg-env.outputs.cache-hit != 'true') ||  ( matrix.alg == 'gpgomea') }}
         run: bash install.sh ${{ matrix.alg }}
       # If cache is restored, we still have to copy alg files in the experiment folder
       - 
