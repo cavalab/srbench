@@ -67,7 +67,7 @@ for SUBNAME in ${subnames[@]} ; do
     ########################################
 
     echo "build_clone_base_env: ${build_clone_base_env}"
-    if [ "${build_clone_base_env}" == "yes" ] ; then
+    if [ ${build_clone_base_env} == "yes" ] ; then
 
         echo "........................................"
         echo "Cloning base environment"
