@@ -19,7 +19,10 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 LABEL com.nvidia.volumes.needed="nvidia_driver"
 ################################################################################
-
+ENV http_proxy="http://proxy.tch.harvard.edu:3128"
+ENV https_proxy=http://proxy.tch.harvard.edu:3128
+ENV HTTPS_PROXY=http://proxy.tch.harvard.edu:3128
+ENV HTTP_PROXY=http://proxy.tch.harvard.edu:3128
 # Install base packages.
 USER root
 
@@ -42,4 +45,5 @@ RUN apt update && apt install -y \
 USER $MAMBA_USER
 SHELL ["/bin/bash", "-c"]
 COPY . .
-RUN bash install.sh 
+RUN mamba env create -f base_environment.yml
+RUN bash install.sh afp
