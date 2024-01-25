@@ -19,7 +19,7 @@ env:
 
 jobs:
   ################################################################################
-  # matrix build and test
+  # build the base environment
   ################################################################################
   base-env-build:
     runs-on: ubuntu-latest
@@ -54,6 +54,9 @@ jobs:
           echo "Didn't find the cache for the srbench environment :("
           conda info --envs
           mamba env update -n srbench -f base_environment.yml 
+  ################################################################################
+  # get a list of algorithms
+  ################################################################################
   list-algs:
     runs-on: ubuntu-latest
     outputs:
@@ -62,6 +65,9 @@ jobs:
       - uses: actions/checkout@v2
       - id: set-matrix
         run: echo "::set-output name=matrix::$(ls algorithms/ | jq -R -s -c 'split("\n")[:-1]')"
+  ################################################################################
+  # build each algorithm in parallel and run tests
+  ################################################################################
   build-and-test:
     runs-on: ubuntu-latest
     needs: 
@@ -72,7 +78,6 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
-        # folder: ${{ fromJSON(needs.detect-directory-changes.outputs.changed) }}
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
       fail-fast: false
     steps:
@@ -80,16 +85,7 @@ jobs:
         name: Checkout code
         uses: actions/checkout@v3
       - 
-        name: Filter to changed paths
-        uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            alg:
-              - format('algorithms/{0}/**', matrix.alg)
-      - 
         name: Setup Mambaforge
-        # if: steps.changes.outputs.alg == 'true'
         uses: conda-incubator/setup-miniconda@v2
         with:
           miniforge-variant: Mambaforge
@@ -99,7 +95,6 @@ jobs:
       - 
         name: Cache srbench environment
         id: cache-srbench
-        # if: steps.changes.outputs.alg == 'true'
         uses: actions/cache@v3
         with:
           path: /usr/share/miniconda3/envs/srbench
@@ -113,9 +108,10 @@ jobs:
           echo "Didn't find the cache for the srbench environment :("
           conda info --envs
           mamba env update -n srbench -f base_environment.yml 
-################################################################################
-# install the submission
-################################################################################
+      ################################################################################
+      # install the algorithm
+      ################################################################################
+      # Try to restore alg from cache if none of the files in its directory have changed
       - 
         name: Cache alg environment
         id: cache-alg-env
@@ -123,20 +119,22 @@ jobs:
         with:
           path: /usr/share/miniconda3/envs/srbench-${{ matrix.alg }}
           key: ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles(format('./algorithms/{0}/**', matrix.alg)) }}
+      # If no cache, run the install script specifying this algo
       - 
         name: Install method
         if: |
           steps.cache-alg-env.outputs.cache-hit != 'true'
         run: bash install.sh ${{ matrix.alg }}
+      # Print the conda env for debugging purposes
       - 
         name: Print conda environment
         run: |
           echo "/////// Conda Environment (conda env export)/////"
           conda env export  
           echo "/////////////////////////////////////////////////"
-  ################################################################################
-  # tests
-  ################################################################################
+      ################################################################################
+      # tests
+      ################################################################################
       -
         name: Test Method
         run: |
@@ -144,4 +142,3 @@ jobs:
           pwd
           ls
           mamba run -n srbench-${{ matrix.alg }} python -m pytest -v test_algorithm.py --ml ${{ matrix.alg }}
-################################################################################          
