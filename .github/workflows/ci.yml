@@ -62,9 +62,10 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: set-matrix
         run: echo "::set-output name=matrix::$(ls algorithms/ | jq -R -s -c 'split("\n")[:-1]')"
+  
   ################################################################################
   # build each algorithm in parallel and run tests
   ################################################################################
@@ -84,6 +85,18 @@ jobs:
       - 
         name: Checkout code
         uses: actions/checkout@v3
+      - 
+        name: read-yaml-file
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: metadata
+        with:
+          config: algorithms/${{ matrix.alg }}/metadata.yml
+      - 
+        name: cache flag
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: metadata
+        with:
+          config: algorithms/${{ matrix.alg }}/metadata.yml
       - 
         name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
@@ -123,7 +136,7 @@ jobs:
       - 
         name: Install method
         if: |
-          steps.cache-alg-env.outputs.cache-hit != 'true'
+          ${{ (steps.cache-alg-env.outputs.cache-hit != 'true') ||  (${{ matrix.alg }} != 'gpgomea') }}
         run: bash install.sh ${{ matrix.alg }}
       # If cache is restored, we still have to copy alg files in the experiment folder
       - 
