@@ -86,12 +86,6 @@ jobs:
         name: Checkout code
         uses: actions/checkout@v3
       - 
-        name: read-yaml-file
-        uses: pietrobolcato/action-read-yaml@1.0.0
-        id: metadata
-        with:
-          config: algorithms/${{ matrix.alg }}/metadata.yml
-      - 
         name: Setup Mambaforge
         uses: conda-incubator/setup-miniconda@v2
         with:
