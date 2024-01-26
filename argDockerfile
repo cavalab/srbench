@@ -5,7 +5,8 @@
 # - https://pythonspeed.com/articles/conda-docker-image-size/
 # micromamba is failing for PySR, so sticking with mambaforge for now.
 # FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
-FROM condaforge/mambaforge:4.11.0-2 as base
+#FROM condaforge/mambaforge:4.11.0-2 as base
+FROM condaforge/miniforge-pypy3:23.11.0-0 as base
 ################################################################################
 # Nvidia code ##################################################################
 ################################################################################
@@ -19,15 +20,17 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 LABEL com.nvidia.volumes.needed="nvidia_driver"
 ################################################################################
-ENV http_proxy="http://proxy.tch.harvard.edu:3128"
-ENV https_proxy=http://proxy.tch.harvard.edu:3128
-ENV HTTPS_PROXY=http://proxy.tch.harvard.edu:3128
-ENV HTTP_PROXY=http://proxy.tch.harvard.edu:3128
+
 # Install base packages.
 USER root
 
-ARG DEBIAN_FRONTEND=noninteractive
 
+########################################
+# proxy
+########################################
+
+
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     default-jdk \
     rsync \
@@ -37,6 +40,7 @@ RUN apt update && apt install -y \
     # git \
     # wget \
     build-essential \
+    libgmp3-dev \
     vim \
     jq && \
     rm -rf /var/lib/apt/lists/*
@@ -45,27 +49,7 @@ RUN apt update && apt install -y \
 ################################################################################
 USER $MAMBA_USER
 SHELL ["/bin/bash", "-c"]
-COPY . .
-RUN mamba env create -f base_environment.yml
-# RUN bash install.sh
-RUN bash install.sh  afp
-RUN bash install.sh  bingo
-RUN bash install.sh  e2et
-RUN bash install.sh  eplex
-RUN bash install.sh  eql
-RUN bash install.sh  feat
-RUN bash install.sh  ffx
-RUN bash install.sh  geneticengine
-RUN bash install.sh  gpgomea
-RUN bash install.sh  gplearn
-RUN bash install.sh  gpzgd
-RUN bash install.sh  itea
-RUN bash install.sh  operon
-RUN bash install.sh  ps-tree
-RUN bash install.sh  pysr
-RUN bash install.sh  qlattice
-RUN bash install.sh  rils-rols
-USER root
-RUN apt install -y libgmp3-dev
-USER $MAMBA_USER
-RUN bash install.sh  tir
+COPY . "/srbench/"
+WORKDIR "/srbench"
+ARG ALG
+RUN bash install.sh $ARG
