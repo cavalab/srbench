@@ -1,3 +1,4 @@
+docker-compose.yml
 *.lock.yml
 .idea
 results_*/
