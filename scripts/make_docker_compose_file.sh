@@ -8,9 +8,17 @@ cat <<EOF > docker-compose.yml
 version: '3'
 
 services:
+  base:
+    image: srbench-base
+    build:
+      dockerfile: baseDockerfile
 EOF
 
-algorithms=$(ls algorithms/)
+#algorithms=$(ls algorithms/)
+algorithms=(
+    gplearn
+    ffx
+)
 
 for alg in ${algorithms[@]} ; do
     # allow user to specify their own Dockerfile. 
@@ -22,22 +30,16 @@ for alg in ${algorithms[@]} ; do
     fi
 
     cat <<EOF >> docker-compose.yml
-    ${alg}:
-        build:
-            context: .
-            dockerfile: ${dockerfile}
-            args:
-                ALG: ${alg}
-        container_name: "srbench-${alg}"
-        stdin_open: true
-        tty: true
-        volumes:
-          - ./:/srbench
-        network_mode: host
-        deploy:
-          resources:
-            reservations:
-              devices:
-                - capabilities: [gpu]
+  ${alg}:
+    build:
+      dockerfile: ${dockerfile}
+      args:
+        ALGORITHM: ${alg}
+    container_name: "srbench-${alg}"
+    depends_on:
+      - base
+    volumes:
+      - ./experiment:/srbench
+  
 EOF
 done

@@ -1,55 +1,39 @@
-################################################################################
-# Notes: this image is large and many improvements are possible. 
-# Sources:
-# - https://uwekorn.com/2021/03/01/deploying-conda-environments-in-docker-how-to-do-it-right.html
-# - https://pythonspeed.com/articles/conda-docker-image-size/
-# micromamba is failing for PySR, so sticking with mambaforge for now.
-# FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
-#FROM condaforge/mambaforge:4.11.0-2 as base
-FROM condaforge/miniforge-pypy3:23.11.0-0 as base
-################################################################################
-# Nvidia code ##################################################################
-################################################################################
-ENV PATH /usr/local/nvidia/bin/:$PATH
-ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:$LD_LIBRARY_PATH
-# Tell nvidia-docker the driver spec that we need as well as to
-# use all available devices, which are mounted at /usr/local/nvidia.
-# The LABEL supports an older version of nvidia-docker, the env
-# variables a newer one.
-ENV NVIDIA_VISIBLE_DEVICES all
-ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-LABEL com.nvidia.volumes.needed="nvidia_driver"
-################################################################################
-
-# Install base packages.
-USER root
-
-
-########################################
-# proxy
-########################################
-
-
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -y \
-    default-jdk \
-    rsync \
-    # bzip2 \
-    # ca-certificates \
-    curl \
-    # git \
-    # wget \
-    build-essential \
-    libgmp3-dev \
-    vim \
-    jq && \
-    rm -rf /var/lib/apt/lists/*
+FROM srbench-base as base
 
 # Install env
 ################################################################################
-USER $MAMBA_USER
+ARG ALGORITHM
+# this is needed because RUN commands don't expand ARG definitions
+# ENV Algorithm ${ALGORITHM}
+#USER $MAMBA_USER
 SHELL ["/bin/bash", "-c"]
-COPY . "/srbench/"
+WORKDIR "/install"
+COPY base_environment.yml install_algorithm.sh . 
+# COPY experiment experiment/
+# RUN mkdir algorithms
+COPY ./algorithms/${ALGORITHM} ./${ALGORITHM}
+RUN ls -l
+RUN echo $ALGORITHM
+RUN bash install_algorithm.sh $ALGORITHM
+
+VOLUME ["/srbench"]
 WORKDIR "/srbench"
-ARG ALG
-RUN bash install.sh $ARG
+# COPY scripts/copy_algorithm_files.sh ./
+# RUN bash copy_algorithm_files.sh /install/$ALGORITHM experiment/methods
+#SHELL ["/entry.sh", "/bin/bash", "-c"]
+ENV CONDA_DEFAULT_ENV srbench-$ALGORITHM
+ENV CONDA_TARGET_ENV=srbench-$ALGORITHM
+RUN mamba init bash && echo 'conda activate "${CONDA_TARGET_ENV:-base}"' >>  ~/.bashrc
+ENV ALGO=$ALGORITHM
+# RUN echo 'bash link_algorithm_files.sh /install/$ALGO /srbench/methods' >> ~/.bashrc
+# Make RUN commands use the new environment:
+#ENTRYPOINT ["/bin/bash", "-c", "mamba", "run", "-n", ${ALGORITHM}, "/bin/sh", "-c"]
+ENTRYPOINT ["/bin/bash", "-c"]
+#ENTRYPOINT mamba run -n $ALGORITHM /bin/sh -c
+# copy algorithm files
+#COPY scripts/link_algorithm_files.sh ./
+WORKDIR "/"
+COPY entry.sh /
+RUN chmod +x /entry.sh
+ENTRYPOINT ["/entry.sh", "/bin/bash", "-c"]
+WORKDIR "/srbench"
