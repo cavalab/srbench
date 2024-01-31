@@ -14,11 +14,11 @@ services:
       dockerfile: baseDockerfile
 EOF
 
-#algorithms=$(ls algorithms/)
-algorithms=(
-    gplearn
-    ffx
-)
+algorithms=$(ls algorithms/)
+# algorithms=(
+#     gplearn
+#     ffx
+# )
 
 for alg in ${algorithms[@]} ; do
     # allow user to specify their own Dockerfile. 

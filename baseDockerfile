@@ -41,6 +41,9 @@ RUN apt update && apt install -y \
     # wget \
     build-essential \
     libgmp3-dev \
+    libblas-dev \
+    liblapack-dev \
+    libgsl-dev \
     vim \
     jq && \
     rm -rf /var/lib/apt/lists/*
