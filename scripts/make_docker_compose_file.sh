@@ -9,7 +9,7 @@ version: '3'
 
 services:
   base:
-    image: srbench-base
+    image: srbench/base
     build:
       dockerfile: baseDockerfile
 EOF
@@ -35,7 +35,7 @@ for alg in ${algorithms[@]} ; do
       dockerfile: ${dockerfile}
       args:
         ALGORITHM: ${alg}
-    container_name: "srbench-${alg}"
+    container_name: "srbench/${alg}"
     depends_on:
       - base
     volumes:

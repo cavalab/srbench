@@ -1,4 +1,4 @@
-FROM srbench-base as base
+FROM srbench/base as base
 
 # Install env
 ################################################################################

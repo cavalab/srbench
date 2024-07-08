@@ -6,7 +6,7 @@
 # micromamba is failing for PySR, so sticking with mambaforge for now.
 # FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
 #FROM condaforge/mambaforge:4.11.0-2 as base
-FROM condaforge/miniforge-pypy3:23.11.0-0 as base
+FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
 ################################################################################
 # Nvidia code ##################################################################
 ################################################################################
@@ -24,29 +24,24 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 # Install base packages.
 USER root
 
-
-########################################
-# proxy
-########################################
-
-
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -y \
-    default-jdk \
-    rsync \
-    # bzip2 \
-    # ca-certificates \
-    curl \
-    # git \
-    # wget \
-    build-essential \
-    libgmp3-dev \
-    libblas-dev \
-    liblapack-dev \
-    libgsl-dev \
-    vim \
-    jq && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt update \
+    && apt install -y \
+        default-jdk \
+        rsync \
+        # bzip2 \
+        # ca-certificates \
+        curl \
+        # git \
+        # wget \
+        build-essential \
+        libgmp3-dev \
+        libblas-dev \
+        liblapack-dev \
+        libgsl-dev \
+        vim \
+        jq \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install env
 ################################################################################
