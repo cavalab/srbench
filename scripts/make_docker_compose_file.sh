@@ -5,8 +5,6 @@
 
 cat Dockerfile-template > autoDockerfile
 cat <<EOF > docker-compose.yml
-version: '3'
-
 services:
   base:
     image: srbench/base
@@ -31,11 +29,12 @@ for alg in ${algorithms[@]} ; do
 
     cat <<EOF >> docker-compose.yml
   ${alg}:
+    image: srbench/${alg}
+    container_name: srbench-${alg}
     build:
       dockerfile: ${dockerfile}
       args:
         ALGORITHM: ${alg}
-    container_name: "srbench/${alg}"
     depends_on:
       - base
     volumes:

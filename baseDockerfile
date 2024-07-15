@@ -6,7 +6,8 @@
 # micromamba is failing for PySR, so sticking with mambaforge for now.
 # FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
 #FROM condaforge/mambaforge:4.11.0-2 as base
-FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
+# FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
+FROM condaforge/miniforge-pypy3:23.11.0-0 AS base
 ################################################################################
 # Nvidia code ##################################################################
 ################################################################################
@@ -25,6 +26,14 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
+
+# proxy for apt
+ENV MIRROR="mirrors\.ocf\.berkeley\.edu"
+
+RUN sed -i -e "s/archive\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
+RUN sed -i -e "s/security\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
+RUN sed -i -e "s/http/https/" /etc/apt/sources.list
+
 RUN apt update \
     && apt install -y \
         default-jdk \
@@ -50,5 +59,5 @@ SHELL ["/bin/bash", "-c"]
 #VOLUME ["/srbench"]
 RUN mkdir /srbench
 WORKDIR "/srbench"
-COPY base_environment.yml . 
-RUN mamba env create -f base_environment.yml
+COPY base_environment-lock.yml . 
+RUN mamba env create -f base_environment-lock.yml

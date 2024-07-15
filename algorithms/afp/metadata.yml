@@ -1,0 +1,14 @@
+
+authors: # the participants
+  - William La Cava
+email: william.lacava@childrens.harvard.edu
+name: afp # name of the submission /method
+description: | # anything you'd like here to describe the method.
+  Age-Fitness Pareto Optimization. 
+  An implementation of the algorithm my Schmidt et al. 
+url: http://cavalab.org/ellyn # a link to the project
+########################################
+# Option arguments for the build process. 
+# Unless you know what you are doing, do not change these.
+build:
+  clone_base_env: no

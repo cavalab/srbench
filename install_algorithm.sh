@@ -54,7 +54,7 @@ eval $(parse_yaml $SUBFOLDER/metadata.yml)
 ########################################
 
 echo "build_clone_base_env: ${build_clone_base_env}"
-if [ ${build_clone_base_env} == "yes" ] ; then
+if [ ${build_clone_base_env} == "yes" ] && [ ! -f "${SUBFOLDER}/environment-lock.yml" ] ; then
 
     echo "........................................"
     echo "Cloning base environment"
@@ -77,7 +77,16 @@ else
     echo "........................................"
     echo "Creating environment ${SUBENV} from scratch"
     echo "........................................"
-    mamba create -n $SUBENV -f ${SUBFOLDER}/environment.yml
+    if test -f "${SUBFOLDER}/environment-lock.yml" ; then 
+        echo "using ${SUBFOLDER}/environment-lock.yml"
+        mamba env create -n $SUBENV --file ${SUBFOLDER}/environment-lock.yml
+    elif test -f "${SUBFOLDER}/environment.yml" ; then 
+        echo "using ${SUBFOLDER}/environment.yml ... "
+        mamba env create -n $SUBENV -f ${SUBFOLDER}/environment.yml
+    else 
+        echo "creating blank environment..."
+        mamba create --name $SUBENV
+    fi
 fi
 
 

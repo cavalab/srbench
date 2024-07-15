@@ -1,39 +1,46 @@
-FROM srbench/base as base
+FROM srbench/base AS build
+################################################################################
 
 # Install env
-################################################################################
 ARG ALGORITHM
-# this is needed because RUN commands don't expand ARG definitions
-# ENV Algorithm ${ALGORITHM}
-#USER $MAMBA_USER
 SHELL ["/bin/bash", "-c"]
 WORKDIR "/install"
 COPY base_environment.yml install_algorithm.sh . 
-# COPY experiment experiment/
-# RUN mkdir algorithms
 COPY ./algorithms/${ALGORITHM} ./${ALGORITHM}
-RUN ls -l
-RUN echo $ALGORITHM
 RUN bash install_algorithm.sh $ALGORITHM
 
-VOLUME ["/srbench"]
-WORKDIR "/srbench"
-# COPY scripts/copy_algorithm_files.sh ./
-# RUN bash copy_algorithm_files.sh /install/$ALGORITHM experiment/methods
-#SHELL ["/entry.sh", "/bin/bash", "-c"]
-ENV CONDA_DEFAULT_ENV srbench-$ALGORITHM
-ENV CONDA_TARGET_ENV=srbench-$ALGORITHM
-RUN mamba init bash && echo 'conda activate "${CONDA_TARGET_ENV:-base}"' >>  ~/.bashrc
-ENV ALGO=$ALGORITHM
-# RUN echo 'bash link_algorithm_files.sh /install/$ALGO /srbench/methods' >> ~/.bashrc
-# Make RUN commands use the new environment:
-#ENTRYPOINT ["/bin/bash", "-c", "mamba", "run", "-n", ${ALGORITHM}, "/bin/sh", "-c"]
-ENTRYPOINT ["/bin/bash", "-c"]
-#ENTRYPOINT mamba run -n $ALGORITHM /bin/sh -c
-# copy algorithm files
-#COPY scripts/link_algorithm_files.sh ./
-WORKDIR "/"
+
+# Install conda-pack:
+RUN ulimit -n 128000 && \
+    mamba install -y conda-pack
+
+# Use conda-pack to create a standalone enviornment
+# in /venv:
+RUN conda-pack -n srbench-$ALGORITHM -o /tmp/env.tar && \
+    mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
+    rm /tmp/env.tar
+
+# # We've put venv in same path it'll be in final image,
+# # so now fix up paths:
+RUN /venv/bin/conda-unpack
+
+
+# The runtime-stage image
+FROM ubuntu:20.04 AS runtime
+################################################################################
+
+# Copy /venv from the previous stage:
+COPY --from=build /venv /venv
+
+ARG ALGORITHM
+ENV ALGORITHM=$ALGORITHM
+# When image is run, run the code with the environment
+# activated:
 COPY entry.sh /
 RUN chmod +x /entry.sh
-ENTRYPOINT ["/entry.sh", "/bin/bash", "-c"]
+
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT ["/entry.sh"]
+CMD ["/bin/bash", "-c"]
+
 WORKDIR "/srbench"
