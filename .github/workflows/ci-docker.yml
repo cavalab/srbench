@@ -62,7 +62,7 @@ jobs:
         run: bash scripts/make_docker_compose_file.sh
       # Pull the latest image to build, and avoid caching pull-only images.
       # (docker pull is faster than caching in most cases.)
-      - run: docker compose pull ${{ matrix.alg }}
+      # - run: docker compose pull ${{ matrix.alg }}
       # In this step, this action saves a list of existing images,
       # the cache is created without them in the post run.
       # It also restores the cache if it exists.
