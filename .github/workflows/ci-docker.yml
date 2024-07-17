@@ -78,7 +78,7 @@ jobs:
             git config user.email github-actions@github.com
             git add algorithms/${{ matrix.alg }}/environment.lock
             git commit -m "update ${{ matrix.alg }} environment.lock"
-            git pull
+            git pull --ff-only
             git push
           fi
       ################################################################################
