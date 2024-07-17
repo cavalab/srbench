@@ -8,6 +8,3 @@ dependencies:
     - scikit-learn==1.0.2
     - sympy==1.10.1
     - pip
-    - pip:
-        - pmlb==1.*
-        - feyn==3.0.1
