@@ -17,11 +17,7 @@ echo "........................................"
 echo "Creating environment"
 echo "........................................"
 add_base_env=true
-if test -f "${SUBFOLDER}/environment.lock" ; then 
-    echo "using ${SUBFOLDER}/environment.lock"
-    micromamba install -n base -y -f ${SUBFOLDER}/environment.lock
-    add_base_env=false
-elif test -f "${SUBFOLDER}/environment.yml" ; then 
+if test -f "${SUBFOLDER}/environment.yml" ; then 
     echo "using ${SUBFOLDER}/environment.yml ... "
     micromamba install -n base -y -f ${SUBFOLDER}/environment.yml
 fi
@@ -33,9 +29,9 @@ if test -f "${SUBFOLDER}/requirements.txt" ; then
     pip cache purge
 fi
 
-if $add_base_env ; then
-    micromamba install -n base -y -f base_environment.yml
-fi
+# if $add_base_env ; then
+micromamba install -n base -y -f base_environment.yml
+# fi
 
 if test -f "${SUBFOLDER}/install.sh" ; then
     echo "running install.sh..."
