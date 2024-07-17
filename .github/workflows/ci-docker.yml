@@ -60,12 +60,21 @@ jobs:
       - 
         name: Make docker-compose.yml file
         run: bash scripts/make_docker_compose_file.sh
-      - 
-        name: Build docker image
-        run: docker compose build --pull ${{ matrix.alg }}
+      # Pull the latest image to build, and avoid caching pull-only images.
+      # (docker pull is faster than caching in most cases.)
+      - run: docker compose pull ${{ matrix.alg }}
+      # In this step, this action saves a list of existing images,
+      # the cache is created without them in the post run.
+      # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+      # - 
+      #   name: Build docker image
+      #   run: docker compose build --pull ${{ matrix.alg }}
       - 
         name: Test docker image
-        run: docker compose run ${{ matrix.alg }} bash test.sh
+        run: docker compose run --build ${{ matrix.alg }} bash test.sh
       - 
         name: Push docker image
         run: docker compose push ${{ matrix.alg }}
