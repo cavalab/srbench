@@ -58,12 +58,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_KEY }}
       - 
+        name: Make docker-compose.yml file
+        run: bash scripts/make_docker_compose_file.sh
+      - 
         name: Build docker image
+        run: docker compose build --pull ${{ matrix.alg }}
+      - 
+        name: Test docker image
+        run: docker compose run ${{ matrix.alg }} bash test.sh
+      - 
+        name: Push docker image
+        run: docker compose push ${{ matrix.alg }}
+      - 
+        name: Update lock file
         run: |
-          bash scripts/make_docker_compose_file.sh
-          # docker compose build --pull ${{ matrix.alg }}
-          docker compose run --build ${{ matrix.alg }} bash test.sh
-          docker compose push ${{ matrix.alg }}
+          docker compose run ${{ matrix.alg }} "bash cat /install/environment.lock" > algorithms/${{ matrix.alg }}/environment.lock
       ################################################################################
       # tests
       ################################################################################
