@@ -12,4 +12,3 @@ RUN bash install_algorithm.sh $ALGORITHM \
     && micromamba clean --all --yes
 WORKDIR "/srbench"
 USER root
-COPY --chown=$MAMBA_USER:$MAMBA_USER ./algorithms/${ALGORITHM}/regressor.py /srbench/methods/${ALGORITHM}/

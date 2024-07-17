@@ -38,6 +38,5 @@ for alg in ${algorithms[@]} ; do
       - base
     volumes:
       - ./experiment:/srbench
-  
 EOF
 done
