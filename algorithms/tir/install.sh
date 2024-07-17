@@ -1,11 +1,6 @@
 # !/bin/bash
 # install ITEA
 
-# remove directory if it exists
-if [ -d tir ]; then
-    rm -rf tir
-fi
-
 git clone https://github.com/folivetti/tir.git
 
 cd tir
