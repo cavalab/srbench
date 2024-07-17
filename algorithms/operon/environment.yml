@@ -20,5 +20,4 @@ dependencies:
     - sympy
     - taskflow=3.3.0
     - xxhash
-    - pip:
-        - pmlb==1.0.1.post3
+    - optuna-integration
