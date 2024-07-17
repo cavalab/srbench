@@ -1,21 +1,14 @@
 FROM srbench/base AS build
-# FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
 ################################################################################
 
 # Install env
 ARG ALGORITHM
 ENV ALGORITHM=$ALGORITHM
 WORKDIR "/install"
-COPY --chown=$MAMBA_USER:$MAMBA_USER base_environment.yml microinstall_algorithm.sh . 
+COPY --chown=$MAMBA_USER:$MAMBA_USER base_environment.yml install_algorithm.sh . 
 COPY --chown=$MAMBA_USER:$MAMBA_USER ./algorithms/${ALGORITHM} ./${ALGORITHM}
 ARG MAMBA_DOCKERFILE_ACTIVATE=1     
-# RUN micromamba install -y -n base -f ./${ALGORITHM}/environment.yml \
-#     && micromamba install -y -n base -f ./base_environment.yml \
-#     # && cd ${ALGORITHM}; bash install.sh ; cd - \
-#     && micromamba clean --all --yes
-RUN bash microinstall_algorithm.sh $ALGORITHM \
+RUN bash install_algorithm.sh $ALGORITHM \
     && micromamba clean --all --yes
 WORKDIR "/srbench"
 USER root
-# RUN chown -R $MAMBA_USER:$MAMBA_USER /srbench
-# USER MAMBA_USER
