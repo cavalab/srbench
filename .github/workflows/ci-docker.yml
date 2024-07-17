@@ -57,13 +57,14 @@ jobs:
         run: |
           bash scripts/make_docker_compose_file.sh
           docker compose build --pull ${{ matrix.alg }}
+          docker compose run ${{ matrix.alg }} bash test.sh
       ################################################################################
       # tests
       ################################################################################
-      -
-        name: Test Method
-        run: |
-          docker compose run ${{ matrix.alg }} bash test.sh
-      - 
-        name: Push docker image
-        run: docker compose push ${{ matrix.alg }}
+      # -
+      #   name: Test Method
+      #   run: |
+      #     docker compose run ${{ matrix.alg }} bash test.sh
+      # - 
+      #   name: Push docker image
+      #   run: docker compose push ${{ matrix.alg }}
