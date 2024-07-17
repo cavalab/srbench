@@ -1,119 +1,56 @@
-# install one algorithm, located in directory passed as $1
-# note: make sure conda srbench environment is installed 
+# install one algorithm with micromamba, located in directory passed as $1
 set -e
-
-# script to read yaml
-function parse_yaml {
-   local prefix=$2
-   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-   sed -ne "s|^\($s\):|\1|" \
-        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
-        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-   awk -F$fs '{
-      indent = length($1)/2;
-      vname[indent] = $2;
-      for (i in vname) {if (i > indent) {delete vname[i]}}
-      if (length($3) > 0) {
-         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
-      }
-   }'
-}
 
 
 SUBNAME=$(basename $1)
 SUBFOLDER="$(dirname $1)/${SUBNAME}"
-SUBENV="srbench-$SUBNAME"
-# SUBENV="base"
+SUBENV="base"
 
 echo "SUBNAME: ${SUBNAME} ; SUBFOLDER: ${SUBFOLDER}"
 
-install_base() {
-    # install base srbench environment if it doesn't exist
-    if conda info --envs | grep srbench | grep -v "srbench-"; then 
-        echo "existing base srbench environment (not installing)"; 
-    else 
-        echo "installing base srbench environment"
-
-        mamba env create -f base_environment.yml
-
-        eval "$(conda shell.bash hook)"
-
-        conda init bash
-    fi
-}
 
 
 echo "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo ".................... Installing $SUBNAME ..."
 
-
-build_clone_base_env="yes"
-########################################
-# read yaml
-eval $(parse_yaml $SUBFOLDER/metadata.yml)
-########################################
-
-echo "build_clone_base_env: ${build_clone_base_env}"
-# if [ ${build_clone_base_env} == "yes" ] && [ ! -f "${SUBFOLDER}/environment-lock.yml" ] ; then
-
-#     echo "........................................"
-#     echo "Cloning base environment"
-#     echo "........................................"
-
-#     if conda info --envs | grep -q $SUBENV ; then 
-#         echo "not cloning base because ${SUBENV} already exists"
-#     else
-#         install_base
-#         conda create --name $SUBENV --clone srbench
-#         # update from base environment
-#         if test -f "${SUBFOLDER}/environment.yml" ; then
-#             echo "Update alg env from environment.yml"
-#             echo "........................................"
-#             mamba env update -n $SUBENV -f ${SUBFOLDER}/environment.yml
-#         fi
-#     fi
-# else
-
 echo "........................................"
-echo "Creating environment ${SUBENV} from scratch"
+echo "Creating environment"
 echo "........................................"
-if test -f "${SUBFOLDER}/environment-lock.yml" ; then 
-    echo "using ${SUBFOLDER}/environment-lock.yml"
-    mamba env update -n $SUBENV --file ${SUBFOLDER}/environment-lock.yml
+add_base_env=true
+if test -f "${SUBFOLDER}/environment.lock" ; then 
+    echo "using ${SUBFOLDER}/environment.lock"
+    micromamba install -n base -y -f ${SUBFOLDER}/environment.lock
+    add_base_env=false
 elif test -f "${SUBFOLDER}/environment.yml" ; then 
     echo "using ${SUBFOLDER}/environment.yml ... "
-    mamba env update -n $SUBENV -f ${SUBFOLDER}/environment.yml
-# else 
-#     echo "creating blank environment..."
-#     mamba create --name $SUBENV
+    micromamba install -n base -y -f ${SUBFOLDER}/environment.yml
 fi
-# fi
-
 if test -f "${SUBFOLDER}/requirements.txt" ; then
     echo "Update alg env from requirements.txt"
     echo "........................................"
-    mamba run -n ${SUBENV} pip install -r ${SUBFOLDER}/requirements.txt
+    micromamba install -n base -y -c conda-forge pip
+    pip install -r ${SUBFOLDER}/requirements.txt
+    pip cache purge
 fi
 
-cd $SUBFOLDER
-if test -f "install.sh" ; then
+if $add_base_env ; then
+    micromamba install -n base -y -f base_environment.yml
+fi
+
+if test -f "${SUBFOLDER}/install.sh" ; then
     echo "running install.sh..."
     echo "........................................"
-    mamba run -n $SUBENV bash install.sh
+    cd $SUBFOLDER
+    micromamba run -n base bash install.sh
+    cd -
 else
     echo "::warning::No install.sh file found in ${SUBFOLDER}."
     echo " Assuming the method is a conda package specified in environment.yml."
 fi
-cd -
-
-# update with base package dependencies
-mamba env update -n $SUBENV -f base_environment.yml
 
 # export env
 echo "Exporting environment"
 echo "........................................"
-# conda env export -n $SUBENV > $SUBFOLDER/environment.lock.yml
-conda env export -n $SUBENV > $SUBFOLDER/environment.lock.yml
-conda env export -n $SUBENV 
+# conda env export > $SUBFOLDER/environment.lock.yml
+micromamba env export --explicit --md5 > $SUBFOLDER/environment.lock
 echo "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"

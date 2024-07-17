@@ -19,11 +19,11 @@ algorithms=$(ls algorithms/)
 
 for alg in ${algorithms[@]} ; do
     # allow user to specify their own Dockerfile. 
-    # otherwise use the default one (argDockerfile)
+    # otherwise use the default one (alg-Dockerfile)
     if test -f "./algorithms/${alg}/Dockerfile" ; then
       dockerfile="./algorithms/${alg}/Dockerfile" 
     else
-      dockerfile="argDockerfile"
+      dockerfile="alg-Dockerfile"
     fi
 
     cat <<EOF >> docker-compose.yml

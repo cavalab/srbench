@@ -1,47 +1,57 @@
+#################################################################################
+## Notes: this image is large and many improvements are possible. 
+## Sources:
+## - https://uwekorn.com/2021/03/01/deploying-conda-environments-in-docker-how-to-do-it-right.html
+## - https://pythonspeed.com/articles/conda-docker-image-size/
+## micromamba is failing for PySR, so sticking with mambaforge for now.
+## FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
+##FROM condaforge/mambaforge:4.11.0-2 as base
+## FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
+#FROM condaforge/miniforge-pypy3:23.11.0-0 AS base
+#################################################################################
+## Nvidia code ##################################################################
+#################################################################################
+#ENV PATH /usr/local/nvidia/bin/:$PATH
+#ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:$LD_LIBRARY_PATH
+## Tell nvidia-docker the driver spec that we need as well as to
+## use all available devices, which are mounted at /usr/local/nvidia.
+## The LABEL supports an older version of nvidia-docker, the env
+## variables a newer one.
+#ENV NVIDIA_VISIBLE_DEVICES all
+#ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+#LABEL com.nvidia.volumes.needed="nvidia_driver"
 ################################################################################
-# Notes: this image is large and many improvements are possible. 
-# Sources:
-# - https://uwekorn.com/2021/03/01/deploying-conda-environments-in-docker-how-to-do-it-right.html
-# - https://pythonspeed.com/articles/conda-docker-image-size/
-# micromamba is failing for PySR, so sticking with mambaforge for now.
-# FROM --platform=linux/amd64 mambaorg/micromamba:0.21.2 as build
-#FROM condaforge/mambaforge:4.11.0-2 as base
-# FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
-FROM condaforge/miniforge-pypy3:23.11.0-0 AS base
-################################################################################
-# Nvidia code ##################################################################
-################################################################################
-ENV PATH /usr/local/nvidia/bin/:$PATH
-ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:$LD_LIBRARY_PATH
-# Tell nvidia-docker the driver spec that we need as well as to
-# use all available devices, which are mounted at /usr/local/nvidia.
-# The LABEL supports an older version of nvidia-docker, the env
-# variables a newer one.
-ENV NVIDIA_VISIBLE_DEVICES all
-ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-LABEL com.nvidia.volumes.needed="nvidia_driver"
-################################################################################
+FROM mambaorg/micromamba:1.5.8
 
 # Install base packages.
 USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# proxy for apt
+# # proxy for apt
 # ENV MIRROR="mirrors\.ocf\.berkeley\.edu"
 
 # RUN sed -i -e "s/archive\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
 # RUN sed -i -e "s/security\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
-RUN sed -i -e "s/http/https/" /etc/apt/sources.list
+# RUN sed -i -e "s/http/https/" /etc/apt/sources.list
+#
+# ENV MIRROR="debian\.csail\.mit\.edu"
+# ENV MIRROR="us\.debian\.org"
+# ENV MIRROR="debian\.cc\.lehigh\.edu"
+# ENV MIRROR="debian\.cs\.binghamton\.edu"
+# ENV MIRROR="debian\.mirror\.constant\.com"
 
+# RUN sed -i -e "s/deb\.debian\.org/${MIRROR}/" /etc/apt/sources.list.d/debian.sources
+RUN sed -i -e "s/http/https/" /etc/apt/sources.list.d/debian.sources
+# COPY debian.sources /etc/apt/list/sources.list.d/
 RUN apt update \
-    && apt install -y \
-        default-jdk \
+     && apt install -y \
+        # default-jdk \
         rsync \
         # bzip2 \
         # ca-certificates \
         curl \
-        # git \
+        git \
         # wget \
         build-essential \
         libgmp3-dev \
@@ -49,15 +59,14 @@ RUN apt update \
         liblapack-dev \
         libgsl-dev \
         vim \
-        jq \
+        # jq \
     && rm -rf /var/lib/apt/lists/*
+
+USER $MAMBA_USER
 
 # Install env
 ################################################################################
 #USER $MAMBA_USER
-SHELL ["/bin/bash", "-c"]
-##VOLUME ["/srbench"]
-#RUN mkdir /srbench
-#WORKDIR "/srbench"
-#COPY base_environment-lock.yml . 
-#RUN mamba env create -f base_environment-lock.yml
+# SHELL ["/bin/bash", "-c"]
+#VOLUME ["/srbench"]
+# WORKDIR "/srbench"
