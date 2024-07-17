@@ -72,7 +72,7 @@ jobs:
       - 
         name: Update lock file
         run: |
-          docker compose run ${{ matrix.alg }} "bash cat /install/environment.lock" > algorithms/${{ matrix.alg }}/environment.lock
+          docker compose run ${{ matrix.alg }} "bash cat /install/${{ matrix.alg }}/environment.lock" > algorithms/${{ matrix.alg }}/environment.lock
       ################################################################################
       # tests
       ################################################################################
