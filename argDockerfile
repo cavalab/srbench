@@ -1,46 +1,30 @@
 FROM srbench/base AS build
+# FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
 ################################################################################
 
 # Install env
 ARG ALGORITHM
+ENV ALGORITHM=$ALGORITHM
 SHELL ["/bin/bash", "-c"]
 WORKDIR "/install"
 COPY base_environment.yml install_algorithm.sh . 
 COPY ./algorithms/${ALGORITHM} ./${ALGORITHM}
-RUN bash install_algorithm.sh $ALGORITHM
-
-
-# Install conda-pack:
 RUN ulimit -n 128000 && \
-    mamba install -y conda-pack
-
-# Use conda-pack to create a standalone enviornment
-# in /venv:
-RUN conda-pack -n srbench-$ALGORITHM -o /tmp/env.tar && \
-    mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
-    rm /tmp/env.tar
-
-# # We've put venv in same path it'll be in final image,
-# # so now fix up paths:
-RUN /venv/bin/conda-unpack
+    bash install_algorithm.sh $ALGORITHM && \
+    mamba clean -y -a
 
 
-# The runtime-stage image
-FROM ubuntu:20.04 AS runtime
-################################################################################
-
-# Copy /venv from the previous stage:
-COPY --from=build /venv /venv
-
-ARG ALGORITHM
-ENV ALGORITHM=$ALGORITHM
-# When image is run, run the code with the environment
-# activated:
+ENV CONDA_DEFAULT_ENV srbench-$ALGORITHM
+ENV CONDA_TARGET_ENV=srbench-$ALGORITHM
+RUN mamba init bash && echo 'conda activate "${CONDA_TARGET_ENV:-base}"' >>  ~/.bashrc
+ENV ALGO=$ALGORITHM
+#ENTRYPOINT ["/bin/bash", "-c", "mamba", "run", "-n", ${ALGORITHM}, "/bin/sh", "-c"]
+# ENTRYPOINT ["/bin/bash", "-c"]
+#ENTRYPOINT mamba run -n $ALGORITHM /bin/sh -c
+# copy algorithm files
+#COPY scripts/link_algorithm_files.sh ./
+# WORKDIR "/"
 COPY entry.sh /
 RUN chmod +x /entry.sh
-
-SHELL ["/bin/bash", "-c"]
-ENTRYPOINT ["/entry.sh"]
-CMD ["/bin/bash", "-c"]
-
+ENTRYPOINT ["/entry.sh", "/bin/bash", "-c"]
 WORKDIR "/srbench"

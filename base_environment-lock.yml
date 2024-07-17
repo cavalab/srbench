@@ -1,7 +1,3 @@
-name: srbench
-channels:
-  - conda-forge
-dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
   - alsa-lib=1.2.10=hd590300_0

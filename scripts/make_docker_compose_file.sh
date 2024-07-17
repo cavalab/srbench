@@ -3,7 +3,6 @@
 # run from repo root directory as 
 #   bash scripts/make_dockerfile.sh
 
-cat Dockerfile-template > autoDockerfile
 cat <<EOF > docker-compose.yml
 services:
   base:

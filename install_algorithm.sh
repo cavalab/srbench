@@ -24,6 +24,7 @@ function parse_yaml {
 SUBNAME=$(basename $1)
 SUBFOLDER="$(dirname $1)/${SUBNAME}"
 SUBENV="srbench-$SUBNAME"
+# SUBENV="base"
 
 echo "SUBNAME: ${SUBNAME} ; SUBFOLDER: ${SUBFOLDER}"
 
@@ -54,41 +55,40 @@ eval $(parse_yaml $SUBFOLDER/metadata.yml)
 ########################################
 
 echo "build_clone_base_env: ${build_clone_base_env}"
-if [ ${build_clone_base_env} == "yes" ] && [ ! -f "${SUBFOLDER}/environment-lock.yml" ] ; then
+# if [ ${build_clone_base_env} == "yes" ] && [ ! -f "${SUBFOLDER}/environment-lock.yml" ] ; then
 
-    echo "........................................"
-    echo "Cloning base environment"
-    echo "........................................"
+#     echo "........................................"
+#     echo "Cloning base environment"
+#     echo "........................................"
 
-    if conda info --envs | grep -q $SUBENV ; then 
-        echo "not cloning base because ${SUBENV} already exists"
-    else
-        install_base
-        conda create --name $SUBENV --clone srbench
-        # update from base environment
-        if test -f "${SUBFOLDER}/environment.yml" ; then
-            echo "Update alg env from environment.yml"
-            echo "........................................"
-            mamba env update -n $SUBENV -f ${SUBFOLDER}/environment.yml
-        fi
-    fi
-else
+#     if conda info --envs | grep -q $SUBENV ; then 
+#         echo "not cloning base because ${SUBENV} already exists"
+#     else
+#         install_base
+#         conda create --name $SUBENV --clone srbench
+#         # update from base environment
+#         if test -f "${SUBFOLDER}/environment.yml" ; then
+#             echo "Update alg env from environment.yml"
+#             echo "........................................"
+#             mamba env update -n $SUBENV -f ${SUBFOLDER}/environment.yml
+#         fi
+#     fi
+# else
 
-    echo "........................................"
-    echo "Creating environment ${SUBENV} from scratch"
-    echo "........................................"
-    if test -f "${SUBFOLDER}/environment-lock.yml" ; then 
-        echo "using ${SUBFOLDER}/environment-lock.yml"
-        mamba env create -n $SUBENV --file ${SUBFOLDER}/environment-lock.yml
-    elif test -f "${SUBFOLDER}/environment.yml" ; then 
-        echo "using ${SUBFOLDER}/environment.yml ... "
-        mamba env create -n $SUBENV -f ${SUBFOLDER}/environment.yml
-    else 
-        echo "creating blank environment..."
-        mamba create --name $SUBENV
-    fi
+echo "........................................"
+echo "Creating environment ${SUBENV} from scratch"
+echo "........................................"
+if test -f "${SUBFOLDER}/environment-lock.yml" ; then 
+    echo "using ${SUBFOLDER}/environment-lock.yml"
+    mamba env update -n $SUBENV --file ${SUBFOLDER}/environment-lock.yml
+elif test -f "${SUBFOLDER}/environment.yml" ; then 
+    echo "using ${SUBFOLDER}/environment.yml ... "
+    mamba env update -n $SUBENV -f ${SUBFOLDER}/environment.yml
+# else 
+#     echo "creating blank environment..."
+#     mamba create --name $SUBENV
 fi
-
+# fi
 
 if test -f "${SUBFOLDER}/requirements.txt" ; then
     echo "Update alg env from requirements.txt"
@@ -107,6 +107,8 @@ else
 fi
 cd -
 
+# update with base package dependencies
+mamba env update -n $SUBENV -f base_environment.yml
 
 # export env
 echo "Exporting environment"

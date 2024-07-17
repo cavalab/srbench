@@ -28,10 +28,10 @@ USER root
 ARG DEBIAN_FRONTEND=noninteractive
 
 # proxy for apt
-ENV MIRROR="mirrors\.ocf\.berkeley\.edu"
+# ENV MIRROR="mirrors\.ocf\.berkeley\.edu"
 
-RUN sed -i -e "s/archive\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
-RUN sed -i -e "s/security\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
+# RUN sed -i -e "s/archive\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
+# RUN sed -i -e "s/security\.ubuntu\.com/${MIRROR}/" /etc/apt/sources.list
 RUN sed -i -e "s/http/https/" /etc/apt/sources.list
 
 RUN apt update \
@@ -56,8 +56,8 @@ RUN apt update \
 ################################################################################
 #USER $MAMBA_USER
 SHELL ["/bin/bash", "-c"]
-#VOLUME ["/srbench"]
-RUN mkdir /srbench
-WORKDIR "/srbench"
-COPY base_environment-lock.yml . 
-RUN mamba env create -f base_environment-lock.yml
+##VOLUME ["/srbench"]
+#RUN mkdir /srbench
+#WORKDIR "/srbench"
+#COPY base_environment-lock.yml . 
+#RUN mamba env create -f base_environment-lock.yml

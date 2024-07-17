@@ -12,7 +12,7 @@ def read_file(filename, label='target', use_dataframe=True, sep=None):
     print('compression:',compression)
     print('filename:',filename)
 
-    input_data = pd.read_csv(filename, sep=sep, compression=compression)
+    input_data = pd.read_csv(filename, sep=sep, compression=compression, engine='python')
      
     # clean up column names
     clean_names = {k:k.strip().replace('.','_') for k in input_data.columns}

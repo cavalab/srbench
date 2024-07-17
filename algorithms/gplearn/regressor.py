@@ -37,3 +37,11 @@ def model(est):
 def complexity(est):
     #TODO: check
     return len(re.split('\(|,',model(est)))
+
+# define eval_kwargs.
+eval_kwargs = dict(
+                   test_params = {
+                       'generations': 5,
+                       'population_size': 10
+                     }
+                  )
