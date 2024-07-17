@@ -13,20 +13,6 @@ dependencies:
     - pybind11=2.11.1
     - nlohmann_json=3.11.2
     - pybind11_json=0.2.13
-    ###
-    # srbench dependencies
-    - scikit-learn 
-    - pandas 
-    - numpy
-    - pytest
-    - sympy
-    - pyyaml
-    - pip=23.3.2
-    ###
+    - pip
     - pip:
         # - git+https://github.com/cavalab/feat.git
-      ###
-      # srbench dependencies
-        - pmlb==1.0.1.post3
-        - pytest-order
-      ###

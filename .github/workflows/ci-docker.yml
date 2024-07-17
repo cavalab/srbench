@@ -72,19 +72,19 @@ jobs:
       - 
         name: Push docker image
         run: docker compose push ${{ matrix.alg }}
-      - 
-        name: Update lock file
-        run: |
-          docker compose run ${{ matrix.alg }} cat /install/${{ matrix.alg }}/environment.lock > algorithms/${{ matrix.alg }}/environment.lock
-          if [[ -n $(git status -s) ]] ; then
-            git config user.name github-actions
-            git config user.email github-actions@github.com
-            git config pull.rebase false
-            git add algorithms/${{ matrix.alg }}/environment.lock
-            git commit -m "update ${{ matrix.alg }} environment.lock"
-            git pull 
-            git push
-          fi
+      # - 
+      #   name: Update lock file
+      #   run: |
+      #     docker compose run ${{ matrix.alg }} cat /install/${{ matrix.alg }}/environment.lock > algorithms/${{ matrix.alg }}/environment.lock
+      #     if [[ -n $(git status -s) ]] ; then
+      #       git config user.name github-actions
+      #       git config user.email github-actions@github.com
+      #       git config pull.rebase false
+      #       git add algorithms/${{ matrix.alg }}/environment.lock
+      #       git commit -m "update ${{ matrix.alg }} environment.lock"
+      #       git pull 
+      #       git push
+      #     fi
       ################################################################################
       # tests
       ################################################################################
