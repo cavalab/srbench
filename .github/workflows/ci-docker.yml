@@ -60,16 +60,15 @@ jobs:
       - 
         name: Make docker-compose.yml file
         run: bash scripts/make_docker_compose_file.sh
-      - 
-        name: Pull docker image
-        run: docker compose pull ${{ matrix.alg }}
-        continue-on-error: true
-      - 
-        name: Build docker image
-        run: docker compose build ${{ matrix.alg }}
+      # - 
+      #   name: Pull docker image
+      #   run: docker compose pull ${{ matrix.alg }}
+      # - 
+      #   name: Build docker image
+      #   run: docker compose build ${{ matrix.alg }}
       - 
         name: Test docker image
-        run: docker compose run ${{ matrix.alg }} bash test.sh
+        run: docker compose run --build ${{ matrix.alg }} bash test.sh
       - 
         name: Push docker image
         run: docker compose push ${{ matrix.alg }}
