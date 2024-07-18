@@ -13,7 +13,7 @@ dependencies:
   - pybind11
   - pip
   - pip:
-    - numpy==1.23
+    - numpy>=1.23.5
     - scikit-learn==1.1.2
     - sympy==1.11.1
     - pandas==1.5.0
