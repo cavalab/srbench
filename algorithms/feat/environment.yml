@@ -13,6 +13,7 @@ dependencies:
     - pybind11
     - nlohmann_json
     - pybind11_json
+    - pandas<=2.0
     - pip
     - pip:
         - git+https://github.com/cavalab/feat.git
