@@ -9,6 +9,7 @@ fi
 git clone https://github.com/folivetti/tir.git
 
 cd tir
+git checkout 959a315bd6a819d66536d8f91f0ff19cf00d8908
 
 # WGL NOTE: this is a temp fix until PR https://github.com/folivetti/ITEA/pull/12 is merged
 # install ghcup
