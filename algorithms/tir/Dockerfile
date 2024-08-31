@@ -61,7 +61,7 @@ RUN apt update \
         libgsl-dev \
         vim \
         # jq \
-    && apt -t experimental install ghc cabal-install
+    && apt -t experimental install ghc cabal-install \
     && rm -rf /var/lib/apt/lists/*
 
 USER $MAMBA_USER
