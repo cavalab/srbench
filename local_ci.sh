@@ -59,6 +59,7 @@ conda activate $SUBENV
 conda env list 
 conda info 
 python -m pytest -v test_algorithm.py --ml $SUBNAME
+python -m pytest -v test_population.py --ml $SUBNAME
 
 # Store Competitor
 # cd ..
