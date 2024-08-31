@@ -29,12 +29,14 @@ You can leverage this code base and previous experimental results to do so.
 - If your method uses a random seed, it should have a `random_state` attribute that can be set.
 - Methods must have their own folders in the `algorithms` directory (e.g., `algorithms/feat`). 
 This folder should contain:
-  1. `metadata.yml` (**required**): A file describing your submission, following the descriptions in [submission/feat-example/metadata.yml][metadata]. 
-  2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. See [submission/feat-example/regressor.py][regressor] for complete documentation. 
+  1. `metadata.yml` (**required**): A file describing your submission, following the descriptions in [algorithms/feat/metadata.yml][metadata]. 
+  2. `regressor.py` (**required**): a Python file that defines your method, named appropriately. See [algorithms/feat/regressor.py][regressor] for complete documentation. 
       It should contain:
       -   `est`: a sklearn-compatible `Regressor` object. 
       -   `model(est, X=None)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model. It can optionally take the training data as an input argument. See [guidance below](###-returning-a-sympy-compatible-model-string). 
       -   `eval_kwargs` (optional): a dictionary that can specify method-specific arguments to `evaluate_model.py`.
+      -   `get_population(est) --> List[RegressorMixin]`: a function that return a list of at most 100 expressions, if using pareto front, population-based optimization, beam search, or any strategy that allows your algorithm to explore several expressions. If this is not valid for your algorithm, you can just wrap the estimator in a list (_i.e._, `return [est]`). Every element from the returned list must be a compatible `Regressor`, meaning that calling `predict(X)` should work, as well as your custom `model(est, X=None)` method for getting a string representation.
+      -   `get_best_solution(est)`: should provide an easy way of accessing the best solution from the current population, if this feature is valid for your algorithm. If not, then return the estimator itself `return est`.
   3. `LICENSE` *(optional)* A license file
   4. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
   It will be used to update the baseline environment (`environment.yml` in the root directory). 
