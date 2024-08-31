@@ -45,7 +45,8 @@ This folder should contain:
   5. `requirements.txt` *(optional)*: a pypi requirements file. The script will run `pip install -r requirements.txt` if this file is found, before proceeding.
   5. `install.sh` *(optional)*: a bash script that installs your method. 
   **Note: scripts should not require sudo permissions. The library and include paths should be directed to conda environment; the environmental variable `$CONDA_PREFIX` specifies the path to the environment.
-  6. **do not include your source code**. use `install.sh` to pull it from a stable source repository. 
+  6. `Dockerfile` *(optional)*: we will try to dockerize all algorithms. You can optionally have a `Dockerfile` inside your `algorithms/your-submission` folder to describe specific images for running your algorithm. If no file is provided, it will use `alg-Dockerfile` for your container. You can specify the image as you like, as long as you have as minimal dependences the python packages described in `base_environment.yml`, as they are used to run the experiment scripts. See [algorithms/tir/Dockerfile][this example] in case you want to use a custom image. *Notice that there is a workflow to build the docker images and push them to dockerhub*.
+  7. **do not include your source code**. use `install.sh` to pull it from a stable source repository. 
 
 ### model compatibility with sympy
 
@@ -65,3 +66,5 @@ def model(est, X):
 ```
 
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
+
+### using populations

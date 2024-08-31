@@ -118,6 +118,16 @@ done
 
 **Output**: next to each `.json` file, an additional file named `.json.updated` is saved with the symbolic assessment included. 
 
+### For docker users
+
+When a new algorithm is submitted to SRBench, a GitHub workflow will generate a docker image and push it to [Docker Hub](hub.docker.com). Ths means that you can also easily pull the images, without having to deal with local installations.
+
+To use docker, you first run `scripts/make_docker_compose_file.sh`. Then `docker compose up` should create the images.
+
+You can now submit arbitrary python commands to the image, _e.g._ `docker compose run feat bash test.sh`
+
+Or you can enter bash mode using an image with `docker compose run feat bash`
+
 ### Post-processing
 
 Navigate to the [postprocessing](postprocessing) folder to begin postprocessing the experiment results. 
