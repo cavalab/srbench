@@ -43,7 +43,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # RUN sed -i -e "s/deb\.debian\.org/${MIRROR}/" /etc/apt/sources.list.d/debian.sources
 RUN sed -i -e "s/http/https/" /etc/apt/sources.list.d/debian.sources
-RUN echo "deb http://ftp.debian.org/debian experimental main contrib non-free" >> /etc/apt/sources.list.d/experimental.list
+#RUN echo "deb http://ftp.debian.org/debian experimental main contrib non-free" >> /etc/apt/sources.list.d/experimental.list
 # COPY debian.sources /etc/apt/list/sources.list.d/
 RUN apt update \
      && apt install -y \
@@ -60,8 +60,10 @@ RUN apt update \
         liblapack-dev \
         libgsl-dev \
         vim \
+        ghc \
+        cabal-install \
         # jq \
-    && apt -t experimental install ghc cabal-install \
+    #&& apt -t experimental install ghc cabal-install \
     && rm -rf /var/lib/apt/lists/*
 
 USER $MAMBA_USER
