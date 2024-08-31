@@ -2,7 +2,7 @@ import sys
 import os
 import pyTIR as tir
 from itertools import product
-os.environ["LD_LIBRARY_PATH"] = os.environ["CONDA_PREFIX"] + "/lib"
+#os.environ["LD_LIBRARY_PATH"] = os.environ["CONDA_PREFIX"] + "/lib"
 
 hyper_params = [
     {
