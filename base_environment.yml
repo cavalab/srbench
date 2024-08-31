@@ -1,17 +1,12 @@
-name: srbench
 channels:
   - conda-forge
+  - defaults
 dependencies:
-  - python
   - scikit-learn 
   - pandas 
   - numpy
-  - jupyter
   - pytest
-  - matplotlib
   - sympy
-  - ipdb
-  - seaborn
   - pyyaml
   - pip 
   - pip:

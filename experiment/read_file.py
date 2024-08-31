@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 
 def read_file(filename, label='target', use_dataframe=True, sep=None):
     

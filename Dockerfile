@@ -19,7 +19,10 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 LABEL com.nvidia.volumes.needed="nvidia_driver"
 ################################################################################
-
+ENV http_proxy="http://proxy.tch.harvard.edu:3128"
+ENV https_proxy=http://proxy.tch.harvard.edu:3128
+ENV HTTPS_PROXY=http://proxy.tch.harvard.edu:3128
+ENV HTTP_PROXY=http://proxy.tch.harvard.edu:3128
 # Install base packages.
 USER root
 
@@ -33,6 +36,7 @@ RUN apt update && apt install -y \
     curl \
     # git \
     # wget \
+    build-essential \
     vim \
     jq && \
     rm -rf /var/lib/apt/lists/*
@@ -42,4 +46,26 @@ RUN apt update && apt install -y \
 USER $MAMBA_USER
 SHELL ["/bin/bash", "-c"]
 COPY . .
-RUN bash install.sh 
+RUN mamba env create -f base_environment.yml
+# RUN bash install.sh
+RUN bash install.sh  afp
+RUN bash install.sh  bingo
+RUN bash install.sh  e2et
+RUN bash install.sh  eplex
+RUN bash install.sh  eql
+RUN bash install.sh  feat
+RUN bash install.sh  ffx
+RUN bash install.sh  geneticengine
+RUN bash install.sh  gpgomea
+RUN bash install.sh  gplearn
+RUN bash install.sh  gpzgd
+RUN bash install.sh  itea
+RUN bash install.sh  operon
+RUN bash install.sh  ps-tree
+RUN bash install.sh  pysr
+RUN bash install.sh  qlattice
+RUN bash install.sh  rils-rols
+USER root
+RUN apt install -y libgmp3-dev
+USER $MAMBA_USER
+RUN bash install.sh  tir

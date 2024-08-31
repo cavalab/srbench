@@ -1,0 +1,14 @@
+FROM srbench/base AS build
+################################################################################
+
+# Install env
+ARG ALGORITHM
+ENV ALGORITHM=$ALGORITHM
+WORKDIR "/install"
+COPY --chown=$MAMBA_USER:$MAMBA_USER base_environment.yml install_algorithm.sh . 
+COPY --chown=$MAMBA_USER:$MAMBA_USER ./algorithms/${ALGORITHM} ./${ALGORITHM}
+ARG MAMBA_DOCKERFILE_ACTIVATE=1     
+RUN bash install_algorithm.sh $ALGORITHM \
+    && micromamba clean --all --yes
+WORKDIR "/srbench"
+USER root

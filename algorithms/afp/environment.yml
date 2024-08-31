@@ -1,4 +1,4 @@
-name: ellyn-env
+name: srbench-afp
 channels:
     - conda-forge
 dependencies:
@@ -10,7 +10,3 @@ dependencies:
     - pip
     - pip:
         - DistanceClassifier
-    # - setuptools=45.*
-    # - wheel=0.35.*
-    # - pip=20.*
-    # - pip:

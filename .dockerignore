@@ -1,19 +1,24 @@
-docker-compose.yml
-*.lock.yml
-.idea
-results_*/
-*.swp
-tmp_*
+# Git
+.git
+.gitignore
+.gitattributes
+
+
+# CI
+.codeclimate.yml
+.travis.yml
+.taskcluster.yml
+
+# Docker
+.docker
+.dockerignore
+
 # Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+**/__pycache__/
+**/*.py[cod]
 
 # C extensions
 *.so
-
-# json
-*.json
 
 # Distribution / packaging
 .Python
@@ -23,13 +28,11 @@ develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
 lib/
 lib64/
 parts/
 sdist/
 var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -48,12 +51,9 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
-.coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*.cover
-.hypothesis/
 
 # Translations
 *.mo
@@ -61,14 +61,6 @@ coverage.xml
 
 # Django stuff:
 *.log
-local_settings.py
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
 
 # Sphinx documentation
 docs/_build/
@@ -76,35 +68,21 @@ docs/_build/
 # PyBuilder
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# celery beat schedule file
-celerybeat-schedule
-
-# SageMath parsed files
-*.sage.py
-
-# dotenv
-.env
-
-# virtualenv
-.venv
+# Virtual environment
+.venv/
 venv/
-ENV/
 
-# Spyder project settings
-.spyderproject
-.spyproject
+# PyCharm
+.idea
 
-# Rope project settings
+# Python mode for VIM
 .ropeproject
+**/.ropeproject
 
-# mkdocs documentation
-/site
+# Vim swap files
+**/*.swp
 
-# mypy
-.mypy_cache/
+# VS Code
+.vscode/
+
+*.log

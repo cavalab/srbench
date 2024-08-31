@@ -1,0 +1,84 @@
+name: Docker CI
+
+# Controls when the action will run. 
+on:
+  push:
+    branches:
+      - docker-compose
+  #   paths:
+  #     - 'algorithms/**'
+  #     - 'experiment/**'
+  #     - '.github/workflows/**'
+  # pull_request:
+  #   paths:
+  #     - 'algorithms/**'
+  #     - 'experiment/**'
+  #     - '.github/workflows/**'
+  # workflow_dispatch:
+
+# env:
+#   USER: ${{ secrets.DOCKER_HUB_USERNAME }}
+#   PASS: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+#   APP: srbench
+
+jobs:
+  ################################################################################
+  # get a list of algorithms
+  ################################################################################
+  list-algs:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: set-matrix
+        run: echo "::set-output name=matrix::$(ls algorithms/ | jq -R -s -c 'split("\n")[:-1]')"
+  
+  ################################################################################
+  # build each algorithm in parallel and run tests
+  ################################################################################
+  build-and-test:
+    runs-on: ubuntu-latest
+    needs: 
+      - list-algs
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      matrix:
+        alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - 
+        name: Checkout code
+        uses: actions/checkout@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_KEY }}
+      - 
+        name: Make docker-compose.yml file
+        run: bash scripts/make_docker_compose_file.sh
+      # - 
+      #   name: Pull docker image
+      #   run: docker compose pull ${{ matrix.alg }}
+      # - 
+      #   name: Build docker image
+      #   run: docker compose build ${{ matrix.alg }}
+      - 
+        name: Test docker image
+        run: docker compose run --build ${{ matrix.alg }} bash test.sh
+      - 
+        name: Push docker image
+        run: docker compose push ${{ matrix.alg }}
+      ################################################################################
+      # tests
+      ################################################################################
+      # -
+      #   name: Test Method
+      #   run: |
+      #     docker compose run ${{ matrix.alg }} bash test.sh
+      # - 
+      #   name: Push docker image
+      #   run: docker compose push ${{ matrix.alg }}

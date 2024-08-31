@@ -2,18 +2,18 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - python=3.10
-    - cmake
+    - python=3.10.13
+    - cmake=3.28.2
     # - gcc
     # - gxx
-    - ninja
-    - eigen
+    - ninja=1.11.1
+    - eigen=3.4.0
     - shogun-cpp=6.1.4
-    - wheel
-    - pybind11
-    - nlohmann_json
-    - pybind11_json
+    - wheel=0.42.0
+    - pybind11=2.11.1
+    - nlohmann_json=3.11.2
+    - pybind11_json=0.2.13
     - pandas<=2.0
     - pip
     - pip:
-        - git+https://github.com/cavalab/feat.git
+      - git+https://github.com/cavalab/feat.git

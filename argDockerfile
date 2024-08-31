@@ -1,0 +1,30 @@
+FROM srbench/base AS build
+# FROM condaforge/miniforge-pypy3:24.3.0-0 AS base
+################################################################################
+
+# Install env
+ARG ALGORITHM
+ENV ALGORITHM=$ALGORITHM
+SHELL ["/bin/bash", "-c"]
+WORKDIR "/install"
+COPY base_environment.yml install_algorithm.sh . 
+COPY ./algorithms/${ALGORITHM} ./${ALGORITHM}
+RUN ulimit -n 128000 && \
+    bash install_algorithm.sh $ALGORITHM && \
+    mamba clean -y -a
+
+
+ENV CONDA_DEFAULT_ENV srbench-$ALGORITHM
+ENV CONDA_TARGET_ENV=srbench-$ALGORITHM
+RUN mamba init bash && echo 'conda activate "${CONDA_TARGET_ENV:-base}"' >>  ~/.bashrc
+ENV ALGO=$ALGORITHM
+#ENTRYPOINT ["/bin/bash", "-c", "mamba", "run", "-n", ${ALGORITHM}, "/bin/sh", "-c"]
+# ENTRYPOINT ["/bin/bash", "-c"]
+#ENTRYPOINT mamba run -n $ALGORITHM /bin/sh -c
+# copy algorithm files
+#COPY scripts/link_algorithm_files.sh ./
+# WORKDIR "/"
+COPY entry.sh /
+RUN chmod +x /entry.sh
+ENTRYPOINT ["/entry.sh", "/bin/bash", "-c"]
+WORKDIR "/srbench"
