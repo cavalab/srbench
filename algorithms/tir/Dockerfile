@@ -12,6 +12,7 @@ RUN apt update && apt install -y \
     libgsl-dev \
     ghc \
     cabal-install \
+    pkg-config \
     && \
     rm -rf /var/lib/apt/lists/*
 
