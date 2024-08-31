@@ -12,4 +12,5 @@ cd tir
 #export PATH=$PATH:~/.ghcup/bin:~/.cabal/bin 
 
 #conda activate srbench
+cabal update
 cabal install --overwrite-policy=always --installdir=./python && cd python && pip install .
