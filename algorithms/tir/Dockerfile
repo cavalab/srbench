@@ -28,15 +28,12 @@ USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+RUN sed -i -e "s/http/https/" /etc/apt/sources.list.d/debian.sources
 #RUN echo "deb http://ftp.debian.org/debian experimental main contrib non-free" >> /etc/apt/sources.list.d/experimental.list
 RUN apt update && apt install -y \
     default-jdk \
     rsync \
-    # bzip2 \
-    # ca-certificates \
     curl \
-    # git \
-    # wget \
     build-essential \
     vim \
     git \
