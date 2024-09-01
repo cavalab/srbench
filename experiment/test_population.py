@@ -24,7 +24,7 @@ if 'MKL_NUM_THREADS' not in os.environ.keys():
 def test_population(ml):
     """Sympy compatibility of model string"""
 
-    dataset = '192_vineyard_small'
+    dataset = 'test/192_vineyard_small.tsv.gz'
     random_state = 42
 
     algorithm = importlib.__import__(f'methods.{ml}.regressor',globals(),
@@ -33,8 +33,6 @@ def test_population(ml):
 
     algorithm.get_population,
 
-    dataset_name = dataset.split('/')[-1][:-7]
-    
     features, labels, feature_names =  read_file(
         dataset, 
         use_dataframe=True
@@ -47,6 +45,7 @@ def test_population(ml):
                                                     test_size=0.25,
                                                     random_state=random_state)
     
+    # Few samples to try to make it quick
     sample_idx = np.random.choice(np.arange(len(X_train)), size=10)
     
     y_train = y_train[sample_idx]
