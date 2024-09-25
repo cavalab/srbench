@@ -1,24 +1,22 @@
 name: gpg
 channels:
   - conda-forge
+  - nodefaults
 dependencies:
-  - pkgconfig
-  - boost
-  - armadillo=9.900.4
   - make
-  - cmake=3.28.1
-  - python=3.10
+  - cmake=3
+  - python=3.11
   - eigen=3.4.0
   - python-devtools=0.9.0
   - pybind11
   - pip
   - pip:
-    - numpy>=1.23.5
-    - scikit-learn==1.1.2
-    - sympy==1.11.1
-    - pandas==1.5.0
-    - setuptools==65.4.0
-    - torch==1.13.1
-    - functorch==1.13.1
-    - sympytorch==0.1.4
-    - stopit==1.1.2
+    - numpy
+    - scikit-learn
+    - sympy
+    - pandas
+    - setuptools
+    - torch
+    - functorch
+    - sympytorch
+    - stopit
