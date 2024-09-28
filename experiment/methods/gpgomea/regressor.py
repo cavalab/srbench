@@ -1,16 +1,31 @@
-# assumes everything is installed and mgpg is available
-import sympy as sym
+from sklearn.base import RegressorMixin
 
 from pymgpg.sk import MGPGRegressor
-
-from sklearn.base import BaseEstimator, RegressorMixin
 
 
 est: RegressorMixin = MGPGRegressor(
     verbose=False,
     log=False,
-    MO_mode=True,
-    n_clusters=5,
+    MO_mode=False,
+    n_clusters=1,
+    use_optim=True,
+    log_front=False,
+    drift=True,
+    remove_duplicates=True,
+    replacement_strategy="sample",
+    pop=4096,
+    use_adf=True,
+    nr_multi_trees=4,
+    use_max_range=True,
+    ff="lsmse",
+    bs_opt=256,
+    cmp=1.0,
+    max_coeffs=-1,
+    max_non_improve=-1,
+    equal_p_coeffs=True,
+    bs=2048,
+    # only return 100 models
+    max_models=100,
 )
 
 
@@ -75,7 +90,7 @@ def get_population(est: MGPGRegressor) -> list[RegressorMixin]:
         e.models = [m]
         return e
 
-    return [make_regressor(sym.simplify(m)) for m in est.models]
+    return [make_regressor(m) for m in est.models]
 
 
 def get_best_solution(est: MGPGRegressor) -> RegressorMixin:
@@ -130,4 +145,22 @@ Options
 
 
 # define eval_kwargs.
-eval_kwargs = dict(test_params={"g": 5, "pop": 500, "verbose": True})
+eval_kwargs = dict(
+    test_params=dict(
+        g=2,
+        max_time=180,
+        verbose=True,
+    )
+)
+
+if __name__ == "__main__":
+    import pandas as pd
+
+    df = pd.read_csv("dataset/air.csv")
+    X = df.drop(columns=["target"]).to_numpy()
+    y = df["target"].to_numpy()
+
+    est.set_params(**eval_kwargs["test_params"])
+
+    est.fit(X, y)
+    print("Archive size:", len(get_population(est)))
