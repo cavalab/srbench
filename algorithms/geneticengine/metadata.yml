@@ -1,16 +1,10 @@
 authors: # the participants
-  - Guilherme Espada, Leon Ingelse, Paulo Santos, Pedro Barbosa, Alcides Fonseca
-email: gjespada@fc.ul.pt, leoningelse@gmail.com, pacsantos@fc.ul.pt, psbarbosa@ciencias.ulisboa.pt, me@alcidesfonseca.com
-name: Genetic Engine 
+  - Alcides Fonseca, Guilherme Espada, Leon Ingelse, Eduardo Madeira
+email: me@alcidesfonseca.com, gjespada@fc.ul.pt, leoningelse@gmail.com, jmadeira@lasige.di.fc.ul.pt
+name: Genetic Engine
 description:
-  Genetic Engine is a framework for using Genetic Programming in different contexts. Genetic Engine allows the user to define trees in terms of Classes and Inheritance, as they would in a regular programming environment. Our framework takes care of generating individuals, mutating them and crossing them over. The user also defines a fitness function that takes a tree and returns a fitness score. This often requires to write (or reuse) a tree interpreter, as it is custom in these types of approaches.
+  GeneticEngine is an extensible framework for implementing evolutionary algorithms. Users can write their own class structure and select the algorithm they want to run. Each algorithm will generate random trees following the class specification.
+  Currently, GeneticEngine supports several representations (tree-based, grammatical evolution, structured grammatical evolution, stack-based), several algorithms (hill-climbing, Genetic Programming, 1+1) and several operators (Tournament, Lexicase, different mutations and crossovers).
+  A distinctive feature of this framework is that it supports dependent types that semantically constraint the tree generation.
 
-  The main different between STGP and GGGP is that the restrictions on what trees are valid are done via types, while in GGGP they are expressed using a grammar. Genetic Engine extracts the grammar from the types and their relationship, allowing to use any technique from GGGP (such as Grammatical Evolution) in STGP.
-
-  The advantages of using STGP are:
-
-  * the user does not need to know grammars, EBNF or any other grammar syntax
-  * there is no need for a textual representation of programs, as trees can be the only representation (à lá lisp).
-  * there is no need for parsing a textual program to a tree, to then interpret the tree
-  * Mutations and Recombination are automatically type-safe, where in a grammar that type-safety is implicit in the structure of the grammar (and hard to reason)
 url: "https://github.com/alcides/GeneticEngine/"
