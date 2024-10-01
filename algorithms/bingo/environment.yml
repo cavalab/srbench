@@ -13,12 +13,13 @@ dependencies:
     - shogun-cpp=6.1.4
     - wheel=0.35.*
     - numpy>=1.14.3
-    - mpi4py
+    - sympy
     - pip
     - pip:
         - eigency==1.77
         - pmlb==1.*
-        - mpi4py>=2.0.0
+        - mpi4py>=2.0.0,<4.0
         - numpy>=1.14.3
         - scipy>=1.6.2
         - dill>=0.2.9
+        - smcpy>=0.1.4
