@@ -1,9 +1,12 @@
 authors: # the participants
   - Johannes Koch
   - Joe Harrison
+  - Tanja Alderliesten
+  - Peter A. N. Bosman 
 email:
   - johannes@cwi.nl
   - joe@cwi.nl
+  - peter.bosman@cwi.nl
 name: GP-GOMEA  # name of the submission /method
 description: | # anything you'd like here to describe the method.
   GP-GOMEA with modular expression trees
