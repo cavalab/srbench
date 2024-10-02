@@ -41,18 +41,17 @@ Once everything is working, participants can basically sit tight: the competitio
         -   `est`: a sklearn-compatible `Regressor` object. 
         -   `model(est, X=None)`: a function that returns a [**sympy-compatible**](https://www.sympy.org) string specifying the final model. It can optionally take the training data as an input argument. See [guidance below](###-returning-a-sympy-compatible-model-string). 
         -   `eval_kwargs` (optional): a dictionary that can specify method-specific arguments to `evaluate_model.py`.
-        
-    3. `LICENSE` *(optional)* A license file
-    4. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
+    3. We expect your algorithm to have a `max_time` parameter that lets us control the maximum execution time. When running the experiments in a cluster, we will give extra time to compensate for the overhead of initializing everything, and the maximum time will be considered only during the fit process. A signal `signal.SIGALRM` will be sent to your process if `fit(X, y)` exceeds the maximum time, and you can implement strategies to handle this signal. One idea is to store a random initial solution as the best and update it accordingly throughout the execution to make sure the `evaluate_model.py` script will find an equation to calculate the metrics and get the SymPy compatible expression.
+    4. `LICENSE` *(optional)* A license file
+    5. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
     See [submission/feat-example/environment.yml][env] for an example.
     It will be used to update the baseline environment (`environment.yml` in the root directory). 
     To the extent possible, conda should be used to specify the dependencies you need. 
     If your method is part of conda, great! You can just put that in here and leave `install.sh` blank. 
-    5. `install.sh` *(optional)*: a bash script that installs your method. 
+    6. `install.sh` *(optional)*: a bash script that installs your method. 
     **Note: scripts should not require sudo permissions. The library and include paths should be directed to conda environment; the environmental variable `$CONDA_PREFIX` specifies the path to the environment.
-    6. additional files *(optional)*: you may include a folder containing the code for your method in the submission. Otherwise, `install.sh` should pull the source code remotely. 
-
-    7. Commit your changes and submit your branch as a [pull request Competition 2022 branch][PR]. 
+    7. additional files *(optional)*: you may include a folder containing the code for your method in the submission. Otherwise, `install.sh` should pull the source code remotely. 
+    8. Commit your changes and submit your branch as a [pull request Competition 2022 branch][PR]. 
 
     8. Once the tests pass, you will be an official competitor!
 
