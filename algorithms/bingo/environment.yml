@@ -1,4 +1,4 @@
-name: Bingo
+name: srbench-bingo
 channels:
     - conda-forge
     - defaults
