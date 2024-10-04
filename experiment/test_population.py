@@ -48,8 +48,8 @@ def test_population(ml):
     # Few samples to try to make it quick
     sample_idx = np.random.choice(np.arange(len(X_train)), size=10)
     
-    y_train = y_train.iloc[sample_idx]
-    X_train = X_train.iloc[sample_idx, :]
+    y_train = y_train[sample_idx]
+    X_train = X_train.iloc[sample_idx]
 
     algorithm.est.fit(X_train, y_train)
 
@@ -59,7 +59,6 @@ def test_population(ml):
         algorithm.get_best_solution = lambda est: est
 
     population = algorithm.get_population(algorithm.est)
-
     best_model = algorithm.get_best_solution(algorithm.est)
     print(algorithm.model(best_model))
     print(algorithm.est.predict(X_train))
