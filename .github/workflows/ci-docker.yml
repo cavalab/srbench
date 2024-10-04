@@ -72,9 +72,9 @@ jobs:
       - 
         name: Test docker image
         run: docker compose run --build ${{ matrix.alg }} bash test.sh
-      - 
-        name: Push docker image
-        run: docker compose push ${{ matrix.alg }}
+      # - 
+      #   name: Push docker image
+      #   run: docker compose push ${{ matrix.alg }}
       ################################################################################
       # tests
       ################################################################################
