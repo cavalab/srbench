@@ -9,7 +9,9 @@ on:
   #     - 'algorithms/**'
   #     - 'experiment/**'
   #     - '.github/workflows/**'
-  # pull_request:
+  pull_request:
+    branches:
+      - docker-compose
   #   paths:
   #     - 'algorithms/**'
   #     - 'experiment/**'
