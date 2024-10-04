@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - docker-compose
+      - main
   #   paths:
   #     - 'algorithms/**'
   #     - 'experiment/**'
@@ -51,14 +52,14 @@ jobs:
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
       fail-fast: false
     steps:
-      - 
-        name: Checkout code
-        uses: actions/checkout@v3
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_KEY }}
+      # - 
+      #   name: Checkout code
+      #   uses: actions/checkout@v3
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_KEY }}
       - 
         name: Make docker-compose.yml file
         run: bash scripts/make_docker_compose_file.sh
