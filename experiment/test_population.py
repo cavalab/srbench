@@ -31,8 +31,6 @@ def test_population(ml):
                                         locals(),
                                     ['est','hyper_params','complexity'])
 
-    algorithm.get_population,
-
     features, labels, feature_names =  read_file(
         dataset, 
         use_dataframe=True
