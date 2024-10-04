@@ -52,9 +52,9 @@ jobs:
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
       fail-fast: false
     steps:
-      # - 
-      #   name: Checkout code
-      #   uses: actions/checkout@v3
+      - 
+        name: Checkout code
+        uses: actions/checkout@v3
       # - name: Log in to Docker Hub
       #   uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
       #   with:
