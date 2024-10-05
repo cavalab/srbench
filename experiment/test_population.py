@@ -58,7 +58,7 @@ def test_population(ml):
 
     population = algorithm.get_population(algorithm.est)
     best_model = algorithm.get_best_solution(algorithm.est)
-    print(algorithm.model(best_model))
+    print(algorithm.model(best_model, X_train))
     print(algorithm.est.predict(X_train))
 
     # assert that population has at least 1 and no more than 100 individuals
