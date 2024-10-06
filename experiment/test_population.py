@@ -65,5 +65,5 @@ def test_population(ml):
     assert 1 <= len(population) <= 100, "Population size is not within the expected range"
     
     for p in population:
-        print(algorithm.model(p))
+        print(algorithm.model(p, X_train))
         print(p.predict(X_train))
