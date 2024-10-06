@@ -41,7 +41,7 @@ est = ellyn(selection='epsilon_lexicase',
 def complexity(est):
     return len(est.best_estimator_)
 
-def model(est):
+def model(est, X=None):
     return est.stack_2_eqn(est.best_estimator_)
 
 eval_kwargs = dict(use_dataframe=False)
