@@ -6,7 +6,7 @@ def complexity(est):
     return est.get_best()["complexity"]
 
 
-def model(est):
+def model(est, X=None):
     return str(est.sympy())
 
 
