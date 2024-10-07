@@ -1,4 +1,4 @@
-name: Bingo
+name: srbench-bingo
 channels:
     - conda-forge
     - defaults
@@ -8,17 +8,18 @@ dependencies:
     - ninja
     - eigen>=3.3
     - cython=0.29.*
+    - mpi4py>=2.0.0,<4.0
     - pandas=1.1.*
     - setuptools
     - shogun-cpp=6.1.4
     - wheel=0.35.*
     - numpy>=1.14.3
-    - mpi4py
+    - sympy
     - pip
     - pip:
         - eigency==1.77
         - pmlb==1.*
-        - mpi4py>=2.0.0
         - numpy>=1.14.3
         - scipy>=1.6.2
         - dill>=0.2.9
+        - smcpy>=0.1.4
