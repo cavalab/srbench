@@ -31,7 +31,7 @@ est = SymbolicRegressor(
                        )
 
 
-def model(est):
+def model(est, X=None):
     return str(est._program)
 
 def complexity(est):

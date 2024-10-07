@@ -7,6 +7,6 @@ eval_kwargs = {'scale_x': False, 'scale_y': False}
 # if there is still that requirement (as in paper), otherwise keep 1 million. 
 est = RILSROLSRegressor(max_seconds=2*60*60, max_fit_calls=1000*1000, max_complexity=50, sample_size=0, verbose=True)
 
-def model(est):
+def model(est, X=None):
     return str(est.model_string())
 
