@@ -47,9 +47,9 @@ def test_population(ml):
     sample_idx = np.random.choice(np.arange(len(X_train)), size=10)
     
     y_train = y_train[sample_idx]
-    X_train = X_train.iloc[sample_idx].values
+    X_train = X_train.iloc[sample_idx]
 
-    algorithm.est.fit(X_train, y_train)
+    algorithm.est.fit(X_train.values, y_train)
 
     if 'get_population' not in dir(algorithm):
         algorithm.get_population = lambda est: [est]
@@ -59,11 +59,11 @@ def test_population(ml):
     population = algorithm.get_population(algorithm.est)
     best_model = algorithm.get_best_solution(algorithm.est)
     print(algorithm.model(best_model, X_train))
-    print(algorithm.est.predict(X_train))
+    print(algorithm.est.predict(X_train.values))
 
     # assert that population has at least 1 and no more than 100 individuals
     assert 1 <= len(population) <= 100, "Population size is not within the expected range"
     
     for p in population:
         print(algorithm.model(p, X_train))
-        print(p.predict(X_train))
+        print(p.predict(X_train.values))
