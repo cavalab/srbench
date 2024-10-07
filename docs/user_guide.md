@@ -118,6 +118,16 @@ done
 
 **Output**: next to each `.json` file, an additional file named `.json.updated` is saved with the symbolic assessment included. 
 
+### For docker users
+
+When a new algorithm is submitted to SRBench, a GitHub workflow will generate a docker image and push it to [Docker Hub](hub.docker.com). Ths means that you can also easily pull the images, without having to deal with local installations.
+
+To use docker, you first run `scripts/make_docker_compose_file.sh`. Then `docker compose up` should create the images.
+
+You can now submit arbitrary python commands to the image, _e.g._ `docker compose run feat bash test.sh`
+
+Or you can enter bash mode using an image with `docker compose run feat bash`
+
 ### Post-processing
 
 Navigate to the [postprocessing](postprocessing) folder to begin postprocessing the experiment results. 
@@ -142,5 +152,5 @@ python collate_groundtruth_results.py
 
 To use your own datasets, you want to check out / modify read_file in read_file.py: https://github.com/cavalab/srbench/blob/4cc90adc9c450dad3cb3f82c93136bc2cb3b1a0a/experiment/read_file.py
 
-If your datasets follow the convention of https://github.com/EpistasisLab/pmlb/tree/master/datasets, i.e. they are in a pandas DataFrame with the target column labelled "targert", you can call `read_file` directly just passing the filename like you would with any of the PMLB datasets. 
+If your datasets follow the convention of https://github.com/EpistasisLab/pmlb/tree/master/datasets, i.e. they are in a pandas DataFrame with the target column labelled "target", you can call `read_file` directly just passing the filename like you would with any of the PMLB datasets. 
 The file should be stored and compressed as a `.tsv.gz` file. 

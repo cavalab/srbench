@@ -1,15 +1,16 @@
 # This example submission shows the submission of FEAT (cavalab.org/feat). 
 from feat import FeatRegressor
+from sklearn.base import BaseEstimator, RegressorMixin
 
 """
 est: a sklearn-compatible regressor. 
     if you don't have one they are fairly easy to create. 
     see https://scikit-learn.org/stable/developers/develop.html
 """
-est = FeatRegressor(
+est:RegressorMixin = FeatRegressor(
                     pop_size=100,
                     gens=100,
-                    max_time=8*60*60,  # 8 hrs
+                    max_time=8*60*60,  # 8 hrs. Your algorithm should have this feature
                     max_depth=6,
                     verbosity=2,
                     batch_size=100,
@@ -18,7 +19,7 @@ est = FeatRegressor(
                    )
 # want to tune your estimator? wrap it in a sklearn CV class. 
 
-def model(est, X=None):
+def model(est, X=None) -> str:
     """
     Return a sympy-compatible string of the final model. 
 
@@ -65,6 +66,35 @@ def model(est, X=None):
     model_str = model_str.replace('^','**')
 
     return model_str
+
+def get_population(est) -> list[RegressorMixin]:
+    """
+    Return the final population of the model. This final population should
+    be a list with at most 100 individuals. Each of the individuals must
+    be compatible with scikit-learn, so they should have a predict method.
+
+    Also, it is expected that the `model()` function can operate with them,
+    so they should have a way of getting a simpy string representation.
+    
+    Returns
+    -------
+    A list of scikit-learn compatible estimators
+    """
+
+    return [est]
+
+
+def get_best_solution(est) -> RegressorMixin:
+    """
+    Return the best solution from the final model. 
+    
+    Returns
+    -------
+    A scikit-learn compatible estimator
+    """
+
+    return est
+
 
 ################################################################################
 # Optional Settings

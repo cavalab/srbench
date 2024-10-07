@@ -19,7 +19,7 @@ def complexity(est):
     return total_complexity
 
 
-def model(e):
+def model(e, X=None):
     return e.model()
 
 
