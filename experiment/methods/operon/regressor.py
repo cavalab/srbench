@@ -62,7 +62,8 @@ class SympyExprModel(RegressorMixin):
 
 
     def predict(self, X):
-        return self.best_estimator(*X.values.T)
+        values = X.values if isinstance(X, pd.DataFrame) else X
+        return self.best_estimator(*values.T)
 
 
 class Objective:
@@ -141,8 +142,7 @@ class OperonOptuna(BaseEstimator, RegressorMixin):
 
         # save the best solution as a SympyExprModel
         best = self.best_estimator
-        names = X.columns.tolist() if isinstance(X, pd.DataFrame) else None
-
+        names = X.columns.tolist() if isinstance(X, pd.DataFrame) else list(best.variables_.values())
         model_string = lambda x: best.get_model_string(x, 6, names).replace('^', '**')
 
         self.best_solution = SympyExprModel(model_string(best.model_), names)
