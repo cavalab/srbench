@@ -37,7 +37,7 @@ def model(e, X):
 
 def get_population(est):
     pop = []
-    for i in range(min(100, length(est.front))):
+    for i in range(min(100, len(est.front))):
         pop.append(est.create_model_from(i))
     return pop 
 
