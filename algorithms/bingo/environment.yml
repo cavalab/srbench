@@ -8,6 +8,7 @@ dependencies:
     - ninja
     - eigen>=3.3
     - cython=0.29.*
+    - mpi4py>=2.0.0,<4.0
     - pandas=1.1.*
     - setuptools
     - shogun-cpp=6.1.4
