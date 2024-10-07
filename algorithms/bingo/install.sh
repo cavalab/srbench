@@ -1,3 +1,6 @@
+# install mpi
+apt-get install -y mpich libmpich-dev
+
 # install Bingo
 git clone --recurse-submodules --depth 1 --branch v0.4.1.srbench https://github.com/nasa/bingo.git
 cd bingo
