@@ -14,5 +14,6 @@ symbolic_algs = [
     "MRGPRegressor",
     "OperonRegressor",
     "PySRRegressor",
+    "RILSROLSRegressor",
     "sembackpropgp",
 ]
