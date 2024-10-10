@@ -39,8 +39,8 @@ jobs:
           fetch-depth: 0
       - id: check
         run: |
-          echo "changed-algs=$(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2)" >> $GITHUB_OUTPUT
-          echo "unchanged-algs=$(comm -23 <(ls algorithms/) <(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2))" >> $GITHUB_OUTPUT
+          echo "::set-output name=changed-algs::$(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2)"
+          echo "::set-output name=unchanged-algs::$(comm -23 <(ls algorithms/) <(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2))"
           echo "Changed Algorithms:"
           git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2
           echo ""
