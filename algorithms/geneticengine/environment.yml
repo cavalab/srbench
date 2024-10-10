@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - python=3.12.6
-  - setuptools=62.1.0
-  - pip=22.0.4
+  - setuptools=75.1.0
+  - pip=24.2
   - pip:
       - geneticengine @ git+https://github.com/alcides/GeneticEngine.git@693bf09f861402d2c031e021e3d17cb2b71a1dd1
