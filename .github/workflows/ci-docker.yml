@@ -18,6 +18,15 @@ on:
       - '.github/workflows/**'
 
 jobs:
+  list-algs:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: set-matrix
+        run: echo "::set-output name=matrix::$(ls algorithms/ | jq -R -s -c 'split("\n")[:-1]')"
+
   check-changes:
     runs-on: ubuntu-latest
     outputs:
