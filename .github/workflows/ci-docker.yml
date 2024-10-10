@@ -71,7 +71,8 @@ jobs:
             echo "::set-output name=status::skipped"
           fi
       - name: Print should_run status
-        run: echo "Should run: ${{ steps.check_algorithm.outputs.should_run }}"
+        run: |
+          echo "Should run: ${{ steps.check_algorithm.outputs.should_run }}"
       - name: Build and Test Algorithm
         if: steps.check_algorithm.outputs.should_run == 'true'
         run: |
