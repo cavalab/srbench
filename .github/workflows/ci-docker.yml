@@ -26,6 +26,21 @@ on:
 
 jobs:
   ################################################################################
+  # Check for changed files
+  ################################################################################
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changes-detected: ${{ steps.check.outputs.changes-detected }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: check
+        run: |
+          echo "::set-output name=changes-detected::$(git diff --name-only HEAD~1..HEAD | grep -E '^algorithms/' || git diff --name-only HEAD~1..HEAD | grep -E '^experiment/methods/')"
+  
+  ################################################################################
   # get a list of algorithms
   ################################################################################
   list-algs:
@@ -43,6 +58,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     needs: 
+      - check-changes
       - list-algs
     defaults:
       run:
@@ -51,6 +67,7 @@ jobs:
       matrix:
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
       fail-fast: false
+    if: needs.check-changes.outputs.changes-detected != ''
     steps:
       - 
         name: Checkout code
