@@ -58,65 +58,54 @@ jobs:
       - id: set-matrix
         run: echo "::set-output name=matrix::$(ls algorithms/ | jq -R -s -c 'split("\n")[:-1]')"
   
-  ################################################################################
-  # build each algorithm in parallel and run tests
-  ################################################################################
-  build-and-test:
-    runs-on: ubuntu-latest
-    needs: 
-      - check-changes
-      - list-algs
-    defaults:
-      run:
-        shell: bash -l {0}
-    strategy:
-      matrix:
-        alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
-      fail-fast: false
-    steps:
-      - 
-        name: Checkout code
-        uses: actions/checkout@v3
-      - 
-        name: Check if algorithm has changed
-        id: check_algorithm
-        run: |
-          CHANGED_ALGS=$(echo "${{ needs.check-changes.outputs.changed-algs }}" | tr ',' '\n')
-          if [[ "$CHANGED_ALGS" == *"${{ matrix.alg }}"* ]]; then
-            echo "::set-output name=should_run::true"
-          else
-            echo "::set-output name=should_run::false"
-          fi
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_KEY }}
-      - 
-        name: Make docker-compose.yml file
-        if: steps.check_algorithm.outputs.should_run == 'true'
-        run: bash scripts/make_docker_compose_file.sh
-      # - 
-      #   name: Pull docker image
-      #   run: docker compose pull ${{ matrix.alg }}
-      # - 
-      #   name: Build docker image
-      #   run: docker compose build ${{ matrix.alg }}
+################################################################################
+# build each algorithm in parallel and run tests
+################################################################################
+build-and-test:
+  runs-on: ubuntu-latest
+  needs: 
+    - check-changes
+    - list-algs
+  defaults:
+    run:
+      shell: bash -l {0}
+  strategy:
+    matrix:
+      alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
+    fail-fast: false
+  if: needs.check-changes.outputs.changes-detected != ''
+  steps:
+    - 
+      name: Checkout code
+      uses: actions/checkout@v3
+    - 
+      name: Check if algorithm has changed
+      id: check_algorithm
+      run: |
+        CHANGED_ALGS=$(echo "${{ needs.check-changes.outputs.changed-algs }}" | tr ',' '\n')
+        if [[ "$CHANGED_ALGS" == *"${{ matrix.alg }}"* ]]; then
+          echo "::set-output name=should_run::true"
+        else
+          echo "::set-output name=status::skipped"
+        fi
+    -
+      name: Build and Test Algorithm
+      if: steps.check_algorithm.outputs.should_run == 'true'
+      run: |
+        # Log in to Docker Hub
+        # docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_KEY }}
 
-      - 
-        name: Test docker image
-        if: steps.check_algorithm.outputs.should_run == 'true'
-        run: docker compose run --build ${{ matrix.alg }} bash test.sh
-      # - 
-      #   name: Push docker image
-      #   run: docker compose push ${{ matrix.alg }}
-      ################################################################################
-      # tests
-      ################################################################################
-      # -
-      #   name: Test Method
-      #   run: |
-      #     docker compose run ${{ matrix.alg }} bash test.sh
-      # - 
-      #   name: Push docker image
-      #   run: docker compose push ${{ matrix.alg }}
+        # Make docker-compose.yml file
+        bash scripts/make_docker_compose_file.sh
+
+        # Pull docker image
+        # docker compose pull ${{ matrix.alg }}
+
+        # Build docker image
+        # docker compose build ${{ matrix.alg }}
+
+        # Test docker image
+        docker compose run --build ${{ matrix.alg }} bash test.sh
+
+        # Push docker image
+        # docker compose push ${{ matrix.alg }}
