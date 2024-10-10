@@ -31,14 +31,21 @@ jobs:
   check-changes:
     runs-on: ubuntu-latest
     outputs:
-      changes-detected: ${{ steps.check.outputs.changes-detected }}
+      changed-algs: ${{ steps.check.outputs.changed-algs }}
+      unchanged-algs: ${{ steps.check.outputs.unchanged-algs }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - id: check
         run: |
-          echo "::set-output name=changes-detected::$(git diff --name-only HEAD~1..HEAD | grep -E '^algorithms/' || git diff --name-only HEAD~1..HEAD | grep -E '^experiment/methods/')"
+          echo "changed-algs=$(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2)" >> $GITHUB_OUTPUT
+          echo "unchanged-algs=$(comm -23 <(ls algorithms/) <(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2))" >> $GITHUB_OUTPUT
+          echo "Changed Algorithms:"
+          git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2
+          echo ""
+          echo "Unchanged Algorithms:"
+          comm -23 <(ls algorithms/) <(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2)
   
   ################################################################################
   # get a list of algorithms
@@ -72,6 +79,12 @@ jobs:
       - 
         name: Checkout code
         uses: actions/checkout@v3
+      - 
+        name: Print Changed Algorithms
+        run: echo "Changed Algorithms: ${{ needs.check-changes.outputs.changed-algs }}"
+      - 
+        name: Print Unchanged Algorithms
+        run: echo "Unchanged Algorithms: ${{ needs.check-changes.outputs.unchanged-algs }}"  
       # - name: Log in to Docker Hub
       #   uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
       #   with:
