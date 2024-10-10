@@ -73,7 +73,6 @@ jobs:
       matrix:
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
       fail-fast: false
-    if: needs.check-changes.outputs.changes-detected != ''
     steps:
       - 
         name: Checkout code
