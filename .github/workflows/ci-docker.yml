@@ -77,20 +77,6 @@ jobs:
       - 
         name: Checkout code
         uses: actions/checkout@v3
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_KEY }}
-      - 
-        name: Make docker-compose.yml file
-        run: bash scripts/make_docker_compose_file.sh
-      # - 
-      #   name: Pull docker image
-      #   run: docker compose pull ${{ matrix.alg }}
-      # - 
-      #   name: Build docker image
-      #   run: docker compose build ${{ matrix.alg }}
       - 
         name: Check if algorithm has changed
         id: check_algorithm
@@ -101,6 +87,22 @@ jobs:
           else
             echo "::set-output name=should_run::false"
           fi
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_KEY }}
+      - 
+        name: Make docker-compose.yml file
+        if: steps.check_algorithm.outputs.should_run == 'true'
+        run: bash scripts/make_docker_compose_file.sh
+      # - 
+      #   name: Pull docker image
+      #   run: docker compose pull ${{ matrix.alg }}
+      # - 
+      #   name: Build docker image
+      #   run: docker compose build ${{ matrix.alg }}
+
       - 
         name: Test docker image
         if: steps.check_algorithm.outputs.should_run == 'true'
