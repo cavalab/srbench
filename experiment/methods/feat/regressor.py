@@ -17,7 +17,6 @@ est:RegressorMixin = FeatRegressor(
                     functions=['+','-','*','/','^2','^3','sqrt','sin','cos','exp','log'],
                     otype='f'
                    )
-
 # want to tune your estimator? wrap it in a sklearn CV class. 
 
 def model(est, X=None) -> str:

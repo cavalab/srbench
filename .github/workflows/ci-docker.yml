@@ -7,14 +7,14 @@ on:
       - main
     paths:
       - 'algorithms/**'
-      - 'experiment/**'
+      - 'experiment/methods/**'
       - '.github/workflows/**'
   pull_request:
     branches:
       - docker-compose
     paths:
       - 'algorithms/**'
-      - 'experiment/**'
+      - 'experiment/methods/**'
       - '.github/workflows/**'
 
 jobs:
@@ -23,6 +23,8 @@ jobs:
     outputs:
       changed-algs: ${{ steps.check.outputs.changed-algs }}
       unchanged-algs: ${{ steps.check.outputs.unchanged-algs }}
+      changed-experiments: ${{ steps.check.outputs.changed-experiments }}
+      unchanged-experiments: ${{ steps.check.outputs.unchanged-experiments }}
       changes-detected: ${{ steps.check.outputs.changes-detected }}
     steps:
       - uses: actions/checkout@v3
@@ -32,23 +34,34 @@ jobs:
         run: |
           CHANGED_ALGS=$(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2 | tr '\n' ',')
           UNCHANGED_ALGS=$(comm -23 <(ls algorithms/) <(echo "$CHANGED_ALGS"))
+          CHANGED_EXPERIMENTS=$(git diff --name-only HEAD~1..HEAD | grep '^experiment/methods/' | cut -d '/' -f 2 | tr '\n' ',')
+          UNCHANGED_EXPERIMENTS=$(comm -23 <(ls experiment/methods/) <(echo "$CHANGED_EXPERIMENTS"))
           echo "::set-output name=changed-algs::$CHANGED_ALGS"
           echo "::set-output name=unchanged-algs::$UNCHANGED_ALGS"
-          echo "::set-output name=changes-detected::$(test -z "$CHANGED_ALGS" && echo "false" || echo "true")"
+          echo "::set-output name=changed-experiments::$CHANGED_EXPERIMENTS"
+          echo "::set-output name=unchanged-experiments::$UNCHANGED_EXPERIMENTS"
+          echo "::set-output name=changes-detected::$(test -z "$CHANGED_ALGS$CHANGED_EXPERIMENTS" && echo "false" || echo "true")"
 
-  list-algs:
+  print-changes:
     runs-on: ubuntu-latest
+    needs: check-changes
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      changed-algorithms: ${{ steps.print.outputs.changed-algorithms }}
     steps:
       - uses: actions/checkout@v3
-      - id: set-matrix
-        run: echo "::set-output name=matrix::$(ls algorithms/ | jq -R -s -c 'split("\n")[:-1]')"
+      - id: print
+        run: |
+          echo "Changed algorithms:"
+          echo "${{ needs.check-changes.outputs.changed-algs }}"
+          echo ""
+          echo "Changed experiments:"
+          echo "${{ needs.check-changes.outputs.changed-experiments }}"
 
   build-and-test:
     runs-on: ubuntu-latest
     needs: 
       - check-changes
+      - print-changes
       - list-algs
     defaults:
       run:
