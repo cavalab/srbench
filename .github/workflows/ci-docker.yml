@@ -43,7 +43,6 @@ jobs:
           echo "::set-output name=unchanged-algs::$(comm -23 <(ls algorithms/) <(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2))"
           echo "Changed Algorithms:"
           git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2
-          echo ""
           echo "Unchanged Algorithms:"
           comm -23 <(ls algorithms/) <(git diff --name-only HEAD~1..HEAD | grep '^algorithms/' | cut -d '/' -f 2)
   
@@ -94,7 +93,18 @@ jobs:
       #   name: Build docker image
       #   run: docker compose build ${{ matrix.alg }}
       - 
+        name: Check if algorithm has changed
+        id: check_algorithm
+        run: |
+          CHANGED_ALGS=$(echo "${{ needs.check-changes.outputs.changed-algs }}" | tr ',' '\n')
+          if [[ "$CHANGED_ALGS" == *"${{ matrix.alg }}"* ]]; then
+            echo "::set-output name=should_run::true"
+          else
+            echo "::set-output name=should_run::false"
+          fi
+      - 
         name: Test docker image
+        if: steps.check_algorithm.outputs.should_run == 'true'
         run: docker compose run --build ${{ matrix.alg }} bash test.sh
       # - 
       #   name: Push docker image
