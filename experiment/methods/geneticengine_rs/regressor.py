@@ -1,5 +1,5 @@
 # This example submission shows the submission of FEAT (cavalab.org/feat).
-from geml.regressors import GeneticProgrammingRegressor
+from geml.regressors import OnePlusOneRegressor
 from geml.regressors import model
 from sklearn.base import RegressorMixin
 
@@ -8,7 +8,7 @@ est: a sklearn-compatible regressor.
     if you don't have one they are fairly easy to create. 
     see https://scikit-learn.org/stable/developers/develop.html
 """
-est: RegressorMixin = GeneticProgrammingRegressor(
+est: RegressorMixin = OnePlusOneRegressor(
     max_time=8 * 60 * 60,  # 8 hrs. Your algorithm should have this feature
 )
 
