@@ -9,7 +9,7 @@ est: a sklearn-compatible regressor.
     see https://scikit-learn.org/stable/developers/develop.html
 """
 est: RegressorMixin = RandomSearchRegressor(
-    max_time=8 * 60 * 60 - 60,  # 8 hrs. Your algorithm should have this feature
+    max_time=360  # 8 hrs. Your algorithm should have this feature
 )
 
 
