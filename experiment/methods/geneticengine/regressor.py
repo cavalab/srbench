@@ -9,7 +9,7 @@ est: a sklearn-compatible regressor.
     see https://scikit-learn.org/stable/developers/develop.html
 """
 est: RegressorMixin = GeneticProgrammingRegressor(
-    max_time=1,  # 8 hrs. Your algorithm should have this feature
+    max_time=3,  # 8 hrs. Your algorithm should have this feature
 )
 
 
