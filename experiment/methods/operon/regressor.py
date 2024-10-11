@@ -113,7 +113,7 @@ class Objective:
 
 
 class OperonOptuna(BaseEstimator, RegressorMixin):
-    def __init__(self, name, n_folds=3, n_trials=100, max_time=3600, fixed_params={}, suggest_callback=None, random_state=None):
+    def __init__(self, name, n_folds=3, n_trials=100, max_time=1,0, fixed_params={}, suggest_callback=None, random_state=None):
         self.name = name
         self.n_folds = n_folds
         self.n_trials = n_trials
