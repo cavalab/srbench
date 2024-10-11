@@ -8,4 +8,4 @@ dependencies:
   - pip=24.2
   - dill=0.3.9
   - pip:
-      - geneticengine @ git+https://github.com/alcides/GeneticEngine.git@62b0322e8896579ea88a20e34301bc77c1d63286
+      - geneticengine @ git+https://github.com/alcides/GeneticEngine.git@6561c3de6d3f7df5f6eda414160480180601d18f
