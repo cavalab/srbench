@@ -1,0 +1,10 @@
+authors: # the participants
+  - Alcides Fonseca, Guilherme Espada, Leon Ingelse, Eduardo Madeira
+email: me@alcidesfonseca.com, gjespada@fc.ul.pt, leoningelse@gmail.com, jmadeira@lasige.di.fc.ul.pt
+name: Genetic Engine
+description:
+  GeneticEngine is an extensible framework for implementing evolutionary algorithms. Users can write their own class structure and select the algorithm they want to run. Each algorithm will generate random trees following the class specification.
+  Currently, GeneticEngine supports several representations (tree-based, grammatical evolution, structured grammatical evolution, stack-based), several algorithms (hill-climbing, Genetic Programming, 1+1) and several operators (Tournament, Lexicase, different mutations and crossovers).
+  A distinctive feature of this framework is that it supports dependent types that semantically constraint the tree generation.
+
+url: "https://github.com/alcides/GeneticEngine/"
