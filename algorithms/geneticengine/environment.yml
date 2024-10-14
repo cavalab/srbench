@@ -3,9 +3,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9.12
-  - python_abi=3.9
-  - setuptools=62.1.0
-  - pip=22.0.4
+  - python=3.12.6
+  - setuptools=75.1.0
+  - pip=24.2
+  - dill=0.3.9
   - pip:
-    - geneticengine==0.0.18
+      - geneticengine @ git+https://github.com/alcides/GeneticEngine.git@5e7c4ec8807b8299f92e0347443714e16f22e40f
