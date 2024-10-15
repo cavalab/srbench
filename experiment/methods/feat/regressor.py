@@ -163,9 +163,15 @@ def get_population(est) -> list[RegressorMixin]:
 
     # archive contains individuals serialized in json objects. let's get their ids
     for ind in archive:
+        # Archive is sorted by complexity
         pop.append(
             FeatPopEstimator(est, ind['id'])
         )
+
+        # Stopping here to avoid too many models
+        if len(pop) >= 100:
+            break
+
 
     return pop
 
