@@ -14,5 +14,5 @@ est = FFXRegressor()
 def complexity(est):
     return est.model_.complexity()
 
-def model(est):
+def model(est, X=None):
     return est.model_.str2().replace('^', '**')
