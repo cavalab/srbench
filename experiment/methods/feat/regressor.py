@@ -132,8 +132,7 @@ def model(est, X=None) -> str:
         model_str = est.cfeat_.get_eqn()
 
     # Here we replace "|" with "" to handle
-    # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
-    model_str = est.cfeat_.get_eqn()
+    # protected sqrt (expressed as sqrt(|.|)) in FEAT) 
     model_str = model_str.replace('|','')
 
     # use python syntax for exponents
