@@ -1,6 +1,21 @@
 # This example submission shows the submission of FEAT (cavalab.org/feat). 
 from feat import FeatRegressor
 from sklearn.base import BaseEstimator, RegressorMixin
+from feat import Feat, FeatRegressor, FeatClassifier 
+
+from sklearn.datasets import load_diabetes, make_blobs
+from sklearn.base import clone
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics.pairwise import rbf_kernel
+from sklearn.metrics import r2_score
+from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
+import unittest
+import argparse
+import sys
+import pandas as pd
+import numpy as np
+import pickle
+
 
 """
 est: a sklearn-compatible regressor. 
@@ -18,6 +33,59 @@ est:RegressorMixin = FeatRegressor(
                     otype='f'
                    )
 # want to tune your estimator? wrap it in a sklearn CV class. 
+
+
+class FeatPopEstimator(RegressorMixin):
+    """
+    FeatPopEstimator is a custom regressor that wraps a fitted FEAT estimator
+    to call `model` and `predict` from its archive.
+    
+    Attributes:
+        est (object): The fitted FEAT estimator.
+        id (int): The identifier for the specific model in the estimator's archive.
+    Methods:
+        __init__(est, id):
+            Initializes the FeatPopEstimator with a fitted FEAT estimator
+            and a model ID.
+        fit(X, y):
+            Dummy fit method to set the estimator as fitted.
+        predict(X):
+            Prepares the input data and predicts the output using the
+            model from the estimator's archive.
+        score(X, y):
+            Computes the R^2 score of the prediction.
+        model():
+            Retrieves the model equation from the estimator's archive.
+    """
+    def __init__(self, est, id):
+        self.est = est
+        self.id  = id
+
+    def fit(self, X, y):
+        self.is_fitted_ = True
+
+    def predict(self, X):
+        
+        X = self.est._prep_X(X)
+
+        return self.est.cfeat_.predict_archive(self.id, X)
+
+    def score(self, X, y):
+        yhat = self.predict(X).flatten()
+        return r2_score(y,yhat)
+    
+    def model(self):
+        archive = self.est.cfeat_.get_archive(False)
+        ind = [i for i in archive if i['id']==self.id][0]
+
+        eqn = f"{np.round(ind['ml']['bias'], 5)}"
+        for eq, w in zip(ind['eqn'].replace('[', '').split(']'), ind['w']):
+            if str(w)[0]=='-':
+                eqn = eqn + f'{np.round(float(w), 2)}*{eq}'
+            else:
+                eqn = eqn + f'+{np.round(float(w), 2)}*{eq}'
+
+        return eqn
 
 def model(est, X=None) -> str:
     """
@@ -57,6 +125,12 @@ def model(est, X=None) -> str:
     https://github.com/cavalab/srbench/issues/new/choose
     """
 
+    model_str = None
+    if isinstance(est, FeatPopEstimator):
+        model_str = est.model()
+    else:
+        model_str = est.cfeat_.get_eqn()
+
     # Here we replace "|" with "" to handle
     # protecte sqrt (expressed as sqrt(|.|)) in FEAT) 
     model_str = est.cfeat_.get_eqn()
@@ -66,6 +140,7 @@ def model(est, X=None) -> str:
     model_str = model_str.replace('^','**')
 
     return model_str
+
 
 def get_population(est) -> list[RegressorMixin]:
     """
@@ -78,11 +153,21 @@ def get_population(est) -> list[RegressorMixin]:
     
     Returns
     -------
-    A list of scikit-learn compatible estimators
+    A list of scikit-learn compatible estimators that can be used for prediction.
     """
 
-    return [est]
+    # passing True will return just the front, and False will return final population
+    archive = est.cfeat_.get_archive(False)
 
+    pop = []
+
+    # archive contains individuals serialized in json objects. let's get their ids
+    for ind in archive:
+        pop.append(
+            FeatPopEstimator(est, ind['id'])
+        )
+
+    return pop
 
 def get_best_solution(est) -> RegressorMixin:
     """
