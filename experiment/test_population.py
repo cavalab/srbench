@@ -46,7 +46,7 @@ def test_population(ml):
     sample_idx = np.random.choice(np.arange(len(X_train)), size=10)
     
     y_train = y_train[sample_idx]
-    X_train = X_train.iloc[sample_idx]
+    X_train = X_train.iloc[sample_idx, :]
 
     ##################################################
     # fit with max_time

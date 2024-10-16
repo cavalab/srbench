@@ -37,6 +37,7 @@ This folder should contain:
       -   `eval_kwargs` (optional): a dictionary that can specify method-specific arguments to `evaluate_model.py`.
       -   `get_population(est) --> List[RegressorMixin]`: a function that return a list of at most 100 expressions, if using pareto front, population-based optimization, beam search, or any strategy that allows your algorithm to explore several expressions. If this is not valid for your algorithm, you can just wrap the estimator in a list (_i.e._, `return [est]`). Every element from the returned list must be a compatible `Regressor`, meaning that calling `predict(X)` should work, as well as your custom `model(est, X=None)` method for getting a string representation.
       -   `get_best_solution(est)`: should provide an easy way of accessing the best solution from the current population, if this feature is valid for your algorithm. If not, then return the estimator itself `return est`.
+      -   We expect your algorithm to have a `max_time` parameter that lets us control the maximum execution time in seconds. When running the experiments in a cluster, we will give extra time to compensate for the overhead of initializing everything, and the maximum time considered is just the fit process. A signal `signal.SIGALRM` will be sent to your process if `fit(X, y)` exceeds the maximum time, and you can implement strategies to handle this signal. One idea is to store a random initial solution as the best and update it during the execution to ensure the `evaluate_model.py` script will find an equation to work on.
   3. `LICENSE` *(optional)* A license file
   4. `environment.yml` *(optional)*: a [conda environment file](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) that specifies dependencies for your submission. 
   It will be used to update the baseline environment (`environment.yml` in the root directory). 
@@ -58,7 +59,7 @@ If your method names variables some other way, e.g. `[x_0 ... x_m]`, you can
 specify a mapping in the `model` function such as:
 
 ```python
-def model(est, X):
+def model(est, X=None):
     mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
     new_model = est.model_
     for k,v in reversed(mapping.items()):
@@ -66,5 +67,3 @@ def model(est, X):
 ```
 
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
-
-### using populations

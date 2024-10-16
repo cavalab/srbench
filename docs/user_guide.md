@@ -122,7 +122,7 @@ done
 
 When a new algorithm is submitted to SRBench, a GitHub workflow will generate a docker image and push it to [Docker Hub](hub.docker.com). Ths means that you can also easily pull the images, without having to deal with local installations.
 
-To use docker, you first run `scripts/make_docker_compose_file.sh`. Then `docker compose up` should create the images.
+To use docker, you first run `bash scripts/make_docker_compose_file.sh` in the root directory. Then `docker compose up` should create the images.
 
 You can now submit arbitrary python commands to the image, _e.g._ `docker compose run feat bash test.sh`
 
