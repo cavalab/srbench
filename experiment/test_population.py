@@ -45,7 +45,7 @@ def test_population(ml):
     # Few samples to try to make it quick
     sample_idx = np.random.choice(np.arange(len(X_train)), size=10)
     
-    y_train = y_train.iloc[sample_idx]
+    y_train = y_train[sample_idx]
     X_train = X_train.iloc[sample_idx, :]
 
     ##################################################
