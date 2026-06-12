@@ -248,7 +248,7 @@ val_path: data/validation
 
 raw_test_path: data/raw_datasets/150
 test_path: data/validation
-model_path: /local/home/lbiggio/NeuralSymbolicRegressionThatScales/weights/10MCompleted.ckpt  
+model_path: .../weights/nesymres_100M.ckpt
 
 wandb: True
 num_of_workers: 28
@@ -437,10 +437,12 @@ for restarts, eqs in zip(n_restarts, total_number_of_eqs):
         })
         
 class NeSymResRegressor(BaseEstimator, RegressorMixin):
-    def __init__(self, n_restarts=10, total_number_of_eqs=200, max_ops=5):
+    def __init__(self, n_restarts=10, total_number_of_eqs=200, max_ops=5,
+                 weights_path="/srbench_pretrained/nesymres_100M.ckpt"):
         self.n_restarts = n_restarts
         self.total_number_of_eqs = total_number_of_eqs
         self.max_ops = max_ops
+        self.weights_path = weights_path
 
     def fit(self, X, y):
         # Setting parameters
@@ -480,7 +482,9 @@ class NeSymResRegressor(BaseEstimator, RegressorMixin):
                                 beam_size=cfg.inference.beam_size #This parameter is a tradeoff between accuracy and fitting time
                                 )
 
-        weights_path = "/srbench_pretrained/nesymres_100M.ckpt"
+        weights_path = self.weights_path
+        if not os.path.isfile(weights_path):
+          raise FileNotFoundError(weights_path)
 
         ## Load architecture, set into eval mode, and pass the config parameters
         #cfg.architecture.num_features = eq_setting["num_variables"]
