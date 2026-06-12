@@ -1,6 +1,7 @@
 channels:
     - conda-forge
     - defaults
+channel_priority: strict
 dependencies:
     - python=3.10.13
     - cmake=3.28.2
@@ -8,7 +9,7 @@ dependencies:
     # - gxx
     - ninja=1.11.1
     - eigen=3.4.0
-    - shogun-cpp
+    - shogun-cpp=6.1.*
     - wheel=0.42.0
     - pybind11=2.11.1
     - nlohmann_json=3.11.2
