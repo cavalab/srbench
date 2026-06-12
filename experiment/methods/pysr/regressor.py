@@ -91,7 +91,7 @@ hyper_params = [{}]
 eval_kwargs = {
     "test_params": dict(
         niterations=3,
-        ncyclesperiteration=500,
+        ncycles_per_iteration=500,
         populations=3,
     )
 }
