@@ -13,7 +13,7 @@ pip install -e src/
 pip install lightning==1.9
 
 cd ../..
-cp TPSR -r ${CONDA_PREFIX}/bin/tpsr
+cp -r TPSR ${CONDA_PREFIX}/bin/tpsr
 
 mkdir -p /pretrained
 curl -L https://dl.fbaipublicfiles.com/symbolicregression/model1.pt --output /pretrained/model1.pt
