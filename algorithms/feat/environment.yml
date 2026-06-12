@@ -8,7 +8,7 @@ dependencies:
     # - gxx
     - ninja=1.11.1
     - eigen=3.4.0
-    - shogun-cpp=6.1.4
+    - shogun-cpp
     - wheel=0.42.0
     - pybind11=2.11.1
     - nlohmann_json=3.11.2
