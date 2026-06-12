@@ -1,3 +1,5 @@
+set -e
+
 #install sympytorch
 #git clone https://github.com/pakamienny/sympytorch.git
 pip install git+https://github.com/pakamienny/sympytorch.git@rationals
@@ -13,3 +15,5 @@ pip install git+https://github.com/pakamienny/sympytorch.git@rationals
 
 pip install git+https://github.com/pakamienny/e2e_transformer.git
 
+mkdir -p /pretrained
+curl -L https://dl.fbaipublicfiles.com/symbolicregression/model1.pt --output /pretrained/model.pt

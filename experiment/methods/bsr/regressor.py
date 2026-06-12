@@ -27,5 +27,6 @@ def model(est):
 
     # get rid of square brackets
     new_model_str = model_str.replace('[','').replace(']','')
+    new_model_str = new_model_str.replace('^','**')
     
     return new_model_str
