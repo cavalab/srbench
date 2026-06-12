@@ -9,7 +9,5 @@ cd NeuralSymbolicRegressionThatScales
 pip install -e src/
 
 # Download pretrained weights
-mkdir -p srbench_pretrained
-
-wget -O srbench_pretrained/nesymres_100M.ckpt \
-  https://huggingface.co/TommasoBendinelli/NeuralSymbolicRegressionThatScales/resolve/main/100M.ckpt
+mkdir -p srbench_pretrained\
+curl -L https://huggingface.co/TommasoBendinelli/NeuralSymbolicRegressionThatScales/resolve/main/100M.ckpt --output srbench_pretrained/nesymres_100M.ckpt
