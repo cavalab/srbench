@@ -35,7 +35,7 @@ def model(est, X=None):
 
 est = PySRRegressor(
     niterations=1_000_000_000,
-    ncyclesperiteration=2_500,
+    ncycles_per_iteration=2_500,
     population_size=100,
     populations=2, # originally max(15, 2*n_cpu), but srbench runs on a single core
     verbosity=0,
