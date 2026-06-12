@@ -5,8 +5,8 @@ channel_priority: strict
 dependencies:
     - python=3.10.13
     - cmake=3.28.2
-    # - gcc
-    # - gxx
+    - gcc=13.2.0 # although brush's original env uses a generic compiler, here we want a linux specific with fixed version due to incompatibility issues when using cxx-compiler
+    - gxx=13.2.0
     - ninja=1.11.1
     - eigen=3.4.0
     - shogun-cpp=6.1.*
