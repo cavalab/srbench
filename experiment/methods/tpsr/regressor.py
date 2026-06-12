@@ -232,9 +232,9 @@ class TPSRRegressor(BaseEstimator, RegressorMixin):
             self.tpsr_params.cache = 'n' # no caching
 
         self.tpsr_params.backbone_model="e2e"
-        self.tpsr_params.reload_model = "/pretrained/model1.pt"
-        if not os.path.isfile(self.tpsr_params.reload_model):
-            raise FileNotFoundError(self.tpsr_params.reload_model)
+        # self.tpsr_params.reload_model = "/pretrained/model1.pt"
+        # if not os.path.isfile(self.tpsr_params.reload_model):
+        #     raise FileNotFoundError(self.tpsr_params.reload_model)
 
         self.equation_env = build_env(self.tpsr_params)
         modules = build_modules(self.equation_env, self.tpsr_params)
