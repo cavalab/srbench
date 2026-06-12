@@ -26,6 +26,8 @@ FROM mambaorg/micromamba:1.5.8
 # Install base packages.
 USER root
 
+ENV LD_LIBRARY_PATH=/opt/conda/lib:${LD_LIBRARY_PATH}
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 # # proxy for apt
@@ -61,6 +63,10 @@ RUN apt update \
         vim \
         # jq \
     && rm -rf /var/lib/apt/lists/*
+
+# Standard path for methods that requires downloading a pretrained model
+RUN mkdir -p /pretrained /srbench_pretrained \
+    && chown -R $MAMBA_USER:$MAMBA_USER /pretrained /srbench_pretrained
 
 USER $MAMBA_USER
 

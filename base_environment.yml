@@ -2,7 +2,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - scikit-learn<1.6
+  - scikit-learn
   - pandas 
   - numpy
   - pyarrow
