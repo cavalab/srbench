@@ -1,5 +1,6 @@
 # Scikit-like regressor wrapper around the symbolic genetic programming algorithm.
 # This module exposes a fit/predict interface and configures the GP training process.
+# SMGP Regressor integration for SRBench
 
 from __future__ import annotations
 
