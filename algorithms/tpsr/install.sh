@@ -15,5 +15,6 @@ pip install lightning==1.9
 cd ../..
 cp -r TPSR ${CONDA_PREFIX}/bin/tpsr
 
-mkdir -p /pretrained
-curl -L https://dl.fbaipublicfiles.com/symbolicregression/model1.pt --output /pretrained/model1.pt
+mkdir -p /pretrained /srbench_pretrained
+curl -L https://dl.fbaipublicfiles.com/symbolicregression/model1.pt --output /srbench_pretrained/model1.pt
+ln -sf /srbench_pretrained/model1.pt /pretrained/model1.pt
