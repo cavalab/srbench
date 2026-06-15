@@ -1243,15 +1243,15 @@ class SMGPRegressor(BaseEstimator, RegressorMixin):
         random_state: Optional[int] = None,
         max_time: Optional[float] = None,
         population_size: int = 100,
-        generations: int = 100,
-        depth: int = 4,
-        mutation_rate: float = 0.01,
-        random_individual_rate: float = 0.1,
-        variable_probability: float = 0.4,
+        generations: int = 100000,
+        depth: int = 6,
+        mutation_rate: float = 0.03,
+        random_individual_rate: float = 0.08,
+        variable_probability: float = 0.44,
         min_terminal_node_val: float = 0.0,
         max_terminal_node_val: float = 10.0,
         function_set: Optional[Union[SmoothMultifunctionSet, List[str]]] = None,
-        taylor_sum_elements: int = 100,
+        taylor_sum_elements: int = 5,
         use_triangle_fval: bool = True,
         verbose: bool = False,
     ):
@@ -1454,11 +1454,25 @@ class SMGPRegressor(BaseEstimator, RegressorMixin):
 
         variable_list = self._create_variable_list(self.feature_names_in_)
         function_list = self._function_list()
-        return self._evaluate(self.best_individual_, X_arr, variable_list, function_list)
+        return self._evaluate(self.best_individual_, X_arr, variable_list, function_list) 
+    
+est = SMGPRegressor
 
+hyper_params = {
+    "depth": [4, 5, 6, 7],
+    "mutation_rate": [0.01, 0.03, 0.05],
+    "random_individual_rate": [0.05, 0.1, 0.2],
+    "variable_probability": [0.3, 0.4, 0.5],
+}
 
-def model(est: SMGPRegressor, X=None):
-    model_str = getattr(est, 'model_', None)
+def complexity(estimator: SMGPRegressor):
+    # jednoduchý proxy (SRBench většinou jen potřebuje scalar nebo string)
+    if estimator.best_individual_ is None:
+        return 0
+    return len(estimator.best_individual_.vector)
+
+def model(estimator: SMGPRegressor, X=None):
+    model_str = getattr(estimator, 'model_', None)
     if model_str is None:
         raise ValueError('Estimator has no model_ string. Fit the estimator first.')
     if X is None:
