@@ -11,6 +11,14 @@ from typing import Optional, Union, List
 import numpy as np
 import importlib
 
+import sys
+import os
+
+print(f"DEBUG: CWD (pracovní adresář): {os.getcwd()}")
+print(f"DEBUG: __file__ (cesta k regressor.py): {os.path.abspath(__file__)}")
+print(f"DEBUG: sys.path (kde Python hledá moduly): {sys.path}")
+print(f"DEBUG: Obsah složky s regressor.py: {os.listdir(os.path.dirname(os.path.abspath(__file__)))}")
+
 try:
     sklearn_base = importlib.import_module("sklearn.base")
     BaseEstimator = getattr(sklearn_base, "BaseEstimator")
