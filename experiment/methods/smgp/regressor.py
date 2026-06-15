@@ -39,14 +39,14 @@ except Exception:
             raise ValueError("X must be a 2D array or matrix")
         return X_arr
 
-from crossover import Crossover
-from data import ArrayDataSource
-from evolution import VectorEvolutionAlgorithm
-from fitness import MeanSquaredErrorFitnessFunctionVector
-from individual import Individual
-from mutation import Mutation
-from smoothMultifunctionSet import SmoothMultifunctionSet
-from variable import Variable
+from .crossover import Crossover
+from .data import ArrayDataSource
+from .evolution import VectorEvolutionAlgorithm
+from .fitness import MeanSquaredErrorFitnessFunctionVector
+from .individual import Individual
+from .mutation import Mutation
+from .smoothMultifunctionSet import SmoothMultifunctionSet
+from .variable import Variable
 
 
 class SMGPRegressor(BaseEstimator, RegressorMixin):
