@@ -1456,7 +1456,7 @@ class SMGPRegressor(BaseEstimator, RegressorMixin):
         function_list = self._function_list()
         return self._evaluate(self.best_individual_, X_arr, variable_list, function_list) 
     
-est = SMGPRegressor
+est = SMGPRegressor()
 
 hyper_params = {
     "depth": [4, 5, 6, 7],
@@ -1465,9 +1465,8 @@ hyper_params = {
     "variable_probability": [0.3, 0.4, 0.5],
 }
 
-def complexity(estimator: SMGPRegressor):
-    # jednoduchý proxy (SRBench většinou jen potřebuje scalar nebo string)
-    if estimator.best_individual_ is None:
+def complexity(estimator):
+    if getattr(estimator, "best_individual_", None) is None:
         return 0
     return len(estimator.best_individual_.vector)
 
