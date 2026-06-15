@@ -1,25 +1,19 @@
 #!/bin/bash
 set -ex
 
-# 1. Vyčištění cílového místa
-rm -rf methods/smgp
-mkdir -p methods
+# 1. Vytvoř dočasnou složku pro stažení (např. v /tmp)
+TMP_DIR=$(mktemp -d)
 
-# 2. Klonování do absolutní cesty
-# Použijeme `pwd` pro zjištění aktuálního pracovního adresáře
-ROOT_DIR=$(pwd)
-echo "--- Pracuji v: $ROOT_DIR ---"
+# 2. Klonuj do této dočasné složky
+git clone https://github.com/MichalicekPetr/SRBench-SMGPRegressor-Src-Files.git "$TMP_DIR"
 
-git clone https://github.com/MichalicekPetr/SRBench-SMGPRegressor-Src-Files.git "$ROOT_DIR/methods/smgp"
+# 3. Nainstaluj balíček do systému (do site-packages)
+# Pip zkopíruje soubory z TMP_DIR do systémového adresáře Pythonu
+pip install "$TMP_DIR"
 
-# 3. DIAGNOSTIKA: Kontrola bezprostředně po klonování
-cd "$ROOT_DIR/methods/smgp"
-echo "--- Obsah složky po klonování (příkaz ls -la) ---"
-ls -la
+# 4. (Volitelné) Smaž dočasnou složku, už ji nepotřebuješ
+rm -rf "$TMP_DIR"
 
-# Ověření cesty, kde jsme
-echo "--- Aktuální absolutní cesta ---"
-pwd
-
-# 4. Instalace
-pip install .
+# 5. Ověření
+echo "--- Ověření instalace v systému ---"
+pip show smgp
