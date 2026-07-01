@@ -1,6 +1,6 @@
 authors:
-  - YOUR_NAME_HERE   # à remplacer avant soumission PR
-email: YOUR_EMAIL@example.com
+  - Guillaume ROBIN
+email: guillaume.robin7@gmail.com
 name: Pantara
 description: |
   Pantara v7d — Matching-pursuit symbolic regression with neural oracle.
@@ -12,5 +12,4 @@ description: |
   correlation score. Power-law equations (y = C·x1^n1·x2^n2·...)
   are detected analytically in O(N) via lstsq in log-log space.
 
-  Repository: https://github.com/YOUR_USERNAME/physiqai  # à remplir
-url: https://github.com/YOUR_USERNAME/physiqai
+url: https://github.com/Yapock22/pantara
