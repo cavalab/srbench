@@ -1,0 +1,16 @@
+authors:
+  - YOUR_NAME_HERE   # à remplacer avant soumission PR
+email: YOUR_EMAIL@example.com
+name: Pantara
+description: |
+  Pantara v7d — Matching-pursuit symbolic regression with neural oracle.
+
+  Builds a prediction as a sum of basis functions chosen by a SetEncoder
+  neural network. Each step selects the best function family
+  (lin, sq, pair, qc, trip, qinv, sin, cos) and space transformation
+  (original, log_y, log_x, log_log, sq_y, inv_x) from a learned
+  correlation score. Power-law equations (y = C·x1^n1·x2^n2·...)
+  are detected analytically in O(N) via lstsq in log-log space.
+
+  Repository: https://github.com/YOUR_USERNAME/physiqai  # à remplir
+url: https://github.com/YOUR_USERNAME/physiqai
