@@ -39,9 +39,9 @@ Methods currently benchmarked:
 The full experiment code and results for this edition live on the [`srbench_2025`](https://github.com/cavalab/srbench/tree/srbench_2025) branch (raw results in [`results/`](https://github.com/cavalab/srbench/tree/srbench_2025/results)).
 If you are choosing baselines for a new symbolic regression paper, please use this roster and these results rather than the 2021 tables below.
 
-Black-box regression (AUC of the $R^2$ performance profile per dataset, methods clustered by similarity):
+Black-box regression (median and 95% confidence interval across datasets):
 
-![SRBench 2025 black-box results](postprocessing/figs/black-box-tuning/r2_AUC_tuning_with_sizes.png)
+![SRBench 2025 black-box results](postprocessing/figs/black-box-tuning/pairgrid-pointplot_r2_test_model_size_training-time-s.png)
 
 First-principles problems (accuracy-size Pareto fronts; the star marks the known first-principles expression evaluated on the same data):
 
