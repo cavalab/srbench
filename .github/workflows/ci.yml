@@ -43,10 +43,10 @@ jobs:
         name: Checkout code
         uses: actions/checkout@v4
       - 
-        name: Setup Mambaforge
+        name: Setup Miniforge
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge
+          miniforge-variant: Miniforge3
           miniforge-version: latest
           activate-environment: srbench
           use-mamba: true
@@ -113,10 +113,10 @@ jobs:
         name: Checkout code
         uses: actions/checkout@v4
       - 
-        name: Setup Mambaforge
+        name: Setup Miniforge
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge
+          miniforge-variant: Miniforge3
           miniforge-version: latest
           activate-environment: srbench
           use-mamba: true
@@ -158,10 +158,10 @@ jobs:
         name: Checkout code
         uses: actions/checkout@v4
       - 
-        name: Setup Mambaforge
+        name: Setup Miniforge
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge
+          miniforge-variant: Miniforge3
           miniforge-version: latest
           activate-environment: srbench
           use-mamba: true
