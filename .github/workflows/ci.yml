@@ -28,6 +28,9 @@ on:
 
 env: 
   CACHE_NUMBER: 0
+  # the 2022 baseline env pulls the deprecated PyPI "sklearn" shim, which now
+  # hard-errors on install; this is the workaround the error message names
+  SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL: "True"
 
 jobs:
   ################################################################################
