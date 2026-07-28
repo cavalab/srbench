@@ -1,0 +1,15 @@
+# SRBench method metadata (contract: algorithms/feat/metadata.yml format)
+name: lagh
+short_name: lagh
+description: >
+  Certified symbolic law discovery. Outputs are three-track: machine-checked
+  exact certificates (every point within a declared epsilon; chance-fit
+  significance bound alpha reported), labeled empirical conjectures, or
+  explicit abstentions. For this harness the conjecture track always answers;
+  certificate status is carried as estimator metadata (track_/tag_/
+  alpha_log10_). Zero-confident-wrong invariant: the system never claims an
+  exact law it cannot certify.
+authors: James Allan Scott (jascal)
+url: https://github.com/jascal/lagh
+license: Apache-2.0
+language: python
