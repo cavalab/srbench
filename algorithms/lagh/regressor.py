@@ -20,3 +20,20 @@ def model(est, X=None):
 
 
 eval_kwargs = {}
+
+
+def complexity(est):
+    """Parse-tree node count of the final expression (srbench_2025 fallback;
+    normally computed from the sympy string)."""
+    import sympy as sp
+    e = sp.sympify(est.model())
+    return int(sp.count_ops(e, visual=False)) + len(e.free_symbols) + 1
+
+
+def get_population(est):
+    """lagh keeps a single certified/conjectured model, not a population."""
+    return [est]
+
+
+def get_best_solution(est):
+    return est
