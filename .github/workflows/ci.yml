@@ -2,6 +2,11 @@
 
 name: CI
 
+env:
+  # the 2022 baseline env pulls the deprecated PyPI "sklearn" shim, which now
+  # hard-errors on install; this is the workaround the error message names
+  SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL: "True"
+
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the master and dev branches
