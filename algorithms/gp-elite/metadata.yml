@@ -1,0 +1,17 @@
+authors:
+  - Sabri Hakou (ariel95500-create)
+email: ariel95500@gmail.com
+name: GP_ELITE
+description: |
+  Pure-Python symbolic regression, no compiled dependencies: genetic
+  programming with island parallelism, Levenberg-Marquardt constant
+  optimization, multi-restart with merged candidate archives, and a
+  complexity/accuracy Pareto front.
+
+  Optionally restricts the search to dimensionally consistent expressions when
+  physical units are supplied, and can deduce the units and value of a law's
+  missing physical constant (not used here, as the harness does not pass units).
+
+  pip install gp-elite
+
+url: https://github.com/ariel95500-create/gp-elite
