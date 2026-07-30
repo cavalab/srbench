@@ -1,4 +1,6 @@
-#install sympytorch
+set -e
+
+# install sympytorch
 #git clone https://github.com/pakamienny/sympytorch.git
 pip install git+https://github.com/pakamienny/sympytorch.git@rationals
 
@@ -8,8 +10,9 @@ pip install git+https://github.com/pakamienny/sympytorch.git@rationals
 # > cd /
 # > mkdir pretrained
 # > curl https://dl.fbaipublicfiles.com/symbolicregression/model1.pt --output /pretrained/model.pt
-# Save it locally and keep it in an accessible folder, instead of inside the 
-# docker image. You need to specify the path to the pretrained models
+mkdir -p /pretrained
+curl --fail --location --retry 5 \
+    https://dl.fbaipublicfiles.com/symbolicregression/model1.pt \
+    --output /pretrained/model.pt
 
 pip install git+https://github.com/pakamienny/e2e_transformer.git
-
