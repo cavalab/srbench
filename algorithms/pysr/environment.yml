@@ -3,4 +3,6 @@ channels:
 dependencies:
     - pysr==0.16
     - python==3.11
+    - julia=1.10
     - numpy=1.26.4
+    - scikit-learn<1.6 # PySR 0.16 uses BaseEstimator._validate_data, removed in scikit-learn 1.6.
