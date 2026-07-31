@@ -1,0 +1,16 @@
+# PIR — Physics Intermediate Representation
+authors:
+  - name: Qazi Hanif
+    email: qmhanif70@gmail.com
+key: PIR
+paper:
+  title: "PIR: Physics Intermediate Representation for Automated Discovery of Physical Laws"
+  url: https://doi.org/10.5281/zenodo.21351039
+description: >
+  Classical symbolic regression via monomial-basis search with log-linearization
+  gate for power-law detection (F3 gate), pairwise structure decomposition,
+  RANSAC, sparse regression, and iterative residual refinement with Occam
+  complexity penalty. No neural components. Verified blind Feynman Tier A:
+  12/44 EXACT (zero seed wobble, v3.4). Secondary: +12/44 FORM_NUMERIC
+  (correct functional form, transcendental constant as decimal, reported
+  separately and never summed into the primary figure).
