@@ -1,5 +1,8 @@
 FROM mambaorg/micromamba:1.5.8
 
+# Make conda-provided native libraries visible to compiled method wrappers.
+ENV LD_LIBRARY_PATH=/opt/conda/lib:${LD_LIBRARY_PATH}
+
 USER root
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -15,5 +18,8 @@ RUN sed -i -e "s/http/https/" /etc/apt/sources.list.d/debian.sources \
         liblapack-dev \
         libgsl-dev \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /pretrained /srbench_pretrained \
+    && chown -R $MAMBA_USER:$MAMBA_USER /pretrained /srbench_pretrained
 
 USER $MAMBA_USER

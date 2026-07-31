@@ -159,11 +159,13 @@ jobs:
           # Pull docker image
           # docker compose pull ${{ matrix.alg }}
 
-          # Build docker image
-          # docker compose build ${{ matrix.alg }}
+          # Build the shared base explicitly. Algorithm Dockerfiles use
+          # srbench/base as their FROM image.
+          docker compose build base
+          docker compose build ${{ matrix.alg }}
 
           # Test docker image
-          docker compose run --build ${{ matrix.alg }} bash test.sh
+          docker compose run --rm ${{ matrix.alg }} bash test.sh
 
           # Push docker image
           # docker compose push ${{ matrix.alg }}
