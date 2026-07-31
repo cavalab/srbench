@@ -15,8 +15,7 @@ How to contribute an SR method
 ==============================
 
 To contribute a symbolic regression method for benchmarking, fork the repo, make the changes listed below, and submit a pull request to the `dev` branch. 
-Once your method passes the basic tests and we've reviewed it, congrats! 
-We will plan to benchmark your method on hundreds of regression problems. 
+Once your method passes the basic tests and we've reviewed it, it will be available as part of srbench.
 
 Please note that the schedule for updating benchmarks is dependent on a lot of factors including availability of computing resources and availability of all our contributors. 
 If you are on a tight schedule, it is better to plan to benchmark your method yourself. 
