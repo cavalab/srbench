@@ -27,5 +27,7 @@ def model(est):
 
     # get rid of square brackets
     new_model_str = model_str.replace('[','').replace(']','')
+    # BSR uses caret notation for powers; SymPy parses ^ as XOR here.
+    new_model_str = new_model_str.replace('^', '**')
     
     return new_model_str

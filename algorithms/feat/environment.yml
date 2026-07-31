@@ -15,5 +15,3 @@ dependencies:
     - pybind11_json=0.2.13
     - pandas<=2.0
     - pip
-    - pip:
-      - git+https://github.com/cavalab/feat.git
