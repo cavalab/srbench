@@ -382,5 +382,7 @@ if __name__ == '__main__':
         algorithm=algorithm,
         test=args.TEST,
         fit_time_limit=args.FITTIME,
+        target_noise=args.Y_NOISE,
+        feature_noise=args.X_NOISE,
         **eval_kwargs
     )
