@@ -31,6 +31,12 @@ on:
       - 'entry.sh'
       - 'configure.sh'
       - '.github/workflows/**'
+  # Weekly full rebuild. Several methods install from git or unpinned pip, so
+  # they break without anyone touching the repo. Merges alone don't catch that
+  # during a quiet stretch. Scheduled runs only ever use the default branch.
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
 
 jobs:
   # Fast structural check. The build-and-test matrix below is generated from
@@ -55,89 +61,87 @@ jobs:
       - id: set-matrix
         run: echo "matrix=$(ls -1 algorithms/ | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
 
+  # Decides which algorithm images build. Pull requests build only what they
+  # touch; every other event rebuilds everything, so dependency drift in an
+  # untouched method still surfaces.
   check-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed-algs: ${{ steps.check.outputs.changed-algs }}
-      unchanged-algs: ${{ steps.check.outputs.unchanged-algs }}
-      changed-experiments: ${{ steps.check.outputs.changed-experiments }}
-      unchanged-experiments: ${{ steps.check.outputs.unchanged-experiments }}
-      changes-detected: ${{ steps.check.outputs.changes-detected }}
-      rebuild-all: ${{ steps.check.outputs.rebuild-all }}
+      build-algs: ${{ steps.check.outputs.build-algs }}
+      full-rebuild: ${{ steps.check.outputs.full-rebuild }}
+      reason: ${{ steps.check.outputs.reason }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -euo pipefail
 
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BASE_SHA="${{ github.event.pull_request.base.sha }}"
-            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-          else
-            BASE_SHA="${{ github.event.before }}"
-            HEAD_SHA="${{ github.sha }}"
-          fi
-
-          if [[ "$BASE_SHA" == "0000000000000000000000000000000000000000" ]]; then
-            BASE_SHA=$(git hash-object -t tree /dev/null)
-          fi
-
-          CHANGED_FILES=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
-
-          CHANGED_ALGS=""
-          CHANGED_EXPERIMENTS=""
-          if [[ -n "$CHANGED_FILES" ]]; then
-            CHANGED_ALGS=$(printf '%s\n' "$CHANGED_FILES" | awk -F/ '/^algorithms\// {print $2}' | sort -u)
-            CHANGED_EXPERIMENTS=$(printf '%s\n' "$CHANGED_FILES" | awk -F/ '/^experiment\/methods\// {print $2}' | sort -u)
-          fi
-
-          REBUILD_ALL=false
-          if printf '%s\n' "$CHANGED_FILES" | grep -Eq '^(alg-Dockerfile|baseDockerfile|base_environment.*\.yml|scripts/|entry\.sh|configure\.sh|\.github/workflows/)'; then
-            REBUILD_ALL=true
-          fi
-
-          if [[ "$REBUILD_ALL" == "true" ]]; then
-            CHANGED_ALGS=$(ls -1 algorithms/ | sort)
-          fi
-
-          CHANGED_ALGS_CSV=$(printf '%s\n' "$CHANGED_ALGS" | paste -sd, -)
-          CHANGED_EXPERIMENTS_CSV=$(printf '%s\n' "$CHANGED_EXPERIMENTS" | paste -sd, -)
-
           ALL_ALGS=$(ls -1 algorithms/ | sort)
-          UNCHANGED_ALGS=$(comm -23 <(printf '%s\n' "$ALL_ALGS") <(printf '%s\n' "$CHANGED_ALGS"))
-          ALL_EXPERIMENTS=$(ls -1 experiment/methods/ | sort)
-          UNCHANGED_EXPERIMENTS=$(comm -23 <(printf '%s\n' "$ALL_EXPERIMENTS") <(printf '%s\n' "$CHANGED_EXPERIMENTS"))
 
-          echo "changed-algs=$CHANGED_ALGS_CSV" >> "$GITHUB_OUTPUT"
-          echo "unchanged-algs=$(printf '%s\n' "$UNCHANGED_ALGS" | paste -sd, -)" >> "$GITHUB_OUTPUT"
-          echo "changed-experiments=$CHANGED_EXPERIMENTS_CSV" >> "$GITHUB_OUTPUT"
-          echo "unchanged-experiments=$(printf '%s\n' "$UNCHANGED_EXPERIMENTS" | paste -sd, -)" >> "$GITHUB_OUTPUT"
-          echo "rebuild-all=$REBUILD_ALL" >> "$GITHUB_OUTPUT"
+          emit_full () {
+            echo "full rebuild: $1"
+            {
+              echo "build-algs=$(printf '%s\n' "$ALL_ALGS" | paste -sd, -)"
+              echo "full-rebuild=true"
+              echo "reason=$1"
+            } >> "$GITHUB_OUTPUT"
+          }
 
-          if [[ "$REBUILD_ALL" == "true" ]]; then
-            echo "changes-detected=true" >> "$GITHUB_OUTPUT"
-          elif [[ -n "$CHANGED_ALGS$CHANGED_EXPERIMENTS" ]]; then
-            echo "changes-detected=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "changes-detected=false" >> "$GITHUB_OUTPUT"
+          # push / schedule / workflow_dispatch: rebuild everything.
+          if [[ "$EVENT_NAME" != "pull_request" ]]; then
+            emit_full "event is ${EVENT_NAME}"
+            exit 0
           fi
+
+          # A force-push can leave the base commit unreachable. Rebuild rather
+          # than fail on the diff.
+          if ! git cat-file -e "${PR_BASE_SHA}^{commit}" 2>/dev/null; then
+            emit_full "base commit ${PR_BASE_SHA} is unreachable"
+            exit 0
+          fi
+
+          CHANGED_FILES=$(git diff --name-only "$PR_BASE_SHA" "$PR_HEAD_SHA")
+
+          # Anything baked into every image invalidates all of them.
+          if printf '%s\n' "$CHANGED_FILES" | grep -Eq '^(alg-Dockerfile|baseDockerfile|base_environment.*\.yml|scripts/|entry\.sh|configure\.sh|\.github/workflows/)'; then
+            emit_full "a shared build input changed"
+            exit 0
+          fi
+
+          # algorithms/<name>/ changes the install; experiment/methods/<name>/
+          # changes the regressor the tests import. Either one must retest the
+          # method, so take the union and keep only names that have an image.
+          # note the field numbers: algorithms/<name>/... is $2, but
+          # experiment/methods/<name>/... is $3
+          CHANGED_ALGS=$(printf '%s\n' "$CHANGED_FILES" | awk -F/ '/^algorithms\// {print $2}')
+          CHANGED_EXPERIMENTS=$(printf '%s\n' "$CHANGED_FILES" | awk -F/ '/^experiment\/methods\// {print $3}')
+          BUILD_ALGS=$(printf '%s\n%s\n' "$CHANGED_ALGS" "$CHANGED_EXPERIMENTS" \
+            | sed '/^$/d' | sort -u \
+            | grep -Fxf <(printf '%s\n' "$ALL_ALGS") || true)
+
+          echo "algorithms to build:"
+          printf '  %s\n' ${BUILD_ALGS:-"(none)"}
+
+          {
+            echo "build-algs=$(printf '%s\n' "$BUILD_ALGS" | sed '/^$/d' | paste -sd, -)"
+            echo "full-rebuild=false"
+            echo "reason=changed methods only"
+          } >> "$GITHUB_OUTPUT"
 
   print-changes:
     runs-on: ubuntu-latest
     needs: check-changes
-    outputs:
-      changed-algorithms: ${{ steps.print.outputs.changed-algorithms }}
     steps:
-      - uses: actions/checkout@v4
-      - id: print
-        run: |
-          echo "Changed algorithms:"
-          echo "${{ needs.check-changes.outputs.changed-algs }}"
-          echo ""
-          echo "Changed experiments:"
-          echo "${{ needs.check-changes.outputs.changed-experiments }}"
+      - run: |
+          echo "full rebuild: ${{ needs.check-changes.outputs.full-rebuild }}"
+          echo "reason:       ${{ needs.check-changes.outputs.reason }}"
+          echo "building:     ${{ needs.check-changes.outputs.build-algs }}"
 
   build-and-test:
     runs-on: ubuntu-latest
@@ -153,19 +157,27 @@ jobs:
       matrix:
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
       fail-fast: false
-    # always() keeps the matrix running even when check-changes reports no
-    # changes, but a layout failure means the images would be built from a
-    # method that cannot be imported -- don't spend ~27 docker builds on that.
-    if: always() && needs.validate-layout.result == 'success'
+    # No always() here on purpose. If validate-layout fails the images would be
+    # built from a method that cannot be imported, and if check-changes fails
+    # the build list is empty -- which would skip every build and report green.
+    # Default `needs` behaviour skips this job in both cases instead.
     steps:
       - uses: actions/checkout@v4
+      # The job always runs and always reports, so the check name stays present
+      # for every algorithm and can be marked required. Only the expensive build
+      # step is skipped.
       - name: Check if algorithm has changed
         id: check_algorithm
+        env:
+          BUILD_ALGS: ${{ needs.check-changes.outputs.build-algs }}
         run: |
-          echo "should_run=true" >> "$GITHUB_OUTPUT"
-      - name: Print should_run status
-        run: |
-          echo "Should run: ${{ steps.check_algorithm.outputs.should_run }}"
+          if [[ ",${BUILD_ALGS}," == *",${{ matrix.alg }},"* ]]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "${{ matrix.alg }}: building"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "${{ matrix.alg }}: unchanged, skipping build"
+          fi
       - name: Build and Test Algorithm
         if: steps.check_algorithm.outputs.should_run == 'true'
         run: |
