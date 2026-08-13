@@ -3,8 +3,9 @@ name: Docker CI
 on:
   push:
     branches:
-      - docker-compose
       - master
+      - dev
+      - docker-compose
     paths:
       - 'algorithms/**'
       - 'experiment/methods/**'
@@ -17,8 +18,9 @@ on:
       - '.github/workflows/**'
   pull_request:
     branches:
-      - docker-compose
       - master
+      - dev
+      - docker-compose
     paths:
       - 'algorithms/**'
       - 'experiment/methods/**'
