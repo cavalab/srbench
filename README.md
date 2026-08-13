@@ -136,7 +136,7 @@ GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/cavalab/srbench.git
 
 A detailed guide on how to reproduce the experiments by yourself is provided in [`docs/user_guide.md`](./docs/user_guide.md).
 
-Once you get all the results, you nee to collate the results using the `collate` scripts in [`./postprocessing/scripts`](./postprocessing/scripts/collate_experiments_results.py)
+Once you get all the results, you need to collate them using the `collate` scripts in [`./postprocessing/`](./postprocessing/): [`collate_blackbox_results.py`](./postprocessing/collate_blackbox_results.py) and [`collate_groundtruth_results.py`](./postprocessing/collate_groundtruth_results.py).
 
 # References
 
