@@ -1,67 +1,36 @@
-SUBNAME=$1
-SUBFOLDER="algorithms/$1"
-echo "testing $SUBFOLDER"
-# SUBFOLDER=official_competitors/$SUBNAME 
-SUBENV=srbench-$SUBNAME 
-# update base env
-# mamba env update -n srbench -f environment.yml 
+#!/bin/bash
+# Build and test one algorithm the same way CI does.
+#
+#   bash local_ci.sh <method-name>
+#
+# <method-name> must match a directory in both algorithms/ and
+# experiment/methods/. Run from the repository root.
+set -euo pipefail
 
-# install method
-cd $SUBFOLDER
-pwd
-echo "Installing dependencies for ${SUBNAME}"
-echo "........................................"
-echo "Copying base environment"
-echo "........................................"
-conda create --name $SUBENV --clone srbench
-if [ -e environment.yml ] ; then 
-    echo "Installing conda dependencies"
-    echo "........................................"
-    mamba env update -n $SUBENV -f environment.yml
-fi
-if [ -e requirements.txt ] ; then 
-    echo "Installing pip dependencies"
-    echo "........................................"
-    mamba run -n $SUBENV pip install -r requirements.txt
+SUBNAME="${1:-}"
+if [ -z "$SUBNAME" ]; then
+    echo "usage: bash local_ci.sh <method-name>" >&2
+    exit 1
 fi
 
-eval "$(conda shell.bash hook)"
-conda init bash
-conda activate $SUBENV
-if test -f "install.sh" ; then
-echo "running install.sh..."
-echo "........................................"
-bash install.sh
-else
-echo "::warning::No install.sh file found in ${SUBFOLDER}. Assuming the method is a conda package specified in environment.yml."
+if [ ! -d "algorithms/${SUBNAME}" ] || [ ! -d "experiment/methods/${SUBNAME}" ]; then
+    echo "error: ${SUBNAME} needs a directory in BOTH algorithms/ and experiment/methods/" >&2
+    echo "see CONTRIBUTING.md for the expected layout" >&2
+    exit 1
 fi
 
-# Copy files and environment
-echo "Copying files and environment to experiment/methods ..."
-echo "........................................"
-cd ../../
-mkdir -p experiment/methods/$SUBNAME
-cp $SUBFOLDER/regressor.py experiment/methods/$SUBNAME/
-cp $SUBFOLDER/metadata.yml experiment/methods/$SUBNAME/
-touch experiment/methods/$SUBNAME/__init__.py
+echo "==> checking method layout"
+python scripts/check_method_layout.py
 
-# export env
-echo "Exporting environment"
-conda env export -n $SUBENV > $SUBFOLDER/environment.lock.yml
+echo "==> regenerating docker-compose.yml"
+bash scripts/make_docker_compose_file.sh
 
-# Test Method
-cd experiment
-pwd
-ls
-echo "activating conda env $SUBENV..."
-echo "........................................"
-conda activate $SUBENV 
-conda env list 
-conda info 
-python -m pytest -v test_algorithm.py --ml $SUBNAME
-python -m pytest -v test_evaluate_model.py --ml $SUBNAME
+# Algorithm images are FROM srbench/base, so the base image has to exist first.
+echo "==> building base image"
+docker compose build base
 
-# Store Competitor
-# cd ..
-# rsync -avz --exclude=".git" submission/$SUBNAME official_competitors/
-# rm -rf submission/$SUBNAME
+echo "==> building ${SUBNAME}"
+docker compose build "${SUBNAME}"
+
+echo "==> testing ${SUBNAME}"
+docker compose run --rm "${SUBNAME}" bash test.sh
