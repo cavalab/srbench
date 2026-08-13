@@ -33,6 +33,19 @@ on:
       - '.github/workflows/**'
 
 jobs:
+  # Fast structural check. The build-and-test matrix below is generated from
+  # `ls algorithms/`, so a method added only under experiment/methods/ would
+  # otherwise get a full set of green checks without ever being built.
+  validate-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml
+      - run: python scripts/check_method_layout.py
+
   list-algs:
     runs-on: ubuntu-latest
     outputs:
@@ -128,7 +141,8 @@ jobs:
 
   build-and-test:
     runs-on: ubuntu-latest
-    needs: 
+    needs:
+      - validate-layout
       - check-changes
       - print-changes
       - list-algs
@@ -139,7 +153,10 @@ jobs:
       matrix:
         alg: ${{ fromJson(needs.list-algs.outputs.matrix) }}
       fail-fast: false
-    if: always()
+    # always() keeps the matrix running even when check-changes reports no
+    # changes, but a layout failure means the images would be built from a
+    # method that cannot be imported -- don't spend ~27 docker builds on that.
+    if: always() && needs.validate-layout.result == 'success'
     steps:
       - uses: actions/checkout@v4
       - name: Check if algorithm has changed

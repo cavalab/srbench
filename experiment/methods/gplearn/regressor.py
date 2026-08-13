@@ -37,4 +37,4 @@ def model(est, X=None):
 
 def complexity(est):
     #TODO: check
-    return len(re.split('\(|,',model(est)))
+    return len(re.split(r'\(|,',model(est)))
