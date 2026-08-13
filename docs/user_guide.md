@@ -7,7 +7,7 @@ should check out the [v2.0 release](https://github.com/cavalab/srbench/releases/
 
 ### Local install
 
-We have provided a [conda environment](../base_environment.yml), [configuration script](configure.sh), and [installation script](../scripts/install_algorithm.sh) that should make installation straightforward.
+We have provided a [conda environment](../base_environment.yml), [configuration script](../configure.sh), and [installation script](../scripts/install_algorithm.sh) that should make installation straightforward.
 The installation script is the same used internally when building the docker images.
 
 We've currently tested this on Ubuntu and CentOS. 
@@ -23,7 +23,7 @@ conda config --set solver libmamba
 1. Install the conda environment naming it `srbench`:
 
 ```bash
-conda env create -f environment.yml -n srbench
+conda env create -f base_environment.yml -n srbench
 conda activate srbench
 ```
 
