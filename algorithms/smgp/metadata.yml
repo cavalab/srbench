@@ -1,0 +1,8 @@
+name: smgp
+
+description: >-
+  Smooth Multifunction Genetic Programming regressor with a scikit-learn-compatible API and symbolic model export.
+authors:
+  - Petr Michalíček, Tomáš Brandejský
+language: python
+license: MIT
