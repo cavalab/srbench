@@ -1,7 +1,10 @@
 # PIR — Physics Intermediate Representation
+name: PIR
 authors:
   - name: Qazi Hanif
     email: qmhanif70@gmail.com
+email: qmhanif70@gmail.com
+url: https://github.com/Qazi-pk/physics-engine
 key: PIR
 paper:
   title: "PIR: Physics Intermediate Representation for Automated Discovery of Physical Laws"
