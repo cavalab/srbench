@@ -90,7 +90,10 @@ def _predict_1d_linear(block, X):
     w       = block['w']
     b       = block['b']
 
-    X_t, _, valid = transform_space(X, np.zeros(len(X)), space)
+    # Dummy y must be positive: transform_space rejects y<=0 for log_y/log_log
+    # (it would return valid=False and make this block silently predict 0).
+    # Only X_t is used here; the transformed y is discarded.
+    X_t, _, valid = transform_space(X, np.ones(len(X)), space)
     if not valid:
         return np.zeros(len(X))
 
@@ -117,7 +120,9 @@ def _predict_multi_linear(block, X):
         eps  = 1e-10
         X_t  = np.log(np.abs(X) + eps)
     else:
-        X_t, _, valid = transform_space(X, np.zeros(len(X)), space)
+        # Dummy y must be positive (see _predict_1d_linear): transform_space
+        # rejects y<=0 for log_y/log_log, which would zero out this block.
+        X_t, _, valid = transform_space(X, np.ones(len(X)), space)
         if not valid:
             return np.zeros(len(X))
 
@@ -551,43 +556,133 @@ eval_kwargs = {
 
 def model(est, X=None):
     """
-    Return a sympy-compatible string for the fitted model.
+    Return a sympy-parseable string for the fitted model.
 
-    For a single power-law block, returns an exact algebraic expression.
-    For composite models, returns a descriptive block sequence string.
-    The latter won't parse as sympy (symbolic accuracy = N/A) but is
-    informative for qualitative analysis.
+    Pantara's prediction is an additive decomposition: predict() sums the
+    fitted blocks, each mapped back to the original feature space. This
+    rebuilds that same sum symbolically — mirroring predict() and the
+    space transforms — so the result is a valid sympy expression for every
+    block type, not just single power laws. Feature references use the
+    fitted feature names, so the string round-trips through
+    sympy.parse_expr against SRBench's feature-name symbol table.
     """
-    blocks  = getattr(est, 'fitted_blocks_', [])
-    chosen  = getattr(est, 'chosen_', [])
-    f_names = getattr(est, 'feature_names_', None)
+    import sympy as sp
 
+    blocks = getattr(est, 'fitted_blocks_', [])
     if not blocks:
         return None
 
-    # ── single power-law → exact sympy expression ─────────────────────────
-    if len(blocks) == 1 and blocks[0]['type'] == 'power_law':
-        coeffs  = blocks[0]['coeffs']
-        C       = float(np.exp(coeffs[0]))
-        D       = len(coeffs) - 1
-        if f_names and len(f_names) >= D:
-            var_names = f_names[:D]
-        elif X is not None:
-            try:
-                var_names = list(X.columns)[:D]
-            except AttributeError:
-                var_names = [f'x{j}' for j in range(D)]
-        else:
-            var_names = [f'x{j}' for j in range(D)]
+    f_names = getattr(est, 'feature_names_', None)
+    if (not f_names) and X is not None:
+        try:
+            f_names = list(X.columns)
+        except AttributeError:
+            f_names = None
 
-        parts = [f'{C:.6g}']
-        for j, n in enumerate(coeffs[1:]):
-            if abs(n) > 1e-4:
-                parts.append(f'{var_names[j]}**{n:.4f}')
-        return '*'.join(parts)
+    def feat(j):
+        if f_names is not None and j < len(f_names):
+            return sp.Symbol(str(f_names[j]))
+        return sp.Symbol(f'x{j}')
 
-    # ── composite model → descriptive string ──────────────────────────────
-    return ' + '.join(chosen) if chosen else None
+    def xt(j, space):
+        """Feature j after the block's input-space transform (cf. transform_space)."""
+        x = feat(j)
+        if space in ('log_x', 'log_log', 'log_log_multi'):
+            return sp.log(x)
+        if space == 'inv_x':
+            return 1 / x
+        # original, log_y, sq_y leave X untouched
+        return x
+
+    def inv_y(expr, space):
+        """Invert the y-space transform (cf. inverse_transform_y)."""
+        if space in ('log_y', 'log_log', 'log_log_multi'):
+            return sp.exp(expr)
+        if space == 'sq_y':
+            return sp.sqrt(sp.Abs(expr))
+        # original, log_x, inv_x
+        return expr
+
+    def feature_col(family, indices, space):
+        """Symbolic column for a 1-D block family (cf. _compute_feature_col)."""
+        xj = xt(indices[0], space)
+        if family == 'lin':
+            return xj
+        if family == 'sq':
+            return xj ** 2
+        if family == 'pair':
+            return xj * xt(indices[1], space)
+        if family == 'qc':
+            return xj * xt(indices[1], space) ** 2
+        if family == 'trip':
+            return xj * xt(indices[1], space) * xt(indices[2], space)
+        if family == 'qinv':
+            return xj ** 2 / xt(indices[1], space)
+        return None
+
+    def block_expr(b):
+        t = b['type']
+
+        if t == 'power_law':
+            coeffs = b['coeffs']
+            expr = sp.Float(float(np.exp(coeffs[0])))
+            for j, n in enumerate(coeffs[1:]):
+                if abs(float(n)) > 1e-4:
+                    expr = expr * feat(j) ** sp.Float(float(n))
+            return expr
+
+        if t == 'trig':
+            x = feat(b['j_var'])
+            A = sp.Float(float(b['A'])); w = sp.Float(float(b['omega']))
+            phi = sp.Float(float(b['phi'])); C = sp.Float(float(b['C']))
+            B = sp.Float(float(b.get('B', 0.0)))
+            arg = w * x + phi
+            form = b['form']
+            if form == 'sin':
+                return A * sp.sin(arg) + C
+            if form == 'cos':
+                return A * sp.cos(arg) + C
+            if form == 'sin+lin':
+                return A * sp.sin(arg) + B * x + C
+            if form == 'cos+lin':
+                return A * sp.cos(arg) + B * x + C
+            return C
+
+        if t == '1d_linear':
+            space = b['space']
+            col = feature_col(b['family'], b['indices'], space)
+            if col is None:
+                return sp.Integer(0)
+            col_n = (col - sp.Float(float(b['mn_c']))) / sp.Float(float(b['iqr_c']) + 1e-10)
+            pred_t = (sp.Float(float(b['w'])) * col_n + sp.Float(float(b['b']))) \
+                * sp.Float(float(b['iqr_r'])) + sp.Float(float(b['mn_r']))
+            return inv_y(pred_t, space)
+
+        if t == 'multi_linear':
+            space = b['space']
+            mu_x, s_x, W = b['mu_x'], b['s_x'], b['W']
+            n_feats = len(f_names) if f_names is not None else len(W)
+            pred_s = sp.Float(float(b['b']))
+            for j in range(len(W)):
+                # predict() zero-pads transformed features beyond the input width
+                x_t = xt(j, space) if j < n_feats else sp.Integer(0)
+                x_std = (x_t - sp.Float(float(mu_x[j]))) / sp.Float(float(s_x[j]) + 1e-10)
+                pred_s = pred_s + sp.Float(float(W[j])) * x_std
+            pred_t = pred_s * sp.Float(float(b['s_r'])) + sp.Float(float(b['mu_r']))
+            return inv_y(pred_t, space)
+
+        return sp.Integer(0)
+
+    total = sp.Integer(0)
+    for b in blocks:
+        try:
+            total = total + block_expr(b)
+        except Exception:
+            pass  # drop an un-rebuildable block; the partial sum still parses
+
+    if total == sp.Integer(0):
+        return None
+    return str(total)
 
 
 def complexity(est):
