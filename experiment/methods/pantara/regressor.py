@@ -275,7 +275,13 @@ class PantaraRegressor:
 
     def _load_oracle(self):
         oracle = OracleClassifier(n_classes=N_CLASSES)
-        oracle.load_state_dict(torch.load(_MODEL_PATH, weights_only=True))
+        # map_location=DEVICE: the checkpoint may have been saved on mps/cuda;
+        # remap to whatever device exists here (cpu on the Linux CI runner),
+        # otherwise torch.load tries to restore mps storage and raises
+        # "Storage device not recognized: mps".
+        oracle.load_state_dict(
+            torch.load(_MODEL_PATH, weights_only=True, map_location=DEVICE)
+        )
         oracle.to(DEVICE)
         oracle.eval()
         return oracle
