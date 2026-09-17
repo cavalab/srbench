@@ -11,7 +11,10 @@ permissions:
   contents: read
 
 env:
-  ORG: ${{ secrets.DOCKER_HUB_USERNAME }}
+  # Image consumers (Compose and Apptainer) pull from the public srbench
+  # namespace. Keep this independent of the personal Docker Hub account used
+  # to authenticate the workflow.
+  IMAGE_ORG: srbench
 
 jobs:
   base:
@@ -34,8 +37,8 @@ jobs:
             echo "base_tag=$version" >> "$GITHUB_OUTPUT"
             {
               echo "tags<<EOF"
-              echo "${ORG}/base:latest"
-              echo "${ORG}/base:${version}"
+              echo "${IMAGE_ORG}/base:latest"
+              echo "${IMAGE_ORG}/base:${version}"
               echo "EOF"
             } >> "$GITHUB_OUTPUT"
           else
@@ -46,7 +49,7 @@ jobs:
             echo "base_tag=dev" >> "$GITHUB_OUTPUT"
             {
               echo "tags<<EOF"
-              echo "${ORG}/base:dev"
+              echo "${IMAGE_ORG}/base:dev"
               echo "EOF"
             } >> "$GITHUB_OUTPUT"
           fi
@@ -82,6 +85,7 @@ jobs:
           - ffx
           - geneticengine
           - gpgomea
+          - gp-elite
           - gplearn
           - gpzgd
           - itea
@@ -114,8 +118,8 @@ jobs:
             echo "base_tag=$version" >> "$GITHUB_OUTPUT"
             {
               echo "tags<<EOF"
-              echo "${ORG}/${{ matrix.algorithm }}:latest"
-              echo "${ORG}/${{ matrix.algorithm }}:${version}"
+              echo "${IMAGE_ORG}/${{ matrix.algorithm }}:latest"
+              echo "${IMAGE_ORG}/${{ matrix.algorithm }}:${version}"
               echo "EOF"
             } >> "$GITHUB_OUTPUT"
           else
@@ -126,7 +130,7 @@ jobs:
             echo "base_tag=dev" >> "$GITHUB_OUTPUT"
             {
               echo "tags<<EOF"
-              echo "${ORG}/${{ matrix.algorithm }}:dev"
+              echo "${IMAGE_ORG}/${{ matrix.algorithm }}:dev"
               echo "EOF"
             } >> "$GITHUB_OUTPUT"
           fi
@@ -149,7 +153,7 @@ jobs:
           file: ${{ steps.dockerfile.outputs.path }}
           build-args: |
             ALGORITHM=${{ matrix.algorithm }}
-            BASE_IMAGE=${{ env.ORG }}/base:${{ steps.image_tags.outputs.base_tag }}
+            BASE_IMAGE=${{ env.IMAGE_ORG }}/base:${{ steps.image_tags.outputs.base_tag }}
           push: true
           tags: ${{ steps.image_tags.outputs.tags }}
           cache-from: type=gha,scope=${{ matrix.algorithm }}
