@@ -43,10 +43,9 @@ class KeplearnRegressor(BaseEstimator, RegressorMixin):
         X = np.asarray(X, dtype=float)
         y = np.asarray(y, dtype=float).ravel()
         self.n_features_in_ = X.shape[1]
-        # Training-target statistics for predict-side hygiene (mean fallback + range clip).
+        # Training-target mean: the fallback value for rows where the model is
+        # non-finite (see predict).
         self.y_mean_ = float(np.mean(y)) if y.size else 0.0
-        self.y_lo_ = float(np.min(y)) if y.size else 0.0
-        self.y_hi_ = float(np.max(y)) if y.size else 0.0
         cols = [f"x{i + 1}" for i in range(self.n_features_in_)]
         header = "\t".join(cols + ["target"])
         rows = [
@@ -80,22 +79,46 @@ class KeplearnRegressor(BaseEstimator, RegressorMixin):
         # `model` is a full closed-form forward model in x1..xN over the fitted
         # feature columns, with the affine fit already baked in.
         self.model_str_ = results[0]["model"] if results else "0"
+        self._build_canonical()
         return self
+
+    def _build_canonical(self):
+        """Build ONE canonical SymPy expression from the engine string; predict,
+        model() and complexity() all use this same object, so the predicting
+        function and the reported model string cannot diverge."""
+        raw = (self.model_str_.replace("arcsin", "asin")
+                              .replace("arccos", "acos")
+                              .replace("^", "**"))
+        try:
+            loc = {"abs": sp.Abs}
+            loc.update({f"x{i + 1}": sp.Symbol(f"x{i + 1}")
+                        for i in range(self.n_features_in_)})
+            expr = _normalize(sp.sympify(raw, locals=loc))
+            syms = [sp.Symbol(f"x{i + 1}") for i in range(self.n_features_in_)]
+            self.expr_ = expr
+            self._predict_fn = sp.lambdify(syms, expr, "numpy")
+        except Exception:
+            self.expr_ = None
+            self._predict_fn = None
 
     def predict(self, X):
         X = np.asarray(X, dtype=float)
-        env = {f"x{i + 1}": X[:, i] for i in range(X.shape[1])}
-        env.update(_NP)
+        fn = getattr(self, "_predict_fn", None)
         with np.errstate(all="ignore"):
             try:
-                v = eval(self.model_str_.replace("^", "**"), {"__builtins__": {}}, env)
+                if fn is not None:
+                    v = fn(*[X[:, i] for i in range(X.shape[1])])
+                else:
+                    env = {f"x{i + 1}": X[:, i] for i in range(X.shape[1])}
+                    env.update(_NP)
+                    v = eval(self.model_str_.replace("^", "**"), {"__builtins__": {}}, env)
             except Exception:
                 v = self.y_mean_
         v = np.asarray(np.broadcast_to(np.asarray(v, dtype=float), (X.shape[0],)), dtype=float)
-        # Predict-side hygiene: non-finite -> training mean; clip to the training target
-        # range so extrapolation blow-ups the selector cannot see can't wreck the score.
-        v = np.where(np.isfinite(v), v, self.y_mean_)
-        return np.clip(v, self.y_lo_, self.y_hi_)
+        # Sole deviation from evaluating the model expression verbatim: rows
+        # where it is non-finite (poles, domain edges) fall back to the
+        # training mean so downstream metric computation stays defined.
+        return np.where(np.isfinite(v), v, self.y_mean_)
 
 
 est = KeplearnRegressor()
@@ -200,52 +223,56 @@ def _normalize(expr):
 
 
 def model(est, X=None):
-    """Return a sympy-parseable model string in the dataset's feature names, run through
-    an output-only normalization pass (see above)."""
-    s = getattr(est, "model_str_", "0")
+    """Return the canonical model as a sympy-parseable string in the dataset's
+    feature names. This is the SAME expression predict evaluates (built once in
+    fit), so predict(X) matches evaluating model(est, X) on every row where the
+    expression is finite."""
     n = int(getattr(est, "n_features_in_", 0))
     if X is not None and hasattr(X, "columns"):
-        names = list(X.columns)
+        names = [str(c) for c in X.columns]
     else:
         names = [f"x_{i}" for i in range(n)]
-    # engine x1..xN (1-indexed) -> feature names; two-pass via placeholders so a
-    # feature literally named "x2" can't collide with the engine's x2.
+    expr = getattr(est, "expr_", None)
+    if expr is None:
+        return _string_model(est, names)
+    try:
+        # If any feature name collides with SRBench clean_pred_model's x{i}/X{i}
+        # remap pattern, emit 0-indexed generic names so the grader's remapper
+        # reconstructs the real names instead of scrambling ours.
+        if any(re.fullmatch(r"[Xx]_?\d+", nm) for nm in names):
+            subs = {sp.Symbol(f"x{i + 1}"): sp.Symbol(f"x{i}") for i in range(n)}
+        else:
+            subs = {sp.Symbol(f"x{i + 1}"): sp.Symbol(names[i]) for i in range(n)}
+        out = str(expr.subs(subs, simultaneous=True))
+        return out if (out and out.lower() not in ("nan", "zoo", "oo")) else _string_model(est, names)
+    except Exception:
+        return _string_model(est, names)
+
+
+def _string_model(est, names):
+    """Fallback when no canonical expression exists (engine string failed to
+    sympify): plain string mapping of the raw engine model, matching what the
+    fallback predict path evaluates."""
+    s = getattr(est, "model_str_", "0")
+    n = int(getattr(est, "n_features_in_", 0))
     for i in range(n, 0, -1):
         s = re.sub(rf"\bx{i}\b", f"__V{i}__", s)
     for i in range(n, 0, -1):
         nm = names[i - 1] if (i - 1) < len(names) else f"x_{i - 1}"
         s = s.replace(f"__V{i}__", str(nm))
-    s = s.replace("arcsin", "asin").replace("arccos", "acos").replace("^", "**")
-    names_s = [str(nm) for nm in names]
-
-    def _plain():  # un-normalized fallback = the previous behavior
-        loc = {"abs": sp.Abs}
-        loc.update({nm: sp.Symbol(nm) for nm in names_s})
-        return str(sp.sympify(s, locals=loc))
-
-    try:
-        # Plain symbols (NOT positive): positivity makes SymPy auto-split radicals, which
-        # diverges from truth's form. Force feature names to Symbols so a column named
-        # like a sympy function (beta, gamma, E, Q, ...) can't parse as a FunctionClass.
-        loc = {"abs": sp.Abs}
-        loc.update({nm: sp.Symbol(nm) for nm in names_s})
-        expr = _normalize(sp.sympify(s, locals=loc))
-        # If any feature name collides with SRBench clean_pred_model's x{i}/X{i} remap
-        # pattern, emit 0-indexed generic so the grader's remapper RECONSTRUCTS the names
-        # instead of scrambling ours (the feynman_I_11_19 collision: features are
-        # literally x1,x2,x3 and clean_pred_model rewrites 'x'+str(i) -> features[i]).
-        if any(re.fullmatch(r"[Xx]_?\d+", nm) for nm in names_s):
-            subs = {sp.Symbol(names_s[i]): sp.Symbol(f"x{i}")
-                    for i in range(len(names_s))}
-            expr = expr.subs(subs, simultaneous=True)
-        out = str(expr)
-        return out if (out and out.lower() not in ("nan", "zoo", "oo")) else _plain()
-    except Exception:
-        return _plain()
+    return s.replace("arcsin", "asin").replace("arccos", "acos").replace("^", "**")
 
 
 def complexity(est):
-    try:
-        return int(sp.count_ops(sp.sympify(model(est))))
-    except Exception:
-        return 0
+    """Ops count of the SAME canonical expression predict evaluates. Fallback
+    (no canonical expression): a token-level operator count of the raw engine
+    string, which errs toward over-counting rather than reporting 0."""
+    expr = getattr(est, "expr_", None)
+    if expr is not None:
+        try:
+            return int(sp.count_ops(expr))
+        except Exception:
+            pass
+    raw = getattr(est, "model_str_", "0")
+    return len(re.findall(
+        r"\*\*|[+\-*/]|\b(?:sin|cos|tan|sqrt|exp|log|tanh|arcsin|arccos|abs)\b", raw))
