@@ -22,7 +22,6 @@ Paper: https://doi.org/10.5281/zenodo.21351039
 """
 
 import re
-import signal
 
 import numpy as np
 
@@ -46,20 +45,16 @@ _PIR_VANILLA_CONFIG = dict(
 )
 
 
-class _Timeout(Exception):
-    pass
-
-
-def _on_alarm(signum, frame):
-    raise _Timeout()
-
-
 class PIRClassicRegressor(BaseEstimator, RegressorMixin):
     """Thin sklearn wrapper around the classical PIRRegressor.
 
-    Adds a `max_time` budget enforced via SIGALRM (required by SRBench), a
-    `random_state` attribute, and a guaranteed-valid fallback model so that
-    model() never raises even if fit is interrupted.
+    Adds a `random_state` attribute and a guaranteed-valid fallback model so
+    that model() never raises even if the inner fit fails. Timeout
+    enforcement is left entirely to SRBench's own outer alarm: signal.alarm
+    is process-global, so a second SIGALRM set here would silently overwrite
+    SRBench's own timeout handler (per gAldeia's review on PR #210). The
+    `max_time` constructor kwarg is still accepted, for API compatibility
+    with the harness's test_params override, but is currently unused.
     """
 
     def __init__(self, max_time=3600, random_state=None, **pir_kwargs):
@@ -84,27 +79,17 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
         self.expr_ = self._fallback_expr_
         self._inner = self._build()
 
-        use_alarm = (
-            hasattr(signal, "SIGALRM") and self.max_time and self.max_time > 0
-        )
-        old_handler = None
-        if use_alarm:
-            old_handler = signal.signal(signal.SIGALRM, _on_alarm)
-            signal.alarm(int(self.max_time))
+        # No process-level alarm here — SRBench's own outer timeout
+        # enforces max_time; see class docstring.
         try:
             self._inner.fit(X, y)
             if hasattr(self._inner, "model"):
                 self.expr_ = self._inner.model()
             elif hasattr(self._inner, "expr_"):
                 self.expr_ = str(self._inner.expr_)
-        except _Timeout:
+        except Exception:
             # Keep the constant fallback already stored in self.expr_.
             pass
-        finally:
-            if use_alarm:
-                signal.alarm(0)
-                if old_handler is not None:
-                    signal.signal(signal.SIGALRM, old_handler)
         self.is_fitted_ = True
         return self
 
@@ -147,8 +132,12 @@ def model(est, X=None):
         return expr
 
     cols = list(X.columns)
+    # Word-boundary match, not substring: a column literally named "co"
+    # must not match inside "cos(x_0)" (per gAldeia's review on PR #210).
+    def _col_appears(col_name, s):
+        return re.search(r"\b" + re.escape(str(col_name)) + r"\b", s) is not None
     # If any real column name already appears, assume names are correct.
-    if any(str(c) in expr for c in cols):
+    if any(_col_appears(c, expr) for c in cols):
         return expr
 
     # Remap generic positional names -> dataset columns.
@@ -167,13 +156,18 @@ def complexity(est):
 
     Counts nodes in the expression by splitting on operators and separators,
     following the convention used by other SRBench methods (e.g. gplearn).
+    SRBench normally uses SymPy's own complexity first; this is only a
+    fallback, but the operator count is included so the fallback is as
+    accurate as possible (per gAldeia's review on PR #210).
     """
     expr = model(est)
     if not expr:
         return 0
-    # Count operands and operators as a proxy for expression tree size.
+    # Count operand-like tokens and add back the operators the split removed.
     tokens = re.split(r"[\s\(\),\+\-\*\/\^]+", expr)
-    return len([t for t in tokens if t])
+    operand_count = len([t for t in tokens if t])
+    operator_count = len(re.findall(r"[\+\-\*\/\^]", expr))
+    return operand_count + operator_count
 
 
 # --- forwarded to evaluate_model.py ------------------------------------------
