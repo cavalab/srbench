@@ -1,0 +1,12 @@
+# PIR — Physics Intermediate Representation
+authors:
+  - name: Qazi Hanif
+    email: qmhanif70@gmail.com
+key: PIR
+paper:
+  title: "PIR: Physics Intermediate Representation for Automated Discovery of Physical Laws"
+  url: https://doi.org/10.5281/zenodo.19723561
+description: >
+  Classical symbolic regression via monomial-basis search with log-linearization
+  gate for power-law detection, pairwise structure decomposition, RANSAC,
+  sparse regression, and iterative residual refinement. No neural components.
