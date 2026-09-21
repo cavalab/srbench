@@ -22,7 +22,7 @@ To handle the lack of a unified framework, we've specified minimal requirements 
 The current edition of the benchmark (SRBench 2025, reported in our [_call for action_ paper](#call-for-action)) evaluates **25** symbolic regression methods under a unified experimental setup: every method runs from a docker container, with hyperparameter tuning and **30** independent runs per dataset, on **24** datasets from [PMLB](https://github.com/EpistasisLab/penn-ml-benchmarks) plus a set of first-principles regression problems.
 This roster includes the 14 methods from the original SRBench together with the methods staged since then.
 
-Methods currently benchmarked:
+Methods currently benchmarked or staged for the next benchmark update:
 
 | Method |  |  |
 |:--|:--|:--|
@@ -30,11 +30,13 @@ Methods currently benchmarked:
 | **Bingo** - [paper](https://dl.acm.org/doi/10.1145/3520304.3534031) | **Brush** - [paper](https://royalsocietypublishing.org/rsta/article/384/2317/20240588/481208/Towards-symbolic-regression-for-interpretable) | **BSR** - [paper](https://arxiv.org/abs/1910.08892) |
 | **E2E** - [paper](https://papers.neurips.cc/paper_files/paper/2022/file/42eb37cdbefd7abae0835f4b67548c39-Paper-Conference.pdf) | **EPLEX** - [paper](https://direct.mit.edu/evco/article-pdf/27/3/377/1858632/evco_a_00224.pdf) | **EQL** - [paper](http://proceedings.mlr.press/v80/sahoo18a/sahoo18a.pdf) |
 | **FEAT** - [paper](https://openreview.net/pdf?id=Hke-JhA9Y7) | **FFX** - [paper](https://link.springer.com/chapter/10.1007/978-1-4614-1770-5_13) | **Genetic Engine** - [paper](https://dl.acm.org/doi/10.1145/3564719.3568697) |
-| **GPGomea** - [paper](http://dx.doi.org/10.1162/evco_a_00278) | **GPlearn** - [paper]() | **GPZGD** - [paper](https://doi.org/10.1145/3377930.3390237) |
-| **ITEA** - [paper](https://direct.mit.edu/evco/article-pdf/29/3/367/1959462/evco_a_00285.pdf) | **NeSymRes** - [paper](http://proceedings.mlr.press/v139/biggio21a/biggio21a.pdf) | **Operon** - [paper](https://link.springer.com/article/10.1007/s10710-019-09371-3) |
-| **Ps-Tree** - [paper](https://www.sciencedirect.com/science/article/pii/S2210650222000335) | **PySR** - [paper](https://arxiv.org/abs/2305.01582) | **Qlattice** - [paper](https://arxiv.org/abs/2104.05417) |
-| **Rils-rols** - [paper](http://dx.doi.org/10.1186/s40537-023-00743-2) | **TIR** - [paper](https://doi.org/10.1145/3597312) | **TPSR** - [paper](https://openreview.net/forum?id=0rVXQEeFEL) |
-| **uDSR** - [paper](https://proceedings.neurips.cc/paper_files/paper/2022/file/dbca58f35bddc6e4003b2dd80e42f838-Paper-Conference.pdf) |  |  |
+| **GPGomea** - [paper](http://dx.doi.org/10.1162/evco_a_00278) | **GP-ELITE** - [code](https://github.com/ariel95500-create/gp-elite) | **GPlearn** - [paper]() |
+| **GPZGD** - [paper](https://doi.org/10.1145/3377930.3390237) | **ITEA** - [paper](https://direct.mit.edu/evco/article-pdf/29/3/367/1959462/evco_a_00285.pdf) | **NeSymRes** - [paper](http://proceedings.mlr.press/v139/biggio21a/biggio21a.pdf) |
+| **Operon** - [paper](https://link.springer.com/article/10.1007/s10710-019-09371-3) | **Pantara** - [code](https://github.com/Yapock22/pantara) | **Ps-Tree** - [paper](https://www.sciencedirect.com/science/article/pii/S2210650222000335) |
+| **PySR** - [paper](https://arxiv.org/abs/2305.01582) | **Qlattice** - [paper](https://arxiv.org/abs/2104.05417) | **Rils-rols** - [paper](http://dx.doi.org/10.1186/s40537-023-00743-2) |
+| **TIR** - [paper](https://doi.org/10.1145/3597312) | **TPSR** - [paper](https://openreview.net/forum?id=0rVXQEeFEL) | **uDSR** - [paper](https://proceedings.neurips.cc/paper_files/paper/2022/file/dbca58f35bddc6e4003b2dd80e42f838-Paper-Conference.pdf) |
+
+GP-ELITE and Pantara are staged for benchmarking and are covered by the container build and test workflows; they are not included in the SRBench 2025 result figures above.
 
 The full experiment code and results for this edition live on the [`srbench_2025`](https://github.com/cavalab/srbench/tree/srbench_2025) branch (raw results in [`results/`](https://github.com/cavalab/srbench/tree/srbench_2025/results)).
 If you are choosing baselines for a new symbolic regression paper, please use this roster and these results rather than the 2021 tables below.
@@ -177,4 +179,3 @@ v1.0 was reported in our GECCO 2018 paper:
 # Contact
 
 William La Cava ([@lacava](https://github.com/lacava)), william dot lacava at childrens dot harvard dot edu
-
