@@ -2,19 +2,59 @@ name: Docker Images
 
 on:
   push:
+    branches:
+      - dev
     tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 env:
-  ORG: ${{ secrets.DOCKER_HUB_USERNAME }}
+  # Image consumers (Compose and Apptainer) pull from the public srbench
+  # namespace. Keep this independent of the personal Docker Hub account used
+  # to authenticate the workflow.
+  IMAGE_ORG: srbench
 
 jobs:
   base:
+    # Temporarily disabled
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # A dev push gets the development tag. A vX.Y tag is a release: publish
+      # its numeric version and promote it to latest.
+      - name: Select image tags
+        id: image_tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            version="${GITHUB_REF_NAME#v}"
+            if [[ -z "$version" || "$version" == "$GITHUB_REF_NAME" ]]; then
+              echo "Release tags must use the v<version> form (for example v0.1)." >&2
+              exit 1
+            fi
+            echo "base_tag=$version" >> "$GITHUB_OUTPUT"
+            {
+              echo "tags<<EOF"
+              echo "${IMAGE_ORG}/base:latest"
+              echo "${IMAGE_ORG}/base:${version}"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            if [[ "$GITHUB_REF_NAME" != "dev" ]]; then
+              echo "Development images may only be published from the dev branch." >&2
+              exit 1
+            fi
+            echo "base_tag=dev" >> "$GITHUB_OUTPUT"
+            {
+              echo "tags<<EOF"
+              echo "${IMAGE_ORG}/base:dev"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
       - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -25,13 +65,13 @@ jobs:
           context: .
           file: baseDockerfile
           push: true
-          tags: |
-            ${{ env.ORG }}/base:latest
-            ${{ env.ORG }}/base:${{ github.ref_name }}
+          tags: ${{ steps.image_tags.outputs.tags }}
           cache-from: type=gha,scope=base
           cache-to: type=gha,scope=base,mode=max
 
   algorithms:
+    # Temporarily disabled
+    if: ${{ false }}
     needs: base
     runs-on: ubuntu-latest
     strategy:
@@ -49,12 +89,16 @@ jobs:
           - ffx
           - geneticengine
           - gpgomea
+          - gp-elite
           - gplearn
           - gpzgd
           - itea
+          - keplearn
           - lightgbm
           - nesymres
           - operon
+          - pantara
+          - pir
           - ps-tree
           - pysr
           - qlattice
@@ -66,6 +110,36 @@ jobs:
           - xgboost
     steps:
       - uses: actions/checkout@v4
+      - name: Select image tags
+        id: image_tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            version="${GITHUB_REF_NAME#v}"
+            if [[ -z "$version" || "$version" == "$GITHUB_REF_NAME" ]]; then
+              echo "Release tags must use the v<version> form (for example v0.1)." >&2
+              exit 1
+            fi
+            echo "base_tag=$version" >> "$GITHUB_OUTPUT"
+            {
+              echo "tags<<EOF"
+              echo "${IMAGE_ORG}/${{ matrix.algorithm }}:latest"
+              echo "${IMAGE_ORG}/${{ matrix.algorithm }}:${version}"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            if [[ "$GITHUB_REF_NAME" != "dev" ]]; then
+              echo "Development images may only be published from the dev branch." >&2
+              exit 1
+            fi
+            echo "base_tag=dev" >> "$GITHUB_OUTPUT"
+            {
+              echo "tags<<EOF"
+              echo "${IMAGE_ORG}/${{ matrix.algorithm }}:dev"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
       - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -85,10 +159,8 @@ jobs:
           file: ${{ steps.dockerfile.outputs.path }}
           build-args: |
             ALGORITHM=${{ matrix.algorithm }}
-            BASE_IMAGE=${{ env.ORG }}/base:${{ github.ref_name }}
+            BASE_IMAGE=${{ env.IMAGE_ORG }}/base:${{ steps.image_tags.outputs.base_tag }}
           push: true
-          tags: |
-            ${{ env.ORG }}/${{ matrix.algorithm }}:latest
-            ${{ env.ORG }}/${{ matrix.algorithm }}:${{ github.ref_name }}
+          tags: ${{ steps.image_tags.outputs.tags }}
           cache-from: type=gha,scope=${{ matrix.algorithm }}
           cache-to: type=gha,scope=${{ matrix.algorithm }},mode=max

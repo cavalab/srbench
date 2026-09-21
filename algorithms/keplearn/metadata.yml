@@ -1,0 +1,16 @@
+authors:
+  - Chandler Freeman
+email: chandler@mnty.sh
+name: keplearn
+description: |
+  Keplearn is a deterministic symbolic regression engine written in Rust. It
+  recovers closed-form equations by best-first recursive reduction: the
+  target is reduced through chains of invertible operations (divide by a
+  fitted factor, target-side shells, fitted inner-affine nodes) until a
+  terminal monomial or composite fit explains it, and candidates are chosen
+  on an internal holdout with an MDL complexity penalty. The engine has no
+  randomness; runs are reproducible byte for byte. install.sh builds it from
+  a pinned release tag of the public repository, and this Python wrapper
+  shells out to the binary (training data as a TSV on stdin, closed-form
+  model as JSON on stdout).
+url: https://github.com/owls-on-wires/keplearn

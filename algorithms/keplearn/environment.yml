@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - sympy
+  - scikit-learn
+  - rust
+  - compilers
+  - git

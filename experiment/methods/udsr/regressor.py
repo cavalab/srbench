@@ -88,7 +88,7 @@ class uDSRRegressor(BaseEstimator, RegressorMixin):
                     # number) will simply returns a minimal reward. With protected=True,
                     # "protected" functions will prevent floating-point errors, but may
                     # introduce discontinuities in the learned functions.      
-                    "protected" : False,
+                    "protected" : True,
                 
                     # You can add artificial reward noise directly to the reward function.
                     # Note this does NOT add noise to the dataset.
