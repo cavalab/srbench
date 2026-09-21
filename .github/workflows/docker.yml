@@ -89,10 +89,12 @@ jobs:
           - gplearn
           - gpzgd
           - itea
+          - keplearn
           - lightgbm
           - nesymres
           - operon
           - pantara
+          - pir
           - ps-tree
           - pysr
           - qlattice
