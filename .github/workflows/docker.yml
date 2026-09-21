@@ -18,6 +18,8 @@ env:
 
 jobs:
   base:
+    # Temporarily disabled
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,6 +70,8 @@ jobs:
           cache-to: type=gha,scope=base,mode=max
 
   algorithms:
+    # Temporarily disabled
+    if: ${{ false }}
     needs: base
     runs-on: ubuntu-latest
     strategy:
