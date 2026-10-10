@@ -1,12 +1,12 @@
 from sklearn import linear_model
 
 hyper_params = [
-     {
-         'fit_intercept': (True,),
-     },
+    {
+        "fit_intercept": (True,),
+    },
 ]
 
-est=linear_model.LinearRegression()
+est = linear_model.LinearRegression()
 
 complexity = None
 model = None

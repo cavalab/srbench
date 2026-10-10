@@ -1,18 +1,26 @@
-from sklearn.base import RegressorMixin
+from __future__ import annotations
 
-from bingo.symbolic_regression.symbolic_regressor import SymbolicRegressor
+from typing import Any
+
 from bingo.symbolic_regression.srbench_interface import (
-    model,
-    get_population,
-    get_best_solution,
     eval_kwargs as base_eval_kwargs,
 )
+from bingo.symbolic_regression.srbench_interface import (
+    get_best_solution as get_best_solution,
+)
+from bingo.symbolic_regression.srbench_interface import (
+    get_population as get_population,
+)
+from bingo.symbolic_regression.srbench_interface import (
+    model as model,
+)
+from bingo.symbolic_regression.symbolic_regressor import SymbolicRegressor
 
 eval_kwargs = dict(base_eval_kwargs)
 eval_kwargs["use_dataframe"] = False
 
 # sklearn's interface should not modify constructor parameters. Bingo modifies
-# max_time, so here I'm wrapping it into an sklearn-compatible estimator 
+# max_time, so here I'm wrapping it into an sklearn-compatible estimator
 # so gridsearch will work.
 
 # class BingoSymbolicRegressor(SymbolicRegressor, RegressorMixin):
@@ -88,7 +96,7 @@ eval_kwargs["use_dataframe"] = False
 #         self.best_ind_ = min(self.est_.best_pop_, key=lambda x: x.fitness)
 
 #         return self
-    
+
 #     def get_params(self, deep=True):
 #         out = dict()
 #         for (key, value) in self.__dict__.items():
@@ -144,10 +152,12 @@ eval_kwargs["use_dataframe"] = False
 # )
 
 population_size = [100, 500, 1000]
-operators=[["+", "-", "*", "/", "sin", "cos", "exp", "log", "sqrt"],
-           ["+", "-", "*", "/", "log", "sqrt"]]
+operators = [
+    ["+", "-", "*", "/", "sin", "cos", "exp", "log", "sqrt"],
+    ["+", "-", "*", "/", "log", "sqrt"],
+]
 
-hyper_params = []
+hyper_params: list[dict[str, Any]] = []
 # for p in population_size:
 #     for ops in operators:
 #         hyper_params.append({

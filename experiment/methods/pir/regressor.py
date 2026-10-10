@@ -25,17 +25,15 @@ import re
 
 import numpy as np
 
-from sklearn.base import BaseEstimator, RegressorMixin
-
 # The classical engine. algorithms/pir/install.sh pip-installs this from the
 # public repo at tag v3.4.1.
 from physics_engine.sklearn_adapter import PIRRegressor
-
+from sklearn.base import BaseEstimator, RegressorMixin
 
 # --- Vanilla config that produced the verified blind Tier A result ------------
 _PIR_VANILLA_CONFIG = dict(
-    enforce_dimensions=False,        # blind sweep ran with dim-filter OFF
-    allowed_powers=[1, 2],           # powers 1,2 only (structural cap)
+    enforce_dimensions=False,  # blind sweep ran with dim-filter OFF
+    allowed_powers=[1, 2],  # powers 1,2 only (structural cap)
     include_pairwise_products=True,  # pairwise on; no 3-var assembly
     use_ransac=True,
     use_residual=True,
@@ -122,20 +120,18 @@ def model(est, X=None):
     unchanged. Otherwise generic positional names (x_0, x0, X0, ...) are
     remapped to the dataset columns.
     """
-    expr = (
-        est.model()
-        if hasattr(est, "model")
-        else str(getattr(est, "expr_", "0.0"))
-    )
+    expr = est.model() if hasattr(est, "model") else str(getattr(est, "expr_", "0.0"))
 
     if X is None or not hasattr(X, "columns"):
         return expr
 
     cols = list(X.columns)
+
     # Word-boundary match, not substring: a column literally named "co"
     # must not match inside "cos(x_0)" (per gAldeia's review on PR #210).
     def _col_appears(col_name, s):
         return re.search(r"\b" + re.escape(str(col_name)) + r"\b", s) is not None
+
     # If any real column name already appears, assume names are correct.
     if any(_col_appears(c, expr) for c in cols):
         return expr
