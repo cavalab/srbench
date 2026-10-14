@@ -2,6 +2,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  # pyarrow does not yet publish Conda packages for Python 3.15.
+  # Keep the shared image on the supported version recorded in the lock file.
+  - python=3.12
   - scikit-learn 
   - pandas 
   - numpy
