@@ -120,7 +120,7 @@ class GPEliteSRBench(GPEliteRegressor):
 
         if best is not None and not getattr(self, "is_fitted_", False):
             self._publish(best)
-            
+
         return self
 
 
