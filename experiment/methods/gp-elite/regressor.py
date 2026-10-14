@@ -107,7 +107,7 @@ class GPEliteSRBench(GPEliteRegressor):
                 robust=self.robust,
                 parallel=self.parallel,
                 time_limit=max(1.0, remaining / (n - k)),
-                seed=seed0 + 1000 * k
+                seed=seed0 + 1000 * k,
             )
             score = r.r2_validation
             if score is None or not np.isfinite(score):
@@ -116,10 +116,11 @@ class GPEliteSRBench(GPEliteRegressor):
                 score = 1.0 - float(np.sum((y - p) ** 2) / ss)
             if best is None or score > best_score:
                 best, best_score = r, score
-                self._publish(best)          # published as soon as found
+                self._publish(best)  # published as soon as found
 
         if best is not None and not getattr(self, "is_fitted_", False):
             self._publish(best)
+            
         return self
 
 
@@ -150,8 +151,11 @@ def model(est, X=None):
     operators are spelled as the engine computes them (sqrt(Abs(u)) where u
     can be negative).
     """
-    cols = list(X.columns) if X is not None and hasattr(X, "columns") \
+    cols = (
+        list(X.columns)
+        if X is not None and hasattr(X, "columns")
         else ["x%d" % i for i in range(getattr(est, "n_features_in_", 0))]
+    )
     return est.model_.sympy(cols)
 
 
