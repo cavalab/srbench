@@ -2,9 +2,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  # pyarrow does not yet publish Conda packages for Python 3.15.
-  # Keep the shared image on the supported version recorded in the lock file.
-  - python=3.12
+  # pyarrow does not yet publish Conda packages for Python 3.15.  Keep this
+  # as a ceiling so method-specific environment files can select their own
+  # compatible Python version (for example, FFX needs 3.11.10).
+  - python<3.15
   - scikit-learn 
   - pandas 
   - numpy
