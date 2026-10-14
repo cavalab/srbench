@@ -56,30 +56,32 @@ def _use_toy_dataframe(monkeypatch, feature_names):
     monkeypatch.setattr(symbolic_utils, "read_file", read_toy_file)
 
 
-def test_clean_pred_model_preserves_x_named_features(monkeypatch):
+def test_clean_pred_model_preserves_x_named_features(monkeypatch, ml):
     feature_names = ["x1", "x2", "x3", "y1", "y2", "y3"]
     model = "x1*y1 + x2*y2 + x3*y3"
     _use_toy_dataframe(monkeypatch, feature_names)
 
-    cleaned = symbolic_utils.clean_pred_model(model, "toy.tsv", "example")
+    cleaned = symbolic_utils.clean_pred_model(model, "toy.tsv", ml)
 
     assert simplify(cleaned - parse_expr(model)) == 0
 
 
-def test_clean_pred_model_preserves_mixed_x_named_features(monkeypatch):
+def test_clean_pred_model_preserves_mixed_x_named_features(monkeypatch, ml):
     feature_names = ["m1", "m2", "G", "x1", "x2", "y1", "y2", "z1", "z2"]
     model = "x1**2 - 2*x1*x2 + x2**2"
     _use_toy_dataframe(monkeypatch, feature_names)
 
-    cleaned = symbolic_utils.clean_pred_model(model, "toy.tsv", "example")
+    cleaned = symbolic_utils.clean_pred_model(model, "toy.tsv", ml)
 
     assert simplify(cleaned - parse_expr(model)) == 0
 
 
-def test_clean_pred_model_still_normalizes_generic_placeholders(monkeypatch):
+def test_clean_pred_model_still_normalizes_generic_placeholders(monkeypatch, ml):
     _use_toy_dataframe(monkeypatch, ["mass", "velocity"])
 
-    cleaned = symbolic_utils.clean_pred_model("x0 + x1", "toy.tsv", "example")
+    is_one_based = any(name in ml.lower() for name in ["mrgp", "operon", "dsr"])
+    model = "x1 + x2" if is_one_based else "x0 + x1"
+    cleaned = symbolic_utils.clean_pred_model(model, "toy.tsv", ml)
 
     assert simplify(cleaned - parse_expr("mass + velocity")) == 0
 
