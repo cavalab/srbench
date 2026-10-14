@@ -12,14 +12,13 @@ import pytest
 
 sys.path.append(d(abspath(__file__)))
 
-
+import symbolic_utils
 from evaluate_model import evaluate_model
 from read_file import read_file
 from symbolic_utils import (
     complexity,
     round_floats,
 )
-import symbolic_utils
 from sympy import Symbol, simplify
 
 # symbolic model stuff
@@ -41,9 +40,7 @@ random_state = 42
 
 def _use_toy_dataframe(monkeypatch, feature_names):
     """Make clean_pred_model see a small dataset without a fixture on disk."""
-    dataframe = pd.DataFrame(
-        np.zeros((2, len(feature_names))), columns=feature_names
-    )
+    dataframe = pd.DataFrame(np.zeros((2, len(feature_names))), columns=feature_names)
     dataframe["target"] = 0.0
 
     def read_toy_file(_dataset):

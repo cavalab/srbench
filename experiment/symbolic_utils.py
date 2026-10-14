@@ -181,7 +181,8 @@ def clean_pred_model(model_str, dataset, est_name):
         match.group(0) for match in re.finditer(placeholder_pattern, new_model_str)
     }
     feature_names = {str(feature) for feature in features}
-    index_offset = int( # Some methods start counting features at 1
+
+    index_offset = int(  # Some methods start counting features at 1
         any(name in est_name.lower() for name in ["mrgp", "operon", "dsr"])
     )
 
