@@ -6,6 +6,8 @@ import types
 from os.path import abspath
 from os.path import dirname as d
 
+import numpy as np
+import pandas as pd
 import pytest
 
 sys.path.append(d(abspath(__file__)))
@@ -17,7 +19,8 @@ from symbolic_utils import (
     complexity,
     round_floats,
 )
-from sympy import Symbol
+import symbolic_utils
+from sympy import Symbol, simplify
 
 # symbolic model stuff
 from sympy.parsing.sympy_parser import parse_expr
@@ -34,6 +37,51 @@ if "MKL_NUM_THREADS" not in os.environ.keys():
 dataset = "test/192_vineyard_small.tsv.gz"
 results_path = "tmp_results"
 random_state = 42
+
+
+def _use_toy_dataframe(monkeypatch, feature_names):
+    """Make clean_pred_model see a small dataset without a fixture on disk."""
+    dataframe = pd.DataFrame(
+        np.zeros((2, len(feature_names))), columns=feature_names
+    )
+    dataframe["target"] = 0.0
+
+    def read_toy_file(_dataset):
+        return (
+            dataframe.drop(columns="target"),
+            dataframe["target"].to_numpy(),
+            dataframe.drop(columns="target").columns.to_numpy(),
+        )
+
+    monkeypatch.setattr(symbolic_utils, "read_file", read_toy_file)
+
+
+def test_clean_pred_model_preserves_x_named_features(monkeypatch):
+    feature_names = ["x1", "x2", "x3", "y1", "y2", "y3"]
+    model = "x1*y1 + x2*y2 + x3*y3"
+    _use_toy_dataframe(monkeypatch, feature_names)
+
+    cleaned = symbolic_utils.clean_pred_model(model, "toy.tsv", "example")
+
+    assert simplify(cleaned - parse_expr(model)) == 0
+
+
+def test_clean_pred_model_preserves_mixed_x_named_features(monkeypatch):
+    feature_names = ["m1", "m2", "G", "x1", "x2", "y1", "y2", "z1", "z2"]
+    model = "x1**2 - 2*x1*x2 + x2**2"
+    _use_toy_dataframe(monkeypatch, feature_names)
+
+    cleaned = symbolic_utils.clean_pred_model(model, "toy.tsv", "example")
+
+    assert simplify(cleaned - parse_expr(model)) == 0
+
+
+def test_clean_pred_model_still_normalizes_generic_placeholders(monkeypatch):
+    _use_toy_dataframe(monkeypatch, ["mass", "velocity"])
+
+    cleaned = symbolic_utils.clean_pred_model("x0 + x1", "toy.tsv", "example")
+
+    assert simplify(cleaned - parse_expr("mass + velocity")) == 0
 
 
 def get_algorithm(ml):
