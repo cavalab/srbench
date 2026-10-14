@@ -172,17 +172,49 @@ def clean_pred_model(model_str, dataset, est_name):
 
     local_dict = {k: Symbol(k) for k in features}
     new_model_str = model_str
-    # rename features
-    for i, f in reversed(list(enumerate(features))):
-        print("replacing feature", i, "with", f)
-        if any([n in est_name.lower() for n in ["mrgp", "operon", "dsr"]]):
-            i = i + 1
-        new_model_str = new_model_str.replace("x" + str(i), f)
-        new_model_str = new_model_str.replace("x_" + str(i), f)
-        new_model_str = new_model_str.replace("X_" + str(i), f)
-        new_model_str = new_model_str.replace("X" + str(i), f)
-        new_model_str = new_model_str.replace("x[:,{}]".format(i), f)
-        new_model_str = new_model_str.replace("x[{}]".format(i), f)
+    # Rename generic feature placeholders. Model strings are expected to use
+    # dataset feature names, and some datasets genuinely have names such as
+    # ``x1`` and ``x2``. In that case, treating the names as placeholders would
+    # corrupt an already-correct model.
+    placeholder_pattern = r"\b(?:x_|X_|x|X)(\d+)\b"
+    placeholder_tokens = {
+        match.group(0) for match in re.finditer(placeholder_pattern, new_model_str)
+    }
+    feature_names = {str(feature) for feature in features}
+
+    index_offset = int(  # Some methods start counting features at 1
+        any(name in est_name.lower() for name in ["mrgp", "operon", "dsr"])
+    )
+
+    def feature_name(index):
+        feature_index = index - index_offset
+        if 0 <= feature_index < len(features):
+            return str(features[feature_index])
+        return None
+
+    # If every placeholder-looking identifier is an actual feature name, the
+    # string is already in the documented dataset-name form. This intentionally
+    # favors preserving a compliant model in the otherwise ambiguous x1/x2 case.
+    if not placeholder_tokens.issubset(feature_names):
+
+        def replace_placeholder(match):
+            replacement = feature_name(int(match.group(1)))
+            return replacement if replacement is not None else match.group(0)
+
+        new_model_str = re.sub(placeholder_pattern, replace_placeholder, new_model_str)
+
+    # Array-style placeholders cannot be dataset feature names, so they can
+    # always be normalized. Keep this separate from identifier replacement.
+    def replace_array_placeholder(match):
+        replacement = feature_name(int(match.group(1)))
+        return replacement if replacement is not None else match.group(0)
+
+    new_model_str = re.sub(
+        r"x\[:,\s*(\d+)\s*\]", replace_array_placeholder, new_model_str
+    )
+    new_model_str = re.sub(
+        r"x\[\s*(\d+)\s*\]", replace_array_placeholder, new_model_str
+    )
     # operators
     new_model_str = new_model_str.replace("^", "**")
     # GP-GOMEA
