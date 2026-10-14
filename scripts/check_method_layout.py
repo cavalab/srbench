@@ -129,7 +129,9 @@ def check_algorithm(name: str) -> None:
         if parsed is not None or name not in METADATA_GRANDFATHERED:
             missing = [k for k in REQUIRED_METADATA_KEYS if k not in (parsed or {})]
             if missing and name not in METADATA_GRANDFATHERED:
-                error(name, f"{metadata} is missing required key(s): {', '.join(missing)}")
+                error(
+                    name, f"{metadata} is missing required key(s): {', '.join(missing)}"
+                )
             elif missing:
                 warn(name, f"{metadata} is incomplete (missing {', '.join(missing)})")
 
@@ -157,9 +159,14 @@ def check_algorithm(name: str) -> None:
             error(name, f"{regressor} does not define `{required}` at module level")
 
     if os.path.isfile(os.path.join(alg_path, "regressor.py")):
-        warn(name, f"{alg_path}/regressor.py is ignored; the harness imports {regressor}")
+        warn(
+            name, f"{alg_path}/regressor.py is ignored; the harness imports {regressor}"
+        )
     if os.path.isfile(os.path.join(method_path, "metadata.yml")):
-        warn(name, f"{method_path}/metadata.yml is ignored; metadata.yml belongs in {alg_path}/")
+        warn(
+            name,
+            f"{method_path}/metadata.yml is ignored; metadata.yml belongs in {alg_path}/",
+        )
     for stray in ("install.sh", "environment.yml", "requirements.txt", "Dockerfile"):
         if os.path.isfile(os.path.join(method_path, stray)):
             error(
@@ -179,10 +186,14 @@ def check_orphan_method(name: str) -> None:
 
 def main() -> int:
     if not os.path.isdir(ALG_DIR) or not os.path.isdir(METHOD_DIR):
-        print(f"error: run this from the repository root (missing {ALG_DIR}/ or {METHOD_DIR}/)")
+        print(
+            f"error: run this from the repository root (missing {ALG_DIR}/ or {METHOD_DIR}/)"
+        )
         return 1
 
-    algorithms = sorted(d for d in os.listdir(ALG_DIR) if os.path.isdir(os.path.join(ALG_DIR, d)))
+    algorithms = sorted(
+        d for d in os.listdir(ALG_DIR) if os.path.isdir(os.path.join(ALG_DIR, d))
+    )
     methods = sorted(
         d
         for d in os.listdir(METHOD_DIR)
@@ -199,13 +210,23 @@ def main() -> int:
     print(f"checked {len(algorithms)} algorithms and {len(methods)} method directories")
 
     for line in warnings:
-        print(f"::warning::{line}" if os.environ.get("GITHUB_ACTIONS") else f"warning: {line}")
+        print(
+            f"::warning::{line}"
+            if os.environ.get("GITHUB_ACTIONS")
+            else f"warning: {line}"
+        )
 
     if errors:
         print()
         for line in errors:
-            print(f"::error::{line}" if os.environ.get("GITHUB_ACTIONS") else f"error: {line}")
-        print(f"\n{len(errors)} problem(s) found. See CONTRIBUTING.md for the expected layout.")
+            print(
+                f"::error::{line}"
+                if os.environ.get("GITHUB_ACTIONS")
+                else f"error: {line}"
+            )
+        print(
+            f"\n{len(errors)} problem(s) found. See CONTRIBUTING.md for the expected layout."
+        )
         return 1
 
     print("method layout OK")

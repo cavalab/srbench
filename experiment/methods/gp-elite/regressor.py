@@ -8,13 +8,17 @@ a per-call time limit (`time_limit=`), so a restart can no longer overrun the
 harness budget, and an exported formula written in the raw input variables and
 checked against `predict` at fit time (`SRResult.sympy`).
 """
+
+from __future__ import annotations
+
 import time
+from typing import Any
 
 import numpy as np
 
 try:
     from sklearn.utils.validation import validate_data
-except Exception:                       # older sklearn
+except Exception:  # older sklearn
     validate_data = None
 
 from gp_elite import GPEliteRegressor
@@ -31,14 +35,30 @@ class GPEliteSRBench(GPEliteRegressor):
     it is found.
     """
 
-    def __init__(self, operators="physical", normalize="auto", generations=60,
-                 speed="fast", validation_split=0.20, max_time=3600,
-                 restarts=10, robust=False, parallel=None, random_state=0):
-        super().__init__(operators=operators, normalize=normalize,
-                         generations=generations, speed=speed,
-                         validation_split=validation_split, restarts=restarts,
-                         robust=robust, parallel=parallel,
-                         random_state=random_state)
+    def __init__(
+        self,
+        operators="physical",
+        normalize="auto",
+        generations=60,
+        speed="fast",
+        validation_split=0.20,
+        max_time=3600,
+        restarts=10,
+        robust=False,
+        parallel=None,
+        random_state=0,
+    ):
+        super().__init__(
+            operators=operators,
+            normalize=normalize,
+            generations=generations,
+            speed=speed,
+            validation_split=validation_split,
+            restarts=restarts,
+            robust=robust,
+            parallel=parallel,
+            random_state=random_state,
+        )
         self.max_time = max_time
 
     def _publish(self, r):
@@ -48,8 +68,9 @@ class GPEliteSRBench(GPEliteRegressor):
 
     def fit(self, X, y):
         if validate_data is not None:
-            X, y = validate_data(self, X, y, y_numeric=True,
-                                 ensure_min_samples=2, dtype="numeric")
+            X, y = validate_data(
+                self, X, y, y_numeric=True, ensure_min_samples=2, dtype="numeric"
+            )
         else:
             X = np.asarray(X, dtype=float)
             y = np.asarray(y, dtype=float)
@@ -74,13 +95,20 @@ class GPEliteSRBench(GPEliteRegressor):
             if k > 0 and remaining <= 0:
                 break
             r = symbolic_regression(
-                X, y, feature_names=names,
-                operators=self.operators, normalize=self.normalize,
-                generations=self.generations, speed=self.speed,
-                validation_split=self.validation_split, restarts=1,
-                robust=self.robust, parallel=self.parallel,
+                X,
+                y,
+                feature_names=names,
+                operators=self.operators,
+                normalize=self.normalize,
+                generations=self.generations,
+                speed=self.speed,
+                validation_split=self.validation_split,
+                restarts=1,
+                robust=self.robust,
+                parallel=self.parallel,
                 time_limit=max(1.0, remaining / (n - k)),
-                seed=seed0 + 1000 * k)
+                seed=seed0 + 1000 * k,
+            )
             score = r.r2_validation
             if score is None or not np.isfinite(score):
                 p = r.predict(X)
@@ -88,24 +116,30 @@ class GPEliteSRBench(GPEliteRegressor):
                 score = 1.0 - float(np.sum((y - p) ** 2) / ss)
             if best is None or score > best_score:
                 best, best_score = r, score
-                self._publish(best)          # published as soon as found
+                self._publish(best)  # published as soon as found
 
         if best is not None and not getattr(self, "is_fitted_", False):
             self._publish(best)
+
         return self
 
 
 # ── the three objects SRBench reads ─────────────────────────────────────────
 
-est = GPEliteSRBench(operators="physical", generations=60, speed="fast",
-                     restarts=10, max_time=3600, random_state=0)
+est = GPEliteSRBench(
+    operators="physical",
+    generations=60,
+    speed="fast",
+    restarts=10,
+    max_time=3600,
+    random_state=0,
+)
 
 hyper_params = [
-    {"operators": ("physical", "full"),
-     "generations": (30, 60)},
+    {"operators": ("physical", "full"), "generations": (30, 60)},
 ]
 
-eval_kwargs = {}
+eval_kwargs: dict[str, Any] = {}
 
 
 def model(est, X=None):
@@ -117,8 +151,11 @@ def model(est, X=None):
     operators are spelled as the engine computes them (sqrt(Abs(u)) where u
     can be negative).
     """
-    cols = list(X.columns) if X is not None and hasattr(X, "columns") \
+    cols = (
+        list(X.columns)
+        if X is not None and hasattr(X, "columns")
         else ["x%d" % i for i in range(getattr(est, "n_features_in_", 0))]
+    )
     return est.model_.sympy(cols)
 
 
