@@ -1,0 +1,5 @@
+channels:
+  - conda-forge
+dependencies:
+  # Temporary ceiling: pyarrow has no Python 3.15 Conda package yet.
+  - python<3.15
