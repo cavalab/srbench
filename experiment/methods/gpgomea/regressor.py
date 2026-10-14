@@ -1,7 +1,5 @@
-from sklearn.base import RegressorMixin
-
 from pymgpg.sk import MGPGRegressor
-
+from sklearn.base import RegressorMixin
 
 est: RegressorMixin = MGPGRegressor(
     verbose=False,

@@ -11,6 +11,38 @@ Ground Rules
 2. Make the PR detailed and reference [specific issues](https://github.com/cavalab/srbench/issues) if the PR is meant to address any. 
 3. **Please be kind and please be patient**. We will be, too.  
 
+Code quality
+============
+
+Install the development tools and enable the commit hooks from the repository root:
+
+```bash
+python -m pip install -r requirements-dev.txt
+pre-commit install
+pre-commit run --all-files
+```
+
+The hooks run Ruff linting (with safe automatic fixes), Ruff formatting, and mypy.
+CI runs the same hooks over the entire repository on every pull request and on
+pushes to `master` and `dev`. If a hook changes files, review and stage the changes,
+then rerun it before committing. Python scripts and Jupyter notebook code cells
+are linted and formatted; Markdown Python examples are also formatted. Notebook
+outputs are preserved.
+
+Ruff rules and mypy settings live in `pyproject.toml`. Tool versions are pinned
+in `.pre-commit-config.yaml`; update Ruff's hook revision and `required-version`
+together when upgrading. The formatter targets Python 3.7 syntax to accommodate
+older algorithm environments; development hooks and CI run on Python 3.12.
+
+For type checking alone, install `mypy==2.4.0` and run
+`python scripts/typecheck.py`. The runner checks all Python files, including
+hyphenated method directories that mypy's CLI cannot treat as package names.
+Mypy checks unannotated function bodies without requiring type annotations
+throughout this existing codebase. Algorithm libraries are installed in separate
+containers, so third-party imports are treated as `Any` and site packages are
+ignored for consistent results across environments. Python source in notebooks
+is covered by Ruff, but is not type-checked by mypy.
+
 How to contribute an SR method
 ==============================
 
@@ -108,10 +140,10 @@ specify a mapping in the `model` function such as:
 
 ```python
 def model(est, X=None):
-    mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
+    mapping = {"x_" + str(i): k for i, k in enumerate(X.columns)}
     new_model = est.model_
-    for k,v in reversed(mapping.items()):
-        new_model = new_model.replace(k,v)
+    for k, v in reversed(mapping.items()):
+        new_model = new_model.replace(k, v)
 ```
 
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 

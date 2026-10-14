@@ -1,29 +1,29 @@
 from pysr import PySRRegressor
-from multiprocessing import cpu_count
 
 hyper_params = [
     {
-        'niterations' : [1_000_000_000],
-        'maxsize' : [20],
-        'maxdepth' : [20],
+        "niterations": [1_000_000_000],
+        "maxsize": [20],
+        "maxdepth": [20],
     },
     {
-        'niterations' : [1_000_000],
-        'maxsize' : [30],
-        'maxdepth' : [20],
+        "niterations": [1_000_000],
+        "maxsize": [30],
+        "maxdepth": [20],
     },
     {
-        'niterations' : [1_000_000],
-        'maxsize' : [50],
-        'maxdepth' : [20],
+        "niterations": [1_000_000],
+        "maxsize": [50],
+        "maxdepth": [20],
     },
     {
-        'niterations' : [1_000_000],
-        'maxsize' : [30],
-        'maxdepth' : [20],
-        'population_size' : [200],
+        "niterations": [1_000_000],
+        "maxsize": [30],
+        "maxdepth": [20],
+        "population_size": [200],
     },
 ]
+
 
 def complexity(est):
     return int(est.get_best()["complexity"])
@@ -37,11 +37,11 @@ est = PySRRegressor(
     niterations=1_000_000_000,
     ncyclesperiteration=2_500,
     population_size=100,
-    populations=2, # originally max(15, 2*n_cpu), but srbench runs on a single core
+    populations=2,  # originally max(15, 2*n_cpu), but srbench runs on a single core
     verbosity=0,
     # budget 10 minutes for compile time,
     # ensuring we can finish within 2 hours:
-    timeout_in_seconds=60*60 - 10*60,
+    timeout_in_seconds=60 * 60 - 10 * 60,
     maxsize=30,
     maxdepth=20,
     binary_operators=["+", "-", "*", "/"],
@@ -53,7 +53,7 @@ est = PySRRegressor(
             log=9,
             sqrt=9,
         ),
-        **{"/": (-1, 9)}
+        **{"/": (-1, 9)},
     },
     nested_constraints=dict(
         sin=dict(
@@ -72,10 +72,10 @@ est = PySRRegressor(
         ),
         sqrt=dict(
             sqrt=0,
-        )
+        ),
     ),
     # prefer multiprocessing:
-    procs=1, # cpu_count(),
+    procs=1,  # cpu_count(),
     multithreading=False,
     batching=True,
     batch_size=50,

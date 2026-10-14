@@ -1,6 +1,10 @@
+from __future__ import annotations
+
+from typing import Any
+
 # This example submission shows the submission of FEAT (cavalab.org/feat).
 from geml.regressors import RandomSearchRegressor
-from geml.regressors import model
+from geml.regressors import model as model
 from sklearn.base import RegressorMixin
 
 """
@@ -9,7 +13,7 @@ est: a sklearn-compatible regressor.
     see https://scikit-learn.org/stable/developers/develop.html
 """
 est: RegressorMixin = RandomSearchRegressor(
-    max_time=60*60,  # 8 hrs. Your algorithm should have this feature
+    max_time=60 * 60,  # 8 hrs. Your algorithm should have this feature
 )
 
 
@@ -43,4 +47,4 @@ def get_best_solution(est) -> RegressorMixin:
 
 
 # define eval_kwargs.
-eval_kwargs = {}
+eval_kwargs: dict[str, Any] = {}

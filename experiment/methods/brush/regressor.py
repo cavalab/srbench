@@ -1,5 +1,6 @@
-from pybrush import BrushRegressor
+from __future__ import annotations
 
+from pybrush import BrushRegressor
 
 kwargs = {
     "verbosity": 1,
@@ -10,7 +11,6 @@ kwargs = {
     "initialization": "uniform",
     "validation_size": 0.33,
     "cx_prob": 1 / 7,
-
     "weights_init": False,
     "mutation_probs": {
         "point": 1 / 6,
@@ -20,16 +20,13 @@ kwargs = {
         "toggle_weight_on": 1 / 6,
         "toggle_weight_off": 1 / 6,
     },
-
     "sel": "lexicase",
     "algorithm": "nsga2",
     "objectives": ["scorer", "complexity"],
     "scorer": "mse",
-
     "bandit": "dynamic_thompson",
     "num_islands": 1,
     "shuffle_split": True,
-
     "functions": [
         # Arithmetic
         "Add",
@@ -37,7 +34,6 @@ kwargs = {
         "Mul",
         "Div",
         "Pow",
-
         # Unary functions
         "Sin",
         "Cos",
@@ -45,11 +41,9 @@ kwargs = {
         "Exp",
         "Log",
         "Sqrt",
-
         # Optional split operators
         "SplitBest",
         "SplitOn",
-
         # Terminals
         "Constant",
         "Terminal",
@@ -73,7 +67,6 @@ func_arity = {
     "Div": 2,
     "Add": 2,
     "Pow": 2,
-
     "Sin": 1,
     "Cos": 1,
     "Tanh": 1,
@@ -90,7 +83,7 @@ def pretify_expr(string, feature_names):
     tokens = string.replace(" ", "").replace(")", "").replace("(", ",").split(",")
 
     new_string = ""
-    stack = []
+    stack: list[tuple[str, list[str]]] = []
 
     for token in tokens:
         stack.append((token, []))

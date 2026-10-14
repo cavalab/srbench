@@ -1,0 +1,2 @@
+# Ruff and mypy versions are pinned in .pre-commit-config.yaml.
+pre-commit==4.6.2

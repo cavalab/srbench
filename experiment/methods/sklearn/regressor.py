@@ -2,7 +2,6 @@
 
 from sklearn.linear_model import LinearRegression
 
-
 est = LinearRegression()
 hyper_params = [{"fit_intercept": (True, False)}]
 

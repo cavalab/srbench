@@ -1,3 +1,16 @@
+from __future__ import annotations
+
+import json
+import math as _math
+import os
+import re
+import subprocess
+from typing import Any
+
+import numpy as np
+import sympy as sp
+from sklearn.base import BaseEstimator, RegressorMixin
+
 """SRBench wrapper for the Keplearn engine.
 
 Keplearn is a deterministic symbolic-regression engine written in Rust, built
@@ -12,31 +25,32 @@ experiment/evaluate_model.py). fit() reads it at call time and passes it to the 
 as `--timeout <ms>`; the engine stops gracefully at that budget and emits best-so-far.
 """
 
-import json
-import os
-import re
-import subprocess
-
-import numpy as np
-import sympy as sp
-from sklearn.base import BaseEstimator, RegressorMixin
 
 # Path to the engine binary (installed by algorithms/keplearn/install.sh).
 BIN = os.environ.get("KEPLEARN_BIN", "/opt/conda/bin/keplearn")
 
 # numpy evaluators matching the engine's emitted grammar (same set as the harness).
 _NP = {
-    "sqrt": np.sqrt, "sin": np.sin, "cos": np.cos, "tan": np.tan,
-    "exp": np.exp, "log": np.log, "arcsin": np.arcsin, "arccos": np.arccos,
-    "tanh": np.tanh, "abs": np.abs,
+    "sqrt": np.sqrt,
+    "sin": np.sin,
+    "cos": np.cos,
+    "tan": np.tan,
+    "exp": np.exp,
+    "log": np.log,
+    "arcsin": np.arcsin,
+    "arccos": np.arccos,
+    "tanh": np.tanh,
+    "abs": np.abs,
 }
 
 
 class KeplearnRegressor(BaseEstimator, RegressorMixin):
     def __init__(self, max_time=60, sample=500, random_state=None, max_depth=None):
-        self.max_time = max_time            # SRBench MAXTIME (seconds); overwritten by harness
+        self.max_time = max_time  # SRBench MAXTIME (seconds); overwritten by harness
         self.sample = sample
-        self.random_state = random_state    # engine is deterministic; seeds the holdout shuffle
+        self.random_state = (
+            random_state  # engine is deterministic; seeds the holdout shuffle
+        )
         self.max_depth = max_depth
 
     def fit(self, X, y):
@@ -55,9 +69,15 @@ class KeplearnRegressor(BaseEstimator, RegressorMixin):
         tsv = header + "\n" + "\n".join(rows) + "\n"
 
         cmd = [
-            BIN, "--target", "target", "--top-k", "1",
-            "--sample", str(int(self.sample)),
-            "--timeout", str(int(float(self.max_time) * 1000)),   # seconds -> ms
+            BIN,
+            "--target",
+            "target",
+            "--top-k",
+            "1",
+            "--sample",
+            str(int(self.sample)),
+            "--timeout",
+            str(int(float(self.max_time) * 1000)),  # seconds -> ms
         ]
         if self.random_state is not None:
             cmd += ["--seed", str(int(self.random_state))]
@@ -67,12 +87,15 @@ class KeplearnRegressor(BaseEstimator, RegressorMixin):
         # grace over the engine's own --timeout so the subprocess wrapper never
         # pre-empts the engine's graceful best-so-far emit.
         proc = subprocess.run(
-            cmd, input=tsv, capture_output=True, text=True,
+            cmd,
+            input=tsv,
+            capture_output=True,
+            text=True,
             timeout=float(self.max_time) + 30,
         )
         out = proc.stdout or ""
         try:
-            res = json.loads(out[out.index("{"):])
+            res = json.loads(out[out.index("{") :])
         except Exception:
             res = {"results": []}
         results = res.get("results") or []
@@ -86,13 +109,19 @@ class KeplearnRegressor(BaseEstimator, RegressorMixin):
         """Build ONE canonical SymPy expression from the engine string; predict,
         model() and complexity() all use this same object, so the predicting
         function and the reported model string cannot diverge."""
-        raw = (self.model_str_.replace("arcsin", "asin")
-                              .replace("arccos", "acos")
-                              .replace("^", "**"))
+        raw = (
+            self.model_str_.replace("arcsin", "asin")
+            .replace("arccos", "acos")
+            .replace("^", "**")
+        )
         try:
             loc = {"abs": sp.Abs}
-            loc.update({f"x{i + 1}": sp.Symbol(f"x{i + 1}")
-                        for i in range(self.n_features_in_)})
+            loc.update(
+                {
+                    f"x{i + 1}": sp.Symbol(f"x{i + 1}")
+                    for i in range(self.n_features_in_)
+                }
+            )
             expr = _normalize(sp.sympify(raw, locals=loc))
             syms = [sp.Symbol(f"x{i + 1}") for i in range(self.n_features_in_)]
             self.expr_ = expr
@@ -111,10 +140,14 @@ class KeplearnRegressor(BaseEstimator, RegressorMixin):
                 else:
                     env = {f"x{i + 1}": X[:, i] for i in range(X.shape[1])}
                     env.update(_NP)
-                    v = eval(self.model_str_.replace("^", "**"), {"__builtins__": {}}, env)
+                    v = eval(
+                        self.model_str_.replace("^", "**"), {"__builtins__": {}}, env
+                    )
             except Exception:
                 v = self.y_mean_
-        v = np.asarray(np.broadcast_to(np.asarray(v, dtype=float), (X.shape[0],)), dtype=float)
+        v = np.asarray(
+            np.broadcast_to(np.asarray(v, dtype=float), (X.shape[0],)), dtype=float
+        )
         # Sole deviation from evaluating the model expression verbatim: rows
         # where it is non-finite (poles, domain edges) fall back to the
         # training mean so downstream metric computation stays defined.
@@ -124,7 +157,7 @@ class KeplearnRegressor(BaseEstimator, RegressorMixin):
 est = KeplearnRegressor()
 
 # Deterministic engine: a single (empty) config, i.e. no hyperparameter tuning.
-hyper_params = [{}]
+hyper_params: list[dict[str, Any]] = [{}]
 
 # Raw features (our affine-monomial fit bakes constants; scaling x would perturb
 # them). fit consumes a plain ndarray.
@@ -140,11 +173,10 @@ eval_kwargs = {"scale_x": False, "scale_y": False, "use_dataframe": False}
 # genuine approximation's messy coefficients are left as-is (its wrong STRUCTURE keeps
 # it correctly rejected). Any failure falls back to the un-normalized string, so this
 # can never make the pipeline worse than before.
-import math as _math
 
-_SNAP_Q = (2, 3, 4, 5, 6)   # simple-rational denominators considered
-_SNAP_REL = 1e-7            # coefficient/exponent snap tolerance (relative)
-_PI_REL = 1e-6             # transcendental (pi) recognition tolerance
+_SNAP_Q = (2, 3, 4, 5, 6)  # simple-rational denominators considered
+_SNAP_REL = 1e-7  # coefficient/exponent snap tolerance (relative)
+_PI_REL = 1e-6  # transcendental (pi) recognition tolerance
 
 
 def _snap_float(f):
@@ -161,8 +193,12 @@ def _snap_float(f):
         p = round(v * q)
         if p != 0 and abs(v - p / q) <= _SNAP_REL * max(a, 1):
             return sp.Rational(p, q)
-    for base, sym in ((_math.pi, sp.pi), (_math.pi ** 2, sp.pi ** 2),
-                      (1.0 / _math.pi, 1 / sp.pi), (1.0 / (_math.pi ** 2), 1 / sp.pi ** 2)):
+    for base, sym in (
+        (_math.pi, sp.pi),
+        (_math.pi**2, sp.pi**2),
+        (1.0 / _math.pi, 1 / sp.pi),
+        (1.0 / (_math.pi**2), 1 / sp.pi**2),
+    ):
         k = v / base
         for q in (1, 2, 3, 4, 5, 6):
             p = round(k * q)
@@ -199,7 +235,7 @@ def _fold_mul(m):
         # coef*p_d*z*sqrt(..)) that must stay out — folding it regressed those.
         f = sp.Mul(*nonrad)
         if f.free_symbols and f.free_symbols <= rad[0].free_symbols:
-            return sp.Mul(*const) * sp.sqrt(sp.expand(f ** 2 * rad[0]))
+            return sp.Mul(*const) * sp.sqrt(sp.expand(f**2 * rad[0]))
         return m
     return m
 
@@ -244,7 +280,11 @@ def model(est, X=None):
         else:
             subs = {sp.Symbol(f"x{i + 1}"): sp.Symbol(names[i]) for i in range(n)}
         out = str(expr.subs(subs, simultaneous=True))
-        return out if (out and out.lower() not in ("nan", "zoo", "oo")) else _string_model(est, names)
+        return (
+            out
+            if (out and out.lower() not in ("nan", "zoo", "oo"))
+            else _string_model(est, names)
+        )
     except Exception:
         return _string_model(est, names)
 
@@ -274,5 +314,8 @@ def complexity(est):
         except Exception:
             pass
     raw = getattr(est, "model_str_", "0")
-    return len(re.findall(
-        r"\*\*|[+\-*/]|\b(?:sin|cos|tan|sqrt|exp|log|tanh|arcsin|arccos|abs)\b", raw))
+    return len(
+        re.findall(
+            r"\*\*|[+\-*/]|\b(?:sin|cos|tan|sqrt|exp|log|tanh|arcsin|arccos|abs)\b", raw
+        )
+    )

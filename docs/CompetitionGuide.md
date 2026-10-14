@@ -79,10 +79,10 @@ specify a mapping in the `model` function such as:
 
 ```python
 def model(est, X):
-    mapping = {'x_'+str(i):k for i,k in enumerate(X.columns)}
+    mapping = {"x_" + str(i): k for i, k in enumerate(X.columns)}
     new_model = est.model_
-    for k,v in reversed(mapping.items()):
-        new_model = new_model.replace(k,v)
+    for k, v in reversed(mapping.items()):
+        new_model = new_model.replace(k, v)
 ```
 
 2. The operators/functions in the model are available in [sympy's function set](https://docs.sympy.org/latest/modules/functions/index.html). 
@@ -92,8 +92,8 @@ If your method uses protected operators (e.g., `my_prot_div(a,b)= a/b if b!=0 el
 
 ```python
 def model(est, X):
-    ... # any previous pre-processing
-    new_model = new_model.replace("my_prot_div","/").replace("my_prot_log","log")
+    ...  # any previous pre-processing
+    new_model = new_model.replace("my_prot_div", "/").replace("my_prot_log", "log")
 ```
 
 ### CLI methods
@@ -146,7 +146,8 @@ In python, one can grab this value as follows:
 
 ```python
 import os
-n_cpus = os.environ['OMP_NUM_THREADS']
+
+n_cpus = os.environ["OMP_NUM_THREADS"]
 ```
 
 ### Time Budget
@@ -172,18 +173,17 @@ function in `regressor.py` as part of `eval_kwargs`.
 As an example, one could define the following in `regressor.py`:
 
 ```python
-def pre_train_fn(est, X, y): 
+def pre_train_fn(est, X, y):
     """set max_time in seconds based on length of X."""
-    if len(X)<=1000:
-        max_time = 360 - 1 # 1 second of slack
+    if len(X) <= 1000:
+        max_time = 360 - 1  # 1 second of slack
     else:
-        max_time = 3600 - 1 # 1 second of slack
+        max_time = 3600 - 1  # 1 second of slack
     est.set_params(max_time)
 
+
 # pass the function to eval_kwargs
-eval_kwargs = {
-    'pre_train': pre_train_fn
-}
+eval_kwargs = {"pre_train": pre_train_fn}
 ```
 
 #### Timeout Handling
@@ -195,22 +195,25 @@ Nonetheless, timeout handling looks like this:
 ```python
 import signal
 
+
 class TimeOutException(Exception):
     pass
+
 
 def alarm_handler(signum, frame):
     print(f"raising TimeOutException")
     raise TimeOutException
 
+
 def evaluate(est):
     """model evaluation"""
     # alarm that sends SIGALRM
     signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(MAXTIME) # maximum time, defined above 
+    signal.alarm(MAXTIME)  # maximum time, defined above
     try:
         est.fit()
     except TimeOutException:
-        print('evaluate timeout')
+        print("evaluate timeout")
 ```
 
 Example approaches are the following: 
@@ -280,39 +283,45 @@ Here is an example of how to do so:
 
 ```python
 from sklearn.model_selection import GridSearchCV
-#from mylibrary import MyMethod
+
+# from mylibrary import MyMethod
 from sklearn import linear_model
 
 
-hyper_params = { 'alpha': (1e-04,0.001,0.01,0.1,1,) }
+hyper_params = {
+    "alpha": (
+        1e-04,
+        0.001,
+        0.01,
+        0.1,
+        1,
+    )
+}
 
 # define your base estimator
-base_est=linear_model.LassoLars()
+base_est = linear_model.LassoLars()
 
 # set est to be a GridSearchCV estimator
-est = GridSearchCV(estimator=base_est, 
-                   param_grid=hyper_params, 
-                   cv=5,
-                   refit=True)
+est = GridSearchCV(estimator=base_est, param_grid=hyper_params, cv=5, refit=True)
 
 # set max time w.r.t. hyper-param tuning
 num_combos = 5  # five values of alpha
-num_cv = 5      # 5 cross-validation splits as above
-total_runs = num_combos * num_cv + 1 # +1 because refit=True
+num_cv = 5  # 5 cross-validation splits as above
+total_runs = num_combos * num_cv + 1  # +1 because refit=True
 
-def pre_train_fn(est, X, y): 
+
+def pre_train_fn(est, X, y):
     """set max_time in seconds based on length of X & hyper-parameter tuning"""
-    if len(X)<=1000:
+    if len(X) <= 1000:
         # account for hyper-parameter tuning, remove 1 extra second of slack to be sure it will terminate on time
-        max_time = 360 // total_runs - 1 
+        max_time = 360 // total_runs - 1
     else:
         max_time = 3600 // total_runs - 1
     est.set_params(max_time)
 
+
 # pass the function eval_kwargs
-eval_kwargs = {
-    'pre_train': pre_train_fn
-}
+eval_kwargs = {"pre_train": pre_train_fn}
 
 # additional definitions
 # ...

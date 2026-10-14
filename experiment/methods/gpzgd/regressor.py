@@ -13,24 +13,38 @@ is the internally computed MSE of the model on the training data
 
 """
 
-from sklearn.base import BaseEstimator, RegressorMixin
-from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
-from sklearn.metrics import mean_squared_error, r2_score
-
 import os
-from tempfile import TemporaryDirectory
 import subprocess
+from tempfile import TemporaryDirectory
+
 import numpy as np
 import pandas as pd
+from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
+
 
 class GPZGD(BaseEstimator, RegressorMixin):
-    def __init__(self, pop_size=200, generations=250,
-                 tournament_size=3, validation_prop=0.0,
-                 crossover_rate=0.3, sub_mutation_rate=0.4, point_mutation_rate=0.3, mutation_sigma=0.1,
-                 min_tree_init=2, max_tree_init=4, max_tree_nodes=50,
-                 opset="ADD,SUB,MUL,SIN,ERC,VAR",
-                 learning_rate=0.01, learning_epochs=3, timeout=0, random_state=-1):
-        """ Builds a Symbolic Regression using the cli interface of your algorithm.
+    def __init__(
+        self,
+        pop_size=200,
+        generations=250,
+        tournament_size=3,
+        validation_prop=0.0,
+        crossover_rate=0.3,
+        sub_mutation_rate=0.4,
+        point_mutation_rate=0.3,
+        mutation_sigma=0.1,
+        min_tree_init=2,
+        max_tree_init=4,
+        max_tree_nodes=50,
+        opset="ADD,SUB,MUL,SIN,ERC,VAR",
+        learning_rate=0.01,
+        learning_epochs=3,
+        timeout=0,
+        random_state=-1,
+    ):
+        """Builds a Symbolic Regression using the cli interface of your algorithm.
         Examples
         --------
         >>> from gpzgd import GPZGD
@@ -42,7 +56,7 @@ class GPZGD(BaseEstimator, RegressorMixin):
         """
 
         self.validation_prop = validation_prop
-        
+
         self.pop_size = pop_size
         self.generations = generations
         self.tournament_size = tournament_size
@@ -55,7 +69,7 @@ class GPZGD(BaseEstimator, RegressorMixin):
         self.max_tree_init = max_tree_init
         self.max_tree_nodes = max_tree_nodes
         self.learning_rate = learning_rate
-        self.learning_epochs =learning_epochs
+        self.learning_epochs = learning_epochs
         self.timeout = timeout
         self.random_state = random_state
 
@@ -79,12 +93,12 @@ class GPZGD(BaseEstimator, RegressorMixin):
             # 2. validate the consistency of the data matrices and create a single 2D array with X and y
             X_train, y_train = check_X_y(X_train, y_train, accept_sparse=False)
             if len(y_train.shape) == 1:
-                Z_train = np.hstack((X_train, y_train[:,None]))
+                Z_train = np.hstack((X_train, y_train[:, None]))
             else:
                 Z_train = np.hstack((X_train, y_train))
 
             # 3. create a temp config file
-            cname   = temp_dir + "/config"
+            cname = temp_dir + "/config"
             with open(cname, "w") as config_file:
                 config_file.write(f"timeout={self.timeout}\n")
                 config_file.write(f"validation_prop={self.validation_prop}\n")
@@ -101,41 +115,63 @@ class GPZGD(BaseEstimator, RegressorMixin):
                 config_file.write(f"learning_rate={self.learning_rate}\n")
                 config_file.write(f"learning_epochs={self.learning_epochs}\n")
                 config_file.write(f"opset={self.opset}\n")
-                config_file.write(f"elitism_rate=1\n")
-                config_file.write(f"max_tree_depth=-1\n")
-                config_file.write(f"standardise=Y\n")
-                config_file.write(f"coef_op=Y\n")
-                
+                config_file.write("elitism_rate=1\n")
+                config_file.write("max_tree_depth=-1\n")
+                config_file.write("standardise=Y\n")
+                config_file.write("coef_op=Y\n")
+
             # 4. create a temp file and store the data
-            fname   = temp_dir + "/tmpdata"
-            np.savetxt(f"{fname}", Z_train, delimiter=" ", header=f"{Z_train.shape[0]} {Z_train.shape[1]}", comments="")
+            fname = temp_dir + "/tmpdata"
+            np.savetxt(
+                f"{fname}",
+                Z_train,
+                delimiter=" ",
+                header=f"{Z_train.shape[0]} {Z_train.shape[1]}",
+                comments="",
+            )
 
             # 5. call your cli binary with the parameters
             cwd = os.path.dirname(os.path.realpath(__file__))
             if self.random_state >= 0:
-                ans = subprocess.check_output([ "gpzgd_regressor", f"{fname}", f"{cname}", "-p", f"rng_seed={self.random_state}" ], cwd=cwd, universal_newlines=True)
+                ans = subprocess.check_output(
+                    [
+                        "gpzgd_regressor",
+                        f"{fname}",
+                        f"{cname}",
+                        "-p",
+                        f"rng_seed={self.random_state}",
+                    ],
+                    cwd=cwd,
+                    universal_newlines=True,
+                )
             else:
-                ans = subprocess.check_output([ "gpzgd_regressor", f"{fname}", f"{cname}" ], cwd=cwd, universal_newlines=True)
+                ans = subprocess.check_output(
+                    ["gpzgd_regressor", f"{fname}", f"{cname}"],
+                    cwd=cwd,
+                    universal_newlines=True,
+                )
 
-        xbar, s, mdl, l, e = ans.split(";")
+        xbar, s, mdl, length, e = ans.split(";")
 
-        self.xbar      = eval(xbar)
-        self.s         = eval(s)
-        self.expr      = mdl
-        self.len       = int(l)
-        self.cli_mse   = float(e)
-        self.train_mse = mean_squared_error(y_train, self.eval_expr(X_train)) ## useful to compare with internal score!
-        self.score     = r2_score(y_train, self.eval_expr(X_train))
-        
+        self.xbar = eval(xbar)
+        self.s = eval(s)
+        self.expr = mdl
+        self.len = int(length)
+        self.cli_mse = float(e)
+        self.train_mse = mean_squared_error(
+            y_train, self.eval_expr(X_train)
+        )  ## useful to compare with internal score!
+        self.score = r2_score(y_train, self.eval_expr(X_train))
+
         self.is_fitted_ = True
 
         return self
 
     def expr_str(self):
         return self.expr
-    
+
     def eval_expr(self, X):
-        """ Evaluates the expression with data point x. We assume that the expression is compatible with numpy """
+        """Evaluates the expression with data point x. We assume that the expression is compatible with numpy"""
         X = (X - self.xbar) / self.s
         y = eval(self.expr)
 
@@ -145,7 +181,7 @@ class GPZGD(BaseEstimator, RegressorMixin):
         return y
 
     def predict(self, X_test, ic=None):
-        """ A reference implementation of a predicting function.
+        """A reference implementation of a predicting function.
         Parameters
         ----------
         X : {array-like, sparse matrix}, shape (n_samples, n_features)
@@ -161,31 +197,33 @@ class GPZGD(BaseEstimator, RegressorMixin):
         ##### TODO: Reverse Transform the predictions
         return self.eval_expr(X_test)
 
+
 est = GPZGD()
 
-# want to tune your estimator? wrap it in a sklearn CV class. 
+# want to tune your estimator? wrap it in a sklearn CV class.
+
 
 def model(est, X=None):
     """
-    Return a sympy-compatible string of the final model. 
+    Return a sympy-compatible string of the final model.
 
     Parameters
     ----------
     est: sklearn regressor
-        The fitted model. 
+        The fitted model.
     X: pd.DataFrame, default=None
         The training data. This argument can be dropped if desired.
 
     Returns
     -------
-    A sympy-compatible string of the final model. 
+    A sympy-compatible string of the final model.
 
     Notes
     -----
 
-    Ensure that the variable names appearing in the model are identical to 
-    those in the training data, `X`, which is a `pd.Dataframe`. 
-    If your method names variables some other way, e.g. `[x_0 ... x_m]`, 
+    Ensure that the variable names appearing in the model are identical to
+    those in the training data, `X`, which is a `pd.Dataframe`.
+    If your method names variables some other way, e.g. `[x_0 ... x_m]`,
     you can specify a mapping in the `model` function such as:
 
         ```
@@ -197,25 +235,26 @@ def model(est, X=None):
         ```
 
     If you have special operators such as protected division or protected log,
-    you will need to handle these to assure they conform to sympy format. 
+    you will need to handle these to assure they conform to sympy format.
     One option is to replace them with the unprotected versions. Post an issue
-    if you have further questions: 
+    if you have further questions:
     https://github.com/cavalab/srbench/issues/new/choose
     """
 
     model_str = est.expr_str()
-    model_str = model_str.replace("np.","").replace("[:,", "").replace("]", "")
+    model_str = model_str.replace("np.", "").replace("[:,", "").replace("]", "")
 
     # use python syntax for exponents
-    model_str = model_str.replace('^','**')
+    model_str = model_str.replace("^", "**")
 
     names = X.columns.tolist() if isinstance(X, pd.DataFrame) else None
     if names is not None:
-        mapping = { 'X'+str(i):k for i, k in enumerate(names) }
+        mapping = {"X" + str(i): k for i, k in enumerate(names)}
         for k, v in reversed(mapping.items()):
-            model_str = model_str.replace(k,v)
+            model_str = model_str.replace(k, v)
 
     return model_str
+
 
 ################################################################################
 # Optional Settings
@@ -248,22 +287,22 @@ Options
             y: training labels.
 """
 
+
 def pre_train_fn(est, X, y):
     if len(X) <= 1000:
         pop_size = 500
         generations = 5000
-        max_time = 3564 ## 99% of one hour
+        max_time = 3564  ## 99% of one hour
     else:
         pop_size = 200
         generations = 5000
-        max_time = 35640 ## 99% of ten hours
+        max_time = 35640  ## 99% of ten hours
 
     est.tournament_size = 10
     est.pop_size = pop_size
     est.generations = generations
     est.timeout = max_time
-    
+
+
 # define eval_kwargs.
-eval_kwargs = {
-    "pre_train" : pre_train_fn
-}
+eval_kwargs = {"pre_train": pre_train_fn}

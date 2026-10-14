@@ -4,7 +4,12 @@ import feyn
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, RegressorMixin
-from sklearn.utils.validation import check_X_y, check_array, check_is_fitted, _check_sample_weight
+from sklearn.utils.validation import (
+    _check_sample_weight,
+    check_array,
+    check_is_fitted,
+    check_X_y,
+)
 from sympy.printing.printer import Printer
 
 
@@ -13,26 +18,27 @@ class InternalTimeOutException(Exception):
 
 
 def alarm_handler(signum, frame):
-    print(f"raising InternalTimeOutException")
+    print("raising InternalTimeOutException")
     raise InternalTimeOutException
 
 
-def auto_run_time(ql,
-                  data,
-                  output_name,
-                  kind="regression",
-                  stypes=None,
-                  n_epochs=200,
-                  threads="auto",
-                  max_complexity=10,
-                  query_string=None,
-                  loss_function=None,
-                  criterion="wide_parsimony",
-                  sample_weights=None,
-                  function_names=None,
-                  starting_models=None,
-                  max_time=None
-                  ):
+def auto_run_time(
+    ql,
+    data,
+    output_name,
+    kind="regression",
+    stypes=None,
+    n_epochs=200,
+    threads="auto",
+    max_complexity=10,
+    query_string=None,
+    loss_function=None,
+    criterion="wide_parsimony",
+    sample_weights=None,
+    function_names=None,
+    starting_models=None,
+    max_time=None,
+):
     if max_time:
         signal.signal(signal.SIGALRM, alarm_handler)
         signal.alarm(max_time)
@@ -84,7 +90,7 @@ def auto_run_time(ql,
         best = feyn.get_diverse_models(models)
 
     except InternalTimeOutException:
-        print('InternalTimeOutException raised')
+        print("InternalTimeOutException raised")
         best = feyn.get_diverse_models(models)
 
     return best
@@ -92,21 +98,21 @@ def auto_run_time(ql,
 
 def numpy_check_to_DataFrame(X, y=None):
     if isinstance(X, np.ndarray):
-        columns = [f'x__{i}' for i in range(X.shape[1])]
+        columns = [f"x__{i}" for i in range(X.shape[1])]
         X = pd.DataFrame(X, columns=columns)
 
     if y is None:
         return X
     elif isinstance(y, np.ndarray):
         if y.ndim == 1:
-            y = pd.Series(y, name='target')
+            y = pd.Series(y, name="target")
         elif y.ndim == 2:
-            y = pd.DataFrame(y, columns=['target'])
+            y = pd.DataFrame(y, columns=["target"])
         return X, y
 
 
 def feature_names(X, y=None):
-    if hasattr(X, 'columns'):
+    if hasattr(X, "columns"):
         input_names = X.columns
     else:
         input_names = None
@@ -114,7 +120,7 @@ def feature_names(X, y=None):
     if y is None:
         return input_names
     else:
-        if hasattr(y, 'name'):
+        if hasattr(y, "name"):
             output_name = y.name
         else:
             output_name = None
@@ -122,21 +128,22 @@ def feature_names(X, y=None):
 
 
 class QLatticeRegressor(BaseEstimator, RegressorMixin):
-    def __init__(self,
-                 kind='regression',
-                 stypes=None,
-                 n_epochs=200,
-                 threads='auto',
-                 max_complexity=10,
-                 query_string=None,
-                 loss_function=None,
-                 criterion='wide_parsimony',
-                 sample_weights=None,
-                 function_names=None,
-                 starting_models=None,
-                 random_state=None,
-                 max_time=None
-                 ):
+    def __init__(
+        self,
+        kind="regression",
+        stypes=None,
+        n_epochs=200,
+        threads="auto",
+        max_complexity=10,
+        query_string=None,
+        loss_function=None,
+        criterion="wide_parsimony",
+        sample_weights=None,
+        function_names=None,
+        starting_models=None,
+        random_state=None,
+        max_time=None,
+    ):
         self.kind = kind
         self.stypes = stypes
         self.n_epochs = n_epochs
@@ -177,22 +184,23 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
             sample_weight = _check_sample_weight(sample_weight, X)
 
         ql = feyn.QLattice(random_seed=rseed)
-        self.models_ = auto_run_time(ql=ql,
-                                     data=data,
-                                     output_name=data.columns[-1],
-                                     kind=self.kind,
-                                     stypes=self.stypes,
-                                     n_epochs=self.n_epochs,
-                                     threads=self.threads,
-                                     max_complexity=self.max_complexity,
-                                     query_string=self.query_string,
-                                     loss_function=self.loss_function,
-                                     criterion=self.criterion,
-                                     sample_weights=sample_weight,
-                                     function_names=self.function_names,
-                                     starting_models=self.starting_models,
-                                     max_time=self.max_time
-                                     )
+        self.models_ = auto_run_time(
+            ql=ql,
+            data=data,
+            output_name=data.columns[-1],
+            kind=self.kind,
+            stypes=self.stypes,
+            n_epochs=self.n_epochs,
+            threads=self.threads,
+            max_complexity=self.max_complexity,
+            query_string=self.query_string,
+            loss_function=self.loss_function,
+            criterion=self.criterion,
+            sample_weights=sample_weight,
+            function_names=self.function_names,
+            starting_models=self.starting_models,
+            max_time=self.max_time,
+        )
         return self
 
     def predict(self, X, n=0):
@@ -225,10 +233,10 @@ class QLatticeRegressor(BaseEstimator, RegressorMixin):
 
 
 est = QLatticeRegressor(
-    kind='regression',
+    kind="regression",
     n_epochs=200,
     max_complexity=10,
-    criterion='wide_parsimony',
+    criterion="wide_parsimony",
 )
 
 
@@ -241,7 +249,7 @@ def model(est, X):
         mapping = {feyn.tools._sympy.get_sanitized_name(col): col for col in X.columns}
         for k, v in reversed(mapping.items()):
             string_model = string_model.replace(k, v)
-    except:
+    except Exception:
         pass
 
     return string_model
@@ -291,6 +299,7 @@ def pre_train_fn(est, X, y):
 # define eval_kwargs.
 eval_kwargs = dict(
     pre_train=pre_train_fn,
-    test_params={'n_epochs': 2,
-                 }
+    test_params={
+        "n_epochs": 2,
+    },
 )
