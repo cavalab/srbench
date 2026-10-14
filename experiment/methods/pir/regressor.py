@@ -17,7 +17,7 @@ that produced the verified blind Tier A baseline:
     +12/44 FORM_NUMERIC secondary (correct functional form, transcendental
                 constant folded as decimal — reported separately, never summed)
 
-Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.4.1)
+Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.5)
 Paper: https://doi.org/10.5281/zenodo.21351039
 """
 
@@ -28,7 +28,7 @@ import numpy as np
 from sklearn.base import BaseEstimator, RegressorMixin
 
 # The classical engine. algorithms/pir/install.sh pip-installs this from the
-# public repo at tag v3.4.1.
+# public repo at tag v3.5.
 from physics_engine.sklearn_adapter import PIRRegressor
 
 
