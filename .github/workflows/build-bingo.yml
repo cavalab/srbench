@@ -28,23 +28,6 @@ jobs:
           context: .
           file: ./Dockerfile.bingo
           push: true
-          tags: your-dockerhub-username/srbench-bingo:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/srbench-bingo:latest
           build-args: |
             ALGORITHM=bingo
-```
-
-Then:
-1. Push this to your GitHub repo
-2. Add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets in repo settings
-3. Trigger the workflow manually from the Actions tab
-4. Pull on the cluster with `apptainer pull ... docker://your-dockerhub-username/srbench-bingo:latest`
-
----
-
-## Option C: Use a cloud VM (AWS/GCP/Azure)
-
-Spin up a cheap VM with Docker, build there, push to Docker Hub, then pull on the cluster.
-
----
-
-**Which option fits your setup?** If you have Docker on your Windows machine, Option A is fastest. If you want automation, Option B (GitHub Actions) is best.
