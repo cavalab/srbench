@@ -1,0 +1,49 @@
+Bootstrap: docker
+From: srbench/base:latest
+# Build a SIF for one SRBench algorithm, mirroring alg-Dockerfile.
+#
+# Build with (needs root, --fakeroot, or --remote):
+#   APPTAINERENV_ALGORITHM=brush apptainer build --fakeroot --no-mount bind-paths srbench-brush.sif scripts/srbench-alg.def
+# or, without root:
+#   APPTAINERENV_ALGORITHM=brush apptainer build --remote srbench-brush.sif scripts/srbench-alg.def
+#
+# The --no-mount bind-paths flag disables site-configured bind mounts
+# (e.g. /exp, /pgeo) that would otherwise fail because the base image
+# doesn't have those mountpoints.
+#
+# %files paths are relative to the build CONTEXT (the current directory),
+# so run the build from the srbench repo root.
+
+%files
+    base_environment.yml /install/base_environment.yml
+    scripts/install_algorithm.sh /install/install_algorithm.sh
+    algorithms /install/algorithms
+
+%post
+    set -e
+    ALGORITHM="${APPTAINERENV_ALGORITHM:-brush}"
+    echo "Building for algorithm: ${ALGORITHM}"
+    cd /install
+    # alg-Dockerfile relies on MAMBA_DOCKERFILE_ACTIVATE=1 to auto-activate
+    # the base env in RUN steps; here we activate it explicitly.
+    eval "$(micromamba shell hook --shell bash)"
+    micromamba activate base
+    bash install_algorithm.sh "/install/algorithms/${ALGORITHM}"
+    micromamba clean --all --yes
+    # remove all other algorithm sources to keep the image small
+    find /install/algorithms -mindepth 1 -maxdepth 1 -type d ! -name "${ALGORITHM}" -exec rm -rf {} +
+    mkdir -p /srbench
+
+%environment
+    export LD_LIBRARY_PATH=/opt/conda/lib:${LD_LIBRARY_PATH}
+
+%runscript
+    # The base image's Docker entrypoint (micromamba activation) is NOT run
+    # by apptainer, so activate base here to match `docker compose run`.
+    eval "$(micromamba shell hook --shell bash)"
+    micromamba activate base
+    cd /srbench
+    exec "$@"
+
+%labels
+    Project srbench

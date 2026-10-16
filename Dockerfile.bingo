@@ -1,0 +1,28 @@
+FROM srbench/base:latest
+
+# Build argument for algorithm name
+ARG ALGORITHM=bingo
+
+# Copy install script and algorithm files
+COPY scripts/install_algorithm.sh /install/install_algorithm.sh
+COPY base_environment.yml /install/base_environment.yml
+COPY algorithms/${ALGORITHM} /install/algorithms/${ALGORITHM}
+
+# Run installation
+WORKDIR /install
+RUN eval "$(micromamba shell hook --shell bash)" && \
+    micromamba activate base && \
+    bash install_algorithm.sh "/install/algorithms/${ALGORITHM}" && \
+    micromamba clean --all --yes && \
+    mkdir -p /srbench
+
+# Set environment
+ENV ALGORITHM=${ALGORITHM}
+ENV LD_LIBRARY_PATH=/opt/conda/lib:${LD_LIBRARY_PATH}
+
+# Default working directory
+WORKDIR /srbench
+
+# Entrypoint that activates micromamba
+ENTRYPOINT ["/bin/bash", "-c", "eval \"$(micromamba shell hook --shell bash)\" && micromamba activate base && cd /srbench && exec \"$@\"", "--"]
+CMD ["bash"]
