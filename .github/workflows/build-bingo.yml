@@ -4,7 +4,6 @@ on:
   workflow_dispatch:  # manual trigger
   push:
     branches:
-      - master
       - image.pull
     paths:
       - 'algorithms/bingo/**'
