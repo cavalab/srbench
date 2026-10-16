@@ -3,6 +3,9 @@ name: Build Bingo Docker Image
 on:
   workflow_dispatch:  # manual trigger
   push:
+    branches:
+      - main
+      - image.pull
     paths:
       - 'algorithms/bingo/**'
       - 'Dockerfile.bingo'
