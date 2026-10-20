@@ -10,14 +10,21 @@ algorithms/pir/install.sh) in the interface SRBench expects:
     complexity(est)        returns an integer complexity count for the model
     eval_kwargs            method-specific args forwarded to evaluate_model.py
 
-No neural components. Vanilla classical PIR only — this is the configuration
-that produced the verified blind Tier A baseline:
+No neural components. Classical PIR engine (unchanged vanilla configuration
+below), followed since pir-engine 3.6.0 by its built-in fallback gates
+(gates="all"), tried in a fixed order only when the engine's model is not
+already exact:
 
-    12/44 EXACT  (zero seed wobble, v3.4)
-    +12/44 FORM_NUMERIC secondary (correct functional form, transcendental
-                constant folded as decimal — reported separately, never summed)
+    rational  y = P(x)/Q(x), low-degree polynomials   (accepted only if exact)
+    exp       y = C*exp(sum of monomials)              (accepted only if exact)
+    noisy     y = C*prod x_j**(p/q), exponents snapped to simple fractions
+              (accepted only if its training MSE <= the engine's)
 
-Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.5)
+A gate's model replaces the engine's only when it passes its test; any error
+inside a gate keeps the engine's model. Thresholds are fixed in the engine.
+
+Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.6.0)
+Software DOI: https://doi.org/10.5281/zenodo.23460311
 Paper: https://doi.org/10.5281/zenodo.21351039
 """
 
@@ -26,11 +33,11 @@ import re
 import numpy as np
 
 # The classical engine. algorithms/pir/install.sh pip-installs this from the
-# public repo at tag v3.5.
+# public repo at tag v3.6.0.
 from physics_engine.sklearn_adapter import PIRRegressor
 from sklearn.base import BaseEstimator, RegressorMixin
 
-# --- Vanilla config that produced the verified blind Tier A result ------------
+# --- Vanilla engine config (unchanged since v3.4) -----------------------------
 _PIR_VANILLA_CONFIG = dict(
     enforce_dimensions=False,  # blind sweep ran with dim-filter OFF
     allowed_powers=[1, 2],  # powers 1,2 only (structural cap)
@@ -53,15 +60,18 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
     SRBench's own timeout handler (per gAldeia's review on PR #210). The
     `max_time` constructor kwarg is still accepted, for API compatibility
     with the harness's test_params override, but is currently unused.
+    `gates` is passed to the engine (pir-engine >= 3.6.0); it is an explicit
+    constructor argument so that it is recorded by get_params().
     """
 
-    def __init__(self, max_time=3600, random_state=None, **pir_kwargs):
+    def __init__(self, max_time=3600, random_state=None, gates="all", **pir_kwargs):
         self.max_time = max_time
         self.random_state = random_state
+        self.gates = gates
         self.pir_kwargs = {**_PIR_VANILLA_CONFIG, **pir_kwargs}
 
     def _build(self):
-        kw = dict(self.pir_kwargs)
+        kw = dict(self.pir_kwargs, gates=self.gates)
         seed = 0 if self.random_state is None else self.random_state
         try:
             return PIRRegressor(random_state=seed, **kw)
