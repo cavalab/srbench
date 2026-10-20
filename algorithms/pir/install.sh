@@ -1,2 +1,2 @@
 #!/bin/bash
-pip install "git+https://github.com/Qazi-pk/physics-engine.git@v3.5"
+pip install "git+https://github.com/Qazi-pk/physics-engine.git@v3.6.0"
