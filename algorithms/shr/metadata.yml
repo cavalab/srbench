@@ -1,0 +1,14 @@
+name: SHR
+description: |
+  SHR is a symbolic regression system that combines deterministic structural
+  probes with exact symbolic solving and a genetic-programming fallback. It
+  narrows the search using multiplicative, additive, algebraic, trigonometric,
+  gaussian, and rational structural cues, re-validates candidates across
+  multiple splits, and respects a global time budget. It does not train
+  weights, query a lookup table, or use per-problem branches.
+authors:
+  - il143
+email:
+  - 527874348@qq.com
+url: https://github.com/il143/SHR
+license: MIT
