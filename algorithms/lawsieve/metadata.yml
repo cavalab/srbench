@@ -1,0 +1,18 @@
+authors:
+  - Ephemeral6 (developed with Claude, Anthropic)
+email: ephemeral.060416@gmail.com
+name: lawsieve
+description: |
+  LawSieve is a deterministic, pure-Python (numpy/scipy/sympy) symbolic
+  regression method for noise-robust recovery of closed-form laws. A
+  best-first recursive reduction (monomial factoring, invertible target
+  shells) proposes structures; terminals fit affine power laws, a
+  Boltzmann/Arrhenius form, sparse sums over a physics term library (nested
+  libraries, multi-start OMP, backward elimination) and Pade-like rationals.
+  For noise robustness, structures proposed on (noise-amplified) reduced
+  targets are re-estimated on the raw target with free exponents that are
+  then snapped using their standard errors; models are chosen on a holdout
+  with a BIC/MDL score, non-identifiable constants are removed and constants
+  are snapped only when statistically compatible. install.sh installs a
+  pinned release tag of the public repository.
+url: https://github.com/Ephemeral6/lawsieve
