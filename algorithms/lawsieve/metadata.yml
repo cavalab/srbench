@@ -8,7 +8,8 @@ description: |
   best-first recursive reduction (monomial factoring, invertible target
   shells) proposes structures; terminals fit affine power laws, a
   Boltzmann/Arrhenius form, sparse sums over a physics term library (nested
-  libraries, multi-start OMP, backward elimination) and Pade-like rationals.
+  libraries, multi-start OMP, backward elimination), Pade-like rationals and,
+  for nodes with up to 3 variables, best-subset polynomial and rational forms.
   For noise robustness, structures proposed on (noise-amplified) reduced
   targets are re-estimated on the raw target with free exponents that are
   then snapped using their standard errors; models are chosen on a holdout
