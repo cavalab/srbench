@@ -18,4 +18,7 @@ description: >
   an exact exponential gate, and a noise-tolerant power-law gate with exponents
   snapped to simple fractions. Since 3.7.0, a safeguard returns a ridge-linear
   model (or the mean) instead when the formula fits clearly worse than that
-  baseline under cross-validation. Software DOI: 10.5281/zenodo.23631107.
+  baseline under cross-validation. Since 3.8.0, a deterministic separability
+  stage tests whether y = g(A)*h(B) for a split of the inputs, solves the
+  parts separately and accepts their product only if it is exact.
+  Software DOI: 10.5281/zenodo.23827328.

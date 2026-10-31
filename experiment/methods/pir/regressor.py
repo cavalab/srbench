@@ -29,8 +29,15 @@ training R^2 >= 0.999 is always kept; otherwise the linear model replaces it
 only if its 5-fold cross-validated R^2 is higher by more than 0.05, and the
 mean is returned if both are below 0. Rules are fixed in the engine.
 
-Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.7.0)
-Software DOI: https://doi.org/10.5281/zenodo.23631107
+Since pir-engine 3.8.0, a separability stage (separability=True) runs after
+the engine and before the gates, only when the engine's model is not exact: a
+deterministic cross-term test looks for a split of the inputs with
+y = g(A)*h(B), the parts are solved separately (at most 4 attempts, each on a
+fixed 5,000-row subsample), and the product is accepted only if it reproduces
+all training rows exactly (max relative error < 1e-6) and beats the engine.
+
+Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.8.0)
+Software DOI: https://doi.org/10.5281/zenodo.23827328
 Paper: https://doi.org/10.5281/zenodo.21351039
 """
 
@@ -39,7 +46,7 @@ import re
 import numpy as np
 
 # The classical engine. algorithms/pir/install.sh pip-installs this from the
-# public repo at tag v3.7.0.
+# public repo at tag v3.8.0.
 from physics_engine.sklearn_adapter import PIRRegressor
 from sklearn.base import BaseEstimator, RegressorMixin
 
@@ -66,8 +73,8 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
     SRBench's own timeout handler (per gAldeia's review on PR #210). The
     `max_time` constructor kwarg is still accepted, for API compatibility
     with the harness's test_params override, but is currently unused.
-    `gates` (pir-engine >= 3.6.0) and `safeguard` (>= 3.7.0) are passed to
-    the engine; they are explicit constructor arguments so that they are
+    `gates` (pir-engine >= 3.6.0), `safeguard` (>= 3.7.0) and `separability`
+    (>= 3.8.0) are passed to the engine; they are explicit constructor arguments so that they are
     recorded by get_params().
     """
 
@@ -77,16 +84,23 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
         random_state=None,
         gates="all",
         safeguard=True,
+        separability=True,
         **pir_kwargs,
     ):
         self.max_time = max_time
         self.random_state = random_state
         self.gates = gates
         self.safeguard = safeguard
+        self.separability = separability
         self.pir_kwargs = {**_PIR_VANILLA_CONFIG, **pir_kwargs}
 
     def _build(self):
-        kw = dict(self.pir_kwargs, gates=self.gates, safeguard=self.safeguard)
+        kw = dict(
+            self.pir_kwargs,
+            gates=self.gates,
+            safeguard=self.safeguard,
+            separability=self.separability,
+        )
         seed = 0 if self.random_state is None else self.random_state
         try:
             return PIRRegressor(random_state=seed, **kw)
