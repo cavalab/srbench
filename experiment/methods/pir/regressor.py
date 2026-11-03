@@ -35,9 +35,11 @@ deterministic cross-term test looks for a split of the inputs with
 y = g(A)*h(B), the parts are solved separately (at most 4 attempts, each on a
 fixed 5,000-row subsample), and the product is accepted only if it reproduces
 all training rows exactly (max relative error < 1e-6) and beats the engine.
+Since 3.9.0 it also handles targets that change sign and, in a late pass after
+the gates, factors that are roots or sin/cos terms; acceptance is still exact.
 
-Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.8.0)
-Software DOI: https://doi.org/10.5281/zenodo.23827328
+Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.9.0)
+Software DOI: https://doi.org/10.5281/zenodo.23926418
 Paper: https://doi.org/10.5281/zenodo.21351039
 """
 
@@ -46,7 +48,7 @@ import re
 import numpy as np
 
 # The classical engine. algorithms/pir/install.sh pip-installs this from the
-# public repo at tag v3.8.0.
+# public repo at tag v3.9.0.
 from physics_engine.sklearn_adapter import PIRRegressor
 from sklearn.base import BaseEstimator, RegressorMixin
 

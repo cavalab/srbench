@@ -20,5 +20,6 @@ description: >
   model (or the mean) instead when the formula fits clearly worse than that
   baseline under cross-validation. Since 3.8.0, a deterministic separability
   stage tests whether y = g(A)*h(B) for a split of the inputs, solves the
-  parts separately and accepts their product only if it is exact.
-  Software DOI: 10.5281/zenodo.23827328.
+  parts separately and accepts their product only if it is exact. Since 3.9.0
+  it also handles sign-changing targets and root and sin/cos factors.
+  Software DOI: 10.5281/zenodo.23926418.
