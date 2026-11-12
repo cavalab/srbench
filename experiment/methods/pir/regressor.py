@@ -10,14 +10,45 @@ algorithms/pir/install.sh) in the interface SRBench expects:
     complexity(est)        returns an integer complexity count for the model
     eval_kwargs            method-specific args forwarded to evaluate_model.py
 
-No neural components. Vanilla classical PIR only — this is the configuration
-that produced the verified blind Tier A baseline:
+No neural components. Classical PIR engine (unchanged vanilla configuration
+below), followed since pir-engine 3.6.0 by its built-in fallback gates
+(gates="all"), tried in a fixed order only when the engine's model is not
+already exact:
 
-    12/44 EXACT  (zero seed wobble, v3.4)
-    +12/44 FORM_NUMERIC secondary (correct functional form, transcendental
-                constant folded as decimal — reported separately, never summed)
+    rational  y = P(x)/Q(x), low-degree polynomials   (accepted only if exact)
+    exp       y = C*exp(sum of monomials)              (accepted only if exact)
+    noisy     y = C*prod x_j**(p/q), exponents snapped to simple fractions
+              (accepted only if its training MSE <= the engine's)
 
-Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.5)
+A gate's model replaces the engine's only when it passes its test; any error
+inside a gate keeps the engine's model. Thresholds are fixed in the engine.
+
+Since pir-engine 3.7.0, a safeguard (safeguard=True) then compares the final
+formula with a ridge-regression linear model and the mean of y: a formula with
+training R^2 >= 0.999 is always kept; otherwise the linear model replaces it
+only if its 5-fold cross-validated R^2 is higher by more than 0.05, and the
+mean is returned if both are below 0. Rules are fixed in the engine.
+
+Since pir-engine 3.8.0, a separability stage (separability=True) runs after
+the engine and before the gates, only when the engine's model is not exact: a
+deterministic cross-term test looks for a split of the inputs with
+y = g(A)*h(B), the parts are solved separately (at most 4 attempts, each on a
+fixed 5,000-row subsample), and the product is accepted only if it reproduces
+all training rows exactly (max relative error < 1e-6) and beats the engine.
+Since 3.9.0 it also handles targets that change sign and, in a late pass after
+the gates, factors that are roots or sin/cos terms; acceptance is still exact.
+
+Since pir-engine 3.10.0, a noise-tolerant stage (noise_tolerant=True) runs
+after the late separability pass and before the safeguard, only when no model
+so far is exact and there are at least 2,000 training rows. It fits separable,
+power-law-times-exp and short rational forms on 75% of (at most 20,000) rows,
+snaps exponents and coefficient ratios to simple fractions within 3 standard
+errors, accepts a form only if it predicts the other 25% within 5% of a
+flexible reference model, and replaces the current model only if it predicts
+those rows better. Rules are fixed in the engine.
+
+Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.10.0)
+Software DOI: https://doi.org/10.5281/zenodo.24156912
 Paper: https://doi.org/10.5281/zenodo.21351039
 """
 
@@ -26,11 +57,11 @@ import re
 import numpy as np
 
 # The classical engine. algorithms/pir/install.sh pip-installs this from the
-# public repo at tag v3.5.
+# public repo at tag v3.10.0.
 from physics_engine.sklearn_adapter import PIRRegressor
 from sklearn.base import BaseEstimator, RegressorMixin
 
-# --- Vanilla config that produced the verified blind Tier A result ------------
+# --- Vanilla engine config (unchanged since v3.4) -----------------------------
 _PIR_VANILLA_CONFIG = dict(
     enforce_dimensions=False,  # blind sweep ran with dim-filter OFF
     allowed_powers=[1, 2],  # powers 1,2 only (structural cap)
@@ -53,15 +84,37 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
     SRBench's own timeout handler (per gAldeia's review on PR #210). The
     `max_time` constructor kwarg is still accepted, for API compatibility
     with the harness's test_params override, but is currently unused.
+    `gates` (pir-engine >= 3.6.0), `safeguard` (>= 3.7.0), `separability`
+    (>= 3.8.0) and `noise_tolerant` (>= 3.10.0) are passed to the engine; they
+    are explicit constructor arguments so that they are recorded by get_params().
     """
 
-    def __init__(self, max_time=3600, random_state=None, **pir_kwargs):
+    def __init__(
+        self,
+        max_time=3600,
+        random_state=None,
+        gates="all",
+        safeguard=True,
+        separability=True,
+        noise_tolerant=True,
+        **pir_kwargs,
+    ):
         self.max_time = max_time
         self.random_state = random_state
+        self.gates = gates
+        self.safeguard = safeguard
+        self.separability = separability
+        self.noise_tolerant = noise_tolerant
         self.pir_kwargs = {**_PIR_VANILLA_CONFIG, **pir_kwargs}
 
     def _build(self):
-        kw = dict(self.pir_kwargs)
+        kw = dict(
+            self.pir_kwargs,
+            gates=self.gates,
+            safeguard=self.safeguard,
+            separability=self.separability,
+            noise_tolerant=self.noise_tolerant,
+        )
         seed = 0 if self.random_state is None else self.random_state
         try:
             return PIRRegressor(random_state=seed, **kw)
