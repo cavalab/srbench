@@ -38,8 +38,17 @@ all training rows exactly (max relative error < 1e-6) and beats the engine.
 Since 3.9.0 it also handles targets that change sign and, in a late pass after
 the gates, factors that are roots or sin/cos terms; acceptance is still exact.
 
-Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.9.0)
-Software DOI: https://doi.org/10.5281/zenodo.23926418
+Since pir-engine 3.10.0, a noise-tolerant stage (noise_tolerant=True) runs
+after the late separability pass and before the safeguard, only when no model
+so far is exact and there are at least 2,000 training rows. It fits separable,
+power-law-times-exp and short rational forms on 75% of (at most 20,000) rows,
+snaps exponents and coefficient ratios to simple fractions within 3 standard
+errors, accepts a form only if it predicts the other 25% within 5% of a
+flexible reference model, and replaces the current model only if it predicts
+those rows better. Rules are fixed in the engine.
+
+Engine: https://github.com/Qazi-pk/physics-engine (MIT, tag v3.10.0)
+Software DOI: https://doi.org/10.5281/zenodo.24156912
 Paper: https://doi.org/10.5281/zenodo.21351039
 """
 
@@ -48,7 +57,7 @@ import re
 import numpy as np
 
 # The classical engine. algorithms/pir/install.sh pip-installs this from the
-# public repo at tag v3.9.0.
+# public repo at tag v3.10.0.
 from physics_engine.sklearn_adapter import PIRRegressor
 from sklearn.base import BaseEstimator, RegressorMixin
 
@@ -75,9 +84,9 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
     SRBench's own timeout handler (per gAldeia's review on PR #210). The
     `max_time` constructor kwarg is still accepted, for API compatibility
     with the harness's test_params override, but is currently unused.
-    `gates` (pir-engine >= 3.6.0), `safeguard` (>= 3.7.0) and `separability`
-    (>= 3.8.0) are passed to the engine; they are explicit constructor arguments so that they are
-    recorded by get_params().
+    `gates` (pir-engine >= 3.6.0), `safeguard` (>= 3.7.0), `separability`
+    (>= 3.8.0) and `noise_tolerant` (>= 3.10.0) are passed to the engine; they
+    are explicit constructor arguments so that they are recorded by get_params().
     """
 
     def __init__(
@@ -87,6 +96,7 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
         gates="all",
         safeguard=True,
         separability=True,
+        noise_tolerant=True,
         **pir_kwargs,
     ):
         self.max_time = max_time
@@ -94,6 +104,7 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
         self.gates = gates
         self.safeguard = safeguard
         self.separability = separability
+        self.noise_tolerant = noise_tolerant
         self.pir_kwargs = {**_PIR_VANILLA_CONFIG, **pir_kwargs}
 
     def _build(self):
@@ -102,6 +113,7 @@ class PIRClassicRegressor(BaseEstimator, RegressorMixin):
             gates=self.gates,
             safeguard=self.safeguard,
             separability=self.separability,
+            noise_tolerant=self.noise_tolerant,
         )
         seed = 0 if self.random_state is None else self.random_state
         try:

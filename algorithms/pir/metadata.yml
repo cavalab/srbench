@@ -22,4 +22,9 @@ description: >
   stage tests whether y = g(A)*h(B) for a split of the inputs, solves the
   parts separately and accepts their product only if it is exact. Since 3.9.0
   it also handles sign-changing targets and root and sin/cos factors.
-  Software DOI: 10.5281/zenodo.23926418.
+  Since 3.10.0, a noise-tolerant stage (at least 2,000 training rows, only
+  when nothing is exact) fits separable, exponential and rational forms,
+  snaps exponents and coefficient ratios to simple fractions within their
+  standard errors, and accepts a form only if it predicts held-out rows as
+  well as a flexible reference model.
+  Software DOI: 10.5281/zenodo.24156912.
